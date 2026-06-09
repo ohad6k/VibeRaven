@@ -1,0 +1,59 @@
+{
+  "exportedAt": "2026-06-09T20:42:12.384Z",
+  "sourceRepo": "ohad6k/viberaven-dev",
+  "targetRepo": "ohad6k/VibeRaven",
+  "files": [
+    [
+      "docs/public-repo/README.md",
+      "README.md"
+    ],
+    [
+      "llms.txt",
+      "llms.txt"
+    ],
+    [
+      "landing/public/llms-full.txt",
+      "llms-full.txt"
+    ],
+    [
+      "landing/public/agent-context.md",
+      "agent-context.md"
+    ],
+    [
+      "docs/mcp-registry-submission.md",
+      "docs/mcp-registry-submission.md"
+    ],
+    [
+      "docs/github-repo-metadata.md",
+      "docs/github-repo-metadata.md"
+    ],
+    [
+      "docs/badge-snippet.md",
+      "docs/badge-snippet.md"
+    ],
+    [
+      "AGENTS.md",
+      "AGENTS.md"
+    ],
+    [
+      "CLAUDE.md",
+      "CLAUDE.md"
+    ],
+    [
+      "GEMINI.md",
+      "GEMINI.md"
+    ],
+    [
+      ".cursor/rules/viberaven.mdc",
+      ".cursor/rules/viberaven.mdc"
+    ],
+    [
+      ".github/copilot-instructions.md",
+      ".github/copilot-instructions.md"
+    ],
+    [
+      "examples/nextjs-supabase-vercel-production-ready-template",
+      "examples/nextjs-supabase-vercel-production-ready-template"
+    ]
+  ]
+}

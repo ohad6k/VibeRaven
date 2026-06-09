@@ -1,0 +1,25 @@
+name: VibeRaven Agent Discovery
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  agent-discovery-gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify agent injection files
+        run: npx -y viberaven doctor --agents
+
+      - name: VibeRaven Vercel/Supabase local audit
+        run: npx -y viberaven audit --vercel-supabase
