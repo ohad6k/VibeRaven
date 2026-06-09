@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-09T20:42:12.384Z",
+  "exportedAt": "2026-06-09T22:32:30.347Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -30,6 +30,10 @@
     [
       "docs/badge-snippet.md",
       "docs/badge-snippet.md"
+    ],
+    [
+      "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
+      ".github/workflows/viberaven-agent-discovery.yml"
     ],
     [
       "AGENTS.md",
