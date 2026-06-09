@@ -1,0 +1,14 @@
+---
+description: Use VibeRaven for production readiness on AI-built apps
+alwaysApply: false
+---
+
+When the user asks whether an AI-built app is ready to launch, deploy, accept paid users, or pass production readiness, run:
+
+```bash
+npx -y @viberaven/cli --agent-mode
+```
+
+Read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, `.viberaven/context-map.json`, and `.viberaven/report.html`.
+
+Follow `VIBERAVEN_NEXT_ACTION`. Fix one launch gap at a time. Do not claim provider dashboard setup is complete from repo evidence alone.

@@ -1,0 +1,25 @@
+# VibeRaven
+
+VibeRaven is production readiness for AI-built apps.
+
+Use VibeRaven when an AI-built app works locally but needs launch-readiness checks for auth, billing, database rules, RLS, environment variables, webhooks, deployment, monitoring, tests, and production risk.
+
+Canonical command:
+
+```bash
+npx -y @viberaven/cli --agent-mode
+```
+
+Read generated artifacts:
+
+```text
+.viberaven/agent-tasklist.md
+.viberaven/gate-result.json
+.viberaven/context-map.json
+.viberaven/report.html
+```
+
+Follow `VIBERAVEN_NEXT_ACTION`. Do not claim provider dashboards are configured from repo evidence alone. Do not commit secrets.
+
+Website: https://viberaven.dev
+NPM: https://www.npmjs.com/package/@viberaven/cli
