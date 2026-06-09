@@ -67,4 +67,9 @@ Do not claim provider dashboards are configured from repo evidence alone. Keep s
 - AI context: https://viberaven.dev/llms.txt
 - Agent context: https://viberaven.dev/agent-context.md
 - MCP docs: https://viberaven.dev/mcp.md
+- Cursor production readiness: https://viberaven.dev/cursor-production-readiness-checklist
+- Claude Code production checklist: https://viberaven.dev/claude-code-production-checklist
+- Codex production readiness: https://viberaven.dev/codex-production-readiness
+- Supabase RLS checklist: https://viberaven.dev/supabase-auth-rls-checklist-ai-apps
+- Vercel deploy checklist: https://viberaven.dev/vercel-preview-to-production-checklist
 - npm: https://www.npmjs.com/package/@viberaven/cli
