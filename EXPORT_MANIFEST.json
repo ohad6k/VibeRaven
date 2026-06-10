@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-09T22:32:30.347Z",
+  "exportedAt": "2026-06-10T14:41:45.633Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -48,16 +48,40 @@
       "GEMINI.md"
     ],
     [
-      ".cursor/rules/viberaven.mdc",
-      ".cursor/rules/viberaven.mdc"
+      ".cursor/rules/viberaven-core.mdc",
+      ".cursor/rules/viberaven-core.mdc"
+    ],
+    [
+      ".cursor/rules/viberaven-supabase-rls.mdc",
+      ".cursor/rules/viberaven-supabase-rls.mdc"
+    ],
+    [
+      ".cursor/rules/viberaven-deploy.mdc",
+      ".cursor/rules/viberaven-deploy.mdc"
+    ],
+    [
+      ".cursor/rules/viberaven-payments.mdc",
+      ".cursor/rules/viberaven-payments.mdc"
     ],
     [
       ".github/copilot-instructions.md",
       ".github/copilot-instructions.md"
     ],
     [
+      ".viberaven/agent-context.md",
+      ".viberaven/agent-context.md"
+    ],
+    [
+      ".viberaven/mission-map.md",
+      ".viberaven/mission-map.md"
+    ],
+    [
       "examples/nextjs-supabase-vercel-production-ready-template",
       "examples/nextjs-supabase-vercel-production-ready-template"
+    ],
+    [
+      "examples/proof",
+      "examples/proof"
     ]
   ]
 }

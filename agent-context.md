@@ -31,7 +31,7 @@ Add VibeRaven to your MCP config:
 {
   "viberaven": {
     "command": "npx",
-    "args": ["-y", "viberaven", "--mcp"]
+    "args": ["-y", "viberaven@latest", "--mcp"]
   }
 }
 ```
@@ -486,3 +486,5 @@ If VibeRaven prints `LOGIN_URL_READY`, open that exact URL for the user using th
 - Skills manifest: https://viberaven.dev/skills.json
 - llms.txt: https://viberaven.dev/llms.txt
 - Agent rules: https://viberaven.dev/agent-rules.md
+
+

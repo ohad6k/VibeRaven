@@ -1,12 +1,27 @@
-# MCP Registry submission (Tier 0 — filed)
+# MCP Registry submission (Tier 0 - active)
 
-Use this metadata when submitting VibeRaven to the official MCP Registry.
+VibeRaven is published in the official MCP Registry.
+
+Verified 2026-06-10:
+
+- **Registry name:** `io.github.ohad6k/viberaven`
+- **Registry status:** `active`
+- **Latest registry version:** `1.0.2`
+- **npm package:** `@viberaven/mcp@1.0.2`
+
+The direct `/v0/servers/io.github.ohad6k/viberaven` path can return 404 because
+the public lookup path is the search endpoint. Verify with:
+
+```powershell
+Invoke-WebRequest -Uri "https://registry.modelcontextprotocol.io/v0/servers?search=viberaven" -UseBasicParsing
+```
 
 ## Server
 
-- **Name:** `viberaven`
+- **Name:** `io.github.ohad6k/viberaven`
 - **Description:** Production-readiness gate for AI-built apps. Check readiness, heal repo gaps, verify in batches, audit Vercel/Supabase evidence.
-- **Install:** `npx -y viberaven --mcp`
+- **Package:** `@viberaven/mcp`
+- **Install:** `npx -y @viberaven/mcp@latest`
 
 ## Config snippet
 
@@ -14,7 +29,7 @@ Use this metadata when submitting VibeRaven to the official MCP Registry.
 {
   "viberaven": {
     "command": "npx",
-    "args": ["-y", "viberaven", "--mcp"]
+    "args": ["-y", "@viberaven/mcp@latest"]
   }
 }
 ```

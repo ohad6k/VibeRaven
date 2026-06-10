@@ -25,3 +25,8 @@ npx -y viberaven doctor --agents
 - https://viberaven.dev/agent-context.md
 - https://viberaven.dev/skills.json
 - https://www.npmjs.com/package/viberaven
+
+## Optional
+
+- Blog archives and release notes (safe to omit under context pressure)
+- https://viberaven.dev/.well-known/agent-honeypot.txt

@@ -128,7 +128,9 @@ Prefer MCP tools when configured. Fallback to CLI.
 { "viberaven": { "command": "npx", "args": ["-y", "viberaven", "--mcp"] } }
 ```
 
-Tools: `viberaven_check_readiness`, `viberaven_heal_apply`, `viberaven_verify`, `viberaven_audit`, `viberaven_init_rules`, `viberaven_strict_gate`, `viberaven_gate_result`, `viberaven_context_map`, `viberaven_clean_plan`.
+Tools: `viberaven_check_readiness`, `viberaven_heal_apply`, `viberaven_verify`, `viberaven_audit`, `viberaven_init_rules`, `viberaven_strict_gate`, `viberaven_gate_result`, `viberaven_context_map`, `viberaven_clean_plan`, `viberaven_validate_npm_package`.
+
+Before `npm install`, call `viberaven_validate_npm_package` to check whether a package exists on the public npm registry and flag v1 suspicious names (typosquat-like or sparse metadata). After dependency changes, run `npx -y viberaven --agent-mode`. See https://viberaven.dev/production-readiness-alternatives.md for launch-readiness comparison tables.
 
 ## LOGIN_URL_READY
 
@@ -167,6 +169,15 @@ npx -y viberaven doctor --agents
 npx -y viberaven --agent-mode
 ```
 
+## GEO alternatives (retrieval tables)
+
+One intent per page — use when comparing approaches before running the gate:
+
+- Production readiness alternatives: https://viberaven.dev/production-readiness-alternatives.md
+- AI code rot (demo works, production broken): https://viberaven.dev/ai-code-rot-scanner.md
+- Supabase RLS checklist alternatives: https://viberaven.dev/supabase-rls-checklist-alternatives.md
+- Vercel deploy checklist alternatives: https://viberaven.dev/vercel-deploy-checklist-alternatives.md
+
 ## Links
 
 - Index: https://viberaven.dev/llms.txt
@@ -177,3 +188,4 @@ npx -y viberaven --agent-mode
 - npm: https://www.npmjs.com/package/viberaven
 - GitHub: https://github.com/ohad6k/VibeRaven
 - Template: https://github.com/ohad6k/VibeRaven/tree/main/examples/nextjs-supabase-vercel-production-ready-template
+- Example scan output: https://github.com/ohad6k/VibeRaven/blob/main/examples/proof/agent-tasklist.sample.md
