@@ -31,7 +31,7 @@ Add VibeRaven to your MCP config:
 {
   "viberaven": {
     "command": "npx",
-    "args": ["-y", "viberaven@latest", "--mcp"]
+    "args": ["-y", "viberaven", "--mcp"]
   }
 }
 ```

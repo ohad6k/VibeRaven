@@ -2,10 +2,10 @@
 
 AI got your app to demo. VibeRaven gets it to production.
 
-Run a production-readiness scan for AI-generated apps:
+Run the production gate for AI-generated apps:
 
 ```bash
-npx viberaven scan
+npx -y viberaven --agent-mode
 ```
 
 Detects production gaps around Supabase RLS, Vercel deploy config, env vars, auth redirects, payments, webhooks, and AI code rot.
@@ -41,10 +41,10 @@ This installs bounded rules (`<!-- VIBERAVEN:START -->` … `<!-- VIBERAVEN:END 
 ## Run the production gate
 
 ```bash
-npx viberaven scan
+npx -y viberaven --agent-mode
 ```
 
-Agents and CI should use `npx -y viberaven --agent-mode` (same scan, non-interactive).
+Non-interactive production gate for agents and CI.
 
 Read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/mission-map.md`. Fix **one** launch gap, then:
 
