@@ -236,6 +236,7 @@ One intent per page — use when comparing approaches before running the gate:
 - Agent context: https://viberaven.dev/agent-context.md
 - Skills manifest: https://viberaven.dev/skills.json
 - MCP docs: https://viberaven.dev/mcp.md
+- MCP production readiness for AI agents: https://viberaven.dev/mcp-production-readiness-for-ai-agents.md
 - npm: https://www.npmjs.com/package/viberaven
 - GitHub: https://github.com/ohad6k/VibeRaven
 - Template: https://github.com/ohad6k/VibeRaven/tree/main/examples/nextjs-supabase-vercel-production-ready-template

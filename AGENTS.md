@@ -83,4 +83,4 @@ Gate is not clear until `gate.status === "clear"` in `.viberaven/gate-result.jso
 
 ## Private monorepo (ohad6k/viberaven-dev)
 
-Product map: [docs/repo-map.md](docs/repo-map.md). Surfaces: extension `0.0.37` (`src/`), CLI npm `1.0.3` (`packages/cli`), MCP npm `1.0.2` (`packages/mcp`), flywheel (`docs/plans/`, `marketing/automations/`). Public discovery repo: [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven).
+Product map: [docs/repo-map.md](docs/repo-map.md). Surfaces: extension `0.0.37` (`src/`), CLI npm `1.0.5` (`packages/cli`), MCP npm `1.0.5` (`packages/mcp`), flywheel (`docs/plans/`, `marketing/automations/`). Public discovery repo: [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven).

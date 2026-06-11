@@ -5,7 +5,7 @@ AI got your app to demo. VibeRaven gets it to production.
 Run the production gate for AI-generated apps:
 
 ```bash
-npx -y viberaven --agent-mode
+npx -y viberaven@latest --agent-mode
 ```
 
 Detects production gaps around Supabase RLS, Vercel deploy config, env vars, auth redirects, payments, webhooks, and AI code rot.
@@ -21,14 +21,14 @@ Detects production gaps around Supabase RLS, Vercel deploy config, env vars, aut
 Make Codex, Claude Code, Cursor, Copilot, and Gemini use VibeRaven before deploy:
 
 ```bash
-npx -y viberaven init --agents all
-npx -y viberaven doctor --agents
+npx -y viberaven@latest init --agents all
+npx -y viberaven@latest doctor --agents
 ```
 
 Preview without writing files:
 
 ```bash
-npx -y viberaven init --agents all --dry-run
+npx -y viberaven@latest init --agents all --dry-run
 ```
 
 This installs bounded rules (`<!-- VIBERAVEN:START -->` … `<!-- VIBERAVEN:END -->`) into:
@@ -41,7 +41,7 @@ This installs bounded rules (`<!-- VIBERAVEN:START -->` … `<!-- VIBERAVEN:END 
 ## Run the production gate
 
 ```bash
-npx -y viberaven --agent-mode
+npx -y viberaven@latest --agent-mode
 ```
 
 Non-interactive production gate for agents and CI.
@@ -49,14 +49,14 @@ Non-interactive production gate for agents and CI.
 Read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/mission-map.md`. Fix **one** launch gap, then:
 
 ```bash
-npx -y viberaven --verify
-npx -y viberaven --strict
+npx -y viberaven@latest --verify
+npx -y viberaven@latest --strict
 ```
 
 For Vercel + Supabase local evidence:
 
 ```bash
-npx -y viberaven audit --vercel-supabase
+npx -y viberaven@latest audit --vercel-supabase
 ```
 
 Do not stop at "scan complete." The loop is done when `gate.status === "clear"` in `.viberaven/gate-result.json`.
@@ -73,6 +73,8 @@ Do not stop at "scan complete." The loop is done when `gate.status === "clear"` 
 - [Example proof artifacts](./examples/proof/)
 
 ## MCP
+
+VibeRaven is listed in the MCP registry for agents that prefer tools over raw terminal commands.
 
 ```json
 { "viberaven": { "command": "npx", "args": ["-y", "viberaven", "--mcp"] } }
