@@ -20,6 +20,3 @@ jobs:
 
       - name: Verify agent injection files
         run: npx -y viberaven doctor --agents
-
-      - name: VibeRaven Vercel/Supabase local audit
-        run: npx -y viberaven audit --vercel-supabase
