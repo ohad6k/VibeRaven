@@ -1,69 +1,69 @@
 # VibeRaven
 
-AI got your app to demo. VibeRaven gets it to production.
+AI got your app to demo. VibeRaven helps it ship.
 
-Run the production gate for AI-generated apps:
+Run VibeRaven inside Codex, Claude Code, Cursor, Windsurf, Gemini CLI, or any agent that can run terminal commands. It scans repo evidence, writes a production protocol, separates repo-code fixes from provider dashboard actions, and gives the agent the next safe step.
 
 ```bash
-npx -y viberaven@latest --agent-mode
+npx -y viberaven --agent-mode
 ```
 
-Detects production gaps around Supabase RLS, Vercel deploy config, env vars, auth redirects, payments, webhooks, and AI code rot.
+![VibeRaven operator console demo](./showcase/operator-console.png)
 
-[Example scan output](./examples/proof/agent-tasklist.sample.md) · [What the gate checks](./llms.txt) · [Full agent reference](https://viberaven.dev/llms-full.txt)
+**Why this repo exists:** VibeRaven public repo is the agent discovery and installation surface. Product source code and service internals live in a private repository.
 
-![Terminal scan demo](https://viberaven.dev/marketplace-demo.gif)
+Private product development remains in `ohad6k/viberaven-dev`; this repo is for agent discovery, installation, and GitHub stars.
 
-**Repositories:** Public discovery → [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven) (this repo). Private product development → `ohad6k/viberaven-dev` (not public).
+[Example scan output](./examples/proof/agent-tasklist.sample.md) - [Protocol reference](./llms.txt) - [Full agent reference](https://viberaven.dev/llms-full.txt) - [Website](https://viberaven.dev)
 
 ## Install for AI agents
 
 Make Codex, Claude Code, Cursor, Copilot, and Gemini use VibeRaven before deploy:
 
 ```bash
-npx -y viberaven@latest init --agents all
-npx -y viberaven@latest doctor --agents
+npx -y viberaven init --agents all
+npx -y viberaven doctor --agents
 ```
 
 Preview without writing files:
 
 ```bash
-npx -y viberaven@latest init --agents all --dry-run
+npx -y viberaven init --agents all --dry-run
 ```
 
-This installs bounded rules (`<!-- VIBERAVEN:START -->` … `<!-- VIBERAVEN:END -->`) into:
+This installs bounded rules (`<!-- VIBERAVEN:START -->` ... `<!-- VIBERAVEN:END -->`) into:
 
 - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`
 - `.cursor/rules/viberaven-core.mdc` (+ scoped Supabase, deploy, payments rules)
 - `.github/copilot-instructions.md`
 - `.viberaven/agent-context.md`, `.viberaven/mission-map.md`
 
-## Run the production gate
+## Run the production operator
 
 ```bash
-npx -y viberaven@latest --agent-mode
+npx -y viberaven --agent-mode
 ```
 
-Non-interactive production gate for agents and CI.
+Non-interactive production operator loop for agents and CI.
 
 Read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/mission-map.md`. Fix **one** launch gap, then:
 
 ```bash
-npx -y viberaven@latest --verify
-npx -y viberaven@latest --strict
+npx -y viberaven --verify
+npx -y viberaven --strict
 ```
 
 For Vercel + Supabase local evidence:
 
 ```bash
-npx -y viberaven@latest audit --vercel-supabase
+npx -y viberaven audit --vercel-supabase
 ```
 
 Do not stop at "scan complete." The loop is done when `gate.status === "clear"` in `.viberaven/gate-result.json`.
 
 ## Agent-ready starter template
 
-[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) — agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
+[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) - agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
 
 ## Machine-readable docs
 

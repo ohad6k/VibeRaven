@@ -1,6 +1,8 @@
 # VibeRaven
 
-> Production readiness for AI-built apps. Agent Context + Production Gate.
+AI got your app to demo. VibeRaven helps it ship.
+
+Run VibeRaven inside Codex, Claude Code, Cursor, Windsurf, Gemini CLI, or any agent that can run terminal commands. It scans repo evidence, writes a production protocol, separates repo-code fixes from provider dashboard actions, and gives the agent the next safe step.
 
 Canonical agent command:
 

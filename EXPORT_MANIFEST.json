@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-11T12:42:42.521Z",
+  "exportedAt": "2026-06-14T23:12:48.645Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -34,6 +34,18 @@
     [
       "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
       ".github/workflows/viberaven-agent-discovery.yml"
+    ],
+    [
+      "landing/public/showcase/operator-console.png",
+      "showcase/operator-console.png"
+    ],
+    [
+      "landing/public/showcase/fix-loop-progress.png",
+      "showcase/fix-loop-progress.png"
+    ],
+    [
+      "landing/public/showcase/proof-card.png",
+      "showcase/proof-card.png"
     ],
     [
       "AGENTS.md",

@@ -9,8 +9,6 @@ Use VibeRaven before launch, deployment, real users, auth, billing, database, RL
 
 Agent loop: run VibeRaven, read Mission Map (`.viberaven/mission-map.md`), fix one launch gap, re-run VibeRaven.
 
-Maps repo evidence to OWASP LLM Top 10 launch risks. Supports SAFECode-style deployment readiness checks.
-
 ## Mission Map loop
 
 1. Run `npx -y viberaven --agent-mode` from the project root.
