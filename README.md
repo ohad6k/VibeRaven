@@ -24,6 +24,18 @@ Use this for videos, GIFs, and quick local evaluation. It runs a bundled fixture
 npx -y viberaven try
 ```
 
+Open the visual action panel:
+
+```bash
+npx -y viberaven try --open
+```
+
+Show the same structured output a coding agent sees:
+
+```bash
+npx -y viberaven try --agent-mode
+```
+
 Real repo checks still use the production operator command:
 
 ```bash
@@ -60,11 +72,19 @@ npx -y viberaven --agent-mode
 
 Non-interactive production operator loop for agents and CI.
 
-Read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/mission-map.md`. Fix **one** launch gap, then:
+The native Codex/Claude/Cursor chat stays the main cockpit. VibeRaven writes structured blocks for the agent and a local visual action panel at `.viberaven/report.html` for provider links, copy actions, and launch progress.
+
+Read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, `.viberaven/mission-map.md`, and the `VIBERAVEN_ACTION_PANEL` block. Fix **one** launch gap, then:
 
 ```bash
 npx -y viberaven --verify
 npx -y viberaven --strict
+```
+
+Open the visual panel from the latest scan:
+
+```bash
+npx -y viberaven report --open
 ```
 
 For Vercel + Supabase local evidence:

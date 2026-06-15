@@ -8,6 +8,8 @@ Run VibeRaven in your coding agent before deploy. It finds launch gaps and gives
 npx -y viberaven --agent-mode
 ```
 
+VibeRaven is not a replacement chat. The native Codex, Claude Code, Cursor, Windsurf, Gemini CLI, or Copilot chat remains the main cockpit. VibeRaven writes structured agent blocks and a local visual action panel at `.viberaven/report.html` for provider links, copy actions, and verification progress.
+
 Powered by the VibeRaven Production Protocol: `.viberaven/prp.json`, MCP tools, agent rules, and ordered `nextActions`.
 
 VibeRaven is the Agent Context + Production Gate: scan repo evidence, write agent-readable artifacts, fix one launch gap at a time, verify in batches, and ship when the gate is clear.
@@ -35,9 +37,13 @@ npx -y viberaven --agent-mode
 npx -y viberaven init --agents all
 npx -y viberaven init --agents all --dry-run
 npx -y viberaven doctor --agents
+npx -y viberaven try
+npx -y viberaven try --open
+npx -y viberaven try --agent-mode
 npx -y viberaven --agent-mode
 npx -y viberaven --verify
 npx -y viberaven --strict
+npx -y viberaven report --open
 npx -y viberaven audit --vercel-supabase
 npx -y viberaven clean --plan
 ```
@@ -99,6 +105,8 @@ Also: production ready, Supabase deploy, Vercel deploy, RLS policies, AI coding 
 7. Call `viberaven_verify` or `npx -y viberaven --verify` once per batch — not after every single file patch.
 8. Repeat until `gate.status === "clear"` in `.viberaven/gate-result.json`.
 9. Before deploy or CI pass: `npx -y viberaven --strict`.
+
+If stdout includes `VIBERAVEN_ACTION_PANEL`, use its `reportPath` or run `npx -y viberaven report --open` only when the user needs buttons, provider links, copy actions, or visual progress.
 
 Do not stop at "scan complete." The loop is not done until `gate.status === "clear"`.
 
