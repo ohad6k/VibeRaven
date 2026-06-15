@@ -8,7 +8,7 @@ Run VibeRaven inside Codex, Claude Code, Cursor, Copilot, Gemini CLI, or any cod
 npx -y viberaven --agent-mode
 ```
 
-VibeRaven scans repo evidence, builds a Mission Map, separates safe repo-code fixes from provider dashboard steps, and gives the agent the next production action for Supabase RLS, Vercel deploy config, env vars, auth, payments, and webhooks.
+VibeRaven is an agent production layer: it scans repo evidence, builds a Mission Map, separates safe repo-code fixes from provider dashboard steps, and gives the agent the next production action for Supabase RLS, Vercel deploy config, env vars, auth, payments, and webhooks.
 
 ![VibeRaven native agent flow](./showcase/operator-console.png)
 
