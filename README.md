@@ -16,12 +16,12 @@ Private product development remains in `ohad6k/viberaven-dev`; this repo is for 
 
 [Example scan output](./examples/proof/agent-tasklist.sample.md) - [Protocol reference](./llms.txt) - [Full agent reference](https://viberaven.dev/llms-full.txt) - [Website](https://viberaven.dev)
 
-## Showcase run
+## Try VibeRaven free
 
 Use this for videos, GIFs, and quick local evaluation. It runs a bundled fixture, writes local artifacts, and does not require login, OpenAI keys, or managed API spend.
 
 ```bash
-npx -y viberaven --showcase --agent-mode
+npx -y viberaven try
 ```
 
 Real repo checks still use the production operator command:
