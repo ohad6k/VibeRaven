@@ -2,19 +2,33 @@
 
 AI got your app to demo. VibeRaven helps it ship.
 
-Run VibeRaven inside Codex, Claude Code, Cursor, Windsurf, Gemini CLI, or any agent that can run terminal commands. It scans repo evidence, writes a production protocol, separates repo-code fixes from provider dashboard actions, and gives the agent the next safe step.
+Run VibeRaven in your coding agent before deploy. It finds launch gaps and gives the next safe fix.
 
 ```bash
 npx -y viberaven --agent-mode
 ```
 
-![VibeRaven operator console demo](./showcase/operator-console.png)
+![VibeRaven operator console showcase](./showcase/operator-console.png)
 
 **Why this repo exists:** VibeRaven public repo is the agent discovery and installation surface. Product source code and service internals live in a private repository.
 
 Private product development remains in `ohad6k/viberaven-dev`; this repo is for agent discovery, installation, and GitHub stars.
 
 [Example scan output](./examples/proof/agent-tasklist.sample.md) - [Protocol reference](./llms.txt) - [Full agent reference](https://viberaven.dev/llms-full.txt) - [Website](https://viberaven.dev)
+
+## Showcase run
+
+Use this for videos, GIFs, and quick local evaluation. It runs a bundled fixture, writes local artifacts, and does not require login, OpenAI keys, or managed API spend.
+
+```bash
+npx -y viberaven --showcase --agent-mode
+```
+
+Real repo checks still use the production operator command:
+
+```bash
+npx -y viberaven --agent-mode
+```
 
 ## Install for AI agents
 
