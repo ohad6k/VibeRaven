@@ -1,10 +1,6 @@
 # VibeRaven
 
-AI got your app to demo. VibeRaven helps it ship.
-
-Run VibeRaven inside Codex, Claude Code, Cursor, Windsurf, Gemini CLI, or any agent that can run terminal commands. It scans repo evidence, writes a production protocol, separates repo-code fixes from provider dashboard actions, and gives the agent the next safe step.
-
-Native agent chat remains the main cockpit. VibeRaven also writes a local visual action panel at `.viberaven/report.html` and emits `VIBERAVEN_ACTION_PANEL` so agents can open provider links, copy actions, and visual progress only when useful.
+> Agent production layer for AI-built apps. Mission Map + Production Protocol.
 
 Canonical agent command:
 
@@ -12,15 +8,13 @@ Canonical agent command:
 npx -y viberaven --agent-mode
 ```
 
-Free no-login local try run:
+Preview the native chat/terminal flow locally:
 
 ```bash
-npx -y viberaven try
-npx -y viberaven try --open
-npx -y viberaven try --agent-mode
+npx -y viberaven preview --agent-mode
 ```
 
-Install agent rules into this repo (or any repo):
+Install agent rules into this repo or any repo:
 
 ```bash
 npx -y viberaven init --agents all

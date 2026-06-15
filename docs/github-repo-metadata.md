@@ -11,7 +11,7 @@ Sync policy: **manual curated export** from private -> public. See [`public-repo
 
 Set on https://github.com/ohad6k/VibeRaven/settings:
 
-- **Description:** Production readiness gate for AI-coded Supabase/Vercel apps
+- **Description:** Agent production layer for AI-built Supabase/Vercel apps
 - **Website:** https://viberaven.dev
 
 ## Public repo - Topics
