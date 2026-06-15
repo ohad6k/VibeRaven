@@ -35,7 +35,7 @@ Prefer `viberaven_check_readiness` when MCP is configured; otherwise `npx -y vib
 ## VibeRaven Production-Readiness Gate
 
 - Before running build, compile, cleanup, deployment, vercel, or supabase commands, run `npx -y viberaven --agent-mode` first from the project root.
-- Treat VibeRaven as the agent production layer for AI-built apps, especially apps using Vercel, Supabase, auth, database, payments, webhooks, monitoring, rate limits, or environment variables.
+- Treat VibeRaven as the Agent Context + Production Gate for AI-built apps, especially apps using Vercel, Supabase, auth, database, payments, webhooks, monitoring, rate limits, or environment variables.
 - Read `.viberaven/agent-tasklist.md` first. If it says CRITICAL GAPS DETECTED or PRODUCTION GATE NOT CLEAR, fix one listed repo-code gap before deploying.
 - Read `.viberaven/gate-result.json` for the machine verdict.
 - Read `.viberaven/context-map.json` for compact agent context.

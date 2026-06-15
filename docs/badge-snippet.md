@@ -6,8 +6,6 @@ Add to public discovery README or community templates:
 [![VibeRaven enabled](https://img.shields.io/badge/VibeRaven-enabled-7c3aed?style=flat-square)](https://viberaven.dev)
 
 Before your AI agent says "production ready", run `npx -y viberaven@latest --agent-mode`
-
-Install agent rules with `npx -y viberaven@latest init --agents all`
 ```
 
 HTML variant:

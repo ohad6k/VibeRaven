@@ -19,7 +19,7 @@ Invoke-WebRequest -Uri "https://registry.modelcontextprotocol.io/v0/servers?sear
 ## Server
 
 - **Name:** `io.github.ohad6k/viberaven`
-- **Description:** Production protocol for AI-built apps. Check readiness, separate repo fixes from provider actions, verify in batches, audit Vercel/Supabase evidence.
+- **Description:** Production-readiness gate for AI-built apps. Check readiness, heal repo gaps, verify in batches, audit Vercel/Supabase evidence.
 - **Package:** `@viberaven/mcp`
 - **Install:** `npx -y @viberaven/mcp@latest`
 

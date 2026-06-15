@@ -5,7 +5,7 @@
 
 ## Overview
 
-VibeRaven is the agent production layer for AI-built apps. It scans a project's repo evidence (files, config, environment) and maps production gaps and launch gaps. It writes machine-readable artifacts that AI agents read to run the autonomous fix loop without wasting scan quota.
+VibeRaven is the Agent Context + Production Gate for AI-built apps. It scans a project's repo evidence (files, config, environment) and maps production gaps and launch gaps. It writes machine-readable artifacts that AI agents read to run the autonomous fix loop without wasting scan quota.
 
 **Trigger phrases:** "production ready", "before I ship", "what's missing", "deploy to production", "make it production ready", "launch checklist", "production gaps", "launch gaps"
 

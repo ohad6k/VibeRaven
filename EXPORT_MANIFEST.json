@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-15T10:08:24.491Z",
+  "exportedAt": "2026-06-15T15:10:30.430Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -32,20 +32,12 @@
       "docs/badge-snippet.md"
     ],
     [
+      "skills.sh.json",
+      "skills.sh.json"
+    ],
+    [
       "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
       ".github/workflows/viberaven-agent-discovery.yml"
-    ],
-    [
-      "landing/public/showcase/operator-console.png",
-      "showcase/operator-console.png"
-    ],
-    [
-      "landing/public/showcase/fix-loop-progress.png",
-      "showcase/fix-loop-progress.png"
-    ],
-    [
-      "landing/public/showcase/proof-card.png",
-      "showcase/proof-card.png"
     ],
     [
       "AGENTS.md",
@@ -94,6 +86,10 @@
     [
       "examples/proof",
       "examples/proof"
+    ],
+    [
+      "agent-skills",
+      "agent-skills"
     ]
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Production",
+      "description": "Skills for taking AI-built apps from local demo to launch-ready production.",
+      "skills": [
+        "viberaven-production-readiness"
+      ]
+    }
+  ]
+}

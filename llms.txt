@@ -1,6 +1,6 @@
 # VibeRaven
 
-> Agent production layer for AI-built apps. Mission Map + Production Protocol.
+> VibeRaven Production Protocol for AI-built apps. Agent Context + Production Gate.
 
 Canonical agent command:
 
@@ -8,18 +8,14 @@ Canonical agent command:
 npx -y viberaven --agent-mode
 ```
 
-Preview the native chat/terminal flow locally:
-
-```bash
-npx -y viberaven preview --agent-mode
-```
-
-Install agent rules into this repo or any repo:
+Install agent rules into this repo (or any repo):
 
 ```bash
 npx -y viberaven init --agents all
 npx -y viberaven doctor --agents
 ```
+
+Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json` and `.viberaven/context-map.json`. Keep operating until the gate is clear or a provider/user blocker remains. Do not claim production-ready while `gate.status` is not `clear`.
 
 ## Full canonical reference
 
@@ -28,6 +24,10 @@ npx -y viberaven doctor --agents
 ## Links
 
 - https://viberaven.dev
+- https://viberaven.dev/viberaven-production-protocol-ai-built-apps.md
+- https://viberaven.dev/what-is-viberaven-prp-json.md
+- https://viberaven.dev/how-to-use-viberaven-next-actions.md
+- https://viberaven.dev/viberaven-prp-mcp-resources.md
 - https://viberaven.dev/agent-context.md
 - https://viberaven.dev/skills.json
 - https://www.npmjs.com/package/viberaven
