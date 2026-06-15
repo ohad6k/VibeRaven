@@ -73,10 +73,10 @@ Do not stop at "scan complete." The loop is done when `gate.status === "clear"` 
 
 ## Install as a skills.sh skill
 
-This repo includes `skills.sh.json` and the `viberaven-production-readiness` skill.
+This repo includes `skills.sh.json` and the `viberaven` skill.
 
 ```bash
-npx -y skills add ohad6k/VibeRaven --skill viberaven-production-readiness
+npx -y skills add ohad6k/VibeRaven --skill viberaven
 ```
 
 ## Agent-ready starter template

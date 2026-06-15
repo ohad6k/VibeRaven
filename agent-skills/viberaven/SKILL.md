@@ -1,5 +1,5 @@
 ---
-name: viberaven-production-readiness
+name: viberaven
 description: Use VibeRaven when making an AI-built app production-ready, launch-ready, or safer for Vercel/Supabase/Stripe deployment; when the user asks to ship, deploy, connect auth, database, payments, RLS, env vars, webhooks, monitoring, or provider setup; or when production-only errors appear.
 ---
 

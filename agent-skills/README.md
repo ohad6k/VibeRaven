@@ -1,11 +1,11 @@
 # VibeRaven Agent Skills
 
-This directory contains the public VibeRaven production-readiness skill for AI coding agents.
+This directory contains the public VibeRaven skill for AI coding agents.
 
 After this directory is published in the public VibeRaven GitHub repository, users can install it with the Agent Skills CLI:
 
 ```bash
-npx -y skills add ohad6k/VibeRaven --skill viberaven-production-readiness
+npx -y skills add ohad6k/VibeRaven --skill viberaven
 ```
 
 The skill teaches agents to use VibeRaven as the Agent Context + Production Gate:

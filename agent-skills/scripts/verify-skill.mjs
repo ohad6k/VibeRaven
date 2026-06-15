@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const skill = readFileSync(resolve('agent-skills/viberaven-production-readiness/SKILL.md'), 'utf8');
+const skill = readFileSync(resolve('agent-skills/viberaven/SKILL.md'), 'utf8');
 
 const required = [
-  'name: viberaven-production-readiness',
+  'name: viberaven',
   'description: Use VibeRaven when making an AI-built app production-ready, launch-ready, or safer for Vercel/Supabase/Stripe deployment',
   'production-ready',
   'launch-ready',
