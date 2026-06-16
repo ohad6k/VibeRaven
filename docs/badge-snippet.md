@@ -1,6 +1,6 @@
 # VibeRaven enabled badge
 
-Add to public discovery README or community templates:
+Add to a project README or community template:
 
 ```markdown
 [![VibeRaven enabled](https://img.shields.io/badge/VibeRaven-enabled-7c3aed?style=flat-square)](https://viberaven.dev)
