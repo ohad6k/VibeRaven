@@ -81,6 +81,6 @@ Before ending any deploy, auth, RLS, webhook, or dependency task, run:
 Gate is not clear until `gate.status === "clear"` in `.viberaven/gate-result.json`.
 <!-- VIBERAVEN:END -->
 
-## Private monorepo (ohad6k/viberaven-dev)
+## Public Repository Scope
 
-Product map: [docs/repo-map.md](docs/repo-map.md). Surfaces: extension `0.0.37` (`src/`), CLI npm `1.0.5` (`packages/cli`), MCP npm `1.0.5` (`packages/mcp`), flywheel (`docs/plans/`, `marketing/automations/`). Public discovery repo: [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven).
+This repository is the public open-source surface for VibeRaven docs, agent rules, examples, MCP configuration, and production-readiness command workflows.

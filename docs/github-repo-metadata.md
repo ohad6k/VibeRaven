@@ -1,48 +1,56 @@
-# GitHub repository metadata
+# GitHub Repository Metadata
 
-| Repo | URL | Purpose |
-|------|-----|---------|
-| **Private product** | https://github.com/ohad6k/viberaven-dev | Full monorepo - CLI, extension, landing source, env, billing, internal development |
-| **Public discovery** | https://github.com/ohad6k/VibeRaven | Agent-facing GitHub surface only - README, templates, `llms.txt`, agent rules. **Not** full source code |
+This repository is the public open-source surface for VibeRaven: docs, agent rules, examples, MCP configuration, production-readiness protocol references, and user-facing command workflows.
 
-Sync policy: **manual curated export** from private -> public. See [`public-repo-export.md`](./public-repo-export.md).
+## Repository About
 
-## Public repo (`ohad6k/VibeRaven`) - About
+Set on <https://github.com/ohad6k/VibeRaven/settings>:
 
-Set on https://github.com/ohad6k/VibeRaven/settings:
-
-- **Description:** VibeRaven Production Protocol for AI-built apps. Run `npx -y viberaven --agent-mode`, read `.viberaven/prp.json`, and fix `nextActions` before launch.
+- **Description:** Production readiness for AI-built apps
 - **Website:** https://viberaven.dev
 
-## Public repo - Topics
+## Topics
 
-`production-protocol`, `production-readiness`, `ai-built-apps`, `agents-md`, `mcp-server`, `cursor`, `claude-code`, `codex`, `supabase`, `vercel`
+`production-readiness`, `ai-agents`, `codex`, `claude-code`, `cursor`, `mcp-server`, `supabase`, `vercel`, `agents-md`, `ai-built-apps`, `rls`, `launch-checklist`
 
-## Public README - required boundary line
+## Public README Requirements
 
-The root README on `ohad6k/VibeRaven` must include (verbatim):
+The root README should make these points clear:
 
-> VibeRaven public repo is the agent discovery and installation surface. Product source code and service internals live in a private repository.
+- VibeRaven is production readiness for AI-built apps.
+- The canonical command is `npx -y viberaven --agent-mode`.
+- The free preview command is `npx -y viberaven preview --agent-mode`.
+- Agent-mode writes `.viberaven/actions.json`, `.viberaven/action-registry.json`, `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/context-map.json`.
+- Chat output is optimized for the renderer the agent already has: stable action IDs, focused targets, copy blocks, command blocks, repo-relative file targets, verify commands, and resume prompts.
+- VibeRaven never renders secrets, tokens, raw env values, or absolute local paths.
 
-Canonical export source: [`docs/public-repo/README.md`](./public-repo/README.md).
+## Keep Out Of Public Docs
 
-## Public repo - discovery phrases
+Do not publish:
 
-Keep these exact strings visible in the public README, `llms.txt`, and MCP docs when relevant:
+- `.env` values, credentials, tokens, cookies, customer data, or service-role keys
+- private billing/provider configuration
+- internal incident notes or private deployment logs
+- generated local scan artifacts from a user's real app unless explicitly sanitized
 
-- `VibeRaven Production Protocol`
-- `npx -y viberaven --agent-mode`
-- `.viberaven/prp.json`
-- `nextActions`
-- `decision.status`
-- `prp://current`
-- `viberaven_prp_current`
+## Release Metadata
 
-## Never push to public
+Current public command surface:
 
-Full monorepo, source code, `.env`, billing code, private configs, landing source, internal implementation.
+- `viberaven preview --agent-mode`
+- `viberaven preview --json`
+- `viberaven --agent-mode`
+- `viberaven actions`
+- `viberaven verify --action VR-A1`
+- `viberaven --verify`
+- `viberaven --strict`
+- `viberaven audit --vercel-supabase`
+- `viberaven init --agents all`
+- `viberaven doctor --agents`
+- `viberaven clean --plan`
 
 ## Related
 
-- [Canonical surface plan - two-repository architecture](./plans/2026-06-09-viberaven-agent-canonical-surface-plan.md#two-repository-architecture-operator-note)
-- [Public repo export checklist](./public-repo-export.md)
+- [Public README](../README.md)
+- [Agent reference](../llms.txt)
+- [MCP registry submission](./mcp-registry-submission.md)
