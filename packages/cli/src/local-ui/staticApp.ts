@@ -127,16 +127,23 @@ export function renderLocalUiHtml(): string {
       background: var(--surface);
       color: var(--ink);
       border-radius: var(--radius);
-      padding: 9px 12px;
+      padding: 9px 14px;
+      cursor: pointer;
+    }
+    .project-picker:hover {
+      border-color: #cdd5df;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
     }
     .project-picker::before {
       content: "";
-      width: 15px;
-      height: 12px;
+      width: 18px;
+      height: 13px;
       border: 1.6px solid currentColor;
-      border-radius: 2px;
+      border-radius: 3px;
       display: inline-block;
-      box-shadow: inset 0 4px 0 rgba(17, 20, 23, 0.06);
+      clip-path: polygon(0 28%, 36% 28%, 43% 8%, 100% 8%, 100% 100%, 0 100%);
+      background: linear-gradient(180deg, rgba(17, 20, 23, 0.03), rgba(17, 20, 23, 0.08));
+      flex: 0 0 auto;
     }
     .project-picker::after {
       content: "";
@@ -174,6 +181,18 @@ export function renderLocalUiHtml(): string {
       white-space: nowrap;
       min-height: 44px;
       padding-inline: 16px;
+    }
+    .live-status {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      white-space: nowrap;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 9px 16px;
+      color: var(--ink);
     }
     .dot {
       width: 8px;
@@ -1108,9 +1127,9 @@ export function renderLocalUiHtml(): string {
       <strong>VibeRaven</strong>
       <span class="tagline">From AI demo to production</span>
     </div>
-    <div id="project-picker" class="project-picker" aria-label="Current project"><span>Loading project...</span></div>
+    <button id="project-picker" class="project-picker" type="button" aria-label="Current project"><span>Loading project...</span></button>
     <div class="top-actions">
-      <button id="scan" class="status-button" type="button"><span class="dot ok" aria-hidden="true"></span>Scan</button>
+      <span class="live-status"><span class="dot ok" aria-hidden="true"></span>Connected</span>
       <span class="top-divider" aria-hidden="true"></span>
       <button id="settings" class="icon-button" title="Settings" aria-label="Settings" type="button">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1318,13 +1337,65 @@ export function renderLocalUiHtml(): string {
       }).join('');
       return cards + '<article class="guide-card" style="--panel-index:8"><h3>Use with your coding agent</h3><p>The prompt on the right is scoped to this provider check. Copy it after selecting the row you want to fix.</p><div class="guide-actions"><button class="primary-action" type="button" data-copy-prompt="true">Copy focused prompt</button><button class="verify-action" type="button" data-run-verify="true">Run verify</button></div></article>';
     }
+    function projectFiles() {
+      return (state.data && state.data.project && state.data.project.files) || [];
+    }
+    function fileByPath(path) {
+      return projectFiles().find((file) => file.path === path);
+    }
+    function bestEnvFile() {
+      return fileByPath('.env.local')?.exists ? '.env.local'
+        : fileByPath('.env')?.exists ? '.env'
+          : '.env.example';
+    }
+    function projectFileCards() {
+      return projectFiles().map((file, index) => {
+        const stateLabel = file.exists ? 'Found' : 'Missing';
+        const action = file.exists
+          ? '<button type="button" data-open-file="' + escapeHtml(file.path) + '">Open</button>'
+          : '<button type="button" data-copy="' + escapeHtml(file.path) + '">Copy path</button>';
+        return '<article class="guide-card" style="--panel-index:' + index + '"><h3>' + escapeHtml(file.label) + '</h3><p>' + escapeHtml(file.path) + ' - ' + stateLabel + '</p><div class="guide-actions">' + action + '</div></article>';
+      }).join('');
+    }
+    function taskSteps(provider, item) {
+      if (provider.id === 'supabase' && item.id === 'production-env') {
+        const envFile = bestEnvFile();
+        return [
+          { title: 'Open ' + envFile, body: 'Put the required variable names where your app already keeps environment configuration.', file: envFile },
+          { title: 'Copy Supabase placeholders', body: 'Paste names only. Add real values in your normal local environment, not into committed source.', code: 'NEXT_PUBLIC_SUPABASE_URL=\\nNEXT_PUBLIC_SUPABASE_ANON_KEY=\\nSERVER_ONLY_SUPABASE_ADMIN_KEY=<server-only, never expose to browser>' },
+          { title: 'Run verify', body: 'Refresh VibeRaven after the file is saved.', verify: true }
+        ];
+      }
+      if (provider.id === 'supabase' && item.id === 'rls-policies') {
+        return [
+          { title: 'Open Supabase policies', body: 'Use Supabase to inspect the affected tables and policy names.', openUrl: 'https://supabase.com/dashboard/project/_/auth/policies' },
+          { title: 'Open migrations folder', body: 'Keep the durable SQL proof in your repo so Codex or Claude Code can edit it.', file: 'supabase/migrations' },
+          { title: 'Copy RLS policy template', body: 'Adapt table and owner column names before saving.', code: "alter table public.your_table enable row level security;\\n\\ncreate policy \\"Users manage own rows\\" on public.your_table\\nfor all to authenticated\\nusing (auth.uid() = user_id)\\nwith check (auth.uid() = user_id);" },
+          { title: 'Run verify', body: 'Refresh VibeRaven after the migration is saved.', verify: true }
+        ];
+      }
+      if (provider.id === 'stripe') {
+        const envFile = bestEnvFile();
+        return [
+          { title: 'Open ' + envFile, body: 'Add payment variable names where your app already expects environment values.', file: envFile },
+          { title: 'Copy payment placeholders', body: 'Keep server keys server-side. Use real values only in your local/provider environment.', code: 'STRIPE_SERVER_KEY=<server-only>\\nSTRIPE_WEBHOOK_SIGNING_SECRET=<server-only>\\nNEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=' },
+          { title: 'Run verify', body: 'Refresh VibeRaven after the repo evidence is saved.', verify: true }
+        ];
+      }
+      return [
+        { title: 'Open the likely file', body: 'Start where this project stores launch evidence.', file: bestEnvFile() },
+        { title: 'Copy the focused change', body: item.whatToChange, code: item.whatToChange },
+        { title: 'Run verify', body: 'Refresh VibeRaven after the change is saved.', verify: true }
+      ];
+    }
     function renderTasklistHtml() {
       const provider = selectedProvider();
       const item = selectedPathItem(provider);
-      const cards = guideSteps(provider, item).slice(0, 3).map((step, index) => {
+      const cards = taskSteps(provider, item).map((step, index) => {
         const actions = [
           step.code ? '<button type="button" data-copy="' + escapeHtml(step.code) + '">Copy</button>' : '',
           step.file ? '<button type="button" data-open-file="' + escapeHtml(step.file) + '">Open file</button>' : '',
+          step.openUrl ? '<button type="button" data-open-url="' + escapeHtml(step.openUrl) + '">Open</button>' : '',
           step.verify ? '<button class="verify-action" type="button" data-run-verify="true">Run verify</button>' : ''
         ].filter(Boolean).join('');
         return '<article class="guide-card task-card" style="--panel-index:' + index + '"><span class="task-number">' + (index + 1) + '</span><div><h3>' + escapeHtml(step.title) + '</h3><p>' + escapeHtml(step.body) + '</p>' + (step.code ? '<code>' + escapeHtml(step.code) + '</code>' : '') + '<div class="guide-actions">' + actions + '</div></div></article>';
@@ -1340,7 +1411,11 @@ export function renderLocalUiHtml(): string {
     }
     function openSettingsPanel() {
       const project = state.data.project;
-      openPanel('Settings', 'This console reads repo evidence only.', '<article class="guide-card"><h3>Project folder</h3><p>' + escapeHtml(project.workspacePath) + '</p></article><article class="guide-card"><h3>Privacy boundary</h3><p>Scan and verify inspect package metadata, env examples, deployment config, tests, and provider-related source hints. They do not read real secret values and do not use your private OpenAI API key.</p></article><article class="guide-card"><h3>Commands</h3><code>npx -y viberaven\\nnpx -y viberaven --verify\\nnpx -y viberaven --agent-mode</code></article>');
+      openPanel('Settings', 'Project files and editor shortcuts.', '<article class="guide-card"><h3>Project folder</h3><p>' + escapeHtml(project.workspacePath) + '</p><div class="guide-actions"><button type="button" data-open-file=".">Open folder</button></div></article>' + projectFileCards() + '<article class="guide-card"><h3>Commands</h3><code>npx -y viberaven\\nnpx -y viberaven --verify\\nnpx -y viberaven --agent-mode</code></article>');
+    }
+    function openProjectPanel() {
+      const project = state.data.project;
+      openPanel('Project', project.name, '<article class="guide-card"><h3>Working folder</h3><p>' + escapeHtml(project.workspacePath) + '</p><div class="guide-actions"><button class="primary-action" type="button" data-open-file=".">Open folder</button><button type="button" data-run-verify="true">Run verify</button></div></article>' + projectFileCards());
     }
     function gateLabel(status) {
       return status === 'clear' ? 'Gate clear' : 'Gate not clear';
@@ -1575,10 +1650,7 @@ export function renderLocalUiHtml(): string {
       state.providerQuery = event.target.value.toLowerCase();
       renderProviders();
     });
-    document.getElementById('scan').addEventListener('click', () => {
-      setTip('Running scan...');
-      postAndRefresh('/api/scan');
-    });
+    document.getElementById('project-picker').addEventListener('click', openProjectPanel);
     document.getElementById('verify').addEventListener('click', () => {
       setTip('Running verify...');
       postAndRefresh('/api/verify');

@@ -453,6 +453,17 @@ async function loadArtifact(workspacePath: string): Promise<LocalArtifact | unde
   }
 }
 
+function projectFiles(workspacePath: string) {
+  return [
+    { label: 'Environment', path: '.env', exists: existsSync(join(workspacePath, '.env')) },
+    { label: 'Local environment', path: '.env.local', exists: existsSync(join(workspacePath, '.env.local')) },
+    { label: 'Env example', path: '.env.example', exists: existsSync(join(workspacePath, '.env.example')) },
+    { label: 'Package manifest', path: 'package.json', exists: existsSync(join(workspacePath, 'package.json')) },
+    { label: 'Vercel config', path: 'vercel.json', exists: existsSync(join(workspacePath, 'vercel.json')) },
+    { label: 'Supabase migrations', path: 'supabase/migrations', exists: existsSync(join(workspacePath, 'supabase', 'migrations')) },
+  ];
+}
+
 function localState(cwd: string, artifact?: LocalArtifact) {
   const firstGap = artifact?.gaps[0];
   const providers = PUBLIC_PROVIDER_CATALOG.map((seed) => {
@@ -485,12 +496,12 @@ function localState(cwd: string, artifact?: LocalArtifact) {
             gapId: 'LOCAL-SCAN-001',
             launchPathItemId: focusedRow.id,
             launchPathTitle: focusedRow.title,
-            currentIssue: 'VibeRaven has not scanned this project yet.',
-            whyItMatters: 'The launch console needs local repo evidence before it can focus the correct provider risk.',
-            whatToChange: 'Run Local scan or Verify so VibeRaven can map package, env, deployment, test, and provider evidence.',
+            currentIssue: 'VibeRaven has not checked this project yet.',
+            whyItMatters: 'The launch console needs repo evidence before it can focus the correct provider risk.',
+            whatToChange: 'Click Verify so VibeRaven can map package, env, deployment, test, and provider evidence.',
             verifyWith: 'Click Verify or run npx -y viberaven --verify.',
             prompt: [
-              `Run VibeRaven local evidence discovery for ${basename(cwd) || cwd}.`,
+              `Run VibeRaven evidence discovery for ${basename(cwd) || cwd}.`,
               '',
               'Requirements:',
               '- Inspect package, env example, deployment, test, auth, data, payment, and monitoring evidence.',
@@ -556,6 +567,7 @@ function localState(cwd: string, artifact?: LocalArtifact) {
       scoreLabel: artifact?.scoreLabel,
       summary: artifact?.summary,
       gateStatus: artifact?.verificationSummary.status ?? 'not_checked',
+      files: projectFiles(cwd),
     },
     providers,
     selectedProviderId: selectedProvider.id,
@@ -565,7 +577,7 @@ function localState(cwd: string, artifact?: LocalArtifact) {
 
 async function route(req: IncomingMessage, res: ServerResponse, options: { cwd: string; token: string }): Promise<void> {
   const url = new URL(req.url ?? '/', 'http://127.0.0.1');
-  if (req.method === 'GET' && url.pathname === '/assets/extension-icon.png') {
+  if (req.method === 'GET' && (url.pathname === '/assets/extension-icon.png' || url.pathname === '/favicon.ico')) {
     try {
       const icon = await readFile(join(__dirname, 'extension-icon.png'));
       res.writeHead(200, {
