@@ -1,7 +1,7 @@
 {
-  "mode": "public-source-localhost-phase-1",
-  "exportedAt": "2026-06-17T20:24:57.266Z",
-  "sourceRepo": "private-curated-source",
+  "mode": "public-source",
+  "exportedAt": "2026-06-17T20:34:39.176Z",
+  "sourceRepo": "curated-public-source",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
     [

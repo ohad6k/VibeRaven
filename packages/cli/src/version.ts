@@ -1,1 +1,1 @@
-export const VERSION = '1.1.10-public-localhost';
+export const VERSION = '1.1.10';

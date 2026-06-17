@@ -1743,7 +1743,7 @@ function renderLocalUiHtml() {
 }
 
 // src/version.ts
-var VERSION = "1.1.10-public-localhost";
+var VERSION = "1.1.10";
 
 // src/cli.ts
 function brandSvg(title, fill, path) {
