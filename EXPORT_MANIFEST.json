@@ -1,6 +1,6 @@
 {
   "mode": "public-source-localhost-phase-1",
-  "exportedAt": "2026-06-17T18:04:11.039Z",
+  "exportedAt": "2026-06-17T18:11:25.009Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -31,6 +31,10 @@
     [
       "<generated:public-readme>",
       "README.md"
+    ],
+    [
+      "<generated:public-console-preview>",
+      "docs/assets/viberaven-local-console.svg"
     ],
     [
       "<generated:public-agents>",

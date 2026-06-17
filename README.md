@@ -1,6 +1,13 @@
 # VibeRaven
 
-Local launch console for AI-built apps.
+Local launch console for AI-built apps that are almost ready to ship.
+
+<p>
+  <a href="https://www.npmjs.com/package/viberaven"><img alt="npm version" src="https://img.shields.io/npm/v/viberaven?style=flat-square&color=111827"></a>
+  <a href="./LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-111827?style=flat-square"></a>
+  <img alt="Node 20+" src="https://img.shields.io/badge/node-20%2B-111827?style=flat-square">
+  <img alt="local first" src="https://img.shields.io/badge/local-first-ff7a00?style=flat-square">
+</p>
 
 VibeRaven turns "the AI demo runs on my machine" into a concrete launch-readiness map. Run it in a repo and it opens a localhost console with provider launch paths, repo-evidence gaps, an agent prompt, a tasklist, and a verify loop.
 
@@ -8,16 +15,26 @@ VibeRaven turns "the AI demo runs on my machine" into a concrete launch-readines
 npx -y viberaven
 ```
 
+<p>
+  <img alt="VibeRaven local launch console preview" src="docs/assets/viberaven-local-console.svg">
+</p>
+
+## Why It Exists
+
+AI coding tools are strong at getting an app to demo. The hard part is the last mile: auth callbacks, RLS policy evidence, production env names, deploy checks, webhooks, monitoring, and tests. VibeRaven gives both the developer and the coding agent a shared local map of what is still missing.
+
+Normal git push is not gated by VibeRaven. Use the gate language only when making launch or deploy-readiness claims.
+
 ## What You Get
 
 - A provider-first launch console for Supabase, Vercel, Stripe, GitHub, Sentry, Clerk, PostHog, and local repo evidence.
 - A deterministic local scan that writes `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, `.viberaven/context-map.json`, and `.viberaven/mission-map.md`.
 - A copyable agent prompt focused on the first repo-owned launch gap.
-- A clear boundary: normal git push is not gated; launch/deploy-readiness claims should be verified.
+- A clear boundary between open local evidence and private managed-service features.
 
-## Install And Run
+## Quickstart
 
-Use the published package:
+Use the published package from any project folder:
 
 ```bash
 npx -y viberaven
@@ -27,9 +44,13 @@ npx -y viberaven --agent-mode .
 npx -y viberaven --verify .
 ```
 
-Or build this repo locally:
+The default TTY experience opens the local console. Agent-oriented commands keep terminal behavior predictable:
 
-## Build
+- `viberaven --agent-mode .` writes artifacts and prints the tasklist.
+- `viberaven --verify .` refreshes local evidence and returns a strict exit code.
+- `viberaven ui .` opens the localhost console directly.
+
+## Build From Source
 
 ```bash
 npm install
@@ -46,6 +67,16 @@ node packages/cli/dist/cli.js --agent-mode .
 node packages/cli/dist/cli.js --verify .
 ```
 
+## The Workflow
+
+1. Open the local console with `npx -y viberaven`.
+2. Pick the provider with the highest launch risk.
+3. Copy the focused agent prompt.
+4. Fix one repo-owned gap.
+5. Run `npx -y viberaven --verify .`.
+
+The loop is intentionally small. One concrete fix, one verification pass, one updated map.
+
 ## How It Works
 
 VibeRaven reads local repo evidence only: package metadata, env examples, deployment config, Supabase folders, tests, and provider-related source hints. It does not read real secret values. It maps that evidence into provider launch paths and gives coding agents one concrete next fix.
@@ -57,17 +88,22 @@ The local console is intentionally useful before Cloud exists:
 - Right panel: agent prompt, tasklist, and verify action.
 - Footer: current command and gate status.
 
-## License
-
-The public local CLI/UI source is MIT licensed. Private managed service code remains proprietary and is not part of this export.
-
 ## Open-Core Boundary
 
 This public repo includes the local CLI, localhost UI, deterministic scan, docs, and artifact contracts.
 
 Private managed services are not included: account systems, remote runners, OpenAI-backed services, Polar/Supabase account data, customer records, and future team features stay private.
 
-A normal git push does not require a VibeRaven scan.
+## Project Status
+
+This repo is the public local-first source surface. It is designed to be useful without accounts or private infrastructure.
+
+Current focus:
+
+- Sharpen provider launch-path copy.
+- Add more local evidence checks that do not require secrets.
+- Improve the localhost UI and artifact contracts.
+- Keep the public/private boundary obvious.
 
 ## Contributing
 
@@ -84,3 +120,7 @@ Before sending a PR:
 npm --prefix packages/cli run typecheck
 npm --prefix packages/cli run build
 ```
+
+## License
+
+MIT. The public local CLI/UI source is open. Private managed service code remains outside this export.

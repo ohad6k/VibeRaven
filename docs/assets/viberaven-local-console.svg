@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">VibeRaven local launch console preview</title>
+  <desc id="desc">A provider-rich local launch console with provider status, launch-path checks, an agent prompt, and verify workflow.</desc>
+  <rect width="1400" height="760" rx="28" fill="#fbfbfa"/>
+  <rect x="1" y="1" width="1398" height="758" rx="28" fill="none" stroke="#d9dee7"/>
+  <rect x="0" y="0" width="1400" height="64" rx="28" fill="#ffffff"/>
+  <path d="M0 64H1400" stroke="#e4e7ec"/>
+  <path fill="#071018" d="M28 38c18-1 32-8 43-20 12-12 25-17 42-17-7 4-12 9-15 15 12-4 23-3 34 3-13 2-23 7-30 14 9 0 17 2 25 6-22 7-41 9-58 6-15-3-28-5-41-7Z"/>
+  <path fill="#ff7a00" d="M88 41c14-4 27-3 40 1-12 5-23 11-33 19 1-7-1-13-7-20Z"/>
+  <text x="145" y="39" fill="#111417" font-family="Geist, Satoshi, Arial, sans-serif" font-size="25" font-weight="800">VibeRaven</text>
+  <rect x="296" y="16" width="205" height="34" rx="8" fill="#ffffff" stroke="#d9dee7"/>
+  <text x="315" y="38" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="13" font-weight="700">From AI demo to production</text>
+  <rect x="824" y="14" width="300" height="38" rx="9" fill="#ffffff" stroke="#d9dee7"/>
+  <path d="M844 28h16v12h-16z" fill="none" stroke="#111417" stroke-width="1.6"/>
+  <text x="872" y="39" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="15" font-weight="700">viberaven-app</text>
+  <rect x="1142" y="14" width="118" height="38" rx="9" fill="#ffffff" stroke="#d9dee7"/>
+  <circle cx="1163" cy="33" r="4" fill="#24b26b"/>
+  <text x="1178" y="39" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="14">Local scan</text>
+  <rect x="1282" y="14" width="92" height="38" rx="9" fill="#071018"/>
+  <text x="1314" y="39" fill="#ffffff" font-family="Geist, Arial, sans-serif" font-size="15" font-weight="800">Verify</text>
+
+  <rect x="0" y="64" width="292" height="652" fill="#fbfbfa"/>
+  <path d="M292 64v652" stroke="#e4e7ec"/>
+  <text x="24" y="100" fill="#475467" font-family="Geist, Arial, sans-serif" font-size="12" font-weight="800">PROVIDERS</text>
+  <rect x="24" y="118" width="244" height="38" rx="8" fill="#ffffff" stroke="#d9dee7"/>
+  <circle cx="42" cy="137" r="7" fill="none" stroke="#667085"/>
+  <path d="m47 142 6 6" stroke="#667085"/>
+  <text x="62" y="142" fill="#667085" font-family="Geist, Arial, sans-serif" font-size="12">Search providers...</text>
+  <rect x="24" y="174" width="244" height="58" rx="9" fill="#fffaf5" stroke="#ff7a00"/>
+  <path fill="#3FCF8E" d="M60 184c0-1-1-2-2-1l-24 30c-2 2 0 5 3 5h24l1 18c0 2 2 3 4 1l24-30c2-2 0-5-3-5H62z" transform="scale(.55) translate(55 175)"/>
+  <text x="78" y="203" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="14" font-weight="800">Supabase</text>
+  <text x="78" y="221" fill="#ff7a00" font-family="Geist, Arial, sans-serif" font-size="12" font-weight="700">Needs fix</text>
+  <circle cx="231" cy="203" r="4" fill="#ff7a00"/>
+  <g font-family="Geist, Arial, sans-serif" font-size="14" font-weight="800" fill="#111417">
+    <rect x="24" y="242" width="244" height="58" rx="9" fill="#ffffff" stroke="#d9dee7"/><path d="m55 258 13 24H42z" fill="#111417"/><text x="78" y="272">Vercel</text><text x="78" y="290" fill="#24b26b" font-size="12">Ready</text><circle cx="231" cy="271" r="4" fill="#24b26b"/>
+    <rect x="24" y="310" width="244" height="58" rx="9" fill="#ffffff" stroke="#d9dee7"/><text x="45" y="346" fill="#635BFF" font-size="31">S</text><text x="78" y="340">Stripe</text><text x="78" y="358" fill="#ff7a00" font-size="12">Needs connect</text><circle cx="231" cy="339" r="4" fill="#ff7a00"/>
+    <rect x="24" y="378" width="244" height="58" rx="9" fill="#ffffff" stroke="#d9dee7"/><circle cx="54" cy="407" r="15" fill="#111417"/><text x="78" y="408">GitHub</text><text x="78" y="426" fill="#24b26b" font-size="12">Ready</text><circle cx="231" cy="407" r="4" fill="#24b26b"/>
+    <rect x="24" y="446" width="244" height="58" rx="9" fill="#ffffff" stroke="#d9dee7"/><path d="M43 487h28c-1-9-7-20-15-28l-5 8c5 5 8 10 9 14h-5c-1-3-4-7-7-10l-3 5c2 2 3 4 4 5h-5c-1-2-3-5-5-7l9-16c1-2 3-2 4-1 10 9 19 24 21 34 0 2-1 3-3 3H42c-2 0-3-2-2-4z" fill="#362D59"/><text x="78" y="476">Sentry</text><text x="78" y="494" fill="#e11d1d" font-size="12">Blocked</text><circle cx="231" cy="475" r="4" fill="#e11d1d"/>
+  </g>
+  <rect x="24" y="536" width="244" height="128" rx="9" fill="#ffffff" stroke="#d9dee7"/>
+  <text x="42" y="566" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="14" font-weight="800">Run VibeRaven locally</text>
+  <text x="42" y="590" fill="#475467" font-family="Geist, Arial, sans-serif" font-size="13">Verify your project from the terminal.</text>
+  <rect x="42" y="612" width="208" height="36" rx="7" fill="#071018"/>
+  <text x="58" y="635" fill="#ffffff" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="12">$ npx -y viberaven</text>
+
+  <rect x="292" y="64" width="766" height="652" fill="#fbfbfa"/>
+  <path d="M1058 64v652" stroke="#e4e7ec"/>
+  <path fill="#3FCF8E" d="M374 119c0-2-3-3-4-1l-27 34c-2 3 0 6 3 6h28l1 21c0 2 3 3 5 1l27-34c2-3 0-6-3-6h-28z" transform="scale(.68) translate(178 70)"/>
+  <text x="420" y="126" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="25" font-weight="850">Supabase launch path</text>
+  <text x="420" y="151" fill="#475467" font-family="Geist, Arial, sans-serif" font-size="14">What must be true before this app can ship.</text>
+  <rect x="812" y="114" width="210" height="40" rx="8" fill="#ffffff" stroke="#d9dee7"/>
+  <text x="840" y="139" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="13" font-weight="700">Provider guide unavailable locally</text>
+
+  <path d="M366 190v306" stroke="#d0d5dd"/>
+  <g font-family="Geist, Arial, sans-serif">
+    <circle cx="366" cy="196" r="13" fill="#ffffff" stroke="#d0d5dd"/><circle cx="366" cy="196" r="4" fill="#667085"/>
+    <rect x="388" y="166" width="630" height="66" rx="9" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="408" y="196" fill="#111417" font-size="15" font-weight="800">Schema and migrations</text>
+    <text x="408" y="219" fill="#475467" font-size="13">Production data shape needs repo-owned evidence before real users write to it.</text>
+    <rect x="928" y="180" width="74" height="24" rx="12" fill="#ffffff" stroke="#667085"/><text x="946" y="197" fill="#667085" font-size="11">Not checked</text>
+    <circle cx="366" cy="283" r="13" fill="#fff2e5" stroke="#ff7a00"/><circle cx="366" cy="283" r="4" fill="#ff7a00"/>
+    <rect x="388" y="250" width="630" height="74" rx="9" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="408" y="282" fill="#111417" font-size="15" font-weight="800">RLS policies</text>
+    <text x="408" y="305" fill="#475467" font-size="13">User data must be protected by row ownership rules before launch.</text>
+    <rect x="928" y="266" width="74" height="24" rx="12" fill="#fff2e5" stroke="#ff7a00"/><text x="946" y="283" fill="#ff7a00" font-size="11">Needs fix</text>
+    <circle cx="366" cy="370" r="13" fill="#ffffff" stroke="#d0d5dd"/><circle cx="366" cy="370" r="4" fill="#667085"/>
+    <rect x="388" y="338" width="630" height="66" rx="9" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="408" y="368" fill="#111417" font-size="15" font-weight="800">Auth callbacks</text>
+    <text x="408" y="391" fill="#475467" font-size="13">Authentication breaks when production callback URLs are missing or local-only.</text>
+    <circle cx="366" cy="455" r="13" fill="#ffffff" stroke="#d0d5dd"/><circle cx="366" cy="455" r="4" fill="#667085"/>
+    <rect x="388" y="422" width="630" height="66" rx="9" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="408" y="452" fill="#111417" font-size="15" font-weight="800">Production env</text>
+    <text x="408" y="475" fill="#475467" font-size="13">Production database URLs and keys must be explicit and safely scoped.</text>
+  </g>
+  <rect x="388" y="514" width="630" height="152" rx="9" fill="#ffffff" stroke="#d9dee7"/>
+  <text x="408" y="545" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="16" font-weight="800">Next fix</text>
+  <circle cx="420" cy="578" r="12" fill="#fbfbfa" stroke="#d9dee7"/><text x="416" y="583" fill="#475467" font-family="Geist, Arial, sans-serif" font-size="12" font-weight="800">1</text>
+  <text x="450" y="581" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="14" font-weight="800">Why it matters</text>
+  <text x="450" y="606" fill="#475467" font-family="Geist, Arial, sans-serif" font-size="13">The console needs local repo evidence before it can focus provider risk.</text>
+  <path d="M450 626h520" stroke="#e4e7ec"/>
+  <circle cx="420" cy="650" r="12" fill="#fbfbfa" stroke="#d9dee7"/><text x="416" y="655" fill="#475467" font-family="Geist, Arial, sans-serif" font-size="12" font-weight="800">2</text>
+  <text x="450" y="653" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="14" font-weight="800">What to change</text>
+
+  <rect x="1058" y="64" width="342" height="652" fill="#ffffff"/>
+  <text x="1084" y="120" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="22" font-weight="850">Agent prompt</text>
+  <text x="1084" y="146" fill="#475467" font-family="Geist, Arial, sans-serif" font-size="14">Use this prompt with your coding agent.</text>
+  <rect x="1084" y="170" width="284" height="360" rx="9" fill="#ffffff" stroke="#d9dee7"/>
+  <text x="1104" y="204" fill="#344054" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="13">Run VibeRaven local evidence</text>
+  <text x="1104" y="230" fill="#344054" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="13">discovery for this project.</text>
+  <text x="1104" y="282" fill="#344054" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="13">Requirements:</text>
+  <text x="1104" y="310" fill="#344054" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="13">- Inspect package, env, deploy,</text>
+  <text x="1104" y="336" fill="#344054" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="13">  auth, data, payment, tests.</text>
+  <text x="1104" y="362" fill="#344054" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="13">- Keep findings local.</text>
+  <text x="1104" y="388" fill="#344054" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="13">- Verify after the first fix.</text>
+  <rect x="1084" y="548" width="284" height="42" rx="8" fill="#071018"/>
+  <text x="1185" y="575" fill="#ffffff" font-family="Geist, Arial, sans-serif" font-size="14" font-weight="850">Copy prompt</text>
+  <rect x="1084" y="604" width="284" height="42" rx="8" fill="#ffffff" stroke="#d9dee7"/>
+  <text x="1182" y="631" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="14" font-weight="800">Run verify</text>
+  <rect x="0" y="716" width="1400" height="44" fill="#ffffff"/>
+  <path d="M0 716H1400" stroke="#e4e7ec"/>
+  <text x="24" y="743" fill="#111417" font-family="Geist, Arial, sans-serif" font-size="13" font-weight="800">VibeRaven CLI</text>
+  <rect x="326" y="724" width="150" height="26" rx="7" fill="#ffffff" stroke="#d9dee7"/>
+  <text x="344" y="742" fill="#111417" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="12">npx -y viberaven</text>
+  <circle cx="1276" cy="738" r="4" fill="#e11d1d"/>
+  <text x="1290" y="743" fill="#e11d1d" font-family="Geist, Arial, sans-serif" font-size="13" font-weight="800">Gate not clear</text>
+</svg>
