@@ -1,0 +1,20 @@
+{
+  "name": "viberaven-public-source",
+  "private": true,
+  "description": "Public local-first source export for VibeRaven localhost CLI/UI.",
+  "license": "MIT",
+  "scripts": {
+    "build": "npm --prefix packages/cli run build",
+    "typecheck": "npm --prefix packages/cli run typecheck",
+    "cli:scan": "node packages/cli/dist/cli.js scan",
+    "cli:verify": "node packages/cli/dist/cli.js --verify"
+  },
+  "workspaces": [
+    "packages/cli"
+  ],
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.0"
+  }
+}

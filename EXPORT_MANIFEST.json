@@ -1,87 +1,84 @@
 {
-  "exportedAt": "2026-06-17T11:50:42.589Z",
+  "mode": "public-source-localhost-phase-1",
+  "exportedAt": "2026-06-17T16:47:25.902Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
     [
-      "docs/public-repo/README.md",
+      "package.json",
+      "package.json"
+    ],
+    [
+      "packages/cli/package.json",
+      "packages/cli/package.json"
+    ],
+    [
+      "packages/cli/tsconfig.json",
+      "packages/cli/tsconfig.json"
+    ],
+    [
+      "packages/cli/src/local-ui/staticApp.ts",
+      "packages/cli/src/local-ui/staticApp.ts"
+    ],
+    [
+      "docs/contracts",
+      "docs/contracts"
+    ],
+    [
+      "<generated:public-readme>",
       "README.md"
     ],
     [
-      "llms.txt",
-      "llms.txt"
-    ],
-    [
-      "landing/public/llms-full.txt",
-      "llms-full.txt"
-    ],
-    [
-      "landing/public/agent-context.md",
-      "agent-context.md"
-    ],
-    [
-      "docs/mcp-registry-submission.md",
-      "docs/mcp-registry-submission.md"
-    ],
-    [
-      "docs/github-repo-metadata.md",
-      "docs/github-repo-metadata.md"
-    ],
-    [
-      "docs/badge-snippet.md",
-      "docs/badge-snippet.md"
-    ],
-    [
-      "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
-      ".github/workflows/viberaven-agent-discovery.yml"
-    ],
-    [
-      "AGENTS.md",
+      "<generated:public-agents>",
       "AGENTS.md"
     ],
     [
-      "CLAUDE.md",
+      "<generated:public-claude>",
       "CLAUDE.md"
     ],
     [
-      "GEMINI.md",
+      "<generated:public-gemini>",
       "GEMINI.md"
     ],
     [
-      ".cursor/rules/viberaven-core.mdc",
-      ".cursor/rules/viberaven-core.mdc"
+      "<generated:public-llms>",
+      "llms.txt"
     ],
     [
-      ".cursor/rules/viberaven-supabase-rls.mdc",
-      ".cursor/rules/viberaven-supabase-rls.mdc"
+      "<generated:public-llms-full>",
+      "llms-full.txt"
     ],
     [
-      ".cursor/rules/viberaven-deploy.mdc",
-      ".cursor/rules/viberaven-deploy.mdc"
+      "<generated:mit-license>",
+      "LICENSE"
     ],
     [
-      ".cursor/rules/viberaven-payments.mdc",
-      ".cursor/rules/viberaven-payments.mdc"
+      "<generated:public-cli-agents>",
+      "packages/cli/AGENTS.md"
     ],
     [
-      ".github/copilot-instructions.md",
-      ".github/copilot-instructions.md"
+      "<generated:mit-license>",
+      "packages/cli/LICENSE"
     ],
     [
-      ".viberaven/agent-context.md",
-      ".viberaven/agent-context.md"
+      "<generated:public-cli-readme>",
+      "packages/cli/README.md"
     ],
     [
-      ".viberaven/mission-map.md",
-      ".viberaven/mission-map.md"
+      "<generated:public-root-package>",
+      "package.json"
     ],
     [
-      "examples/nextjs-supabase-vercel-production-ready-template",
-      "examples/nextjs-supabase-vercel-production-ready-template"
+      "<generated:public-cli-package>",
+      "packages/cli/package.json"
     ],
     [
-      "examples/proof",
-      "examples/proof"
+      "<generated:public-local-cli>",
+      "packages/cli/src/cli.ts"
+    ],
+    [
+      "<generated:public-local-build>",
+      "packages/cli/scripts/build.mjs"
     ]
   ]
 }

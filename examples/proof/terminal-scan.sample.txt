@@ -1,9 +1,0 @@
-$ npx viberaven scan
-
-VibeRaven production-readiness scan
-Wrote .viberaven/agent-tasklist.md
-Wrote .viberaven/gate-result.json
-Gate status: not_clear (2 critical, 3 warning)
-
-Next: read .viberaven/agent-tasklist.md and fix TASK-001.
-Run: npx -y viberaven --verify after the heal batch is full.

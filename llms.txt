@@ -1,37 +1,13 @@
-# VibeRaven
+# VibeRaven Public Local Source
 
-> Production readiness for AI-built apps. Agent Context + Production Gate.
+Local commands from this checkout:
 
-Canonical agent command:
+- Build: npm --prefix packages/cli run build
+- UI: node packages/cli/dist/cli.js ui .
+- Scan: node packages/cli/dist/cli.js scan .
+- Agent mode: node packages/cli/dist/cli.js --agent-mode .
+- Verify: node packages/cli/dist/cli.js --verify .
 
-```bash
-npx -y viberaven --agent-mode
-```
+This Phase 1 export is local-only. It writes deterministic .viberaven/ artifacts from repository evidence and excludes private hosted-service, account, paid-tier, runner, remote scan, OpenAI, Polar, and live-provider code.
 
-Install agent rules into this repo (or any repo):
-
-```bash
-npx -y viberaven init --agents all
-npx -y viberaven doctor --agents
-```
-
-## Full canonical reference
-
-- https://viberaven.dev/llms-full.txt
-
-## Links
-
-- https://viberaven.dev
-- https://viberaven.dev/agent-context.md
-- https://viberaven.dev/skills.json
-- https://www.npmjs.com/package/viberaven
-
-## Boundary
-
-- A normal git push does not require a VibeRaven scan.
-- Gate deploys and launch-readiness claims, not ordinary pushes.
-
-## Optional
-
-- Blog archives and release notes (safe to omit under context pressure)
-- https://viberaven.dev/.well-known/agent-honeypot.txt
+A normal git push does not require a VibeRaven scan.
