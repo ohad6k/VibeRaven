@@ -630,7 +630,7 @@ function renderLocalUiHtml() {
       width: 18px;
       height: 18px;
       display: inline-block;
-      background: var(--green);
+      background: var(--purple);
       clip-path: polygon(45% 0, 82% 0, 62% 38%, 94% 38%, 32% 100%, 45% 56%, 10% 56%);
     }
     .next-fix-subtitle {
@@ -690,6 +690,10 @@ function renderLocalUiHtml() {
       font-weight: 750;
       white-space: nowrap;
     }
+    .open-guide-button:hover {
+      background: #6d28d9;
+      color: #ffffff;
+    }
     .drawer {
       border-left: 1px solid var(--line);
       padding: 30px 38px 28px 30px;
@@ -720,7 +724,7 @@ function renderLocalUiHtml() {
       gap: 12px;
     }
     .panel-glyph {
-      color: var(--purple);
+      color: #344054;
       display: grid;
       place-items: center;
       width: 26px;
@@ -729,7 +733,11 @@ function renderLocalUiHtml() {
     .panel-glyph svg {
       width: 24px;
       height: 24px;
-      fill: currentColor;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .copy-small {
       min-height: 36px;
@@ -886,6 +894,147 @@ function renderLocalUiHtml() {
       white-space: nowrap;
     }
     .gate-status[data-status="clear"] { color: var(--green); }
+    .action-panel-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 9;
+      background: rgba(17, 20, 23, 0.28);
+      display: none;
+      align-items: stretch;
+      justify-content: flex-end;
+    }
+    .action-panel-backdrop.is-open { display: flex; }
+    .action-panel {
+      width: min(620px, 100%);
+      height: 100%;
+      background: var(--canvas);
+      border-left: 1px solid var(--line);
+      box-shadow: -24px 0 60px rgba(16, 24, 40, 0.16);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+    .action-panel-header {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: start;
+    }
+    .action-panel-header h2 {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.15;
+    }
+    .action-panel-header p {
+      margin: 8px 0 0;
+      color: var(--muted-strong);
+      line-height: 1.45;
+    }
+    .panel-close {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+    }
+    .panel-close::before,
+    .panel-close::after {
+      content: "";
+      width: 15px;
+      height: 1.8px;
+      background: currentColor;
+      grid-area: 1 / 1;
+      border-radius: 999px;
+    }
+    .panel-close::before { transform: rotate(45deg); }
+    .panel-close::after { transform: rotate(-45deg); }
+    .action-panel-body {
+      overflow: auto;
+      padding: 24px 28px 30px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+    .guide-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      padding: 18px;
+      box-shadow: 0 10px 22px rgba(16, 24, 40, 0.035);
+    }
+    .guide-card h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+    .guide-card p {
+      margin: 0;
+      color: var(--muted-strong);
+      line-height: 1.5;
+    }
+    .guide-card code {
+      display: inline-flex;
+      max-width: 100%;
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 8px 10px;
+      background: var(--surface-soft);
+      color: var(--ink);
+      font: 12px/1.35 var(--mono);
+      white-space: pre-wrap;
+    }
+    .guide-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .guide-actions button {
+      min-height: 38px;
+      font-weight: 700;
+    }
+    .guide-actions .primary-action {
+      border-color: var(--black-button);
+      background: var(--black-button);
+      color: #ffffff;
+    }
+    .guide-actions .primary-action:hover {
+      background: #111a22;
+      color: #ffffff;
+    }
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .report-metric {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      padding: 14px;
+    }
+    .report-metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .report-metric strong {
+      font-size: 18px;
+    }
+    .panel-pre {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      padding: 16px;
+      color: #1f2937;
+      white-space: pre-wrap;
+      font: 13px/1.55 var(--mono);
+    }
     @media (max-width: 1240px) {
       .topbar { grid-template-columns: minmax(220px, 1fr) auto; }
       .project-picker { display: none; }
@@ -937,12 +1086,12 @@ function renderLocalUiHtml() {
     <div class="top-actions">
       <button id="scan" class="status-button" type="button"><span class="dot ok" aria-hidden="true"></span>Local scan</button>
       <span class="top-divider" aria-hidden="true"></span>
-      <span id="settings" class="icon-button" title="Settings unavailable locally" aria-label="Settings unavailable locally" aria-disabled="true">
+      <button id="settings" class="icon-button" title="Settings" aria-label="Settings" type="button">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 8.25a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5Z"/>
           <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.05.05a2 2 0 0 1-2.83 2.83l-.05-.05a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.08a1.7 1.7 0 0 0-1.04-1.56 1.7 1.7 0 0 0-1.87.34l-.05.05a2 2 0 0 1-2.83-2.83l.05-.05A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.08A1.7 1.7 0 0 0 4.6 8.9a1.7 1.7 0 0 0-.34-1.87l-.05-.05a2 2 0 0 1 2.83-2.83l.05.05a1.7 1.7 0 0 0 1.87.34A1.7 1.7 0 0 0 10 3.08V3a2 2 0 0 1 4 0v.08a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.87-.34l.05-.05a2 2 0 0 1 2.83 2.83l-.05.05A1.7 1.7 0 0 0 19.4 8.9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.08A1.7 1.7 0 0 0 19.4 15Z"/>
         </svg>
-      </span>
+      </button>
       <button id="verify" class="primary verify-button" type="button">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 3.2 19 6v5.3c0 4.4-2.7 7.4-7 9.5-4.3-2.1-7-5.1-7-9.5V6Z"/>
@@ -976,7 +1125,7 @@ function renderLocalUiHtml() {
         <div class="panel-heading">
           <div class="panel-title">
             <span class="panel-glyph" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z"/><path d="m19 15 .8 2.8L22 18.6l-2.2.8L19 22l-.8-2.6-2.2-.8 2.2-.8L19 15Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h7"/><path d="M17 12l3 3-3 3"/><path d="M14 15h6"/></svg>
             </span>
             <div>
               <h2>Agent prompt</h2>
@@ -1008,14 +1157,24 @@ function renderLocalUiHtml() {
   <footer class="status-footer">
     <div class="footer-left">
       <strong>VibeRaven CLI</strong>
-      <span id="footer-project">Local project</span>
-      <span id="footer-command" class="footer-command">npx -y viberaven</span>
     </div>
     <div class="footer-right">
       <span>Need help?</span>
       <span id="footer-gate" class="gate-status" data-status="not_clear"><span class="dot bad" aria-hidden="true"></span>Gate not clear</span>
     </div>
   </footer>
+  <div id="action-panel-backdrop" class="action-panel-backdrop" aria-hidden="true">
+    <section class="action-panel" role="dialog" aria-modal="true" aria-labelledby="action-panel-title">
+      <header class="action-panel-header">
+        <div>
+          <h2 id="action-panel-title">Guide</h2>
+          <p id="action-panel-subtitle"></p>
+        </div>
+        <button id="action-panel-close" class="panel-close" type="button" aria-label="Close panel"></button>
+      </header>
+      <div id="action-panel-body" class="action-panel-body"></div>
+    </section>
+  </div>
   <script>
     const state = { data: null, selectedProviderId: null, selectedPathItemId: null, providerQuery: '', busyAction: '' };
     const localToken = new URLSearchParams(window.location.search).get('vr_token') || '';
@@ -1076,6 +1235,88 @@ function renderLocalUiHtml() {
       tip.hidden = !message;
       tip.textContent = message || '';
       tip.dataset.kind = kind || 'info';
+    }
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+    function openPanel(title, subtitle, html) {
+      document.getElementById('action-panel-title').textContent = title;
+      document.getElementById('action-panel-subtitle').textContent = subtitle || '';
+      document.getElementById('action-panel-body').innerHTML = html;
+      const backdrop = document.getElementById('action-panel-backdrop');
+      backdrop.classList.add('is-open');
+      backdrop.setAttribute('aria-hidden', 'false');
+    }
+    function closePanel() {
+      const backdrop = document.getElementById('action-panel-backdrop');
+      backdrop.classList.remove('is-open');
+      backdrop.setAttribute('aria-hidden', 'true');
+    }
+    function guideSteps(provider, item) {
+      if (provider.id === 'supabase' && item.id === 'rls-policies') {
+        return [
+          { title: 'Open Supabase policies', body: 'In Supabase, open Authentication and Database policies for the project tables that store user data.', code: 'https://supabase.com/dashboard/project/_/auth/policies' },
+          { title: 'Enable RLS in a migration', body: 'Keep proof in the repo. Add SQL that enables row level security for each public table.', code: 'alter table public.your_table enable row level security;' },
+          { title: 'Scope rows to the owner', body: 'Add policies that only allow authenticated users to read or write their own records. Avoid permissive USING (true) policies.', code: "create policy \\"Users manage own rows\\" on public.your_table\\nfor all to authenticated\\nusing (auth.uid() = user_id)\\nwith check (auth.uid() = user_id);" },
+          { title: 'Verify locally', body: 'Run local verify after the repo change. VibeRaven will refresh the evidence map without reading secret values.', code: 'npx -y viberaven --verify' }
+        ];
+      }
+      if (provider.id === 'supabase' && item.id === 'production-env') {
+        return [
+          { title: 'Add safe env placeholders', body: 'Use names only. Never paste real Supabase keys into repo files.', code: 'NEXT_PUBLIC_SUPABASE_URL=\\nNEXT_PUBLIC_SUPABASE_ANON_KEY=\\nSERVER_ONLY_SUPABASE_ADMIN_KEY=<server-only, never expose to browser>' },
+          { title: 'Document the boundary', body: 'Make it obvious which key can be public and which must stay server-only.', code: 'The server-only Supabase admin key must not be used in client components.' },
+          { title: 'Verify locally', body: 'Refresh local evidence after the placeholders are committed.', code: 'npx -y viberaven --verify' }
+        ];
+      }
+      if (provider.id === 'stripe') {
+        return [
+          { title: 'Keep payments server-side', body: 'Checkout sessions and webhook verification belong in server routes only.', code: 'STRIPE_SERVER_KEY=<server-only>\\nSTRIPE_WEBHOOK_SIGNING_SECRET=<server-only>\\nNEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=' },
+          { title: 'Copy webhook target', body: 'Use a stable production webhook route and verify signatures before changing subscription state.', code: '/api/stripe/webhook' },
+          { title: 'Verify locally', body: 'VibeRaven checks repo evidence and does not need live secret values.', code: 'npx -y viberaven --verify' }
+        ];
+      }
+      if (provider.id === 'vercel') {
+        return [
+          { title: 'Confirm production env names', body: 'Document the env names your app expects in production without values.', code: '.env.example' },
+          { title: 'Confirm deploy command', body: 'Make package scripts and deployment config agree on build and test commands.', code: 'npm run build' },
+          { title: 'Verify locally', body: 'Refresh the launch map after repo evidence changes.', code: 'npx -y viberaven --verify' }
+        ];
+      }
+      return [
+        { title: item.title, body: item.whyItMatters, code: item.whatToChange },
+        { title: 'Keep the proof in the repo', body: 'Provider setup can still require manual work, but VibeRaven needs safe local evidence for the coding agent.', code: item.verifyWith },
+        { title: 'Verify locally', body: 'Run verify after the repo-owned fix. No production secrets are required.', code: 'npx -y viberaven --verify' }
+      ];
+    }
+    function renderGuideHtml(provider, item) {
+      const cards = guideSteps(provider, item).map((step) => '<article class="guide-card"><h3>' + escapeHtml(step.title) + '</h3><p>' + escapeHtml(step.body) + '</p><code>' + escapeHtml(step.code) + '</code><div class="guide-actions"><button type="button" data-copy="' + escapeHtml(step.code) + '">Copy</button></div></article>').join('');
+      return cards + '<article class="guide-card"><h3>Use with your coding agent</h3><p>The prompt on the right is already scoped to this provider check. Copy it after selecting the row you want to fix.</p><div class="guide-actions"><button class="primary-action" type="button" data-copy-prompt="true">Copy focused prompt</button><button type="button" data-run-verify="true">Run local verify</button></div></article>';
+    }
+    function renderReportHtml() {
+      const project = state.data.project;
+      const counts = state.data.providers.reduce((acc, provider) => {
+        acc[provider.state] = (acc[provider.state] || 0) + 1;
+        return acc;
+      }, {});
+      const providers = state.data.providers.map((provider) => '<article class="guide-card"><h3>' + escapeHtml(provider.label) + '</h3><p>Status: ' + escapeHtml(labels[provider.state] || provider.state) + '</p></article>').join('');
+      return '<div class="report-grid"><div class="report-metric"><span>Gate</span><strong>' + escapeHtml(gateLabel(project.gateStatus)) + '</strong></div><div class="report-metric"><span>Needs work</span><strong>' + escapeHtml((counts.needs_repo_fix || 0) + (counts.connect_live || 0) + (counts.blocked || 0)) + '</strong></div></div>' + providers;
+    }
+    async function openTasklistPanel() {
+      setTip('Loading local tasklist...');
+      const response = await fetch('/api/tasklist?vr_token=' + encodeURIComponent(localToken));
+      const text = await response.text();
+      if (!response.ok) throw new Error(text || 'Could not load tasklist.');
+      openPanel('Local tasklist', 'Generated from local repo evidence. No secrets are needed.', '<pre class="panel-pre">' + escapeHtml(text) + '</pre>');
+      setTip('Tasklist loaded inside VibeRaven.');
+    }
+    function openSettingsPanel() {
+      const project = state.data.project;
+      openPanel('Local settings', 'This console only reads local repo evidence.', '<article class="guide-card"><h3>Project folder</h3><p>' + escapeHtml(project.workspacePath) + '</p></article><article class="guide-card"><h3>Privacy boundary</h3><p>Local scan and verify inspect package metadata, env examples, deployment config, tests, and provider-related source hints. They do not read real secret values and do not use your private OpenAI API key.</p></article><article class="guide-card"><h3>Commands</h3><code>npx -y viberaven\\nnpx -y viberaven --verify\\nnpx -y viberaven --agent-mode</code></article>');
     }
     function gateLabel(status) {
       return status === 'clear' ? 'Gate clear' : 'Gate not clear';
@@ -1256,9 +1497,8 @@ function renderLocalUiHtml() {
       guide.type = 'button';
       guide.textContent = 'Open guide';
       guide.addEventListener('click', () => {
-        setTip(item.title + ': ' + item.whyItMatters + ' Next: ' + item.whatToChange + ' Then: ' + item.verifyWith);
-        const url = providerGuideUrl(provider.id, item);
-        if (url) window.open(url, '_blank', 'noopener,noreferrer');
+        openPanel(provider.label + ' guide', item.title + ' guidance for this local project.', renderGuideHtml(provider, item));
+        setTip('Opened in-app guide for ' + item.title + '.');
       });
       row.append(icon, body, guide);
       container.append(subtitle, row);
@@ -1266,10 +1506,7 @@ function renderLocalUiHtml() {
     }
     function renderChrome() {
       const projectName = state.data.project.name;
-      const command = state.data.command || 'npx -y viberaven';
       document.querySelector('#project-picker span').textContent = projectName;
-      document.getElementById('footer-project').textContent = projectName;
-      document.getElementById('footer-command').textContent = command;
       const gate = document.getElementById('footer-gate');
       gate.dataset.status = state.data.project.gateStatus;
       gate.textContent = '';
@@ -1327,12 +1564,32 @@ function renderLocalUiHtml() {
       postAndRefresh('/api/verify');
     });
     document.getElementById('tasklist').addEventListener('click', () => {
-      setTip('Opening the local tasklist artifact.');
-      window.open('/api/tasklist?vr_token=' + encodeURIComponent(localToken), '_blank', 'noopener,noreferrer');
+      openTasklistPanel().catch((error) => setTip(error instanceof Error ? error.message : String(error), 'error'));
     });
     document.getElementById('last-report').addEventListener('click', () => {
-      setTip('Opening the latest local report data.');
-      window.open('/api/report?vr_token=' + encodeURIComponent(localToken), '_blank', 'noopener,noreferrer');
+      openPanel('Last local report', 'Current provider map from the latest local scan or verify.', renderReportHtml());
+      setTip('Report opened inside VibeRaven.');
+    });
+    document.getElementById('settings').addEventListener('click', openSettingsPanel);
+    document.getElementById('action-panel-close').addEventListener('click', closePanel);
+    document.getElementById('action-panel-backdrop').addEventListener('click', (event) => {
+      if (event.target.id === 'action-panel-backdrop') closePanel();
+    });
+    document.getElementById('action-panel-body').addEventListener('click', async (event) => {
+      const target = event.target.closest('button');
+      if (!target) return;
+      if (target.dataset.copy) {
+        await navigator.clipboard.writeText(target.dataset.copy);
+        setTip('Copied guide snippet.');
+      }
+      if (target.dataset.copyPrompt) {
+        await navigator.clipboard.writeText(document.getElementById('prompt').value || '');
+        setTip('Copied focused prompt.');
+      }
+      if (target.dataset.runVerify) {
+        setTip('Running local verify...');
+        postAndRefresh('/api/verify');
+      }
     });
     document.getElementById('copy').addEventListener('click', async () => {
       const prompt = document.getElementById('prompt').value;
