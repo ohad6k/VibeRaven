@@ -24,7 +24,8 @@ export function renderLocalUiHtml(): string {
       --black-button: #071018;
       --radius: 8px;
       color-scheme: light;
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", monospace;
+      font-family: "Geist", "Satoshi", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; }
     html, body { min-height: 100%; }
@@ -32,8 +33,11 @@ export function renderLocalUiHtml(): string {
       margin: 0;
       background: var(--canvas);
       color: var(--ink);
-      min-height: 100dvh;
+      height: 100dvh;
       letter-spacing: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      overflow: hidden;
     }
     button, input, textarea {
       font: inherit;
@@ -58,54 +62,48 @@ export function renderLocalUiHtml(): string {
     }
     button.primary:hover { background: #111a22; }
     .topbar {
-      height: 58px;
+      height: 68px;
       border-bottom: 1px solid var(--line);
       background: rgba(251, 251, 250, 0.96);
       display: grid;
-      grid-template-columns: minmax(260px, 1fr) minmax(220px, 300px) auto;
+      grid-template-columns: minmax(340px, 1fr) minmax(240px, 310px) auto;
       gap: 18px;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 26px;
       position: sticky;
       top: 0;
+      z-index: 2;
+      box-shadow: 0 1px 0 rgba(17, 20, 23, 0.02);
     }
     .brand-lockup {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       min-width: 0;
     }
     .brand-lockup strong {
-      font-size: 20px;
+      font-size: 28px;
       line-height: 1;
       white-space: nowrap;
     }
     .raven-mark {
-      width: 36px;
-      height: 30px;
-      display: inline-block;
-      border-radius: 65% 35% 50% 45%;
-      background: var(--black-button);
-      position: relative;
-      transform: skewX(-18deg) rotate(-8deg);
+      width: 58px;
+      height: 38px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
     }
-    .raven-mark::after {
-      content: "";
-      position: absolute;
-      right: -7px;
-      bottom: 4px;
-      width: 18px;
-      height: 5px;
-      border-radius: 999px;
-      background: var(--orange);
-      transform: rotate(-28deg);
+    .raven-mark svg {
+      width: 58px;
+      height: 38px;
+      display: block;
     }
     .tagline {
       border: 1px solid var(--line);
       border-radius: 7px;
-      padding: 8px 12px;
+      padding: 9px 16px;
       color: var(--ink);
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 650;
       white-space: nowrap;
       background: var(--surface);
@@ -193,32 +191,35 @@ export function renderLocalUiHtml(): string {
     }
     .shell {
       display: grid;
-      grid-template-columns: 296px minmax(560px, 1fr) 360px;
-      min-height: calc(100dvh - 96px);
+      grid-template-columns: 340px minmax(600px, 1fr) 410px;
+      min-height: 0;
+      height: 100%;
+      overflow: hidden;
     }
     .rail {
       border-right: 1px solid var(--line);
-      padding: 18px 18px 26px;
+      padding: 24px 26px 28px;
       background: var(--canvas);
       overflow: auto;
+      min-height: 0;
     }
     .rail-title {
-      margin: 0 0 10px;
+      margin: 0 0 14px;
       color: var(--muted-strong);
       font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
     }
     .search-box {
-      height: 38px;
+      height: 44px;
       border: 1px solid var(--line);
       background: var(--surface);
-      border-radius: var(--radius);
+      border-radius: 9px;
       display: flex;
       align-items: center;
       gap: 9px;
       padding: 0 10px;
-      margin-bottom: 12px;
+      margin-bottom: 18px;
     }
     .search-box:focus-within {
       border-color: var(--orange);
@@ -254,17 +255,17 @@ export function renderLocalUiHtml(): string {
     }
     .provider-list {
       display: grid;
-      gap: 8px;
+      gap: 10px;
     }
     .provider-button {
       width: 100%;
-      min-height: 58px;
+      min-height: 68px;
       display: grid;
-      grid-template-columns: 34px minmax(0, 1fr) 8px 12px;
-      gap: 10px;
+      grid-template-columns: 44px minmax(0, 1fr) 8px 12px;
+      gap: 13px;
       align-items: center;
       text-align: left;
-      padding: 10px 10px;
+      padding: 12px;
       background: var(--surface);
       border-color: var(--line);
     }
@@ -281,25 +282,25 @@ export function renderLocalUiHtml(): string {
       transform: rotate(-45deg);
     }
     .provider-icon {
-      width: 32px;
-      height: 32px;
+      width: 42px;
+      height: 42px;
       display: grid;
       place-items: center;
       border: 1px solid var(--line);
-      border-radius: 7px;
+      border-radius: 9px;
       background: var(--surface);
       color: var(--ink);
       overflow: hidden;
     }
     .provider-icon svg, .provider-icon img {
-      width: 22px;
-      height: 22px;
+      width: 30px;
+      height: 30px;
       display: block;
     }
     .provider-name { min-width: 0; }
     .provider-name strong {
       display: block;
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.2;
       white-space: nowrap;
       overflow: hidden;
@@ -307,7 +308,7 @@ export function renderLocalUiHtml(): string {
     }
     .state {
       display: inline-flex;
-      margin-top: 5px;
+      margin-top: 6px;
       font-size: 12px;
       line-height: 1;
       color: var(--muted);
@@ -326,11 +327,11 @@ export function renderLocalUiHtml(): string {
     .provider-dot[data-state="repo_evidence_found"], .provider-dot[data-state="live_verified"] { background: var(--green); }
     .provider-dot[data-state="blocked"], .provider-dot[data-state="error"] { background: var(--red); }
     .run-local-card {
-      margin-top: 14px;
+      margin-top: 20px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--surface);
-      padding: 14px;
+      padding: 18px;
     }
     .run-local-card h2 {
       margin: 0 0 6px;
@@ -351,7 +352,7 @@ export function renderLocalUiHtml(): string {
       color: #ffffff;
       border-radius: 7px;
       padding: 11px 12px;
-      font: 13px/1.2 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font: 13px/1.2 var(--mono);
       overflow: hidden;
     }
     .command-pill span {
@@ -360,9 +361,10 @@ export function renderLocalUiHtml(): string {
       white-space: nowrap;
     }
     .main {
-      padding: 26px 28px 34px;
+      padding: 38px 48px 40px;
       overflow: auto;
       background: var(--canvas);
+      min-height: 0;
     }
     .provider-header {
       display: grid;
@@ -373,26 +375,26 @@ export function renderLocalUiHtml(): string {
     }
     .provider-heading {
       display: flex;
-      gap: 16px;
+      gap: 20px;
       align-items: center;
       min-width: 0;
     }
     .provider-heading .provider-icon {
-      width: 44px;
-      height: 44px;
+      width: 58px;
+      height: 58px;
       border: 0;
       background: transparent;
     }
     .provider-heading h1 {
       margin: 0;
-      font-size: 22px;
+      font-size: 28px;
       line-height: 1.15;
       font-weight: 750;
     }
     .provider-heading p {
       margin: 5px 0 0;
       color: var(--muted-strong);
-      font-size: 13px;
+      font-size: 15px;
       line-height: 1.35;
     }
     .secondary-action {
@@ -409,12 +411,12 @@ export function renderLocalUiHtml(): string {
       display: grid;
       gap: 0;
       position: relative;
-      padding-left: 34px;
+      padding-left: 42px;
     }
     .path-list::before {
       content: "";
       position: absolute;
-      left: 14px;
+      left: 18px;
       top: 26px;
       bottom: 26px;
       width: 1px;
@@ -424,20 +426,20 @@ export function renderLocalUiHtml(): string {
       border: 1px solid var(--line);
       border-radius: 8px;
       background: var(--surface);
-      padding: 13px 16px;
+      padding: 16px 20px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 14px;
       position: relative;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .path-row::before {
       content: "";
       position: absolute;
-      left: -31px;
+      left: -35px;
       top: 18px;
-      width: 22px;
-      height: 22px;
+      width: 26px;
+      height: 26px;
       border: 1px solid var(--line-strong);
       border-radius: 999px;
       background: var(--surface);
@@ -445,10 +447,10 @@ export function renderLocalUiHtml(): string {
     .path-row::after {
       content: "";
       position: absolute;
-      left: -23px;
-      top: 26px;
-      width: 6px;
-      height: 6px;
+      left: -25px;
+      top: 28px;
+      width: 7px;
+      height: 7px;
       border-radius: 999px;
       background: var(--muted);
     }
@@ -462,13 +464,13 @@ export function renderLocalUiHtml(): string {
     }
     .path-row.is-focused::after { background: var(--orange); }
     .path-row strong {
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.25;
     }
     .path-row p {
-      margin: 5px 0 0;
+      margin: 6px 0 0;
       color: var(--muted-strong);
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.4;
     }
     .path-state {
@@ -486,15 +488,15 @@ export function renderLocalUiHtml(): string {
     .path-state[data-state="needs_fix"], .path-state[data-state="needs_connect"] { background: var(--orange-soft); }
     .path-state[data-state="blocked"] { background: var(--red-soft); }
     .next-fix {
-      margin: 8px 0 0 34px;
+      margin: 10px 0 0 42px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--surface);
-      padding: 16px;
+      padding: 22px;
     }
     .next-fix h2 {
       margin: 0 0 14px;
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.2;
     }
     .fix-grid {
@@ -505,7 +507,7 @@ export function renderLocalUiHtml(): string {
       display: grid;
       grid-template-columns: 34px minmax(0, 1fr);
       gap: 12px;
-      padding: 13px 0;
+      padding: 16px 0;
       border-top: 1px solid var(--line);
     }
     .fix-section:first-child { border-top: 0; padding-top: 0; }
@@ -524,42 +526,43 @@ export function renderLocalUiHtml(): string {
     }
     .fix-section h3 {
       margin: 0 0 6px;
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.2;
     }
     .fix-section p {
       margin: 0;
       color: var(--muted-strong);
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.45;
     }
     .drawer {
       border-left: 1px solid var(--line);
-      padding: 24px 18px;
+      padding: 34px 24px;
       background: var(--surface);
       overflow: auto;
+      min-height: 0;
     }
     .drawer h2 {
       margin: 0;
-      font-size: 17px;
+      font-size: 20px;
       line-height: 1.2;
     }
     .drawer p {
       margin: 8px 0 16px;
       color: var(--muted-strong);
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.4;
     }
     .prompt-box {
       width: 100%;
-      min-height: 330px;
+      min-height: 410px;
       resize: vertical;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       padding: 14px;
       background: var(--surface);
       color: var(--muted-strong);
-      font: 13px/1.7 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font: 14px/1.75 var(--mono);
     }
     .drawer-actions {
       display: grid;
@@ -569,6 +572,27 @@ export function renderLocalUiHtml(): string {
     .drawer-actions button {
       min-height: 42px;
       font-weight: 650;
+      position: relative;
+    }
+    #copy::before, #tasklist::before, #drawer-verify::before, #verify::before {
+      content: "";
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin-right: 8px;
+      vertical-align: -2px;
+      border: 1.7px solid currentColor;
+      border-radius: 3px;
+    }
+    #tasklist::before {
+      border-left: 0;
+      border-right: 0;
+      border-radius: 0;
+      box-shadow: 0 5px 0 -3px currentColor, 0 -5px 0 -3px currentColor;
+    }
+    #drawer-verify::before, #verify::before {
+      border-radius: 999px 999px 999px 2px;
+      transform: rotate(45deg);
     }
     .tip {
       margin-top: 16px;
@@ -613,7 +637,7 @@ export function renderLocalUiHtml(): string {
       padding: 7px 12px;
       background: var(--surface);
       color: var(--ink);
-      font: 13px/1 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font: 13px/1 var(--mono);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -635,6 +659,12 @@ export function renderLocalUiHtml(): string {
       .drawer { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
     }
     @media (max-width: 820px) {
+      body {
+        height: auto;
+        min-height: 100dvh;
+        overflow: auto;
+        display: block;
+      }
       .topbar {
         height: auto;
         min-height: 58px;
@@ -648,7 +678,7 @@ export function renderLocalUiHtml(): string {
         display: grid;
         grid-template-columns: 1fr 38px 1fr;
       }
-      .shell { grid-template-columns: 1fr; min-height: auto; }
+      .shell { grid-template-columns: 1fr; min-height: auto; height: auto; overflow: visible; }
       .rail { border-right: 0; border-bottom: 1px solid var(--line); max-height: 330px; }
       .main { padding: 20px 14px 28px; }
       .provider-header { grid-template-columns: 1fr; }
@@ -662,7 +692,16 @@ export function renderLocalUiHtml(): string {
 <body>
   <header class="topbar">
     <div class="brand-lockup" aria-label="VibeRaven">
-      <span class="raven-mark" aria-hidden="true"></span>
+      <span class="raven-mark" aria-hidden="true">
+        <svg viewBox="0 0 116 76" role="img" aria-label="VibeRaven mark">
+          <path fill="#071018" d="M5 45c17-1 31-8 43-21C60 11 74 5 91 5c-7 4-12 9-16 15 12-4 24-3 36 3-13 2-23 7-31 15 9 0 18 2 27 7-23 7-43 9-60 6-15-3-29-5-42-6Z"/>
+          <path fill="#18222c" d="M16 56c16-4 29-11 41-22 10-10 22-15 37-16-9 8-14 17-17 26-16 11-36 15-61 12Z"/>
+          <path fill="#ffffff" d="M36 29c12-6 25-10 38-12-8 5-15 11-22 18-6-3-11-5-16-6Z"/>
+          <path fill="#ff7a00" d="M69 50c14-4 28-4 42 1-13 5-25 11-35 20 1-8-1-15-7-21Z"/>
+          <path fill="#ff7a00" d="M85 30c9 2 17 5 25 10-10-1-18 0-26 3-1-4-1-8 1-13Z"/>
+          <circle cx="83" cy="18" r="3" fill="#ffffff"/>
+        </svg>
+      </span>
       <strong>VibeRaven</strong>
       <span class="tagline">From AI demo to production</span>
     </div>
@@ -681,7 +720,7 @@ export function renderLocalUiHtml(): string {
       <section class="run-local-card" aria-label="Run VibeRaven locally">
         <h2>Run VibeRaven locally</h2>
         <p>Verify your project from the terminal.</p>
-        <div class="command-pill"><span>$ node packages/cli/dist/cli.js</span></div>
+        <div class="command-pill"><span>$ npx -y viberaven</span></div>
       </section>
     </aside>
     <main class="main" aria-label="Launch path">
@@ -708,7 +747,7 @@ export function renderLocalUiHtml(): string {
     <div class="footer-left">
       <strong>VibeRaven CLI</strong>
       <span id="footer-project">Local project</span>
-      <span id="footer-command" class="footer-command">node packages/cli/dist/cli.js</span>
+      <span id="footer-command" class="footer-command">npx -y viberaven</span>
     </div>
     <div class="footer-right">
       <span id="footer-gate" class="gate-status" data-status="not_clear"><span class="dot bad" aria-hidden="true"></span>Gate not clear</span>
@@ -870,7 +909,7 @@ export function renderLocalUiHtml(): string {
     }
     function renderChrome() {
       const projectName = state.data.project.name;
-      const command = state.data.command || 'node packages/cli/dist/cli.js';
+      const command = state.data.command || 'npx -y viberaven';
       document.querySelector('#project-picker span').textContent = projectName;
       document.getElementById('footer-project').textContent = projectName;
       document.getElementById('footer-command').textContent = command;

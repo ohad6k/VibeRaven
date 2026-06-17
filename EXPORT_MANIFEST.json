@@ -1,6 +1,6 @@
 {
   "mode": "public-source-localhost-phase-1",
-  "exportedAt": "2026-06-17T17:34:19.052Z",
+  "exportedAt": "2026-06-17T18:04:11.039Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -15,6 +15,10 @@
     [
       "packages/cli/tsconfig.json",
       "packages/cli/tsconfig.json"
+    ],
+    [
+      "packages/cli/src/publicLocalCli.ts",
+      "packages/cli/src/cli.ts"
     ],
     [
       "packages/cli/src/local-ui/staticApp.ts",
@@ -73,8 +77,8 @@
       "packages/cli/package.json"
     ],
     [
-      "<generated:public-local-cli>",
-      "packages/cli/src/cli.ts"
+      "<generated:public-version>",
+      "packages/cli/src/version.ts"
     ],
     [
       "<generated:public-local-build>",
