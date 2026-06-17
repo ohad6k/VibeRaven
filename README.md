@@ -1,6 +1,6 @@
 # VibeRaven
 
-Local launch console for AI-built apps that are almost ready to ship.
+Local launch console for AI-built apps that need to become safe enough for real users.
 
 <p>
   <a href="https://www.npmjs.com/package/viberaven"><img alt="npm version" src="https://img.shields.io/npm/v/viberaven?style=flat-square&color=111827"></a>
@@ -9,7 +9,7 @@ Local launch console for AI-built apps that are almost ready to ship.
   <img alt="local first" src="https://img.shields.io/badge/local-first-ff7a00?style=flat-square">
 </p>
 
-VibeRaven turns "the AI demo runs on my machine" into a concrete launch-readiness map. Run it in a repo and it opens a localhost console with provider launch paths, repo-evidence gaps, an agent prompt, a tasklist, and a verify loop.
+VibeRaven turns "the AI demo runs on my machine" into a concrete local launch map. Run it in a repo and it opens a localhost console with provider readiness, repo-evidence gaps, a copyable agent prompt, a tasklist, and a verify loop.
 
 ```bash
 npx -y viberaven
@@ -21,16 +21,20 @@ npx -y viberaven
 
 ## Why It Exists
 
-AI coding tools are strong at getting an app to demo. The hard part is the last mile: auth callbacks, RLS policy evidence, production env names, deploy checks, webhooks, monitoring, and tests. VibeRaven gives both the developer and the coding agent a shared local map of what is still missing.
+AI coding tools are strong at getting an app to demo. The hard part is the last mile: auth callbacks, RLS policy evidence, production env names, deploy checks, webhooks, monitoring, and tests. VibeRaven gives the developer and the coding agent the same local map of what is still missing.
 
-Normal git push is not gated by VibeRaven. Use the gate language only when making launch or deploy-readiness claims.
+Normal git push is not gated by VibeRaven. Use gate language only when making launch or deploy-readiness claims.
 
-## What You Get
+## What It Catches
 
-- A provider-first launch console for Supabase, Vercel, Stripe, GitHub, Sentry, Clerk, PostHog, and local repo evidence.
-- A deterministic local scan that writes `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, `.viberaven/context-map.json`, and `.viberaven/mission-map.md`.
-- A copyable agent prompt focused on the first repo-owned launch gap.
-- A clear boundary between open local evidence and private managed-service features.
+| Area | Local evidence VibeRaven looks for |
+| --- | --- |
+| Data safety | Supabase folders, migration hints, RLS-related source evidence |
+| Auth | Callback and redirect configuration evidence |
+| Deploy | Vercel/package scripts, production env examples, build commands |
+| Payments | Stripe-related source and webhook evidence |
+| Operations | Sentry/PostHog hints, tests, monitoring and task artifacts |
+| Agent handoff | A focused prompt for the first repo-owned launch gap |
 
 ## Quickstart
 
@@ -49,6 +53,19 @@ The default TTY experience opens the local console. Agent-oriented commands keep
 - `viberaven --agent-mode .` writes artifacts and prints the tasklist.
 - `viberaven --verify .` refreshes local evidence and returns a strict exit code.
 - `viberaven ui .` opens the localhost console directly.
+
+## Local Artifacts
+
+VibeRaven writes reviewable local files under `.viberaven/`:
+
+| File | Purpose |
+| --- | --- |
+| `.viberaven/agent-tasklist.md` | The prioritized gaps a coding agent should fix first |
+| `.viberaven/gate-result.json` | Machine-readable launch gate result |
+| `.viberaven/context-map.json` | Compact repo evidence map for agents |
+| `.viberaven/mission-map.md` | Human-readable launch path and reasoning |
+
+The scan is local-first and does not need production secrets.
 
 ## Build From Source
 
@@ -87,6 +104,15 @@ The local console is intentionally useful before Cloud exists:
 - Center: launch path checklist and the next fix.
 - Right panel: agent prompt, tasklist, and verify action.
 - Footer: current command and gate status.
+
+## Public vs Private
+
+| Included here | Not included here |
+| --- | --- |
+| Local CLI and localhost UI | Hosted team dashboards |
+| Deterministic local evidence checks | Customer records or account systems |
+| Artifact contracts and public docs | Private OpenAI-backed services |
+| Open package source for local usage | Polar/Supabase production data |
 
 ## Open-Core Boundary
 

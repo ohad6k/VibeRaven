@@ -157,7 +157,7 @@ export function renderLocalUiHtml(): string {
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       justify-content: flex-end;
     }
     .top-divider {
@@ -172,6 +172,8 @@ export function renderLocalUiHtml(): string {
       align-items: center;
       gap: 9px;
       white-space: nowrap;
+      min-height: 44px;
+      padding-inline: 16px;
     }
     .dot {
       width: 8px;
@@ -184,15 +186,15 @@ export function renderLocalUiHtml(): string {
     .dot.warn { background: var(--orange); }
     .dot.bad { background: var(--red); }
     .icon-button {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       padding: 0;
       display: grid;
       place-items: center;
       color: #344054;
-      border: 0;
-      background: transparent;
-      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 999px;
     }
     .icon-button:hover { background: var(--surface-soft); }
     .icon-button::before {
@@ -209,7 +211,7 @@ export function renderLocalUiHtml(): string {
       stroke-linejoin: round;
     }
     .verify-button {
-      min-width: 146px;
+      min-width: 128px;
       height: 44px;
       display: inline-flex;
       align-items: center;
@@ -656,19 +658,19 @@ export function renderLocalUiHtml(): string {
     }
     .drawer {
       border-left: 1px solid var(--line);
-      padding: 34px 40px 34px 32px;
+      padding: 30px 38px 28px 30px;
       background: var(--canvas);
       overflow: auto;
       min-height: 0;
       display: grid;
       align-content: start;
-      gap: 32px;
+      gap: 24px;
     }
     .prompt-panel, .quick-panel {
       border: 1px solid var(--line);
       border-radius: 14px;
       background: var(--surface);
-      padding: 26px 28px;
+      padding: 24px 26px;
       box-shadow: 0 12px 30px rgba(16, 24, 40, 0.04);
     }
     .panel-heading {
@@ -731,7 +733,7 @@ export function renderLocalUiHtml(): string {
       background: linear-gradient(135deg, var(--mint-panel), #ffffff 74%);
       color: #1f2937;
       font: 14px/1.65 var(--mono);
-      min-height: 310px;
+      min-height: 270px;
       white-space: pre-wrap;
     }
     .prompt-line {
@@ -899,9 +901,8 @@ export function renderLocalUiHtml(): string {
       </span>
       <button id="verify" class="primary verify-button" type="button">
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 19c2.4-.6 4.3-1.6 5.7-3"/>
-          <path d="M9 15 7.4 9.6 14.8 2.2c.4-.4 1-.2 1.1.3l1.1 5.3 4.5 3c.4.3.4.9-.1 1.2L13 17.4Z"/>
-          <path d="m14.3 6.7 3 3"/>
+          <path d="M12 3.2 19 6v5.3c0 4.4-2.7 7.4-7 9.5-4.3-2.1-7-5.1-7-9.5V6Z"/>
+          <path d="m9.2 12.1 2 2 4-4.3"/>
         </svg>
         <span>Verify now</span>
       </button>
@@ -1098,10 +1099,6 @@ export function renderLocalUiHtml(): string {
       meta.textContent = "We'll guide you through what matters most.";
       copy.append(title, meta);
       heading.append(icon, copy);
-      const guide = document.createElement('span');
-      guide.className = 'secondary-action';
-      guide.setAttribute('aria-disabled', 'true');
-      guide.textContent = 'Provider guide unavailable locally';
       header.append(heading);
     }
     function renderPath(provider) {
@@ -1155,7 +1152,8 @@ export function renderLocalUiHtml(): string {
       icon.innerHTML = pathIconHtml(0);
       const body = document.createElement('div');
       const h = document.createElement('h3');
-      h.textContent = provider.nextFix.title || 'Fix schema or migrations';
+      const focusedItem = provider.launchPath.find((item) => item.id === provider.nextFix.launchPathItemId);
+      h.textContent = provider.nextFix.title || (focusedItem ? 'Fix ' + focusedItem.title.toLowerCase() : 'Fix first launch gap');
       const p = document.createElement('p');
       p.textContent = provider.nextFix.whatToChange;
       body.append(h, p);
