@@ -968,7 +968,7 @@ function renderLocalUiHtml() {
 }
 
 // src/cli.ts
-var VERSION = "1.0.5-public-localhost";
+var VERSION = "1.1.9-public-localhost";
 function send(res, status, body, contentType) {
   res.writeHead(status, {
     "content-type": contentType,

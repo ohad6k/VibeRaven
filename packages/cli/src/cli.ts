@@ -6,7 +6,7 @@ import { randomBytes, timingSafeEqual } from 'node:crypto';
 
 import { renderLocalUiHtml } from './local-ui/staticApp';
 
-const VERSION = '1.0.5-public-localhost';
+const VERSION = '1.1.9-public-localhost';
 
 type GateStatus = 'clear' | 'not_clear';
 type GapSeverity = 'critical' | 'warning' | 'info';
