@@ -496,6 +496,20 @@ function localState(cwd: string, artifact?: LocalArtifact) {
 
 async function route(req: IncomingMessage, res: ServerResponse, options: { cwd: string; token: string }): Promise<void> {
   const url = new URL(req.url ?? '/', 'http://127.0.0.1');
+  if (req.method === 'GET' && url.pathname === '/assets/extension-icon.png') {
+    try {
+      const icon = await readFile(join(__dirname, 'extension-icon.png'));
+      res.writeHead(200, {
+        'content-type': 'image/png',
+        'cache-control': 'public, max-age=31536000, immutable',
+      });
+      res.end(icon);
+    } catch {
+      sendJson(res, 404, { error: 'Asset not found' });
+    }
+    return;
+  }
+
   if (req.method === 'GET' && url.pathname === '/') {
     send(res, 200, renderLocalUiHtml(), 'text/html; charset=utf-8');
     return;

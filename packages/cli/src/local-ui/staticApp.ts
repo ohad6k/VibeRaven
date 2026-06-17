@@ -88,15 +88,18 @@ export function renderLocalUiHtml(): string {
     }
     .raven-mark {
       width: 58px;
-      height: 38px;
+      height: 46px;
       display: inline-grid;
       place-items: center;
       flex: 0 0 auto;
+      overflow: visible;
     }
-    .raven-mark svg {
-      width: 58px;
-      height: 38px;
+    .raven-mark img {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
       display: block;
+      transform: translateY(1px);
     }
     .tagline {
       border: 1px solid var(--line);
@@ -153,6 +156,13 @@ export function renderLocalUiHtml(): string {
       gap: 10px;
       justify-content: flex-end;
     }
+    .top-divider {
+      width: 1px;
+      height: 30px;
+      background: var(--line);
+      margin: 0 4px 0 6px;
+      flex: 0 0 auto;
+    }
     .status-button {
       display: inline-flex;
       align-items: center;
@@ -170,24 +180,50 @@ export function renderLocalUiHtml(): string {
     .dot.warn { background: var(--orange); }
     .dot.bad { background: var(--red); }
     .icon-button {
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       padding: 0;
       display: grid;
       place-items: center;
-      color: var(--muted-strong);
+      color: #344054;
+      border: 0;
+      background: transparent;
+      border-radius: 10px;
     }
+    .icon-button:hover { background: var(--surface-soft); }
     .icon-button::before {
-      content: "";
-      width: 17px;
-      height: 17px;
-      border: 2px solid currentColor;
-      border-radius: 999px;
-      box-shadow: 0 -8px 0 -6px currentColor, 0 8px 0 -6px currentColor, -8px 0 0 -6px currentColor, 8px 0 0 -6px currentColor;
+      content: none;
+    }
+    .icon-button svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .verify-button {
-      min-width: 132px;
+      min-width: 136px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
       font-size: 15px;
+      border-radius: 9px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 18px rgba(7, 16, 24, 0.12);
+    }
+    .verify-button svg {
+      width: 19px;
+      height: 19px;
+      display: block;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .shell {
       display: grid;
@@ -574,7 +610,7 @@ export function renderLocalUiHtml(): string {
       font-weight: 650;
       position: relative;
     }
-    #copy::before, #tasklist::before, #drawer-verify::before, #verify::before {
+    #copy::before, #tasklist::before, #drawer-verify::before {
       content: "";
       display: inline-block;
       width: 15px;
@@ -590,7 +626,7 @@ export function renderLocalUiHtml(): string {
       border-radius: 0;
       box-shadow: 0 5px 0 -3px currentColor, 0 -5px 0 -3px currentColor;
     }
-    #drawer-verify::before, #verify::before {
+    #drawer-verify::before {
       border-radius: 999px 999px 999px 2px;
       transform: rotate(45deg);
     }
@@ -676,8 +712,9 @@ export function renderLocalUiHtml(): string {
       .top-actions {
         width: 100%;
         display: grid;
-        grid-template-columns: 1fr 38px 1fr;
+        grid-template-columns: minmax(118px, 1fr) auto 42px minmax(118px, 1fr);
       }
+      .verify-button { min-width: 118px; }
       .shell { grid-template-columns: 1fr; min-height: auto; height: auto; overflow: visible; }
       .rail { border-right: 0; border-bottom: 1px solid var(--line); max-height: 330px; }
       .main { padding: 20px 14px 28px; }
@@ -693,14 +730,7 @@ export function renderLocalUiHtml(): string {
   <header class="topbar">
     <div class="brand-lockup" aria-label="VibeRaven">
       <span class="raven-mark" aria-hidden="true">
-        <svg viewBox="0 0 116 76" role="img" aria-label="VibeRaven mark">
-          <path fill="#071018" d="M5 45c17-1 31-8 43-21C60 11 74 5 91 5c-7 4-12 9-16 15 12-4 24-3 36 3-13 2-23 7-31 15 9 0 18 2 27 7-23 7-43 9-60 6-15-3-29-5-42-6Z"/>
-          <path fill="#18222c" d="M16 56c16-4 29-11 41-22 10-10 22-15 37-16-9 8-14 17-17 26-16 11-36 15-61 12Z"/>
-          <path fill="#ffffff" d="M36 29c12-6 25-10 38-12-8 5-15 11-22 18-6-3-11-5-16-6Z"/>
-          <path fill="#ff7a00" d="M69 50c14-4 28-4 42 1-13 5-25 11-35 20 1-8-1-15-7-21Z"/>
-          <path fill="#ff7a00" d="M85 30c9 2 17 5 25 10-10-1-18 0-26 3-1-4-1-8 1-13Z"/>
-          <circle cx="83" cy="18" r="3" fill="#ffffff"/>
-        </svg>
+        <img src="/assets/extension-icon.png" alt="" />
       </span>
       <strong>VibeRaven</strong>
       <span class="tagline">From AI demo to production</span>
@@ -708,8 +738,21 @@ export function renderLocalUiHtml(): string {
     <div id="project-picker" class="project-picker" aria-label="Current project"><span>Loading project...</span></div>
     <div class="top-actions">
       <button id="scan" class="status-button" type="button"><span class="dot ok" aria-hidden="true"></span>Local scan</button>
-      <span id="settings" class="icon-button" title="Settings unavailable locally" aria-label="Settings unavailable locally" aria-disabled="true"></span>
-      <button id="verify" class="primary verify-button" type="button">Verify</button>
+      <span class="top-divider" aria-hidden="true"></span>
+      <span id="settings" class="icon-button" title="Settings unavailable locally" aria-label="Settings unavailable locally" aria-disabled="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 8.25a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5Z"/>
+          <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.05.05a2 2 0 0 1-2.83 2.83l-.05-.05a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.08a1.7 1.7 0 0 0-1.04-1.56 1.7 1.7 0 0 0-1.87.34l-.05.05a2 2 0 0 1-2.83-2.83l.05-.05A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.08A1.7 1.7 0 0 0 4.6 8.9a1.7 1.7 0 0 0-.34-1.87l-.05-.05a2 2 0 0 1 2.83-2.83l.05.05a1.7 1.7 0 0 0 1.87.34A1.7 1.7 0 0 0 10 3.08V3a2 2 0 0 1 4 0v.08a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.87-.34l.05-.05a2 2 0 0 1 2.83 2.83l-.05.05A1.7 1.7 0 0 0 19.4 8.9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.08A1.7 1.7 0 0 0 19.4 15Z"/>
+        </svg>
+      </span>
+      <button id="verify" class="primary verify-button" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 19c2.4-.6 4.3-1.6 5.7-3"/>
+          <path d="M9 15 7.4 9.6 14.8 2.2c.4-.4 1-.2 1.1.3l1.1 5.3 4.5 3c.4.3.4.9-.1 1.2L13 17.4Z"/>
+          <path d="m14.3 6.7 3 3"/>
+        </svg>
+        <span>Verify</span>
+      </button>
     </div>
   </header>
   <div class="shell">
