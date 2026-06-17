@@ -899,11 +899,18 @@ function renderLocalUiHtml() {
       inset: 0;
       z-index: 9;
       background: rgba(17, 20, 23, 0.28);
-      display: none;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
       align-items: stretch;
       justify-content: flex-end;
+      transition: opacity 180ms cubic-bezier(0.16, 1, 0.3, 1), visibility 180ms ease;
     }
-    .action-panel-backdrop.is-open { display: flex; }
+    .action-panel-backdrop.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
     .action-panel {
       width: min(620px, 100%);
       height: 100%;
@@ -912,6 +919,13 @@ function renderLocalUiHtml() {
       box-shadow: -24px 0 60px rgba(16, 24, 40, 0.16);
       display: grid;
       grid-template-rows: auto minmax(0, 1fr);
+      transform: translateX(28px);
+      opacity: 0.98;
+      transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease;
+    }
+    .action-panel-backdrop.is-open .action-panel {
+      transform: translateX(0);
+      opacity: 1;
     }
     .action-panel-header {
       padding: 24px 28px;
@@ -964,6 +978,8 @@ function renderLocalUiHtml() {
       background: var(--surface);
       padding: 18px;
       box-shadow: 0 10px 22px rgba(16, 24, 40, 0.035);
+      animation: panelCardIn 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: calc(var(--panel-index, 0) * 38ms);
     }
     .guide-card h3 {
       margin: 0 0 8px;
@@ -1005,6 +1021,46 @@ function renderLocalUiHtml() {
       background: #111a22;
       color: #ffffff;
     }
+    .guide-actions .verify-action {
+      border-color: var(--purple);
+      background: var(--purple);
+      color: #ffffff;
+    }
+    .guide-actions .verify-action:hover {
+      background: #6d28d9;
+      color: #ffffff;
+    }
+    .task-card {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 14px;
+    }
+    .task-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: var(--orange);
+      background: var(--orange-soft);
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .provider-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .provider-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-soft);
+      padding: 7px 10px;
+      color: var(--muted-strong);
+      font-size: 12px;
+      font-weight: 700;
+    }
     .report-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1034,6 +1090,10 @@ function renderLocalUiHtml() {
       color: #1f2937;
       white-space: pre-wrap;
       font: 13px/1.55 var(--mono);
+    }
+    @keyframes panelCardIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     @media (max-width: 1240px) {
       .topbar { grid-template-columns: minmax(220px, 1fr) auto; }
@@ -1084,7 +1144,7 @@ function renderLocalUiHtml() {
     </div>
     <div id="project-picker" class="project-picker" aria-label="Current project"><span>Loading project...</span></div>
     <div class="top-actions">
-      <button id="scan" class="status-button" type="button"><span class="dot ok" aria-hidden="true"></span>Local scan</button>
+      <button id="scan" class="status-button" type="button"><span class="dot ok" aria-hidden="true"></span>Scan</button>
       <span class="top-divider" aria-hidden="true"></span>
       <button id="settings" class="icon-button" title="Settings" aria-label="Settings" type="button">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1106,9 +1166,9 @@ function renderLocalUiHtml() {
       <p class="rail-title">Providers</p>
       <label class="search-box"><span aria-hidden="true"></span><input id="provider-search" placeholder="Search providers..." aria-label="Search providers" /></label>
       <div id="providers" class="provider-list"></div>
-      <section class="run-local-card" aria-label="Run VibeRaven locally">
-        <h2>Run VibeRaven locally</h2>
-        <p>Verify your project from the terminal.</p>
+      <section class="run-local-card" aria-label="Run VibeRaven">
+        <h2>Run VibeRaven</h2>
+        <p>Check your project from the terminal.</p>
         <div class="command-pill"><span>$ npx -y viberaven</span></div>
       </section>
     </aside>
@@ -1147,8 +1207,7 @@ function renderLocalUiHtml() {
         </div>
         <div class="drawer-actions">
           <button id="tasklist" type="button"><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span><span>Open tasklist</span></button>
-          <button id="drawer-verify" type="button" aria-label="Run verify"><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4Z"/></svg></span><span>Run local verify</span></button>
-          <button id="last-report" type="button"><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M8 13h8"/><path d="M8 17h5"/></svg></span><span>View last report</span></button>
+          <button id="drawer-verify" type="button" aria-label="Run verify"><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4Z"/></svg></span><span>Run verify</span></button>
         </div>
         <div class="tip" hidden></div>
       </section>
@@ -1218,18 +1277,6 @@ function renderLocalUiHtml() {
         'Return the exact files changed and the verification result.'
       ].join('\\n');
     }
-    function providerGuideUrl(providerId, item) {
-      const urls = {
-        supabase: item && item.id === 'rls-policies' ? 'https://supabase.com/docs/guides/database/postgres/row-level-security' : 'https://supabase.com/docs',
-        vercel: 'https://vercel.com/docs',
-        stripe: 'https://docs.stripe.com',
-        github: 'https://docs.github.com/actions',
-        sentry: 'https://docs.sentry.io',
-        clerk: 'https://clerk.com/docs',
-        posthog: 'https://posthog.com/docs'
-      };
-      return urls[providerId] || '';
-    }
     function setTip(message, kind) {
       const tip = document.querySelector('.tip');
       tip.hidden = !message;
@@ -1260,63 +1307,74 @@ function renderLocalUiHtml() {
     function guideSteps(provider, item) {
       if (provider.id === 'supabase' && item.id === 'rls-policies') {
         return [
-          { title: 'Open Supabase policies', body: 'In Supabase, open Authentication and Database policies for the project tables that store user data.', code: 'https://supabase.com/dashboard/project/_/auth/policies' },
+          { title: 'Open Supabase policies', body: 'In Supabase, open Authentication and Database policies for the project tables that store user data.', code: 'https://supabase.com/dashboard/project/_/auth/policies', openUrl: 'https://supabase.com/dashboard/project/_/auth/policies' },
           { title: 'Enable RLS in a migration', body: 'Keep proof in the repo. Add SQL that enables row level security for each public table.', code: 'alter table public.your_table enable row level security;' },
           { title: 'Scope rows to the owner', body: 'Add policies that only allow authenticated users to read or write their own records. Avoid permissive USING (true) policies.', code: "create policy \\"Users manage own rows\\" on public.your_table\\nfor all to authenticated\\nusing (auth.uid() = user_id)\\nwith check (auth.uid() = user_id);" },
-          { title: 'Verify locally', body: 'Run local verify after the repo change. VibeRaven will refresh the evidence map without reading secret values.', code: 'npx -y viberaven --verify' }
+          { title: 'Run verify', body: 'Refresh the evidence map after the repo change. VibeRaven does not need secret values.', code: 'npx -y viberaven --verify', verify: true }
         ];
       }
       if (provider.id === 'supabase' && item.id === 'production-env') {
         return [
-          { title: 'Add safe env placeholders', body: 'Use names only. Never paste real Supabase keys into repo files.', code: 'NEXT_PUBLIC_SUPABASE_URL=\\nNEXT_PUBLIC_SUPABASE_ANON_KEY=\\nSERVER_ONLY_SUPABASE_ADMIN_KEY=<server-only, never expose to browser>' },
+          { title: 'Open .env.example', body: 'Add names only. Never paste real Supabase keys into repo files.', code: 'NEXT_PUBLIC_SUPABASE_URL=\\nNEXT_PUBLIC_SUPABASE_ANON_KEY=\\nSERVER_ONLY_SUPABASE_ADMIN_KEY=<server-only, never expose to browser>', file: '.env.example' },
           { title: 'Document the boundary', body: 'Make it obvious which key can be public and which must stay server-only.', code: 'The server-only Supabase admin key must not be used in client components.' },
-          { title: 'Verify locally', body: 'Refresh local evidence after the placeholders are committed.', code: 'npx -y viberaven --verify' }
+          { title: 'Run verify', body: 'Refresh evidence after the placeholders are committed.', code: 'npx -y viberaven --verify', verify: true }
         ];
       }
       if (provider.id === 'stripe') {
         return [
-          { title: 'Keep payments server-side', body: 'Checkout sessions and webhook verification belong in server routes only.', code: 'STRIPE_SERVER_KEY=<server-only>\\nSTRIPE_WEBHOOK_SIGNING_SECRET=<server-only>\\nNEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=' },
+          { title: 'Open env example', body: 'Add payment env names only. Keep server keys out of client code.', code: 'STRIPE_SERVER_KEY=<server-only>\\nSTRIPE_WEBHOOK_SIGNING_SECRET=<server-only>\\nNEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=', file: '.env.example' },
           { title: 'Copy webhook target', body: 'Use a stable production webhook route and verify signatures before changing subscription state.', code: '/api/stripe/webhook' },
-          { title: 'Verify locally', body: 'VibeRaven checks repo evidence and does not need live secret values.', code: 'npx -y viberaven --verify' }
+          { title: 'Run verify', body: 'VibeRaven checks repo evidence and does not need live secret values.', code: 'npx -y viberaven --verify', verify: true }
         ];
       }
       if (provider.id === 'vercel') {
         return [
-          { title: 'Confirm production env names', body: 'Document the env names your app expects in production without values.', code: '.env.example' },
+          { title: 'Open env example', body: 'Document the env names your app expects in production without values.', code: '.env.example', file: '.env.example' },
           { title: 'Confirm deploy command', body: 'Make package scripts and deployment config agree on build and test commands.', code: 'npm run build' },
-          { title: 'Verify locally', body: 'Refresh the launch map after repo evidence changes.', code: 'npx -y viberaven --verify' }
+          { title: 'Run verify', body: 'Refresh the launch map after repo evidence changes.', code: 'npx -y viberaven --verify', verify: true }
         ];
       }
       return [
         { title: item.title, body: item.whyItMatters, code: item.whatToChange },
         { title: 'Keep the proof in the repo', body: 'Provider setup can still require manual work, but VibeRaven needs safe local evidence for the coding agent.', code: item.verifyWith },
-        { title: 'Verify locally', body: 'Run verify after the repo-owned fix. No production secrets are required.', code: 'npx -y viberaven --verify' }
+        { title: 'Run verify', body: 'Run verify after the repo-owned fix. No production secrets are required.', code: 'npx -y viberaven --verify', verify: true }
       ];
     }
     function renderGuideHtml(provider, item) {
-      const cards = guideSteps(provider, item).map((step) => '<article class="guide-card"><h3>' + escapeHtml(step.title) + '</h3><p>' + escapeHtml(step.body) + '</p><code>' + escapeHtml(step.code) + '</code><div class="guide-actions"><button type="button" data-copy="' + escapeHtml(step.code) + '">Copy</button></div></article>').join('');
-      return cards + '<article class="guide-card"><h3>Use with your coding agent</h3><p>The prompt on the right is already scoped to this provider check. Copy it after selecting the row you want to fix.</p><div class="guide-actions"><button class="primary-action" type="button" data-copy-prompt="true">Copy focused prompt</button><button type="button" data-run-verify="true">Run local verify</button></div></article>';
+      const cards = guideSteps(provider, item).map((step, index) => {
+        const actions = [
+          step.code ? '<button type="button" data-copy="' + escapeHtml(step.code) + '">Copy</button>' : '',
+          step.file ? '<button type="button" data-open-file="' + escapeHtml(step.file) + '">Open file</button>' : '',
+          step.openUrl ? '<button type="button" data-open-url="' + escapeHtml(step.openUrl) + '">Open</button>' : '',
+          step.verify ? '<button class="verify-action" type="button" data-run-verify="true">Run verify</button>' : ''
+        ].filter(Boolean).join('');
+        return '<article class="guide-card task-card" style="--panel-index:' + index + '"><span class="task-number">' + (index + 1) + '</span><div><h3>' + escapeHtml(step.title) + '</h3><p>' + escapeHtml(step.body) + '</p>' + (step.code ? '<code>' + escapeHtml(step.code) + '</code>' : '') + '<div class="guide-actions">' + actions + '</div></div></article>';
+      }).join('');
+      return cards + '<article class="guide-card" style="--panel-index:8"><h3>Use with your coding agent</h3><p>The prompt on the right is scoped to this provider check. Copy it after selecting the row you want to fix.</p><div class="guide-actions"><button class="primary-action" type="button" data-copy-prompt="true">Copy focused prompt</button><button class="verify-action" type="button" data-run-verify="true">Run verify</button></div></article>';
     }
-    function renderReportHtml() {
-      const project = state.data.project;
-      const counts = state.data.providers.reduce((acc, provider) => {
-        acc[provider.state] = (acc[provider.state] || 0) + 1;
-        return acc;
-      }, {});
-      const providers = state.data.providers.map((provider) => '<article class="guide-card"><h3>' + escapeHtml(provider.label) + '</h3><p>Status: ' + escapeHtml(labels[provider.state] || provider.state) + '</p></article>').join('');
-      return '<div class="report-grid"><div class="report-metric"><span>Gate</span><strong>' + escapeHtml(gateLabel(project.gateStatus)) + '</strong></div><div class="report-metric"><span>Needs work</span><strong>' + escapeHtml((counts.needs_repo_fix || 0) + (counts.connect_live || 0) + (counts.blocked || 0)) + '</strong></div></div>' + providers;
+    function renderTasklistHtml() {
+      const provider = selectedProvider();
+      const item = selectedPathItem(provider);
+      const cards = guideSteps(provider, item).slice(0, 3).map((step, index) => {
+        const actions = [
+          step.code ? '<button type="button" data-copy="' + escapeHtml(step.code) + '">Copy</button>' : '',
+          step.file ? '<button type="button" data-open-file="' + escapeHtml(step.file) + '">Open file</button>' : '',
+          step.verify ? '<button class="verify-action" type="button" data-run-verify="true">Run verify</button>' : ''
+        ].filter(Boolean).join('');
+        return '<article class="guide-card task-card" style="--panel-index:' + index + '"><span class="task-number">' + (index + 1) + '</span><div><h3>' + escapeHtml(step.title) + '</h3><p>' + escapeHtml(step.body) + '</p>' + (step.code ? '<code>' + escapeHtml(step.code) + '</code>' : '') + '<div class="guide-actions">' + actions + '</div></div></article>';
+      }).join('');
+      const providerPills = state.data.providers.map((candidate) => '<span class="provider-pill">' + escapeHtml(candidate.label) + ': ' + escapeHtml(labels[candidate.state] || candidate.state) + '</span>').join('');
+      return '<article class="guide-card" style="--panel-index:0"><h3>Current focus</h3><p>' + escapeHtml(provider.label + ' - ' + item.title) + '</p><div class="provider-pill-row">' + providerPills + '</div></article>' + cards;
     }
     async function openTasklistPanel() {
-      setTip('Loading local tasklist...');
-      const response = await fetch('/api/tasklist?vr_token=' + encodeURIComponent(localToken));
-      const text = await response.text();
-      if (!response.ok) throw new Error(text || 'Could not load tasklist.');
-      openPanel('Local tasklist', 'Generated from local repo evidence. No secrets are needed.', '<pre class="panel-pre">' + escapeHtml(text) + '</pre>');
+      setTip('Loading tasklist...');
+      await fetch('/api/tasklist?vr_token=' + encodeURIComponent(localToken));
+      openPanel('Tasklist', 'Focused steps from repo evidence. No secrets are needed.', renderTasklistHtml());
       setTip('Tasklist loaded inside VibeRaven.');
     }
     function openSettingsPanel() {
       const project = state.data.project;
-      openPanel('Local settings', 'This console only reads local repo evidence.', '<article class="guide-card"><h3>Project folder</h3><p>' + escapeHtml(project.workspacePath) + '</p></article><article class="guide-card"><h3>Privacy boundary</h3><p>Local scan and verify inspect package metadata, env examples, deployment config, tests, and provider-related source hints. They do not read real secret values and do not use your private OpenAI API key.</p></article><article class="guide-card"><h3>Commands</h3><code>npx -y viberaven\\nnpx -y viberaven --verify\\nnpx -y viberaven --agent-mode</code></article>');
+      openPanel('Settings', 'This console reads repo evidence only.', '<article class="guide-card"><h3>Project folder</h3><p>' + escapeHtml(project.workspacePath) + '</p></article><article class="guide-card"><h3>Privacy boundary</h3><p>Scan and verify inspect package metadata, env examples, deployment config, tests, and provider-related source hints. They do not read real secret values and do not use your private OpenAI API key.</p></article><article class="guide-card"><h3>Commands</h3><code>npx -y viberaven\\nnpx -y viberaven --verify\\nnpx -y viberaven --agent-mode</code></article>');
     }
     function gateLabel(status) {
       return status === 'clear' ? 'Gate clear' : 'Gate not clear';
@@ -1497,7 +1555,7 @@ function renderLocalUiHtml() {
       guide.type = 'button';
       guide.textContent = 'Open guide';
       guide.addEventListener('click', () => {
-        openPanel(provider.label + ' guide', item.title + ' guidance for this local project.', renderGuideHtml(provider, item));
+        openPanel(provider.label + ' guide', item.title + ' guidance for this project.', renderGuideHtml(provider, item));
         setTip('Opened in-app guide for ' + item.title + '.');
       });
       row.append(icon, body, guide);
@@ -1544,7 +1602,7 @@ function renderLocalUiHtml() {
       state.data = payload.state || payload;
       state.selectedProviderId = state.data.selectedProviderId;
       state.selectedPathItemId = null;
-      setTip(path === '/api/verify' ? 'Verify finished. The launch map has been refreshed.' : 'Local scan finished. The launch map has been refreshed.');
+      setTip(path === '/api/verify' ? 'Verify finished. The launch map has been refreshed.' : 'Scan finished. The launch map has been refreshed.');
       render();
     }
     document.getElementById('provider-search').addEventListener('input', (event) => {
@@ -1552,23 +1610,19 @@ function renderLocalUiHtml() {
       renderProviders();
     });
     document.getElementById('scan').addEventListener('click', () => {
-      setTip('Running local scan...');
+      setTip('Running scan...');
       postAndRefresh('/api/scan');
     });
     document.getElementById('verify').addEventListener('click', () => {
-      setTip('Running local verify...');
+      setTip('Running verify...');
       postAndRefresh('/api/verify');
     });
     document.getElementById('drawer-verify').addEventListener('click', () => {
-      setTip('Running local verify...');
+      setTip('Running verify...');
       postAndRefresh('/api/verify');
     });
     document.getElementById('tasklist').addEventListener('click', () => {
       openTasklistPanel().catch((error) => setTip(error instanceof Error ? error.message : String(error), 'error'));
-    });
-    document.getElementById('last-report').addEventListener('click', () => {
-      openPanel('Last local report', 'Current provider map from the latest local scan or verify.', renderReportHtml());
-      setTip('Report opened inside VibeRaven.');
     });
     document.getElementById('settings').addEventListener('click', openSettingsPanel);
     document.getElementById('action-panel-close').addEventListener('click', closePanel);
@@ -1582,12 +1636,22 @@ function renderLocalUiHtml() {
         await navigator.clipboard.writeText(target.dataset.copy);
         setTip('Copied guide snippet.');
       }
+      if (target.dataset.openUrl) {
+        window.open(target.dataset.openUrl, '_blank', 'noopener,noreferrer');
+        setTip('Opened provider page.');
+      }
+      if (target.dataset.openFile) {
+        const base = state.data.project.workspacePath.replaceAll('\\\\', '/').replace(/\\/$/, '');
+        const rel = target.dataset.openFile.replace(/^[/\\\\]+/, '');
+        window.open('vscode://file/' + encodeURI(base + '/' + rel), '_blank', 'noopener,noreferrer');
+        setTip('Opened ' + rel + ' in your editor if the editor protocol is enabled.');
+      }
       if (target.dataset.copyPrompt) {
         await navigator.clipboard.writeText(document.getElementById('prompt').value || '');
         setTip('Copied focused prompt.');
       }
       if (target.dataset.runVerify) {
-        setTip('Running local verify...');
+        setTip('Running verify...');
         postAndRefresh('/api/verify');
       }
     });
