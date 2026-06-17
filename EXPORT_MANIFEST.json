@@ -1,6 +1,6 @@
 {
   "mode": "public-source-localhost-phase-1",
-  "exportedAt": "2026-06-17T18:50:56.601Z",
+  "exportedAt": "2026-06-17T19:08:30.645Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -27,6 +27,10 @@
     [
       "media/extension-icon.png",
       "media/extension-icon.png"
+    ],
+    [
+      "docs/assets/viberaven-local-console.png",
+      "docs/assets/viberaven-local-console.png"
     ],
     [
       "docs/contracts",

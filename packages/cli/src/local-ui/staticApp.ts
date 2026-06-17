@@ -17,6 +17,10 @@ export function renderLocalUiHtml(): string {
       --line-strong: #d0d5dd;
       --orange: #ff7a00;
       --orange-soft: #fff2e5;
+      --purple: #7c3aed;
+      --purple-soft: #f3edff;
+      --purple-line: #ddd0ff;
+      --mint-panel: #f6fffb;
       --green: #24b26b;
       --green-soft: #e9f8f1;
       --red: #e11d1d;
@@ -102,14 +106,14 @@ export function renderLocalUiHtml(): string {
       transform: translateY(1px);
     }
     .tagline {
-      border: 1px solid var(--line);
-      border-radius: 7px;
-      padding: 9px 16px;
-      color: var(--ink);
+      border: 1px solid #eef0f4;
+      border-radius: 10px;
+      padding: 9px 18px;
+      color: var(--muted-strong);
       font-size: 14px;
-      font-weight: 650;
+      font-weight: 600;
       white-space: nowrap;
-      background: var(--surface);
+      background: #f4f6f8;
     }
     .project-picker {
       display: flex;
@@ -205,7 +209,7 @@ export function renderLocalUiHtml(): string {
       stroke-linejoin: round;
     }
     .verify-button {
-      min-width: 136px;
+      min-width: 146px;
       height: 44px;
       display: inline-flex;
       align-items: center;
@@ -227,24 +231,38 @@ export function renderLocalUiHtml(): string {
     }
     .shell {
       display: grid;
-      grid-template-columns: 340px minmax(600px, 1fr) 410px;
+      grid-template-columns: 360px minmax(600px, 1fr) 520px;
       min-height: 0;
       height: 100%;
       overflow: hidden;
     }
     .rail {
       border-right: 1px solid var(--line);
-      padding: 24px 26px 28px;
+      padding: 36px 28px 28px;
       background: var(--canvas);
       overflow: auto;
       min-height: 0;
     }
     .rail-title {
-      margin: 0 0 14px;
-      color: var(--muted-strong);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
+      margin: 0 0 16px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 750;
+      text-transform: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .rail-title::before {
+      content: "";
+      width: 17px;
+      height: 15px;
+      display: inline-block;
+      background:
+        linear-gradient(var(--muted) 0 0) 8px 2px / 9px 1.5px no-repeat,
+        linear-gradient(var(--muted) 0 0) 8px 7px / 9px 1.5px no-repeat,
+        linear-gradient(var(--muted) 0 0) 8px 12px / 9px 1.5px no-repeat,
+        radial-gradient(circle, var(--muted) 1.7px, transparent 2px) 0 0 / 7px 5px repeat-y;
     }
     .search-box {
       height: 44px;
@@ -295,27 +313,22 @@ export function renderLocalUiHtml(): string {
     }
     .provider-button {
       width: 100%;
-      min-height: 68px;
+      min-height: 64px;
       display: grid;
-      grid-template-columns: 44px minmax(0, 1fr) 8px 12px;
-      gap: 13px;
+      grid-template-columns: 42px minmax(0, 1fr) 8px;
+      gap: 14px;
       align-items: center;
       text-align: left;
-      padding: 12px;
+      padding: 11px 14px;
       background: var(--surface);
       border-color: var(--line);
+      border-radius: 10px;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.02);
     }
     .provider-button.is-selected {
       border-color: var(--orange);
-      box-shadow: inset 0 0 0 1px rgba(255, 122, 0, 0.08);
-    }
-    .provider-button::after {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-right: 1.5px solid var(--muted-strong);
-      border-bottom: 1.5px solid var(--muted-strong);
-      transform: rotate(-45deg);
+      background: #fffaf5;
+      box-shadow: 0 8px 22px rgba(255, 122, 0, 0.08);
     }
     .provider-icon {
       width: 42px;
@@ -365,9 +378,10 @@ export function renderLocalUiHtml(): string {
     .run-local-card {
       margin-top: 20px;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 10px;
       background: var(--surface);
       padding: 18px;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.02);
     }
     .run-local-card h2 {
       margin: 0 0 6px;
@@ -397,17 +411,17 @@ export function renderLocalUiHtml(): string {
       white-space: nowrap;
     }
     .main {
-      padding: 38px 48px 40px;
+      padding: 42px 48px 40px;
       overflow: auto;
       background: var(--canvas);
       min-height: 0;
     }
     .provider-header {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr);
       gap: 18px;
       align-items: center;
-      margin-bottom: 18px;
+      margin-bottom: 26px;
     }
     .provider-heading {
       display: flex;
@@ -423,14 +437,14 @@ export function renderLocalUiHtml(): string {
     }
     .provider-heading h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 34px;
       line-height: 1.15;
-      font-weight: 750;
+      font-weight: 780;
     }
     .provider-heading p {
-      margin: 5px 0 0;
+      margin: 8px 0 0;
       color: var(--muted-strong);
-      font-size: 15px;
+      font-size: 16px;
       line-height: 1.35;
     }
     .secondary-action {
@@ -445,60 +459,80 @@ export function renderLocalUiHtml(): string {
     }
     .path-list {
       display: grid;
-      gap: 0;
+      gap: 14px;
       position: relative;
-      padding-left: 42px;
+      padding-left: 72px;
     }
     .path-list::before {
       content: "";
       position: absolute;
-      left: 18px;
-      top: 26px;
-      bottom: 26px;
+      left: 27px;
+      top: -16px;
+      bottom: 30px;
       width: 1px;
-      background: var(--line-strong);
+      background: repeating-linear-gradient(to bottom, #f5b16b 0 9px, transparent 9px 18px);
     }
     .path-row {
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 12px;
       background: var(--surface);
-      padding: 16px 20px;
+      padding: 22px 24px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 14px;
+      grid-template-columns: 48px minmax(0, 1fr) auto 18px;
+      gap: 18px;
+      align-items: center;
       position: relative;
-      margin-bottom: 12px;
+      margin-bottom: 0;
+      min-height: 90px;
+      box-shadow: 0 12px 28px rgba(16, 24, 40, 0.035);
     }
     .path-row::before {
-      content: "";
+      content: attr(data-step);
       position: absolute;
-      left: -35px;
-      top: 18px;
-      width: 26px;
-      height: 26px;
+      left: -72px;
+      top: 22px;
+      width: 40px;
+      height: 40px;
       border: 1px solid var(--line-strong);
       border-radius: 999px;
       background: var(--surface);
-    }
-    .path-row::after {
-      content: "";
-      position: absolute;
-      left: -25px;
-      top: 28px;
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--muted);
+      display: grid;
+      place-items: center;
+      color: #344054;
+      font-size: 15px;
+      font-weight: 800;
     }
     .path-row.is-focused {
-      border-color: var(--line-strong);
-      box-shadow: 0 10px 22px rgba(17, 20, 23, 0.04);
+      border-color: #ffb36b;
+      box-shadow: 0 14px 30px rgba(255, 122, 0, 0.09);
     }
     .path-row.is-focused::before {
       border-color: var(--orange);
       background: var(--orange-soft);
+      color: var(--orange);
     }
-    .path-row.is-focused::after { background: var(--orange); }
+    .path-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--surface-soft);
+      color: #344054;
+      display: grid;
+      place-items: center;
+    }
+    .path-row.is-focused .path-icon {
+      color: var(--orange);
+      background: var(--orange-soft);
+    }
+    .path-icon svg {
+      width: 23px;
+      height: 23px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
     .path-row strong {
       font-size: 15px;
       line-height: 1.25;
@@ -510,135 +544,253 @@ export function renderLocalUiHtml(): string {
       line-height: 1.4;
     }
     .path-state {
-      align-self: start;
-      border: 1px solid currentColor;
+      align-self: center;
+      border: 0;
       border-radius: 999px;
-      padding: 5px 10px;
+      padding: 7px 13px;
       font-size: 12px;
       line-height: 1;
       color: var(--muted);
       white-space: nowrap;
-      background: var(--surface);
+      background: var(--surface-soft);
+    }
+    .path-arrow {
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+    }
+    .path-arrow svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .path-state[data-state="ready"] { background: var(--green-soft); }
     .path-state[data-state="needs_fix"], .path-state[data-state="needs_connect"] { background: var(--orange-soft); }
     .path-state[data-state="blocked"] { background: var(--red-soft); }
     .next-fix {
-      margin: 10px 0 0 42px;
+      margin: 36px 0 0 0;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 14px;
       background: var(--surface);
-      padding: 22px;
+      padding: 28px;
+      box-shadow: 0 12px 30px rgba(16, 24, 40, 0.035);
     }
     .next-fix h2 {
-      margin: 0 0 14px;
-      font-size: 15px;
+      margin: 0 0 4px;
+      font-size: 18px;
       line-height: 1.2;
-    }
-    .fix-grid {
-      display: grid;
-      gap: 0;
-    }
-    .fix-section {
-      display: grid;
-      grid-template-columns: 34px minmax(0, 1fr);
+      display: flex;
+      align-items: center;
       gap: 12px;
-      padding: 16px 0;
-      border-top: 1px solid var(--line);
     }
-    .fix-section:first-child { border-top: 0; padding-top: 0; }
-    .fix-section:last-child { padding-bottom: 0; }
-    .fix-symbol {
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
+    .next-fix h2::before {
+      content: "";
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      background:
+        linear-gradient(45deg, transparent 43%, var(--purple) 44% 56%, transparent 57%),
+        linear-gradient(-45deg, transparent 43%, var(--purple) 44% 56%, transparent 57%);
+      opacity: 0.9;
+    }
+    .next-fix-subtitle {
+      margin: 0 0 22px;
+      color: var(--muted-strong);
+      font-size: 14px;
+    }
+    .next-action-row {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      border: 1px solid var(--purple-line);
+      border-radius: 10px;
+      padding: 18px;
+      background: linear-gradient(100deg, #fbf8ff 0%, #ffffff 58%, #f9f7ff 100%);
+    }
+    .next-action-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 9px;
       display: grid;
       place-items: center;
-      color: var(--muted-strong);
-      background: var(--surface-soft);
-      font-size: 12px;
-      font-weight: 800;
+      color: var(--purple);
+      background: var(--purple-soft);
     }
-    .fix-section h3 {
+    .next-action-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .next-action-row h3 {
       margin: 0 0 6px;
       font-size: 14px;
       line-height: 1.2;
     }
-    .fix-section p {
+    .next-action-row p {
       margin: 0;
       color: var(--muted-strong);
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.45;
+    }
+    .open-guide-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 0;
+      background: var(--purple);
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 750;
+      white-space: nowrap;
     }
     .drawer {
       border-left: 1px solid var(--line);
-      padding: 34px 24px;
-      background: var(--surface);
+      padding: 34px 40px 34px 32px;
+      background: var(--canvas);
       overflow: auto;
       min-height: 0;
+      display: grid;
+      align-content: start;
+      gap: 32px;
+    }
+    .prompt-panel, .quick-panel {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      padding: 26px 28px;
+      box-shadow: 0 12px 30px rgba(16, 24, 40, 0.04);
+    }
+    .panel-heading {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .panel-glyph {
+      color: var(--purple);
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+    }
+    .panel-glyph svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+    .copy-small {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 9px;
+      padding: 8px 12px;
+      color: var(--muted-strong);
+      font-weight: 650;
     }
     .drawer h2 {
       margin: 0;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.2;
     }
     .drawer p {
-      margin: 8px 0 16px;
+      margin: 8px 0 0;
       color: var(--muted-strong);
       font-size: 14px;
       line-height: 1.4;
     }
     .prompt-box {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 1px;
+      height: 1px;
+    }
+    .prompt-card {
       width: 100%;
-      min-height: 410px;
-      resize: vertical;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 14px;
-      background: var(--surface);
-      color: var(--muted-strong);
-      font: 14px/1.75 var(--mono);
+      border-radius: 10px;
+      padding: 22px;
+      background: linear-gradient(135deg, var(--mint-panel), #ffffff 74%);
+      color: #1f2937;
+      font: 14px/1.65 var(--mono);
+      min-height: 310px;
+      white-space: pre-wrap;
+    }
+    .prompt-line {
+      display: grid;
+      grid-template-columns: 20px minmax(0, 1fr);
+      gap: 10px;
+      margin: 7px 0;
+    }
+    .prompt-check {
+      color: var(--green);
+      display: grid;
+      place-items: start center;
+      padding-top: 3px;
+    }
+    .prompt-check svg {
+      width: 14px;
+      height: 14px;
     }
     .drawer-actions {
       display: grid;
-      gap: 9px;
-      margin-top: 12px;
+      gap: 10px;
+      margin-top: 0;
     }
     .drawer-actions button {
       min-height: 42px;
       font-weight: 650;
       position: relative;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) 14px;
+      gap: 10px;
+      align-items: center;
+      text-align: left;
+      border-radius: 9px;
+      padding: 10px 12px;
     }
-    #copy::before, #tasklist::before, #drawer-verify::before {
+    .drawer-actions button::after {
       content: "";
-      display: inline-block;
-      width: 15px;
-      height: 15px;
-      margin-right: 8px;
-      vertical-align: -2px;
-      border: 1.7px solid currentColor;
-      border-radius: 3px;
+      width: 8px;
+      height: 8px;
+      justify-self: end;
+      border-right: 1.5px solid var(--muted);
+      border-bottom: 1.5px solid var(--muted);
+      transform: rotate(-45deg);
     }
-    #tasklist::before {
-      border-left: 0;
-      border-right: 0;
-      border-radius: 0;
-      box-shadow: 0 5px 0 -3px currentColor, 0 -5px 0 -3px currentColor;
-    }
-    #drawer-verify::before {
-      border-radius: 999px 999px 999px 2px;
-      transform: rotate(45deg);
-    }
-    .tip {
-      margin-top: 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 12px;
+    .action-icon {
+      width: 24px;
+      height: 24px;
       color: var(--muted-strong);
-      font-size: 13px;
-      line-height: 1.4;
-      background: var(--surface);
+      display: grid;
+      place-items: center;
+    }
+    .action-icon svg {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .empty {
       color: var(--muted);
@@ -751,7 +903,7 @@ export function renderLocalUiHtml(): string {
           <path d="M9 15 7.4 9.6 14.8 2.2c.4-.4 1-.2 1.1.3l1.1 5.3 4.5 3c.4.3.4.9-.1 1.2L13 17.4Z"/>
           <path d="m14.3 6.7 3 3"/>
         </svg>
-        <span>Verify</span>
+        <span>Verify now</span>
       </button>
     </div>
   </header>
@@ -770,20 +922,42 @@ export function renderLocalUiHtml(): string {
       <section id="provider-header" class="provider-header"></section>
       <section id="path"></section>
       <section class="next-fix">
-        <h2>Next fix</h2>
+        <h2>Next action</h2>
         <div id="next-fix"></div>
       </section>
     </main>
-    <aside class="drawer" aria-label="Agent prompt">
-      <h2>Agent prompt</h2>
-      <p>Use this prompt with your coding agent.</p>
-      <textarea id="prompt" class="prompt-box" readonly></textarea>
-      <div class="drawer-actions">
-        <button id="copy" class="primary" type="button">Copy prompt</button>
-        <button id="tasklist" type="button">Open tasklist</button>
-        <button id="drawer-verify" type="button">Run verify</button>
-      </div>
-      <div class="tip">Tip: re-run Verify after applying a fix to confirm the gate state.</div>
+    <aside class="drawer" aria-label="Agent prompt and quick actions">
+      <section class="prompt-panel" aria-label="Agent prompt">
+        <div class="panel-heading">
+          <div class="panel-title">
+            <span class="panel-glyph" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z"/><path d="m19 15 .8 2.8L22 18.6l-2.2.8L19 22l-.8-2.6-2.2-.8 2.2-.8L19 15Z"/></svg>
+            </span>
+            <div>
+              <h2>Agent prompt</h2>
+              <p>Run this with your coding agent.</p>
+            </div>
+          </div>
+          <button id="copy" class="copy-small" type="button" aria-label="Copy prompt">
+            <span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+            Copy
+          </button>
+        </div>
+        <div id="prompt-preview" class="prompt-card"></div>
+        <textarea id="prompt" class="prompt-box" readonly></textarea>
+      </section>
+      <section class="quick-panel" aria-label="Quick actions">
+        <div class="panel-title">
+          <span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m13 2-8 12h7l-1 8 8-12h-7l1-8Z"/></svg></span>
+          <h2>Quick actions</h2>
+        </div>
+        <div class="drawer-actions">
+          <button id="tasklist" type="button"><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span><span>Open tasklist</span></button>
+          <button id="drawer-verify" type="button" aria-label="Run verify"><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4Z"/></svg></span><span>Run local verify</span></button>
+          <button id="last-report" type="button"><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M8 13h8"/><path d="M8 17h5"/></svg></span><span>View last report</span></button>
+        </div>
+        <div class="tip" hidden></div>
+      </section>
     </aside>
   </div>
   <footer class="status-footer">
@@ -793,6 +967,7 @@ export function renderLocalUiHtml(): string {
       <span id="footer-command" class="footer-command">npx -y viberaven</span>
     </div>
     <div class="footer-right">
+      <span>Need help?</span>
       <span id="footer-gate" class="gate-status" data-status="not_clear"><span class="dot bad" aria-hidden="true"></span>Gate not clear</span>
     </div>
   </footer>
@@ -826,8 +1001,46 @@ export function renderLocalUiHtml(): string {
       if (provider.state === 'needs_repo_fix' || provider.state === 'connect_live' || provider.state === 'requires_user_action') return 'needs_repo_fix';
       return provider.state;
     }
+    function pathIconHtml(index) {
+      const icons = [
+        '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>',
+        '<svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9Z"/><path d="m4 7.5 8 4.5 8-4.5"/><path d="M12 12v9"/></svg>',
+        '<svg viewBox="0 0 24 24"><path d="m14 10-4 4"/><path d="M16.5 7.5a3.5 3.5 0 0 1 0 5l-1.5 1.5a3.5 3.5 0 0 1-5 0"/><path d="M7.5 16.5a3.5 3.5 0 0 1 0-5L9 10a3.5 3.5 0 0 1 5 0"/></svg>',
+        '<svg viewBox="0 0 24 24"><path d="m12 3 8 4-8 4-8-4Z"/><path d="m4 12 8 4 8-4"/><path d="m4 17 8 4 8-4"/></svg>'
+      ];
+      return icons[index % icons.length];
+    }
+    function renderPromptPreview(prompt) {
+      const preview = document.getElementById('prompt-preview');
+      preview.textContent = '';
+      const lines = prompt ? prompt.split('\\n') : [];
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          preview.append(document.createTextNode('\\n'));
+          continue;
+        }
+        if (trimmed.startsWith('- ')) {
+          const row = document.createElement('div');
+          row.className = 'prompt-line';
+          const check = document.createElement('span');
+          check.className = 'prompt-check';
+          check.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.5 2.5 2.5 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+          const copy = document.createElement('span');
+          copy.textContent = trimmed.slice(2);
+          row.append(check, copy);
+          preview.append(row);
+          continue;
+        }
+        const block = document.createElement('div');
+        block.textContent = line;
+        preview.append(block);
+      }
+    }
     function setPrompt(provider) {
-      document.getElementById('prompt').value = provider.nextFix ? provider.nextFix.prompt : '';
+      const prompt = provider.nextFix ? provider.nextFix.prompt : '';
+      document.getElementById('prompt').value = prompt;
+      renderPromptPreview(prompt);
     }
     function renderProviders() {
       const container = document.getElementById('providers');
@@ -880,38 +1093,45 @@ export function renderLocalUiHtml(): string {
       icon.innerHTML = provider.iconHtml;
       const copy = document.createElement('div');
       const title = document.createElement('h1');
-      title.textContent = provider.label + ' launch path';
+      title.textContent = 'Your launch path';
       const meta = document.createElement('p');
-      meta.textContent = 'What must be true before this app can ship.';
+      meta.textContent = "We'll guide you through what matters most.";
       copy.append(title, meta);
       heading.append(icon, copy);
       const guide = document.createElement('span');
       guide.className = 'secondary-action';
       guide.setAttribute('aria-disabled', 'true');
       guide.textContent = 'Provider guide unavailable locally';
-      header.append(heading, guide);
+      header.append(heading);
     }
     function renderPath(provider) {
       const path = document.getElementById('path');
       path.textContent = '';
       const list = document.createElement('div');
       list.className = 'path-list';
-      for (const item of provider.launchPath) {
+      provider.launchPath.forEach((item, index) => {
         const row = document.createElement('article');
         row.className = 'path-row' + (provider.nextFix && provider.nextFix.launchPathItemId === item.id ? ' is-focused' : '');
+        row.dataset.step = String(index + 1);
+        const icon = document.createElement('span');
+        icon.className = 'path-icon';
+        icon.innerHTML = pathIconHtml(index);
         const body = document.createElement('div');
         const title = document.createElement('strong');
         title.textContent = item.title;
         const copy = document.createElement('p');
-        copy.textContent = item.whyItMatters;
+        copy.textContent = item.whatToChange || item.whyItMatters;
         body.append(title, copy);
         const status = document.createElement('span');
         status.className = 'path-state';
         status.dataset.state = item.state;
-        status.textContent = labels[item.state] || item.state;
-        row.append(body, status);
+        status.textContent = item.state === 'not_checked' ? 'Pending' : (labels[item.state] || item.state);
+        const arrow = document.createElement('span');
+        arrow.className = 'path-arrow';
+        arrow.innerHTML = '<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>';
+        row.append(icon, body, status, arrow);
         list.append(row);
-      }
+      });
       path.append(list);
     }
     function renderNextFix(provider) {
@@ -925,29 +1145,26 @@ export function renderLocalUiHtml(): string {
         setPrompt(provider);
         return;
       }
-      const grid = document.createElement('div');
-      grid.className = 'fix-grid';
-      const sections = [
-        ['1', 'Why it matters', provider.nextFix.whyItMatters],
-        ['2', 'What to change', provider.nextFix.whatToChange],
-        ['3', 'Verify with VibeRaven', provider.nextFix.verifyWith]
-      ];
-      for (const [symbol, heading, copy] of sections) {
-        const section = document.createElement('article');
-        section.className = 'fix-section';
-        const marker = document.createElement('span');
-        marker.className = 'fix-symbol';
-        marker.textContent = symbol;
-        const body = document.createElement('div');
-        const h = document.createElement('h3');
-        h.textContent = heading;
-        const p = document.createElement('p');
-        p.textContent = copy;
-        body.append(h, p);
-        section.append(marker, body);
-        grid.append(section);
-      }
-      container.append(grid);
+      const subtitle = document.createElement('p');
+      subtitle.className = 'next-fix-subtitle';
+      subtitle.textContent = 'Start here to move forward.';
+      const row = document.createElement('article');
+      row.className = 'next-action-row';
+      const icon = document.createElement('span');
+      icon.className = 'next-action-icon';
+      icon.innerHTML = pathIconHtml(0);
+      const body = document.createElement('div');
+      const h = document.createElement('h3');
+      h.textContent = provider.nextFix.title || 'Fix schema or migrations';
+      const p = document.createElement('p');
+      p.textContent = provider.nextFix.whatToChange;
+      body.append(h, p);
+      const guide = document.createElement('button');
+      guide.className = 'open-guide-button';
+      guide.type = 'button';
+      guide.textContent = 'Open guide';
+      row.append(icon, body, guide);
+      container.append(subtitle, row);
       setPrompt(provider);
     }
     function renderChrome() {
@@ -1002,6 +1219,7 @@ export function renderLocalUiHtml(): string {
     document.getElementById('verify').addEventListener('click', () => postAndRefresh('/api/verify'));
     document.getElementById('drawer-verify').addEventListener('click', () => postAndRefresh('/api/verify'));
     document.getElementById('tasklist').addEventListener('click', () => window.open('/api/tasklist?vr_token=' + encodeURIComponent(localToken), '_blank', 'noopener,noreferrer'));
+    document.getElementById('last-report').addEventListener('click', () => window.open('/api/project?vr_token=' + encodeURIComponent(localToken), '_blank', 'noopener,noreferrer'));
     document.getElementById('copy').addEventListener('click', async () => {
       const prompt = document.getElementById('prompt').value;
       if (!prompt) return;

@@ -16,7 +16,7 @@ npx -y viberaven
 ```
 
 <p>
-  <img alt="VibeRaven local launch console preview" src="docs/assets/viberaven-local-console.svg">
+  <img alt="VibeRaven local launch console preview" src="docs/assets/viberaven-local-console.png">
 </p>
 
 ## Why It Exists
