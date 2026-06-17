@@ -428,11 +428,7 @@ npx -y viberaven guide <provider>
 
 | Command | Description | Scan quota |
 |---------|-------------|------------|
-| `npx -y viberaven preview --agent-mode` | Free chat-native action preview fixture | 0 |
-| `npx -y viberaven preview --json` | Free machine-readable action preview fixture | 0 |
 | `npx -y viberaven --agent-mode` | Full scan + write all artifacts | 1 |
-| `npx -y viberaven actions` | Reprint current `.viberaven/actions.json` action surface | 0 |
-| `npx -y viberaven verify --action VR-A1` | Verify one stable production action handle | 0-1 |
 | `npx -y viberaven --verify` | Rescan after fix | 1 |
 | `npx -y viberaven --strict` | Strict gate (exit 1 if not clear) | 1 |
 | `npx -y viberaven audit --vercel-supabase` | Local Vercel/Supabase checks | 0 |
@@ -450,8 +446,6 @@ After each scan, VibeRaven writes to `.viberaven/`:
 
 | File | Description |
 |------|-------------|
-| `actions.json` | Current chat-native production action surface |
-| `action-registry.json` | Stable action ID history and lifecycle state |
 | `gate-result.json` | Machine verdict: status, gap list, counts |
 | `agent-tasklist.md` | Prioritized TASK-NNN execution blocks |
 | `agent-summary.md` | Human-readable scan summary |

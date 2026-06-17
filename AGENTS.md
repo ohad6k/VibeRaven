@@ -19,7 +19,7 @@ Trigger: modifications to `package.json`, `vercel.json`, `supabase/migrations/**
 
 1. Do NOT claim "production ready" or close a deploy checklist until `gate.status === "clear"` in `.viberaven/gate-result.json`.
 2. Do NOT run verify after every file patch. Batch heals, then `npx -y viberaven --verify` once per loop.
-3. Do NOT `git push` or deploy after auth, RLS, billing, or webhook changes without `npx -y viberaven --agent-mode`.
+3. A normal git push does not require a VibeRaven scan. Do NOT deploy or claim launch readiness after auth, RLS, billing, or webhook changes without `npx -y viberaven --agent-mode`.
 4. If anomalies appear, read `.viberaven/agent-tasklist.md` fully before writing new repo logic.
 5. Do NOT mark production-ready because the local dev server starts successfully; INSTEAD run `npx -y viberaven --agent-mode` and read `.viberaven/gate-result.json`.
 6. Do NOT treat the Supabase dashboard UI as proof of RLS; INSTEAD fix repo evidence gaps from `.viberaven/agent-tasklist.md`.
@@ -80,7 +80,3 @@ Before ending any deploy, auth, RLS, webhook, or dependency task, run:
 `npx -y viberaven --agent-mode`
 Gate is not clear until `gate.status === "clear"` in `.viberaven/gate-result.json`.
 <!-- VIBERAVEN:END -->
-
-## Public Repository Scope
-
-This repository is the public open-source surface for VibeRaven docs, agent rules, examples, MCP configuration, and production-readiness command workflows.

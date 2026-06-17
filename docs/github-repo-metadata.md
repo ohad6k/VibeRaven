@@ -1,56 +1,36 @@
-# GitHub Repository Metadata
+# GitHub repository metadata
 
-This repository is the public open-source surface for VibeRaven: docs, agent rules, examples, MCP configuration, production-readiness protocol references, and user-facing command workflows.
+| Repo | URL | Purpose |
+|------|-----|---------|
+| **Private product** | https://github.com/ohad6k/viberaven-dev | Full monorepo - CLI, extension, landing source, env, billing, internal development |
+| **Public discovery** | https://github.com/ohad6k/VibeRaven | Agent-facing GitHub surface only - README, templates, `llms.txt`, agent rules. **Not** full source code |
 
-## Repository About
+Sync policy: **manual curated export** from private -> public. See [`public-repo-export.md`](./public-repo-export.md).
 
-Set on <https://github.com/ohad6k/VibeRaven/settings>:
+## Public repo (`ohad6k/VibeRaven`) - About
 
-- **Description:** Production readiness for AI-built apps
+Set on https://github.com/ohad6k/VibeRaven/settings:
+
+- **Description:** Production readiness gate for AI-coded Supabase/Vercel apps
 - **Website:** https://viberaven.dev
 
-## Topics
+## Public repo - Topics
 
-`production-readiness`, `ai-agents`, `codex`, `claude-code`, `cursor`, `mcp-server`, `supabase`, `vercel`, `agents-md`, `ai-built-apps`, `rls`, `launch-checklist`
+`production-readiness`, `supabase`, `vercel`, `cursor`, `claude-code`, `codex`, `agents-md`, `mcp-server`, `ai-built-apps`, `rls`
 
-## Public README Requirements
+## Public README - required boundary line
 
-The root README should make these points clear:
+The root README on `ohad6k/VibeRaven` must include (verbatim):
 
-- VibeRaven is production readiness for AI-built apps.
-- The canonical command is `npx -y viberaven --agent-mode`.
-- The free preview command is `npx -y viberaven preview --agent-mode`.
-- Agent-mode writes `.viberaven/actions.json`, `.viberaven/action-registry.json`, `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/context-map.json`.
-- Chat output is optimized for the renderer the agent already has: stable action IDs, focused targets, copy blocks, command blocks, repo-relative file targets, verify commands, and resume prompts.
-- VibeRaven never renders secrets, tokens, raw env values, or absolute local paths.
+> VibeRaven public repo is the agent discovery and installation surface. Product source code and service internals live in a private repository.
 
-## Keep Out Of Public Docs
+Canonical export source: [`docs/public-repo/README.md`](./public-repo/README.md).
 
-Do not publish:
+## Never push to public
 
-- `.env` values, credentials, tokens, cookies, customer data, or service-role keys
-- private billing/provider configuration
-- internal incident notes or private deployment logs
-- generated local scan artifacts from a user's real app unless explicitly sanitized
-
-## Release Metadata
-
-Current public command surface:
-
-- `viberaven preview --agent-mode`
-- `viberaven preview --json`
-- `viberaven --agent-mode`
-- `viberaven actions`
-- `viberaven verify --action VR-A1`
-- `viberaven --verify`
-- `viberaven --strict`
-- `viberaven audit --vercel-supabase`
-- `viberaven init --agents all`
-- `viberaven doctor --agents`
-- `viberaven clean --plan`
+Full monorepo, source code, `.env`, billing code, private configs, landing source, internal implementation.
 
 ## Related
 
-- [Public README](../README.md)
-- [Agent reference](../llms.txt)
-- [MCP registry submission](./mcp-registry-submission.md)
+- [Canonical surface plan - two-repository architecture](./plans/2026-06-09-viberaven-agent-canonical-surface-plan.md#two-repository-architecture-operator-note)
+- [Public repo export checklist](./public-repo-export.md)
