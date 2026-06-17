@@ -475,6 +475,7 @@ export function renderLocalUiHtml(): string {
       background: repeating-linear-gradient(to bottom, #f5b16b 0 9px, transparent 9px 18px);
     }
     .path-row {
+      width: 100%;
       border: 1px solid var(--line);
       border-radius: 12px;
       background: var(--surface);
@@ -483,6 +484,7 @@ export function renderLocalUiHtml(): string {
       grid-template-columns: 48px minmax(0, 1fr) auto 18px;
       gap: 18px;
       align-items: center;
+      text-align: left;
       position: relative;
       margin-bottom: 0;
       min-height: 90px;
@@ -594,10 +596,8 @@ export function renderLocalUiHtml(): string {
       width: 18px;
       height: 18px;
       display: inline-block;
-      background:
-        linear-gradient(45deg, transparent 43%, var(--purple) 44% 56%, transparent 57%),
-        linear-gradient(-45deg, transparent 43%, var(--purple) 44% 56%, transparent 57%);
-      opacity: 0.9;
+      background: var(--green);
+      clip-path: polygon(45% 0, 82% 0, 62% 38%, 94% 38%, 32% 100%, 45% 56%, 10% 56%);
     }
     .next-fix-subtitle {
       margin: 0 0 22px;
@@ -670,7 +670,7 @@ export function renderLocalUiHtml(): string {
       border: 1px solid var(--line);
       border-radius: 14px;
       background: var(--surface);
-      padding: 24px 26px;
+      padding: 20px 24px;
       box-shadow: 0 12px 30px rgba(16, 24, 40, 0.04);
     }
     .panel-heading {
@@ -732,8 +732,8 @@ export function renderLocalUiHtml(): string {
       padding: 22px;
       background: linear-gradient(135deg, var(--mint-panel), #ffffff 74%);
       color: #1f2937;
-      font: 14px/1.65 var(--mono);
-      min-height: 270px;
+      font: 13px/1.55 var(--mono);
+      min-height: 220px;
       white-space: pre-wrap;
     }
     .prompt-line {
@@ -755,7 +755,7 @@ export function renderLocalUiHtml(): string {
     .drawer-actions {
       display: grid;
       gap: 10px;
-      margin-top: 0;
+      margin-top: 18px;
     }
     .drawer-actions button {
       min-height: 42px;
@@ -802,6 +802,16 @@ export function renderLocalUiHtml(): string {
       background: var(--surface);
       font-size: 13px;
       line-height: 1.45;
+    }
+    .tip {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 12px;
+      color: var(--muted-strong);
+      background: var(--surface-soft);
+      font-size: 13px;
+      line-height: 1.4;
     }
     .status-footer {
       min-height: 38px;
@@ -973,7 +983,7 @@ export function renderLocalUiHtml(): string {
     </div>
   </footer>
   <script>
-    const state = { data: null, selectedProviderId: null, providerQuery: '' };
+    const state = { data: null, selectedProviderId: null, selectedPathItemId: null, providerQuery: '', busyAction: '' };
     const localToken = new URLSearchParams(window.location.search).get('vr_token') || '';
     const labels = {
       not_detected: 'Not detected',
@@ -992,6 +1002,46 @@ export function renderLocalUiHtml(): string {
     function text(value) { return value == null ? '' : String(value); }
     function selectedProvider() {
       return state.data.providers.find((provider) => provider.id === state.selectedProviderId) || state.data.providers[0];
+    }
+    function selectedPathItem(provider) {
+      return provider.launchPath.find((item) => item.id === state.selectedPathItemId)
+        || (provider.nextFix && provider.launchPath.find((item) => item.id === provider.nextFix.launchPathItemId))
+        || provider.launchPath[0];
+    }
+    function providerPrompt(provider, item) {
+      const nextFix = provider.nextFix;
+      if (nextFix && item.id === nextFix.launchPathItemId) return nextFix.prompt;
+      return [
+        'Work on the ' + provider.label + ' launch path for ' + (state.data.project.name || 'this project') + '.',
+        '',
+        'Focused check: ' + item.title,
+        '',
+        'Requirements:',
+        '- Understand why it matters: ' + item.whyItMatters,
+        '- Make the repo-owned change: ' + item.whatToChange,
+        '- Keep changes local/repo-only and do not add secret values.',
+        '- Re-run npx -y viberaven --verify when done.',
+        '',
+        'Return the exact files changed and the verification result.'
+      ].join('\\n');
+    }
+    function providerGuideUrl(providerId, item) {
+      const urls = {
+        supabase: item && item.id === 'rls-policies' ? 'https://supabase.com/docs/guides/database/postgres/row-level-security' : 'https://supabase.com/docs',
+        vercel: 'https://vercel.com/docs',
+        stripe: 'https://docs.stripe.com',
+        github: 'https://docs.github.com/actions',
+        sentry: 'https://docs.sentry.io',
+        clerk: 'https://clerk.com/docs',
+        posthog: 'https://posthog.com/docs'
+      };
+      return urls[providerId] || '';
+    }
+    function setTip(message, kind) {
+      const tip = document.querySelector('.tip');
+      tip.hidden = !message;
+      tip.textContent = message || '';
+      tip.dataset.kind = kind || 'info';
     }
     function gateLabel(status) {
       return status === 'clear' ? 'Gate clear' : 'Gate not clear';
@@ -1038,8 +1088,8 @@ export function renderLocalUiHtml(): string {
         preview.append(block);
       }
     }
-    function setPrompt(provider) {
-      const prompt = provider.nextFix ? provider.nextFix.prompt : '';
+    function setPrompt(provider, item) {
+      const prompt = item ? providerPrompt(provider, item) : (provider.nextFix ? provider.nextFix.prompt : '');
       document.getElementById('prompt').value = prompt;
       renderPromptPreview(prompt);
     }
@@ -1063,6 +1113,8 @@ export function renderLocalUiHtml(): string {
         button.type = 'button';
         button.addEventListener('click', () => {
           state.selectedProviderId = provider.id;
+          state.selectedPathItemId = null;
+          setTip('');
           render();
         });
         const icon = document.createElement('span');
@@ -1107,9 +1159,17 @@ export function renderLocalUiHtml(): string {
       const list = document.createElement('div');
       list.className = 'path-list';
       provider.launchPath.forEach((item, index) => {
-        const row = document.createElement('article');
-        row.className = 'path-row' + (provider.nextFix && provider.nextFix.launchPathItemId === item.id ? ' is-focused' : '');
+        const row = document.createElement('button');
+        const isFocused = selectedPathItem(provider).id === item.id;
+        row.className = 'path-row' + (isFocused ? ' is-focused' : '');
+        row.type = 'button';
         row.dataset.step = String(index + 1);
+        row.setAttribute('aria-label', 'Open ' + item.title + ' guidance');
+        row.addEventListener('click', () => {
+          state.selectedPathItemId = item.id;
+          setTip('Opened guidance for ' + item.title + '. Copy the prompt or use Open guide for the focused steps.');
+          render();
+        });
         const icon = document.createElement('span');
         icon.className = 'path-icon';
         icon.innerHTML = pathIconHtml(index);
@@ -1134,36 +1194,41 @@ export function renderLocalUiHtml(): string {
     function renderNextFix(provider) {
       const container = document.getElementById('next-fix');
       container.textContent = '';
-      if (!provider.nextFix) {
+      const item = selectedPathItem(provider);
+      if (!item) {
         const empty = document.createElement('div');
         empty.className = 'empty';
-        empty.textContent = 'No repo-code gap is focused for this provider. Run scan or verify to refresh VibeRaven evidence.';
+        empty.textContent = 'No launch-path guidance is available for this provider yet. Run scan or verify to refresh VibeRaven evidence.';
         container.append(empty);
-        setPrompt(provider);
+        setPrompt(provider, item);
         return;
       }
       const subtitle = document.createElement('p');
       subtitle.className = 'next-fix-subtitle';
-      subtitle.textContent = 'Start here to move forward.';
+      subtitle.textContent = provider.nextFix && item.id === provider.nextFix.launchPathItemId ? 'Start here to move forward.' : 'Manual guidance for the selected launch check.';
       const row = document.createElement('article');
       row.className = 'next-action-row';
       const icon = document.createElement('span');
       icon.className = 'next-action-icon';
-      icon.innerHTML = pathIconHtml(0);
+      icon.innerHTML = pathIconHtml(Math.max(0, provider.launchPath.findIndex((candidate) => candidate.id === item.id)));
       const body = document.createElement('div');
       const h = document.createElement('h3');
-      const focusedItem = provider.launchPath.find((item) => item.id === provider.nextFix.launchPathItemId);
-      h.textContent = provider.nextFix.title || (focusedItem ? 'Fix ' + focusedItem.title.toLowerCase() : 'Fix first launch gap');
+      h.textContent = 'Fix ' + item.title.toLowerCase();
       const p = document.createElement('p');
-      p.textContent = provider.nextFix.whatToChange;
+      p.textContent = item.whatToChange;
       body.append(h, p);
       const guide = document.createElement('button');
       guide.className = 'open-guide-button';
       guide.type = 'button';
       guide.textContent = 'Open guide';
+      guide.addEventListener('click', () => {
+        setTip(item.title + ': ' + item.whyItMatters + ' Next: ' + item.whatToChange + ' Then: ' + item.verifyWith);
+        const url = providerGuideUrl(provider.id, item);
+        if (url) window.open(url, '_blank', 'noopener,noreferrer');
+      });
       row.append(icon, body, guide);
       container.append(subtitle, row);
-      setPrompt(provider);
+      setPrompt(provider, item);
     }
     function renderChrome() {
       const projectName = state.data.project.name;
@@ -1207,21 +1272,39 @@ export function renderLocalUiHtml(): string {
       }
       state.data = payload.state || payload;
       state.selectedProviderId = state.data.selectedProviderId;
+      state.selectedPathItemId = null;
+      setTip(path === '/api/verify' ? 'Verify finished. The launch map has been refreshed.' : 'Local scan finished. The launch map has been refreshed.');
       render();
     }
     document.getElementById('provider-search').addEventListener('input', (event) => {
       state.providerQuery = event.target.value.toLowerCase();
       renderProviders();
     });
-    document.getElementById('scan').addEventListener('click', () => postAndRefresh('/api/scan'));
-    document.getElementById('verify').addEventListener('click', () => postAndRefresh('/api/verify'));
-    document.getElementById('drawer-verify').addEventListener('click', () => postAndRefresh('/api/verify'));
-    document.getElementById('tasklist').addEventListener('click', () => window.open('/api/tasklist?vr_token=' + encodeURIComponent(localToken), '_blank', 'noopener,noreferrer'));
-    document.getElementById('last-report').addEventListener('click', () => window.open('/api/project?vr_token=' + encodeURIComponent(localToken), '_blank', 'noopener,noreferrer'));
+    document.getElementById('scan').addEventListener('click', () => {
+      setTip('Running local scan...');
+      postAndRefresh('/api/scan');
+    });
+    document.getElementById('verify').addEventListener('click', () => {
+      setTip('Running local verify...');
+      postAndRefresh('/api/verify');
+    });
+    document.getElementById('drawer-verify').addEventListener('click', () => {
+      setTip('Running local verify...');
+      postAndRefresh('/api/verify');
+    });
+    document.getElementById('tasklist').addEventListener('click', () => {
+      setTip('Opening the local tasklist artifact.');
+      window.open('/api/tasklist?vr_token=' + encodeURIComponent(localToken), '_blank', 'noopener,noreferrer');
+    });
+    document.getElementById('last-report').addEventListener('click', () => {
+      setTip('Opening the latest local report data.');
+      window.open('/api/report?vr_token=' + encodeURIComponent(localToken), '_blank', 'noopener,noreferrer');
+    });
     document.getElementById('copy').addEventListener('click', async () => {
       const prompt = document.getElementById('prompt').value;
       if (!prompt) return;
       await navigator.clipboard.writeText(prompt);
+      setTip('Prompt copied. Paste it into your coding agent for the selected launch check.');
     });
     refresh().catch((error) => {
       const tip = document.querySelector('.tip');

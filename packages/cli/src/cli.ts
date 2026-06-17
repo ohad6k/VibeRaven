@@ -344,6 +344,75 @@ function tasklist(artifact: LocalArtifact): string {
   return `${lines.join('\n').trim()}\n`;
 }
 
+function escapeHtml(value: unknown): string {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function reportHtml(artifact: LocalArtifact): string {
+  const gaps = artifact.gaps.length
+    ? artifact.gaps
+        .map(
+          (gap) => `<article class="gap">
+            <div><strong>${escapeHtml(gap.title)}</strong><span>${escapeHtml(gap.severity)}</span></div>
+            <p>${escapeHtml(gap.detail)}</p>
+            <code>${escapeHtml(gap.id)}</code>
+          </article>`,
+        )
+        .join('')
+    : '<p class="empty">No local repo-evidence gaps found.</p>';
+  const areas = artifact.missionGraph.areas
+    .map(
+      (area) => `<li><span>${escapeHtml(area.label)}</span><strong>${escapeHtml(area.readinessPercent)}%</strong></li>`,
+    )
+    .join('');
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VibeRaven Local Report</title>
+  <style>
+    body { margin: 0; background: #fbfbfa; color: #111417; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    main { max-width: 920px; margin: 0 auto; padding: 42px 24px; }
+    h1 { margin: 0 0 8px; font-size: 32px; line-height: 1.1; }
+    .meta { color: #475467; margin: 0 0 28px; }
+    .summary, .gap, .areas { border: 1px solid #e4e7ec; background: #fff; border-radius: 12px; box-shadow: 0 12px 28px rgba(16, 24, 40, 0.035); }
+    .summary { padding: 22px; margin-bottom: 20px; }
+    .status { display: inline-flex; gap: 8px; align-items: center; padding: 7px 11px; border-radius: 999px; background: #fff2e5; color: #ff7a00; font-weight: 700; }
+    .status[data-clear="true"] { background: #e9f8f1; color: #24b26b; }
+    .areas { list-style: none; padding: 8px 18px; margin: 0 0 22px; }
+    .areas li { display: flex; justify-content: space-between; gap: 18px; padding: 12px 0; border-bottom: 1px solid #eef0f4; }
+    .areas li:last-child { border-bottom: 0; }
+    .gap { padding: 18px; margin: 12px 0; }
+    .gap div { display: flex; justify-content: space-between; gap: 16px; }
+    .gap span { color: #ff7a00; font-size: 13px; font-weight: 700; }
+    .gap p { color: #475467; line-height: 1.45; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13px; }
+    .empty { border: 1px dashed #d0d5dd; border-radius: 10px; padding: 16px; background: #fff; color: #475467; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>VibeRaven Local Report</h1>
+    <p class="meta">${escapeHtml(artifact.workspacePath)} · ${escapeHtml(artifact.scannedAt)}</p>
+    <section class="summary">
+      <p class="status" data-clear="${artifact.verificationSummary.status === 'clear'}">${escapeHtml(artifact.verificationSummary.status)}</p>
+      <h2>${escapeHtml(artifact.scoreLabel)}</h2>
+      <p>${escapeHtml(artifact.summary)}</p>
+    </section>
+    <ul class="areas">${areas}</ul>
+    <h2>Open gaps</h2>
+    ${gaps}
+  </main>
+</body>
+</html>`;
+}
+
 async function writeArtifacts(workspacePath: string, artifact: LocalArtifact): Promise<void> {
   const out = join(workspacePath, '.viberaven');
   await mkdir(out, { recursive: true });
@@ -533,6 +602,14 @@ async function route(req: IncomingMessage, res: ServerResponse, options: { cwd: 
       artifact = await runLocalScan(options.cwd);
     }
     send(res, 200, tasklist(artifact), 'text/plain; charset=utf-8');
+    return;
+  }
+  if (req.method === 'GET' && url.pathname === '/api/report') {
+    let artifact = await loadArtifact(options.cwd);
+    if (!artifact) {
+      artifact = await runLocalScan(options.cwd);
+    }
+    send(res, 200, reportHtml(artifact), 'text/html; charset=utf-8');
     return;
   }
   if (req.method === 'POST' && (url.pathname === '/api/scan' || url.pathname === '/api/verify')) {
