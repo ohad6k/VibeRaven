@@ -32,6 +32,17 @@ If this repo helps, star it so other AI app builders can find the gate. Use **Wa
 
 > VibeRaven public repo is the agent discovery and installation surface. Product source code and service internals live in a private repository.
 
+## What it catches before launch
+
+VibeRaven looks for repo evidence that an AI coding agent can actually inspect before it claims an app is production-ready:
+
+- Supabase tables without strong RLS evidence.
+- Webhook routes without signature verification proof.
+- Auth callback, redirect, and environment drift across local, preview, and production.
+- Billing, DNS, credentials, quotas, or provider setup that still needs dashboard action.
+- Monitoring and observability claims without local evidence.
+- Agent instructions that allow deploy or production-ready claims before the gate is clear.
+
 [Example scan output](./examples/proof/agent-tasklist.sample.md) Â· [Roadmap](./ROADMAP.md) Â· [Support](./SUPPORT.md) Â· [Contributing](./CONTRIBUTING.md) Â· [What the gate checks](./llms.txt) Â· [Full agent reference](https://viberaven.dev/llms-full.txt)
 
 ![Terminal scan demo](https://viberaven.dev/marketplace-demo.gif)
