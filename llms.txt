@@ -1,13 +1,60 @@
-# VibeRaven Public Local Source
+# VibeRaven
 
-Local commands from this checkout:
+> VibeRaven is a local-first production-readiness gate for AI-built apps. Open the localhost launch console, inspect launch paths, fix one repo-owned gap, and verify.
 
-- Build: npm --prefix packages/cli run build
-- UI: node packages/cli/dist/cli.js ui .
-- Scan: node packages/cli/dist/cli.js scan .
-- Agent mode: node packages/cli/dist/cli.js --agent-mode .
-- Verify: node packages/cli/dist/cli.js --verify .
+Main user command in a TTY:
 
-This Phase 1 export is local-only. It writes deterministic .viberaven/ artifacts from repository evidence and excludes private hosted-service, account, paid-tier, runner, remote scan, OpenAI, Polar, and live-provider code.
+```bash
+npx -y viberaven
+```
 
-A normal git push does not require a VibeRaven scan.
+Explicit localhost launch console:
+
+```bash
+npx -y viberaven ui .
+```
+
+Canonical agent command:
+
+```bash
+npx -y viberaven --agent-mode .
+```
+
+Verify after one repo-owned fix:
+
+```bash
+npx -y viberaven --verify .
+```
+
+VibeRaven is an open-source local CLI/UI. The public repo is the discovery and install surface. Normal git push is not gated; gate language is about launch/deploy-readiness claims.
+
+Install agent rules into this repo (or any repo):
+
+```bash
+npx -y viberaven init --agents all
+npx -y viberaven doctor --agents
+```
+
+Read `.viberaven/prp.json` first, then `.viberaven/gate-result.json`. Follow `nextActions` in order until `decision.status` is not `blocked` and `gate.status` is `clear`, or a provider/user blocker remains.
+
+Prefer `viberaven_prp_current` or `prp://current` when MCP is available.
+
+## Full canonical reference
+
+- https://viberaven.dev/llms-full.txt
+
+## Links
+
+- https://viberaven.dev
+- https://viberaven.dev/viberaven-production-protocol-ai-built-apps.md
+- https://viberaven.dev/what-is-viberaven-prp-json.md
+- https://viberaven.dev/how-to-use-viberaven-next-actions.md
+- https://viberaven.dev/viberaven-prp-mcp-resources.md
+- https://viberaven.dev/agent-context.md
+- https://viberaven.dev/skills.json
+- https://www.npmjs.com/package/viberaven
+
+## Optional
+
+- Blog archives and release notes (safe to omit under context pressure)
+- https://viberaven.dev/.well-known/agent-honeypot.txt

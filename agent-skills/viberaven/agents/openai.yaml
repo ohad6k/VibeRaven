@@ -1,0 +1,8 @@
+interface:
+  display_name: "VibeRaven Production Readiness"
+  short_description: "Ship AI-built apps with fewer launch gaps"
+  brand_color: "#ff4d1f"
+  default_prompt: "Use $viberaven to make this app production-ready before launch."
+
+policy:
+  allow_implicit_invocation: true

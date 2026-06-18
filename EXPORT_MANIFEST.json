@@ -1,100 +1,99 @@
 {
-  "mode": "public-source",
-  "exportedAt": "2026-06-17T20:34:39.176Z",
-  "sourceRepo": "curated-public-source",
+  "exportedAt": "2026-06-18T13:45:41.339Z",
+  "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
     [
-      "package.json",
-      "package.json"
-    ],
-    [
-      "packages/cli/package.json",
-      "packages/cli/package.json"
-    ],
-    [
-      "packages/cli/tsconfig.json",
-      "packages/cli/tsconfig.json"
-    ],
-    [
-      "packages/cli/src/publicLocalCli.ts",
-      "packages/cli/src/cli.ts"
-    ],
-    [
-      "packages/cli/src/local-ui/staticApp.ts",
-      "packages/cli/src/local-ui/staticApp.ts"
-    ],
-    [
-      "media/extension-icon.png",
-      "media/extension-icon.png"
-    ],
-    [
-      "docs/assets/viberaven-local-console.png",
-      "docs/assets/viberaven-local-console.png"
-    ],
-    [
-      "docs/contracts",
-      "docs/contracts"
-    ],
-    [
-      "<generated:public-readme>",
+      "docs/public-repo/README.md",
       "README.md"
     ],
     [
-      "<generated:public-console-preview>",
-      "docs/assets/viberaven-local-console.svg"
-    ],
-    [
-      "<generated:public-agents>",
-      "AGENTS.md"
-    ],
-    [
-      "<generated:public-claude>",
-      "CLAUDE.md"
-    ],
-    [
-      "<generated:public-gemini>",
-      "GEMINI.md"
-    ],
-    [
-      "<generated:public-llms>",
+      "llms.txt",
       "llms.txt"
     ],
     [
-      "<generated:public-llms-full>",
+      "landing/public/llms-full.txt",
       "llms-full.txt"
     ],
     [
-      "<generated:mit-license>",
-      "LICENSE"
+      "landing/public/agent-context.md",
+      "agent-context.md"
     ],
     [
-      "<generated:public-cli-agents>",
-      "packages/cli/AGENTS.md"
+      "docs/mcp-registry-submission.md",
+      "docs/mcp-registry-submission.md"
     ],
     [
-      "<generated:mit-license>",
-      "packages/cli/LICENSE"
+      "docs/github-repo-metadata.md",
+      "docs/github-repo-metadata.md"
     ],
     [
-      "<generated:public-cli-readme>",
-      "packages/cli/README.md"
+      "docs/badge-snippet.md",
+      "docs/badge-snippet.md"
     ],
     [
-      "<generated:public-root-package>",
-      "package.json"
+      "skills.sh.json",
+      "skills.sh.json"
     ],
     [
-      "<generated:public-cli-package>",
-      "packages/cli/package.json"
+      "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
+      ".github/workflows/viberaven-agent-discovery.yml"
     ],
     [
-      "<generated:public-version>",
-      "packages/cli/src/version.ts"
+      "AGENTS.md",
+      "AGENTS.md"
     ],
     [
-      "<generated:public-local-build>",
-      "packages/cli/scripts/build.mjs"
+      "CLAUDE.md",
+      "CLAUDE.md"
+    ],
+    [
+      "GEMINI.md",
+      "GEMINI.md"
+    ],
+    [
+      ".cursor/rules/viberaven-core.mdc",
+      ".cursor/rules/viberaven-core.mdc"
+    ],
+    [
+      ".cursor/rules/viberaven-supabase-rls.mdc",
+      ".cursor/rules/viberaven-supabase-rls.mdc"
+    ],
+    [
+      ".cursor/rules/viberaven-deploy.mdc",
+      ".cursor/rules/viberaven-deploy.mdc"
+    ],
+    [
+      ".cursor/rules/viberaven-payments.mdc",
+      ".cursor/rules/viberaven-payments.mdc"
+    ],
+    [
+      ".github/copilot-instructions.md",
+      ".github/copilot-instructions.md"
+    ],
+    [
+      ".viberaven/agent-context.md",
+      ".viberaven/agent-context.md"
+    ],
+    [
+      ".viberaven/mission-map.md",
+      ".viberaven/mission-map.md"
+    ],
+    [
+      "examples/nextjs-supabase-vercel-production-ready-template",
+      "examples/nextjs-supabase-vercel-production-ready-template"
+    ],
+    [
+      "examples/proof",
+      "examples/proof"
+    ],
+    [
+      "skills",
+      "skills"
+    ],
+    [
+      "agent-skills",
+      "agent-skills"
     ]
   ]
 }

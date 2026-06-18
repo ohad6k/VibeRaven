@@ -1,5 +1,3 @@
-@AGENTS.md
-
 <!-- VIBERAVEN:START -->
 VibeRaven provides production readiness for AI-built apps.
 
