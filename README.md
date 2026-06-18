@@ -30,6 +30,14 @@ If this repo helps, star it so other AI app builders can find the gate. Use **Wa
 
 ![Terminal scan demo](https://viberaven.dev/marketplace-demo.gif)
 
+## Feedback wanted
+
+What did your AI-built app miss before deploy? Add it to the [feedback discussion](https://github.com/ohad6k/VibeRaven/discussions/7) or open a focused issue:
+
+- [Webhook signature proof example](https://github.com/ohad6k/VibeRaven/issues/4)
+- [Supabase RLS false-positive fixture](https://github.com/ohad6k/VibeRaven/issues/5)
+- [Clerk + Vercel auth redirect evidence](https://github.com/ohad6k/VibeRaven/issues/6)
+
 **Repositories:** Public discovery â†’ [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven) (this repo). Private product development â†’ `ohad6k/viberaven-dev` (not public).
 
 The localhost launch console is designed for vibe coders and coding agents: a startup screen with editable project icon, name, and version; a Project Mission Control status strip; "Can I launch?" as the top-level answer; provider actions for Supabase, Vercel, Stripe, GitHub, Sentry, Clerk, and PostHog; focused agent prompt; tasklist; and Run verify. The local-first boundary matters: the open-source local CLI/UI does not require login and does not use Ohad's OpenAI API key.
