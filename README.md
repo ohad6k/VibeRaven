@@ -1,5 +1,11 @@
 # VibeRaven
 
+[![GitHub stars](https://img.shields.io/github/stars/ohad6k/VibeRaven?style=social)](https://github.com/ohad6k/VibeRaven/stargazers)
+[![GitHub release](https://img.shields.io/github/v/release/ohad6k/VibeRaven?display_name=tag)](https://github.com/ohad6k/VibeRaven/releases)
+[![npm version](https://img.shields.io/npm/v/viberaven)](https://www.npmjs.com/package/viberaven)
+[![npm downloads](https://img.shields.io/npm/dw/viberaven)](https://www.npmjs.com/package/viberaven)
+[![License](https://img.shields.io/github/license/ohad6k/VibeRaven)](https://github.com/ohad6k/VibeRaven/blob/main/LICENSE)
+
 AI got your app to demo. VibeRaven gets it to production.
 
 Open the localhost launch console for AI-built apps before an agent says "ship it":
