@@ -8,6 +8,8 @@ Open the localhost launch console for AI-built apps before an agent says "ship i
 npx -y viberaven
 ```
 
+![VibeRaven Project Mission Control localhost UI](./assets/viberaven-localhost-ui.png)
+
 Explicit UI and agent commands:
 
 ```bash
