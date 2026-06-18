@@ -43,7 +43,7 @@ VibeRaven looks for repo evidence that an AI coding agent can actually inspect b
 - Monitoring and observability claims without local evidence.
 - Agent instructions that allow deploy or production-ready claims before the gate is clear.
 
-[Example scan output](./examples/proof/agent-tasklist.sample.md) Â· [Roadmap](./ROADMAP.md) Â· [Support](./SUPPORT.md) Â· [Contributing](./CONTRIBUTING.md) Â· [What the gate checks](./llms.txt) Â· [Full agent reference](https://viberaven.dev/llms-full.txt)
+[Example scan output](./examples/proof/agent-tasklist.sample.md) Â· [Redacted launch-gap case study](./examples/proof/launch-gap-case-study.md) Â· [Roadmap](./ROADMAP.md) Â· [Support](./SUPPORT.md) Â· [Contributing](./CONTRIBUTING.md) Â· [What the gate checks](./llms.txt) Â· [Full agent reference](https://viberaven.dev/llms-full.txt)
 
 ![Terminal scan demo](https://viberaven.dev/marketplace-demo.gif)
 
