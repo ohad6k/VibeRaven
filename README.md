@@ -20,17 +20,17 @@ npx -y viberaven --verify .
 
 VibeRaven runs the **VibeRaven Production Protocol** through a local-first open-source CLI/UI. The default command opens the localhost launch console; agent mode writes `.viberaven/prp.json`, `.viberaven/gate-result.json`, and supporting protocol artifacts so AI coding agents can keep operating until `decision.status` is not `blocked` and the gate is clear or a provider/user blocker remains.
 
-Current npm live release: `viberaven@1.1.10`, `@viberaven/cli@1.1.10`, and `@viberaven/mcp@1.1.8`. The next CLI candidate is `1.1.11` for the refreshed Project Mission Control localhost UI.
+Current npm live release: `viberaven@1.1.12`, `@viberaven/cli@1.1.12`, and `@viberaven/mcp@1.1.8`.
 
 If this repo helps, star it so other AI app builders can find the gate. Use **Watch -> Custom -> Releases** if you want release notifications.
 
 > VibeRaven public repo is the agent discovery and installation surface. Product source code and service internals live in a private repository.
 
-[Example scan output](./examples/proof/agent-tasklist.sample.md) · [What the gate checks](./llms.txt) · [Full agent reference](https://viberaven.dev/llms-full.txt)
+[Example scan output](./examples/proof/agent-tasklist.sample.md) Â· [Contributing](./CONTRIBUTING.md) Â· [What the gate checks](./llms.txt) Â· [Full agent reference](https://viberaven.dev/llms-full.txt)
 
 ![Terminal scan demo](https://viberaven.dev/marketplace-demo.gif)
 
-**Repositories:** Public discovery → [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven) (this repo). Private product development → `ohad6k/viberaven-dev` (not public).
+**Repositories:** Public discovery â†’ [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven) (this repo). Private product development â†’ `ohad6k/viberaven-dev` (not public).
 
 The localhost launch console is designed for vibe coders and coding agents: a startup screen with editable project icon, name, and version; a Project Mission Control status strip; "Can I launch?" as the top-level answer; provider actions for Supabase, Vercel, Stripe, GitHub, Sentry, Clerk, and PostHog; focused agent prompt; tasklist; and Run verify. The local-first boundary matters: the open-source local CLI/UI does not require login and does not use Ohad's OpenAI API key.
 
@@ -49,7 +49,7 @@ Preview without writing files:
 npx -y viberaven init --agents all --dry-run
 ```
 
-This installs bounded rules (`<!-- VIBERAVEN:START -->` … `<!-- VIBERAVEN:END -->`) into:
+This installs bounded rules (`<!-- VIBERAVEN:START -->` â€¦ `<!-- VIBERAVEN:END -->`) into:
 
 - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`
 - `.cursor/rules/viberaven-core.mdc` (+ scoped Supabase, deploy, payments rules)
@@ -95,7 +95,7 @@ npx -y skills add ohad6k/VibeRaven --skill viberaven
 
 ## Agent-ready starter template
 
-[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) — agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
+[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) â€” agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
 
 ## Machine-readable docs
 
@@ -124,3 +124,4 @@ Prefer `viberaven_prp_current` or `prp://current` when MCP is available; use `vi
 - Website: [viberaven.dev](https://viberaven.dev)
 - npm: [viberaven](https://www.npmjs.com/package/viberaven)
 - Issues: [ohad6k/VibeRaven/issues](https://github.com/ohad6k/VibeRaven/issues)
+- Contributing: [CONTRIBUTING.md](./CONTRIBUTING.md)
