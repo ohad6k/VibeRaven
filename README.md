@@ -8,25 +8,21 @@
 
 AI got your app to demo. VibeRaven gets it to production.
 
-Open the localhost launch console for AI-built apps before an agent says "ship it":
-
-```bash
-npx -y viberaven
-```
+VibeRaven is a local launch-control workspace for AI-built apps. It gives vibe coders and coding agents one place to review launch blockers, connect coding CLIs, attach provider and release context to chat, inspect production evidence, and keep the release gate visible before anyone says "ship it."
 
 ![VibeRaven Project Mission Control localhost UI](./assets/viberaven-localhost-ui.png)
 
-Explicit UI and agent commands:
+The localhost console is designed around the work that usually gets missed between demo and production:
 
-```bash
-npx -y viberaven ui .
-npx -y viberaven --agent-mode .
-npx -y viberaven --verify .
-```
+- Production mission chat for Codex CLI, Claude Code, Gemini CLI, or a local shell.
+- Provider slots for database, auth, hosting, billing, monitoring, analytics, email, cache, and version control.
+- Drag-to-chat context for providers and releases, so agent prompts stay scoped.
+- Live fix, verify, diff, and release actions that keep launch work inside one flow.
+- Local-first artifacts for agents: `.viberaven/prp.json`, `.viberaven/gate-result.json`, and supporting evidence files.
 
-VibeRaven runs the **VibeRaven Production Protocol** through a local-first open-source CLI/UI. The default command opens the localhost launch console; agent mode writes `.viberaven/prp.json`, `.viberaven/gate-result.json`, and supporting protocol artifacts so AI coding agents can keep operating until `decision.status` is not `blocked` and the gate is clear or a provider/user blocker remains.
+VibeRaven runs the **VibeRaven Production Protocol** through a local-first open-source CLI/UI. The local console opens a localhost launch workspace; agent mode writes `.viberaven/prp.json`, `.viberaven/gate-result.json`, and supporting protocol artifacts so AI coding agents can keep operating until `decision.status` is not `blocked` and the gate is clear or a provider/user blocker remains.
 
-Current npm live release: `viberaven@1.1.12`, `@viberaven/cli@1.1.12`, and `@viberaven/mcp@1.1.8`.
+Current npm live release: `viberaven@1.1.13`, `@viberaven/cli@1.1.13`, and `@viberaven/mcp@1.1.8`.
 
 If this repo helps, star it so other AI app builders can find the gate. Use **Watch -> Custom -> Releases** if you want release notifications. Shipping with VibeRaven? Add the [README badge snippet](./docs/badge-snippet.md) so your repo links back to the launch gate.
 
@@ -39,11 +35,14 @@ VibeRaven looks for repo evidence that an AI coding agent can actually inspect b
 - Supabase tables without strong RLS evidence.
 - Webhook routes without signature verification proof.
 - Auth callback, redirect, and environment drift across local, preview, and production.
+- Deploy-only auth failures such as `Authentication required after deploy`, `401 Unauthorized after successful login`, or `auth cookies are set but not recognized`.
+- Preview-only topology failures such as `preflight request does not have HTTP ok status on preview` or `Vercel deployment protection breaks preflight`.
+- Monitoring visibility gaps such as `Sentry SDK is not sending any data`, `events not appearing in my project`, or `recordings are not being captured`.
 - Billing, DNS, credentials, quotas, or provider setup that still needs dashboard action.
 - Monitoring and observability claims without local evidence.
 - Agent instructions that allow deploy or production-ready claims before the gate is clear.
 
-[Example scan output](./examples/proof/agent-tasklist.sample.md) Â· [Redacted launch-gap case study](./examples/proof/launch-gap-case-study.md) Â· [Roadmap](./ROADMAP.md) Â· [Support](./SUPPORT.md) Â· [Contributing](./CONTRIBUTING.md) Â· [What the gate checks](./llms.txt) Â· [Full agent reference](https://viberaven.dev/llms-full.txt)
+[Example scan output](./examples/proof/agent-tasklist.sample.md) · [Redacted launch-gap case study](./examples/proof/launch-gap-case-study.md) · [Roadmap](./ROADMAP.md) · [Support](./SUPPORT.md) · [Contributing](./CONTRIBUTING.md) · [What the gate checks](./llms.txt) · [Full agent reference](https://viberaven.dev/llms-full.txt)
 
 ![Terminal scan demo](https://viberaven.dev/marketplace-demo.gif)
 
@@ -55,9 +54,25 @@ What did your AI-built app miss before deploy? Add it to the [feedback discussio
 - [Supabase RLS false-positive fixture](https://github.com/ohad6k/VibeRaven/issues/5)
 - [Clerk + Vercel auth redirect evidence](https://github.com/ohad6k/VibeRaven/issues/6)
 
-**Repositories:** Public discovery â†’ [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven) (this repo). Private product development â†’ `ohad6k/viberaven-dev` (not public).
+**Repositories:** Public discovery -> [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven) (this repo). Private product development -> `ohad6k/viberaven-dev` (not public).
 
-The localhost launch console is designed for vibe coders and coding agents: a startup screen with editable project icon, name, and version; a Project Mission Control status strip; "Can I launch?" as the top-level answer; provider actions for Supabase, Vercel, Stripe, GitHub, Sentry, Clerk, and PostHog; focused agent prompt; tasklist; and Run verify. The local-first boundary matters: the open-source local CLI/UI does not require login and does not use Ohad's OpenAI API key.
+The local-first boundary matters: the open-source local CLI/UI does not require login and does not use Ohad's OpenAI API key.
+
+## Install and run
+
+Open the local launch console:
+
+```bash
+npx -y viberaven
+```
+
+Explicit UI and gate commands:
+
+```bash
+npx -y viberaven ui .
+npx -y viberaven --agent-mode .
+npx -y viberaven --verify .
+```
 
 ## Install for AI agents
 
@@ -74,7 +89,7 @@ Preview without writing files:
 npx -y viberaven init --agents all --dry-run
 ```
 
-This installs bounded rules (`<!-- VIBERAVEN:START -->` â€¦ `<!-- VIBERAVEN:END -->`) into:
+This installs bounded rules (`<!-- VIBERAVEN:START -->` ... `<!-- VIBERAVEN:END -->`) into:
 
 - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`
 - `.cursor/rules/viberaven-core.mdc` (+ scoped Supabase, deploy, payments rules)
@@ -120,7 +135,7 @@ npx -y skills add ohad6k/VibeRaven --skill viberaven
 
 ## Agent-ready starter template
 
-[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) â€” agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
+[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) - agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
 
 ## Machine-readable docs
 

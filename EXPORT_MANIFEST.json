@@ -1,11 +1,27 @@
 {
-  "exportedAt": "2026-06-18T13:45:41.339Z",
+  "exportedAt": "2026-06-23T20:36:01.186Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
     [
       "docs/public-repo/README.md",
       "README.md"
+    ],
+    [
+      "docs/public-repo/CONTRIBUTING.md",
+      "CONTRIBUTING.md"
+    ],
+    [
+      "docs/public-repo/ROADMAP.md",
+      "ROADMAP.md"
+    ],
+    [
+      "docs/public-repo/SUPPORT.md",
+      "SUPPORT.md"
+    ],
+    [
+      "docs/public-repo/assets/viberaven-localhost-ui.png",
+      "assets/viberaven-localhost-ui.png"
     ],
     [
       "llms.txt",
@@ -34,6 +50,22 @@
     [
       "skills.sh.json",
       "skills.sh.json"
+    ],
+    [
+      "docs/public-repo/.github/ISSUE_TEMPLATE/false-positive.yml",
+      ".github/ISSUE_TEMPLATE/false-positive.yml"
+    ],
+    [
+      "docs/public-repo/.github/ISSUE_TEMPLATE/missed-gap.yml",
+      ".github/ISSUE_TEMPLATE/missed-gap.yml"
+    ],
+    [
+      "docs/public-repo/.github/ISSUE_TEMPLATE/stack-request.yml",
+      ".github/ISSUE_TEMPLATE/stack-request.yml"
+    ],
+    [
+      "docs/public-repo/.github/ISSUE_TEMPLATE/config.yml",
+      ".github/ISSUE_TEMPLATE/config.yml"
     ],
     [
       "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
