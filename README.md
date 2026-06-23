@@ -22,8 +22,7 @@ The localhost console is designed around the work that usually gets missed betwe
 
 VibeRaven runs the **VibeRaven Production Protocol** through a local-first open-source CLI/UI. The local console opens a localhost launch workspace; agent mode writes `.viberaven/prp.json`, `.viberaven/gate-result.json`, and supporting protocol artifacts so AI coding agents can keep operating until `decision.status` is not `blocked` and the gate is clear or a provider/user blocker remains.
 
-Current npm live release: `viberaven@1.1.12`, `@viberaven/cli@1.1.12`, and `@viberaven/mcp@1.1.8`.
-Next Studio UI candidate: `viberaven@1.1.13` / `@viberaven/cli@1.1.13`.
+Current npm live release: `viberaven@1.1.13`, `@viberaven/cli@1.1.13`, and `@viberaven/mcp@1.1.8`.
 
 If this repo helps, star it so other AI app builders can find the gate. Use **Watch -> Custom -> Releases** if you want release notifications. Shipping with VibeRaven? Add the [README badge snippet](./docs/badge-snippet.md) so your repo links back to the launch gate.
 
