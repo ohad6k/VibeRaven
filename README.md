@@ -8,6 +8,8 @@
 
 AI got your app to demo. VibeRaven gets it to production.
 
+**VibeRaven Studio** is the open-source local workspace for production-aware AI coding: chat with your connected CLI, attach provider and release context, inspect diffs, and verify launch readiness without leaving localhost.
+
 VibeRaven is a local launch-control workspace for AI-built apps. It gives vibe coders and coding agents one place to review launch blockers, connect coding CLIs, attach provider and release context to chat, inspect production evidence, and keep the release gate visible before anyone says "ship it."
 
 ![VibeRaven Project Mission Control localhost UI](./assets/viberaven-localhost-ui.png)
