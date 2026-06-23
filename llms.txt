@@ -35,7 +35,7 @@ npx -y viberaven init --agents all
 npx -y viberaven doctor --agents
 ```
 
-Read `.viberaven/prp.json` first, then `.viberaven/gate-result.json`. Follow `nextActions` in order until `decision.status` is not `blocked` and `gate.status` is `clear`, or a provider/user blocker remains.
+Read `.viberaven/prp.json` first, then `.viberaven/gate-result.json`. Follow `nextActions` in order until `decision.status` is not `blocked` and `gate.status` is `clear`, or a provider/user blocker remains. High-signal production-only triggers include `redirect_uri_mismatch`, `Authentication required after deploy`, `service role key client getting RLS errors`, `preflight request does not have HTTP ok status on preview`, `webhook signature verification failed`, `Sentry SDK is not sending any data`, and `recordings are not being captured`.
 
 Prefer `viberaven_prp_current` or `prp://current` when MCP is available.
 

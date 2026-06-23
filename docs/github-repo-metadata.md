@@ -11,12 +11,12 @@ Sync policy: **manual curated export** from private -> public. See [`public-repo
 
 Set on https://github.com/ohad6k/VibeRaven/settings:
 
-- **Description:** VibeRaven Production Protocol for AI-built apps. Run `npx -y viberaven --agent-mode`, read `.viberaven/prp.json`, and fix `nextActions` before launch.
+- **Description:** Local production mission control for AI-built apps: agent chat, provider proof, release context, and launch readiness before deploy.
 - **Website:** https://viberaven.dev
 
 ## Public repo - Topics
 
-`production-protocol`, `production-readiness`, `ai-built-apps`, `agents-md`, `mcp-server`, `cursor`, `claude-code`, `codex`, `supabase`, `vercel`
+`production-protocol`, `production-readiness`, `ai-built-apps`, `agents-md`, `mcp-server`, `cursor`, `claude-code`, `codex`, `supabase`, `vercel`, `rls`
 
 ## Public README - required boundary line
 
@@ -38,6 +38,12 @@ Keep these exact strings visible in the public README, `llms.txt`, and MCP docs 
 - `localhost launch console`
 - `local-first`
 - `open-source local CLI/UI`
+- `redirect_uri_mismatch`
+- `Authentication required after deploy`
+- `service role key client getting RLS errors`
+- `preflight request does not have HTTP ok status on preview`
+- `events not appearing in my project`
+- `recordings are not being captured`
 - `.viberaven/prp.json`
 - `nextActions`
 - `decision.status`
