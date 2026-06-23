@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-23T20:43:38.933Z",
+  "exportedAt": "2026-06-23T21:21:47.251Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -18,6 +18,10 @@
     [
       "docs/public-repo/SUPPORT.md",
       "SUPPORT.md"
+    ],
+    [
+      "docs/public-repo/assets/viberaven-mascot.png",
+      "assets/viberaven-mascot.png"
     ],
     [
       "docs/public-repo/assets/viberaven-localhost-ui.png",

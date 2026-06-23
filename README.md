@@ -1,5 +1,9 @@
 # VibeRaven
 
+<p align="center">
+  <img src="./assets/viberaven-mascot.png" width="112" alt="VibeRaven mascot logo" />
+</p>
+
 [![GitHub stars](https://img.shields.io/github/stars/ohad6k/VibeRaven?style=social)](https://github.com/ohad6k/VibeRaven/stargazers)
 [![GitHub release](https://img.shields.io/github/v/release/ohad6k/VibeRaven?display_name=tag)](https://github.com/ohad6k/VibeRaven/releases)
 [![npm version](https://img.shields.io/npm/v/viberaven)](https://www.npmjs.com/package/viberaven)
