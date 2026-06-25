@@ -84,3 +84,16 @@ Gate is not clear until `gate.status === "clear"` in `.viberaven/gate-result.jso
 ## Private monorepo (ohad6k/viberaven-dev)
 
 Product map: [docs/repo-map.md](docs/repo-map.md). Surfaces: extension `0.0.37` (`src/`), CLI npm live `viberaven@1.1.10` / `@viberaven/cli@1.1.10` with local UI candidate `1.1.11` (`packages/cli`, `packages/viberaven-shim`), MCP npm live `@viberaven/mcp@1.1.8` (`packages/mcp`), flywheel (`docs/plans/`, `marketing/automations/`). Public discovery repo: [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven). Current open-source direction: `npx -y viberaven` opens the localhost launch console / Project Mission Control; `npx -y viberaven --agent-mode` is the agent/pro gate path.
+
+## Current open-source product focus
+
+VibeRaven open source is now centered on `npx -y viberaven`, which opens VibeRaven Studio: a local-first production mission chat for vibe coders. The user connects their own local coding CLI account (Codex CLI, Claude Code, Gemini CLI, or local shell), picks the models exposed by that CLI, drags provider/release context into chat, and asks the agent to plan, fix, verify, inspect diffs, or prepare launch proof.
+
+When continuing work in Codex, Cursor, or another coding agent:
+
+- Treat VibeRaven Studio and the local agent chat as the primary product surface.
+- Keep provider and release data grounded in local project evidence; do not present fake provider proof as real.
+- Preserve the simple ChatGPT-like chat flow: one clean chat by default, split chat only when requested or dragged from recent/context, per-chat CLI/model/reasoning/context state, and no cross-lane answer leakage.
+- Right-side agent actions should send scoped prompts into the selected chat instead of opening unrelated popups.
+- `npx -y viberaven --agent-mode` remains the deterministic production gate for agents and pre-deploy verification, but do not make the Studio UX feel like a scan report.
+- Do not introduce or commit secrets, provider tokens, local transcripts with credentials, `.env` files, temporary browser profiles, `.codex-run`, `output`, `tmp`, or generated debug logs.

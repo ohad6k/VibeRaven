@@ -11,7 +11,7 @@ Sync policy: **manual curated export** from private -> public. See [`public-repo
 
 Set on https://github.com/ohad6k/VibeRaven/settings:
 
-- **Description:** Local production mission control for AI-built apps: agent chat, provider proof, release context, and launch readiness before deploy.
+- **Description:** VibeRaven Studio is the local production mission chat for AI-built apps: connected CLI models, provider proof, release context, and launch readiness before deploy.
 - **Website:** https://viberaven.dev
 
 ## Public repo - Topics
@@ -32,10 +32,15 @@ Keep these exact strings visible in the public README, `llms.txt`, and MCP docs 
 
 - `npx -y viberaven`
 - `npx -y viberaven ui .`
+- `VibeRaven Studio`
+- `local production mission chat`
 - `VibeRaven Production Protocol`
 - `npx -y viberaven --agent-mode`
 - `npx -y viberaven --verify .`
 - `localhost launch console`
+- `CLI/model picker`
+- `Provider Control Board`
+- `Versions & Releases`
 - `local-first`
 - `open-source local CLI/UI`
 - `redirect_uri_mismatch`

@@ -1,6 +1,6 @@
 # VibeRaven
 
-> VibeRaven is a local-first production-readiness gate for AI-built apps. Open the localhost launch console, inspect launch paths, fix one repo-owned gap, and verify.
+> VibeRaven is a local-first production-readiness gate for AI-built apps. Open VibeRaven Studio, inspect launch paths, pull provider context into chat, fix one repo-owned gap, and verify.
 
 Main user command in a TTY:
 
@@ -26,7 +26,7 @@ Verify after one repo-owned fix:
 npx -y viberaven --verify .
 ```
 
-VibeRaven is an open-source local CLI/UI. The public repo is the discovery and install surface. Normal git push is not gated; gate language is about launch/deploy-readiness claims.
+VibeRaven Studio is the open-source local workspace for production-aware AI coding: VibeRaven Chat, connected CLI model picker, provider and release context, split chats, diff views, and the visible launch gate. The public repo is the discovery and install surface. Normal git push is not gated; gate language is about launch/deploy-readiness claims.
 
 Install agent rules into this repo (or any repo):
 

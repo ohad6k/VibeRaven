@@ -21,14 +21,17 @@ VibeRaven is a local launch-control workspace for AI-built apps. It gives vibe c
 The localhost console is designed around the work that usually gets missed between demo and production:
 
 - Production mission chat for Codex CLI, Claude Code, Gemini CLI, or a local shell.
+- CLI/model picker for the connected coding agent inside VibeRaven Chat.
 - Provider slots for database, auth, hosting, billing, monitoring, analytics, email, cache, and version control.
+- Provider Control Board slots plus Versions & Releases context for drag-to-chat evidence.
 - Drag-to-chat context for providers and releases, so agent prompts stay scoped.
+- Split or new chats when auth, billing, or deploy debugging need separate threads.
 - Live fix, verify, diff, and release actions that keep launch work inside one flow.
 - Local-first artifacts for agents: `.viberaven/prp.json`, `.viberaven/gate-result.json`, and supporting evidence files.
 
 VibeRaven runs the **VibeRaven Production Protocol** through a local-first open-source CLI/UI. The local console opens a localhost launch workspace; agent mode writes `.viberaven/prp.json`, `.viberaven/gate-result.json`, and supporting protocol artifacts so AI coding agents can keep operating until `decision.status` is not `blocked` and the gate is clear or a provider/user blocker remains.
 
-Current npm live release: `viberaven@1.1.13`, `@viberaven/cli@1.1.13`, and `@viberaven/mcp@1.1.8`.
+Current npm live release: `viberaven@1.1.14`, `@viberaven/cli@1.1.14`, and `@viberaven/mcp@1.1.8`.
 
 If this repo helps, star it so other AI app builders can find the gate. Use **Watch -> Custom -> Releases** if you want release notifications. Shipping with VibeRaven? Add the [README badge snippet](./docs/badge-snippet.md) so your repo links back to the launch gate.
 
