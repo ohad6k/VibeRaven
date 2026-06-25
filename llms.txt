@@ -1,6 +1,6 @@
 # VibeRaven
 
-> VibeRaven is a local-first production-readiness gate for AI-built apps. Open VibeRaven Studio, inspect launch paths, pull provider context into chat, fix one repo-owned gap, and verify.
+> VibeRaven is the open-source product operations console for AI-built apps — from first demo, to launch, to every version after launch. Open VibeRaven Studio, inspect launch paths, pull provider and release context into chat, compare versions, fix one repo-owned gap, and verify.
 
 Main user command in a TTY:
 

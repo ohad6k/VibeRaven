@@ -10,11 +10,35 @@
 [![npm downloads](https://img.shields.io/npm/dw/viberaven)](https://www.npmjs.com/package/viberaven)
 [![License](https://img.shields.io/github/license/ohad6k/VibeRaven)](https://github.com/ohad6k/VibeRaven/blob/main/LICENSE)
 
-AI got your app to demo. VibeRaven gets it to production.
+AI got your app to demo. **VibeRaven helps you operate it as a real product.**
+
+> **Open-source mission control for AI-built apps.**
+> The operating layer for apps built by AI agents — from first demo, to launch, to every version after launch.
+
+VibeRaven is the **open-source product operations console for AI-built apps**. It gives vibe coders and coding agents one local workspace to manage providers, releases, production evidence, version drift, and next actions — from first demo to real users.
+
+## Three layers, one console
+
+### Layer 1 — Before launch *(the hook)*
+Is auth actually protected? Is Supabase RLS strong? Are webhooks verified? Are env vars correct? Is monitoring real or just installed? Is the agent allowed to say "production ready"?
+Run the production gate: `npx -y viberaven --agent-mode`
+
+### Layer 2 — After launch *(the habit)*
+What changed between v1.0 and v1.1? Which provider drifted — Supabase, Vercel, Clerk, Stripe, Resend, Sentry, PostHog? Did the latest release add risk? What evidence proves the product is healthier now? What should the agent fix next?
+Open the console: `npx -y viberaven`
+
+### Layer 3 — Team & company ops *(the business)*
+Team dashboard, private repos, release history, provider health timeline, PR comments, CI/CD gate, compliance/export reports, "VibeRaven verified release" badge, Slack/Discord alerts. (Team/cloud layer — see [ROADMAP.md](./ROADMAP.md).)
+
+## Three things VibeRaven shows you
+
+| | |
+|---|---|
+| **Provider Control Board** | See Supabase, Vercel, Clerk, Stripe, monitoring, email, analytics, and env state in one place. |
+| **Versions & Releases** | Compare what changed between releases and drag release context into agent chat. |
+| **Agentic Chat with Product Context** | Ask the agent what changed, what broke, what provider needs action, and what to fix next. |
 
 **VibeRaven Studio** is the open-source local workspace for production-aware AI coding: chat with your connected CLI, attach provider and release context, inspect diffs, and verify launch readiness without leaving localhost.
-
-VibeRaven is a local launch-control workspace for AI-built apps. It gives vibe coders and coding agents one place to review launch blockers, connect coding CLIs, attach provider and release context to chat, inspect production evidence, and keep the release gate visible before anyone says "ship it."
 
 ![VibeRaven Project Mission Control localhost UI](./assets/viberaven-localhost-ui.png)
 
