@@ -21,8 +21,6 @@ AI got your app to demo. **VibeRaven helps you operate it as a real product.**
   </a>
 </p>
 
-<p align="center"><em>26s demo · <a href="https://github.com/ohad6k/VibeRaven/releases/tag/studio-demo-v1">watch full video with sound</a></em></p>
-
 Open the console and try it now:
 
 ```bash
