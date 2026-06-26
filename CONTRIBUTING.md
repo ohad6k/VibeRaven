@@ -6,7 +6,19 @@ This public repository is the agent discovery and installation surface for the l
 
 ## Good first contributions
 
-Start with one of these:
+VibeRaven is built in the open as the standard for **operating AI-built apps after launch**. You can help define that standard without touching private internals. Start with a 30–90 minute quest from one of five paths:
+
+| Path | What you can do | Time |
+|------|-----------------|------|
+| Bug storyteller | Share a real launch / after-launch failure story in Discussions | ~15 min |
+| Provider mapper | Add a Supabase/Vercel/Clerk/Stripe/Resend/Sentry evidence example | ~45 min |
+| Fixture builder | Add a broken→fixed example app or release timeline | ~60 min |
+| Prompt writer | Add an agent prompt template for release/provider debugging | ~30 min |
+| Docs contributor | Improve setup, screenshots, and guides | ~30 min |
+
+See [docs/contributor-quests.md](./docs/contributor-quests.md) for full quests with acceptance criteria and example PRs. The maintainer reviews small PRs within **48 hours**.
+
+Existing seed issues:
 
 - [Webhook signature proof example](https://github.com/ohad6k/VibeRaven/issues/4)
 - [Supabase RLS false-positive fixture](https://github.com/ohad6k/VibeRaven/issues/5)

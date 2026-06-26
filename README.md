@@ -15,6 +15,20 @@ AI got your app to demo. **VibeRaven helps you operate it as a real product.**
 > **Open-source mission control for AI-built apps.**
 > The operating layer for apps built by AI agents — from first demo, to launch, to every version after launch.
 
+<p align="center">
+  <a href="https://github.com/ohad6k/VibeRaven/releases/download/studio-demo-v1/viberaven-studio-demo-26s.mp4" title="Watch the 26s VibeRaven Studio demo">
+    <img src="./media/viberaven-demo-hero.gif" alt="VibeRaven Studio demo — provider board, version context, and agentic chat" width="860" />
+  </a>
+</p>
+
+<p align="center"><em>26s demo · <a href="https://github.com/ohad6k/VibeRaven/releases/tag/studio-demo-v1">watch full video with sound</a></em></p>
+
+Open the console and try it now:
+
+```bash
+npx -y viberaven
+```
+
 VibeRaven is the **open-source product operations console for AI-built apps**. It gives vibe coders and coding agents one local workspace to manage providers, releases, production evidence, version drift, and next actions — from first demo to real users.
 
 ## Three layers, one console
@@ -78,6 +92,20 @@ VibeRaven looks for repo evidence that an AI coding agent can actually inspect b
 [Example scan output](./examples/proof/agent-tasklist.sample.md) · [Redacted launch-gap case study](./examples/proof/launch-gap-case-study.md) · [Roadmap](./ROADMAP.md) · [Support](./SUPPORT.md) · [Contributing](./CONTRIBUTING.md) · [What the gate checks](./llms.txt) · [Full agent reference](https://viberaven.dev/llms-full.txt)
 
 ![Terminal scan demo](https://viberaven.dev/marketplace-demo.gif)
+
+## Contribute — help define Agentic Product Ops
+
+VibeRaven is being built in the open as the standard for operating AI-built apps after launch. You don't need to touch private internals to help. Pick a 30–90 minute quest:
+
+| Path | What you can do | Time |
+|------|-----------------|------|
+| Bug storyteller | Share a real launch / after-launch failure in Discussions | ~15 min |
+| Provider mapper | Add a Supabase/Vercel/Clerk/Stripe/Resend/Sentry evidence example | ~45 min |
+| Fixture builder | Add a broken→fixed example app or release timeline | ~60 min |
+| Prompt writer | Add an agent prompt template for release/provider debugging | ~30 min |
+| Docs contributor | Improve setup, screenshots, and guides | ~30 min |
+
+See [docs/contributor-quests.md](./docs/contributor-quests.md) for quests and acceptance criteria, [CONTRIBUTING.md](./CONTRIBUTING.md) for the workflow, and open [good first issues](https://github.com/ohad6k/VibeRaven/contribute). Small PRs are reviewed within 48h.
 
 ## Feedback wanted
 
