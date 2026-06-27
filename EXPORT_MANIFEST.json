@@ -1,27 +1,11 @@
 {
-  "exportedAt": "2026-06-25T14:06:20.290Z",
+  "exportedAt": "2026-06-27T10:57:22.611Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
     [
       "docs/public-repo/README.md",
       "README.md"
-    ],
-    [
-      "docs/public-repo/CONTRIBUTING.md",
-      "CONTRIBUTING.md"
-    ],
-    [
-      "docs/public-repo/ROADMAP.md",
-      "ROADMAP.md"
-    ],
-    [
-      "docs/public-repo/SUPPORT.md",
-      "SUPPORT.md"
-    ],
-    [
-      "docs/public-repo/assets/viberaven-mascot.png",
-      "assets/viberaven-mascot.png"
     ],
     [
       "docs/public-repo/assets/viberaven-localhost-ui.png",
@@ -54,22 +38,6 @@
     [
       "skills.sh.json",
       "skills.sh.json"
-    ],
-    [
-      "docs/public-repo/.github/ISSUE_TEMPLATE/false-positive.yml",
-      ".github/ISSUE_TEMPLATE/false-positive.yml"
-    ],
-    [
-      "docs/public-repo/.github/ISSUE_TEMPLATE/missed-gap.yml",
-      ".github/ISSUE_TEMPLATE/missed-gap.yml"
-    ],
-    [
-      "docs/public-repo/.github/ISSUE_TEMPLATE/stack-request.yml",
-      ".github/ISSUE_TEMPLATE/stack-request.yml"
-    ],
-    [
-      "docs/public-repo/.github/ISSUE_TEMPLATE/config.yml",
-      ".github/ISSUE_TEMPLATE/config.yml"
     ],
     [
       "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",

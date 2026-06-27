@@ -1,32 +1,12 @@
 # VibeRaven
 
-> VibeRaven is the open-source product operations console for AI-built apps — from first demo, to launch, to every version after launch. Open VibeRaven Studio, inspect launch paths, pull provider and release context into chat, compare versions, fix one repo-owned gap, and verify.
-
-Main user command in a TTY:
-
-```bash
-npx -y viberaven
-```
-
-Explicit localhost launch console:
-
-```bash
-npx -y viberaven ui .
-```
+> VibeRaven Production Protocol for AI-built apps. Agent Context + Production Gate.
 
 Canonical agent command:
 
 ```bash
-npx -y viberaven --agent-mode .
+npx -y viberaven --agent-mode
 ```
-
-Verify after one repo-owned fix:
-
-```bash
-npx -y viberaven --verify .
-```
-
-VibeRaven Studio is the open-source local workspace for production-aware AI coding: VibeRaven Chat, connected CLI model picker, provider and release context, split chats, diff views, and the visible launch gate. The public repo is the discovery and install surface. Normal git push is not gated; gate language is about launch/deploy-readiness claims.
 
 Install agent rules into this repo (or any repo):
 
@@ -35,7 +15,7 @@ npx -y viberaven init --agents all
 npx -y viberaven doctor --agents
 ```
 
-Read `.viberaven/prp.json` first, then `.viberaven/gate-result.json`. Follow `nextActions` in order until `decision.status` is not `blocked` and `gate.status` is `clear`, or a provider/user blocker remains. High-signal production-only triggers include `redirect_uri_mismatch`, `Authentication required after deploy`, `service role key client getting RLS errors`, `preflight request does not have HTTP ok status on preview`, `webhook signature verification failed`, `Sentry SDK is not sending any data`, and `recordings are not being captured`.
+Read `.viberaven/prp.json` first, then `.viberaven/gate-result.json`. Follow `nextActions` in order until `decision.status` is not `blocked` and `gate.status` is `clear`, or a provider/user blocker remains.
 
 Prefer `viberaven_prp_current` or `prp://current` when MCP is available.
 
