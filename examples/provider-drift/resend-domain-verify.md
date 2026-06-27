@@ -14,7 +14,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendWelcomeEmail(to: string) {
   return resend.emails.send({
-    from: "VibeRaven <hello@example-app.com>",
+    from: "VibeRaven <hello@updates.example-app.com>",
     to,
     subject: "Welcome",
     html: "<p>Welcome to the app.</p>",
@@ -25,7 +25,7 @@ export async function sendWelcomeEmail(to: string) {
 ```env
 # .env.example
 RESEND_API_KEY=
-RESEND_FROM_EMAIL=hello@example-app.com
+RESEND_FROM_EMAIL=hello@updates.example-app.com
 ```
 
 ## Production symptom
@@ -33,12 +33,12 @@ RESEND_FROM_EMAIL=hello@example-app.com
 Users sign up but never receive the welcome email. No exception is thrown in app logs. Resend's API accepts the request and returns a normal response, but the message never reaches the recipient. In the Resend dashboard, the affected email shows up under **Emails** with status `not_sent` and reason `Domain is not verified`.
 
 ```
-[email.send] id=abc_123 to=user@example.com from=hello@example-app.com status=200 ok=true
+[email.send] id=abc_123 to=user@example.com from=hello@updates.example-app.com status=200 ok=true
 # (no error in app logs)
 
 # Resend dashboard → Emails → abc_123
 # Status:  Not sent
-# Reason:  The domain example-app.com is not verified. Please verify it in the dashboard.
+# Reason:  The domain updates.example-app.com is not verified. Please verify it in the dashboard.
 ```
 
 ## Human action VibeRaven cannot complete from repo code
@@ -46,26 +46,28 @@ Users sign up but never receive the welcome email. No exception is thrown in app
 VibeRaven can confirm the SDK is wired and the `from` address is set, but it cannot verify the sending domain on the user's behalf. The following steps must be completed by a human in the Resend dashboard:
 
 1. Open <https://resend.com/domains> and click **Add Domain**.
-2. Enter the sending domain used in `RESEND_FROM_EMAIL` (here, `example-app.com`).
-3. Add the SPF, DKIM, and (optional) DMARC DNS records that Resend lists to the DNS provider for that domain.
-4. Click **Verify DNS Records** in the Resend dashboard and wait until all records show **Verified**.
-5. Send a test email from the dashboard to confirm delivery.
+2. Enter the sending subdomain used in `RESEND_FROM_EMAIL` (here, `updates.example-app.com`).
+3. Add the DKIM, SPF, and MX DNS records that Resend lists to the DNS provider for that subdomain.
+4. Add a DMARC record if your email policy requires one, or if Resend recommends it for the domain.
+5. Click **Verify DNS Records** in the Resend dashboard and wait until all required records show **Verified**.
+6. Send a test email from the dashboard to confirm delivery.
 
 ## Corrected dashboard state
 
 After verification, the Resend dashboard shows the domain as ready to send and outgoing emails reach the inbox.
 
 ```
-Resend dashboard → Domains → example-app.com
+Resend dashboard → Domains → updates.example-app.com
   Status:  Verified
-  SPF:     Verified
   DKIM:    Verified
-  DMARC:   Verified (optional)
+  SPF:     Verified
+  MX:      Verified
+  DMARC:   Present (optional)
   Region:  us-east-1
 
 Resend dashboard → Emails → most recent
   Status:  Delivered
-  From:    hello@example-app.com
+  From:    hello@updates.example-app.com
   To:      user@example.com
 ```
 
