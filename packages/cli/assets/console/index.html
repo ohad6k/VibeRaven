@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VibeRaven Console</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script>
+      window.__VIBERAVEN_ACTIONS_ENDPOINT__ = "/api/actions";
+    </script>
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <main class="console-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Local readiness console</p>
+          <h1>VibeRaven Console</h1>
+        </div>
+        <button id="refreshButton" class="button" type="button">Refresh</button>
+      </header>
+
+      <section class="summary-strip" aria-label="Console summary">
+        <div>
+          <span class="summary-label">Gate</span>
+          <strong id="gateStatus">Loading</strong>
+        </div>
+        <div>
+          <span class="summary-label">Actions</span>
+          <strong id="actionCount">0</strong>
+        </div>
+        <div>
+          <span class="summary-label">Generated</span>
+          <strong id="generatedAt">-</strong>
+        </div>
+        <div>
+          <span class="summary-label">Artifact</span>
+          <strong id="artifactPath">-</strong>
+        </div>
+      </section>
+
+      <section id="message" class="message" hidden></section>
+      <section id="actions" class="actions-grid" aria-live="polite"></section>
+    </main>
+  </body>
+</html>

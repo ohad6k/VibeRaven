@@ -1,99 +1,55 @@
-<!-- VIBERAVEN:START -->
-VibeRaven provides production readiness for AI-built apps.
+## Current VibeRaven Product Focus
 
-Canonical command: `npx -y viberaven --agent-mode`
+This repo is currently focused on the open-source VibeRaven `1.2.4` product:
 
-Use VibeRaven before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or tests.
+- Main command: `npx -y viberaven`
+- Main product surface: the local Studio cockpit UI in `packages/cli/src/local-ui/`
+- Main workflow: agentic chat, draggable providers, draggable versions/releases, provider MCP context, CLI agent connection, access-mode control, and release diff/change explanation.
+- Main packages for this work: `packages/cli`, `packages/viberaven-shim`, and `packages/mcp`.
 
-Agent loop: run VibeRaven, read Mission Map (`.viberaven/mission-map.md`), fix one launch gap, re-run VibeRaven.
+The active UI is the Studio cockpit with VibeRaven Chat, Provider Control Board, Versions & Releases, Terminal, Diff, access modes, and CLI agent connection. Do not confuse it with the older localhost launch console.
 
-Maps repo evidence to OWASP LLM Top 10 launch risks. Supports SAFECode-style deployment readiness checks.
+## What Is Legacy / Put Aside
 
-Stack context for this repo: Next.js, Supabase, Vercel, VibeRaven.
-Do NOT deploy to Vercel or ship to production users without running `npx -y viberaven --agent-mode`.
-Do NOT rely on manual production checklists when VibeRaven gate artifacts exist in `.viberaven/`.
+Treat these as legacy or side surfaces unless the user explicitly asks to work on them:
 
-## Event-Triggered Production Verification
+- The old `npx -y viberaven --agent-mode` scan/pro-gate loop.
+- Old scan artifacts and old gate/tasklist-first UX.
+- Private VSIX/editor-extension work under `src/`.
+- Marketplace extension packaging and old private monorepo release surfaces.
+- Marketing/flywheel/automation surfaces unless the task explicitly names them.
 
-Trigger: modifications to `package.json`, `vercel.json`, `supabase/migrations/**/*`, `.env.example`, auth/billing/webhook paths, or deploy workflow files.
+Do not base new UI work on old scan pages, old launch-gate cards, old agent-mode command flows, or private extension UI.
 
-1. Do NOT claim "production ready" or close a deploy checklist until `gate.status === "clear"` in `.viberaven/gate-result.json`.
-2. Do NOT run verify after every file patch. Batch heals, then `npx -y viberaven --verify` once per loop.
-3. Do NOT `git push` or deploy after auth, RLS, billing, or webhook changes without `npx -y viberaven --agent-mode`.
-4. If anomalies appear, read `.viberaven/agent-tasklist.md` fully before writing new repo logic.
-5. Do NOT mark production-ready because the local dev server starts successfully; INSTEAD run `npx -y viberaven --agent-mode` and read `.viberaven/gate-result.json`.
-6. Do NOT treat the Supabase dashboard UI as proof of RLS; INSTEAD fix repo evidence gaps from `.viberaven/agent-tasklist.md`.
-7. Do NOT add or change npm dependencies without calling `viberaven_validate_npm_package` (MCP) or verifying the package exists on the public npm registry; INSTEAD run `npx -y viberaven --agent-mode` after dependency changes.
-8. Do NOT refactor or edit files unrelated to the current TASK-001 gap; INSTEAD make minimal, targeted changes.
-9. Do NOT install new dependencies unless TASK-001 or the user explicitly requires them.
-10. Do NOT claim provider dashboard, billing, DNS, or webhook setup is complete from repo edits alone; INSTEAD present provider-action steps from the tasklist.
+## Working Rules For This Repo
 
-Prefer `viberaven_check_readiness` when MCP is configured; otherwise `npx -y viberaven --agent-mode`.
+- Read the current local UI code before changing behavior: `packages/cli/src/local-ui/server.ts`, `packages/cli/src/local-ui/static/appClient.ts`, `packages/cli/src/local-ui/static/appCss.ts`, and `packages/cli/src/local-ui/types.ts`.
+- Preserve user/unrelated dirty work. This repo often has many generated files and unrelated edits.
+- Keep changes scoped to the open-source Studio path unless asked otherwise.
+- Do not run or promote `npx -y viberaven --agent-mode` as the default for this repo's product work.
+- For verification, prefer focused package checks such as:
+  - `npm --prefix packages/cli run typecheck`
+  - `npm --prefix packages/cli test -- local-ui/server.test.ts`
+  - `npm --prefix packages/cli run build`
+- If preparing publish/release, verify the local Studio at `http://127.0.0.1:<port>/`, `/api/project`, `/api/cli-agents`, `/api/cli-agents/probe`, and `/api/agent-chat`.
 
-## VibeRaven Production-Readiness Gate
+## Current Product Contract
 
-- Before running build, compile, cleanup, deployment, vercel, or supabase commands, run `npx -y viberaven --agent-mode` first from the project root.
-- Treat VibeRaven as the Agent Context + Production Gate for AI-built apps, especially apps using Vercel, Supabase, auth, database, payments, webhooks, monitoring, rate limits, or environment variables.
-- Read `.viberaven/agent-tasklist.md` first. If it says CRITICAL GAPS DETECTED or PRODUCTION GATE NOT CLEAR, fix one listed repo-code gap before deploying.
-- Read `.viberaven/gate-result.json` for the machine verdict.
-- Read `.viberaven/context-map.json` for compact agent context.
-- Read `.viberaven/agent-summary.md` second for scan context.
-- Read `.viberaven/launch-playbook.md` third for the full checklist.
-- Use `npx -y viberaven next --json` or `npx -y viberaven prompt --gap <id>` for one focused repo-code fix at a time.
-- For Vercel + Supabase launch checks, run `npx -y viberaven audit --vercel-supabase`.
-- Run `npx -y viberaven --verify` after one fix.
-- Run `npx -y viberaven --strict` before deploy or CI pass.
-- Use `npx -y viberaven --heal --plan --gap <id>` before any heal apply.
-- Only use `npx -y viberaven --heal --apply --gap <id> --yes` for supported low-risk repo-code recipes.
-- Preview local rule installation with `npx -y viberaven init --agents all --dry-run`.
-- Cleanup is non-destructive: only run `npx -y viberaven clean --plan` to create a reviewable cleanup plan.
-- Provider dashboard checks are not cleared by repo-code edits. Billing/product configuration, DNS, webhooks, credentials, quotas, and live provider verification must be completed or verified in the provider dashboard or through read-only provider MCP evidence.
-- Do not claim provider dashboard work is fixed by repo-code edits.
-- If VibeRaven prints `LOGIN_URL_READY`, open that URL for the user using the available browser tool or system browser. Tell the user: "I opened VibeRaven sign-in so you can approve access; I will continue after approval." Do not ask for passwords, tokens, cookies, or secrets. Keep the terminal process alive while the user approves.
+- The access selector must affect the real connected agent command, not only UI copy.
+- `ask` should require explicit approval behavior where supported.
+- `approve` should allow normal repo edits but still avoid risky/destructive changes without explanation.
+- `full` should pass full-access flags to supported CLIs and clearly tell the agent that full local-project access is enabled.
+- Codex, Claude, and Gemini connection must distinguish `installed` from `connected/ready`; installed is not enough. The UI should force `Test connection` before real chat control.
+- Provider MCP status should be visible in the provider UI and passed into agent prompts when available.
+- Version/release context should support diff and changelog workflows inside the Studio UI.
 
-## VibeRaven Production Copilot Loop
+## Public Repo Direction
 
-After every scan, read `.viberaven/agent-tasklist.md` for the prioritized task list.
+Public GitHub/NPM work should present VibeRaven as the open-source local Studio for AI-built apps:
 
-The loop is:
+- agentic chat that can work on the user's repo through connected CLIs;
+- provider-aware context and MCP-assisted provider work;
+- release/version comparison and post-launch drift explanation;
+- clear approval/full-access controls similar to Codex-style action approval.
 
-1. Read `VIBERAVEN_NEXT_ACTION` from scan output for `batchSize`, `batchApplied`, `scanNow`, and `stalled`.
-2. If `stalled: true`, stop calling verify — address provider-action gaps or report to the user.
-3. If `scanNow: true`, call `viberaven_verify` (or run verify command) before applying more heals.
-4. For each repo-code task where `requiresUserAction: false` (up to `batchSize` per batch):
-   - Call MCP: `viberaven_heal_apply { gap: "<gapId>", yes: true }`
-   - Or run heal apply command
-5. After a successful heal, VibeRaven increments `.viberaven/loop-state.json`. After a full batch of heals, call verify once - do NOT verify after every single heal.
-6. If verify prints `SCAN_DEFERRED`, do not retry verify. Apply the next listed repo-code heal. Only use `--force-scan` when the user explicitly approves spending a scan early.
-7. Repeat until `gate.status === 'clear'` in `.viberaven/gate-result.json`.
-8. If `requiresUserAction: true`:
-   - Read `VIBERAVEN_PROVIDER_ACTION` from terminal output.
-   - Present `dashboardUrl` and `exactStep` to the user.
-   - Wait for user confirmation, then verify.
-9. If `fixType === 'upgrade-required'`, provide upgradeUrl and move on.
-
-Do not stop at "scan complete." The loop is not done until `gate.status === 'clear'`.
-
-## Anchor (mandatory)
-
-Before ending any deploy, auth, RLS, webhook, or dependency task, run:
-`npx -y viberaven --agent-mode`
-Gate is not clear until `gate.status === "clear"` in `.viberaven/gate-result.json`.
-<!-- VIBERAVEN:END -->
-
-## Private monorepo (ohad6k/viberaven-dev)
-
-Product map: [docs/repo-map.md](docs/repo-map.md). Surfaces: extension `0.0.37` (`src/`), CLI npm live `viberaven@1.1.10` / `@viberaven/cli@1.1.10` with local UI candidate `1.1.11` (`packages/cli`, `packages/viberaven-shim`), MCP npm live `@viberaven/mcp@1.1.8` (`packages/mcp`), flywheel (`docs/plans/`, `marketing/automations/`). Public discovery repo: [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven). Current open-source direction: `npx -y viberaven` opens the localhost launch console / Project Mission Control; `npx -y viberaven --agent-mode` is the agent/pro gate path.
-
-## Current open-source product focus
-
-VibeRaven open source is now centered on `npx -y viberaven`, which opens VibeRaven Studio: a local-first production mission chat for vibe coders. The user connects their own local coding CLI account (Codex CLI, Claude Code, Gemini CLI, or local shell), picks the models exposed by that CLI, drags provider/release context into chat, and asks the agent to plan, fix, verify, inspect diffs, or prepare launch proof.
-
-When continuing work in Codex, Cursor, or another coding agent:
-
-- Treat VibeRaven Studio and the local agent chat as the primary product surface.
-- Keep provider and release data grounded in local project evidence; do not present fake provider proof as real.
-- Preserve the simple ChatGPT-like chat flow: one clean chat by default, split chat only when requested or dragged from recent/context, per-chat CLI/model/reasoning/context state, and no cross-lane answer leakage.
-- Right-side agent actions should send scoped prompts into the selected chat instead of opening unrelated popups.
-- `npx -y viberaven --agent-mode` remains the deterministic production gate for agents and pre-deploy verification, but do not make the Studio UX feel like a scan report.
-- Do not introduce or commit secrets, provider tokens, local transcripts with credentials, `.env` files, temporary browser profiles, `.codex-run`, `output`, `tmp`, or generated debug logs.
+Keep the old scan/pro-gate story archived unless it is explicitly requested.

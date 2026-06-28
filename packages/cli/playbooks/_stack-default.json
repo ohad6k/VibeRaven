@@ -1,0 +1,11 @@
+{
+  "id": "stack-default",
+  "recommendation": {
+    "frontend": "react",
+    "ui": "tailwind + shadcn/ui",
+    "database": "supabase",
+    "auth": "supabase",
+    "deploy": "vercel",
+    "reason": "Highest agent training density; lowest friction for autonomous deploy loop"
+  }
+}

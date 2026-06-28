@@ -1,0 +1,16 @@
+/node_modules/
+/dist/
+*.tsbuildinfo
+*.log
+*.tgz
+
+.env
+.env.*
+!.env.example
+
+.viberaven/cache/
+.viberaven/tmp/
+
+/coverage/
+/output/
+/demo-report-out/

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://viberaven.dev/schemas/heal-result.schema.json",
+  "title": "VibeRaven Heal Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "runId", "healId", "mode", "status", "changedFiles", "artifacts", "rollback"],
+  "properties": {
+    "$schema": { "const": "https://viberaven.dev/schemas/heal-result.schema.json" },
+    "schemaVersion": { "const": "v1" },
+    "runId": { "type": "string" },
+    "healId": { "type": "string" },
+    "mode": { "enum": ["plan", "prompt", "apply"] },
+    "status": {
+      "enum": [
+        "planned",
+        "prompt_written",
+        "applied_verify_passed",
+        "applied_verify_failed",
+        "applied_verify_not_run",
+        "refused_unsupported",
+        "refused_dangerous",
+        "failed"
+      ]
+    },
+    "gapId": { "type": "string" },
+    "recipe": { "type": "string" },
+    "target": { "type": "string" },
+    "changedFiles": { "type": "array", "items": { "type": "string" } },
+    "artifacts": { "type": "object" },
+    "rollback": {
+      "type": "object",
+      "required": ["available", "instructions"],
+      "properties": {
+        "available": { "type": "boolean" },
+        "instructions": { "type": "string" }
+      }
+    }
+  }
+}

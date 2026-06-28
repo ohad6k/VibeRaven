@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://viberaven.dev/schemas/context-map.schema.json",
+  "title": "VibeRaven Context Map",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["$schema", "schemaVersion", "generatedAt", "workspace", "agentContract", "stack", "capabilityGraph", "productionGate", "topGaps"],
+  "properties": {
+    "$schema": { "const": "https://viberaven.dev/schemas/context-map.schema.json" },
+    "schemaVersion": { "const": "v1" },
+    "generatedAt": { "type": "string" },
+    "workspace": { "type": "object" },
+    "agentContract": {
+      "type": "object",
+      "required": ["readFirst", "machineResult", "contextMap", "verifyCommand", "strictCommand", "nextCommand"],
+      "properties": {
+        "readFirst": { "type": "string" },
+        "machineResult": { "type": "string" },
+        "contextMap": { "type": "string" },
+        "verifyCommand": { "type": "string" },
+        "strictCommand": { "type": "string" },
+        "nextCommand": { "type": "string" }
+      }
+    },
+    "stack": { "type": "object" },
+    "capabilityGraph": { "type": "object" },
+    "productionGate": { "type": "object" },
+    "topGaps": { "type": "array" }
+  }
+}

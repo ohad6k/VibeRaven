@@ -1,0 +1,31 @@
+{
+  "id": "auth-supabase",
+  "provider": "auth-supabase",
+  "title": "Supabase Auth providers",
+  "steps": [
+    {
+      "id": "auth-providers",
+      "title": "Enable providers",
+      "instruction": "Enable Email and any OAuth providers your app uses (Google, GitHub, etc.).",
+      "openUrl": "https://supabase.com/dashboard/project/_/auth/providers"
+    },
+    {
+      "id": "auth-urls",
+      "title": "Redirect URLs",
+      "instruction": "Site URL and Redirect URLs must include your Vercel deployment URL.",
+      "openUrl": "https://supabase.com/dashboard/project/_/auth/url-configuration"
+    },
+    {
+      "id": "auth-email-templates",
+      "title": "Email templates",
+      "instruction": "Customize confirm signup and magic link templates if your app uses email auth.",
+      "openUrl": "https://supabase.com/dashboard/project/_/auth/templates"
+    },
+    {
+      "id": "auth-jwt",
+      "title": "JWT settings",
+      "instruction": "Confirm JWT expiry matches your session strategy. Use service role key only on the server.",
+      "openUrl": "https://supabase.com/dashboard/project/_/settings/api"
+    }
+  ]
+}

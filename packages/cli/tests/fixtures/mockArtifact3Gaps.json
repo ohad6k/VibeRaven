@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "scannedAt": "2026-06-09T12:00:00.000Z",
+  "workspacePath": "/tmp/demo-app",
+  "score": 48,
+  "scoreLabel": "At risk",
+  "summary": "Auth secret, database RLS, and monitoring need attention before launch.",
+  "archetype": "saas-mvp",
+  "plan": "free",
+  "productionCorePercent": 48,
+  "usage": {
+    "plan": "free",
+    "remainingPrompts": 1,
+    "used": 1,
+    "limit": 2,
+    "period": "lifetime",
+    "unlockedMapCategoryKeys": [
+      "appFlow",
+      "frontend",
+      "backend",
+      "auth",
+      "database",
+      "payments"
+    ]
+  },
+  "gaps": [
+    {
+      "id": "auth_secret_missing",
+      "category": "SECURITY & AUTH",
+      "severity": "critical",
+      "title": "Add NEXTAUTH_SECRET to .env.local",
+      "detail": "NEXTAUTH_SECRET is required for Auth.js session signing in production.",
+      "copyPrompt": "Add NEXTAUTH_SECRET to .env.local. Generate with: openssl rand -base64 32",
+      "toolSuggestions": [],
+      "mcpSuggestion": null,
+      "primaryMapCategory": "auth",
+      "affectedMapCategories": []
+    },
+    {
+      "id": "rls_disabled",
+      "category": "DATABASE & DATA",
+      "severity": "critical",
+      "title": "Enable Row Level Security on profiles table",
+      "detail": "Public tables without RLS expose user data to anonymous clients.",
+      "copyPrompt": "Enable RLS on the profiles table in the Supabase dashboard.",
+      "toolSuggestions": [],
+      "mcpSuggestion": null,
+      "primaryMapCategory": "database",
+      "affectedMapCategories": []
+    },
+    {
+      "id": "monitoring_not_configured",
+      "category": "ERROR HANDLING",
+      "severity": "warning",
+      "title": "No error monitoring configured",
+      "detail": "Production apps need error tracking (Sentry, PostHog, or similar).",
+      "copyPrompt": "Add Sentry or PostHog for production error monitoring.",
+      "toolSuggestions": [],
+      "mcpSuggestion": null,
+      "primaryMapCategory": "monitoring",
+      "affectedMapCategories": []
+    }
+  ],
+  "missionGraph": {
+    "areas": [],
+    "byArea": {},
+    "byProvider": {},
+    "repositoryEvidence": {
+      "env": [],
+      "security": []
+    }
+  },
+  "stackWiring": {
+    "items": [],
+    "byKey": {}
+  },
+  "providerRegistry": {
+    "version": "test",
+    "source": "bundled",
+    "generatedAt": "2026-06-09T12:00:00.000Z",
+    "status": "fresh",
+    "providers": []
+  }
+}

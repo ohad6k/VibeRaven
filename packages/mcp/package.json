@@ -1,0 +1,56 @@
+{
+  "name": "@viberaven/mcp",
+  "version": "1.2.4",
+  "description": "MCP server for VibeRaven production-readiness: check_readiness, verify, heal, audit, and strict gate tools for Cursor, Claude Code, and Codex.",
+  "license": "MIT",
+  "author": "VibeRaven",
+  "mcpName": "io.github.ohad6k/viberaven",
+  "homepage": "https://viberaven.dev/mcp.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ohad6k/VibeRaven.git",
+    "directory": "packages/mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/ohad6k/VibeRaven/issues"
+  },
+  "keywords": [
+    "viberaven",
+    "mcp",
+    "claude-code",
+    "codex",
+    "cursor",
+    "launch-readiness",
+    "production"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
+  },
+  "bin": {
+    "viberaven-mcp": "dist/server.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "presmoke": "npm run build",
+    "smoke": "node scripts/smoke.mjs",
+    "pretest": "npm run build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.0"
+  }
+}

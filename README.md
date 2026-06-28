@@ -10,7 +10,7 @@
 [![npm downloads](https://img.shields.io/npm/dw/viberaven)](https://www.npmjs.com/package/viberaven)
 [![License](https://img.shields.io/github/license/ohad6k/VibeRaven)](https://github.com/ohad6k/VibeRaven/blob/main/LICENSE)
 
-AI got your app to demo. **VibeRaven helps you operate it as a real product.**
+AI got your app to demo. **VibeRaven helps you operate it as a real product with production-readiness context.**
 
 > **Open-source mission control for AI-built apps.**
 
@@ -31,6 +31,8 @@ That's the whole install. It opens VibeRaven Studio on localhost — no login, n
 ## What it is
 
 VibeRaven is the **open-source product operations console for AI-built apps**. One local workspace where vibe coders and coding agents manage providers, releases, and what to fix next — from first demo to real users.
+
+VibeRaven turns provider state, release history, and launch gaps into practical context for local agents.
 
 ## How it works
 

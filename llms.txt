@@ -1,14 +1,36 @@
 # VibeRaven
 
-> VibeRaven Production Protocol for AI-built apps. Agent Context + Production Gate.
+> VibeRaven is the open-source product operations console for AI-built apps, from first demo to launch to every version after launch.
 
-Canonical agent command:
+Main user command in a TTY:
+
+```bash
+npx -y viberaven
+```
+
+Explicit localhost launch console:
+
+```bash
+npx -y viberaven ui .
+```
+
+Use VibeRaven Studio to inspect provider state, compare releases, pull provider and version context into chat, and turn production-readiness gaps into scoped agent actions.
+
+Canonical agent command for deterministic production checks:
 
 ```bash
 npx -y viberaven --agent-mode
 ```
 
-Install agent rules into this repo (or any repo):
+Verify after one repo-owned fix:
+
+```bash
+npx -y viberaven --verify .
+```
+
+VibeRaven Studio is the open-source local workspace for production-aware AI coding: VibeRaven Chat, connected CLI model picker, provider and release context, split chats, diff views, and launch gap context. The public repo is the discovery, install, and source surface. Normal git push is not gated; gate language is about launch/deploy-readiness claims.
+
+Install agent rules into this repo or any repo:
 
 ```bash
 npx -y viberaven init --agents all
@@ -33,8 +55,3 @@ Prefer `viberaven_prp_current` or `prp://current` when MCP is available.
 - https://viberaven.dev/agent-context.md
 - https://viberaven.dev/skills.json
 - https://www.npmjs.com/package/viberaven
-
-## Optional
-
-- Blog archives and release notes (safe to omit under context pressure)
-- https://viberaven.dev/.well-known/agent-honeypot.txt

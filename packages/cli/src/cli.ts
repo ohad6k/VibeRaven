@@ -1,800 +1,1322 @@
-import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
-import { existsSync } from 'node:fs';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { basename, join, resolve } from 'node:path';
-import { randomBytes, timingSafeEqual } from 'node:crypto';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-import { renderLocalUiHtml } from './local-ui/staticApp';
+import {
+
+  clearCredentials,
+
+  loadCredentials,
+  loadRunnerSessionCredentials,
+
+  loadStackChoicesFile,
+
+  resolveApiBaseUrl,
+  resolveWorkspaceRoot,
+  saveStackChoicesFile
+
+} from './config';
+
+import { requireCredentials, runDeviceLogin } from './auth';
+
+import {
+  enrichArtifactWithAccount,
+  fetchAccountMe,
+  formatScanLimitMessage,
+  formatUsageLine,
+  syncCredentialsFromAccount
+} from './account';
+
+import { runProjectScan } from './runScan';
+
+import { writeScanArtifacts, type WriteArtifactsResult } from './artifacts';
+import type { GateResult } from './contracts/gateResult';
+import { renderGateResultJson } from './output/json';
+import { renderJsonlEvents } from './output/jsonl';
+import { exitCodeForStrictGate } from './commands/strictGate';
+
+import { refreshReportFromDisk } from './report/refreshReport';
+
+import { openPathInBrowser } from './openBrowser';
+
+import { copyToClipboard } from './clipboard';
+import { printScanSummary } from './terminalSummary';
+import { ERROR, formatAgentStatus, LOGIN_REQUIRED } from './statusLabels';
+import { sanitizeArtifactForDisk } from './sanitizeArtifact';
+import {
+  buildRunnerWatchOptions,
+  formatRepoMatch,
+  parseRunnerConnectFlags,
+  runRunnerConnect,
+  runRunnerWatchLoop
+} from './runnerConnect';
+
+import { isScanNotFoundError, loadLastArtifact, pickGap } from './tui/menu';
+
+import { runInteractiveSession } from './tui/runInteractive';
+
+import { runGuideCommand } from './commands/guide';
+import { runNextCommand } from './commands/next';
+import { runOpenCommand } from './commands/open';
+import { runCondenseCommand } from './commands/condense';
+import { runHealCommand } from './commands/heal';
+import { resolveNextAction } from './resolveNextAction';
+import { PRODUCTION_MAP_CATEGORY_KEYS_ALL } from '../../../shared/planLimits';
+import { recommendStack } from './stackRecommend';
+
+import { PUBLIC_AGENT_MODE_COMMAND, PUBLIC_INIT_ALL_COMMAND } from './contracts/commands';
+import { runInitCommand } from './commands/runInit';
+import { runDoctorAgentsCommand } from './commands/runDoctor';
+import { runValidateNpmPackageCommand } from './commands/runValidateNpmPackage';
+import { runAuditCommand } from './commands/runAudit';
+import { runActionsCommand } from './commands/actions';
+import { runVerifyActionCommand } from './commands/verifyAction';
+import { runPreviewCommand } from './commands/preview';
+import { startLocalUiServer, waitForServerShutdown } from './local-ui/server';
 import { VERSION } from './version';
+import { loadLoopState, saveLoopState, resetBatch } from './loopState';
+import {
+  buildNextActionBlock,
+  printNextActionBlock,
+  printProviderActionBlock,
+} from './output/nextActionBlock';
+import { buildTaskList } from './buildTaskList';
+import { verifyProviderGap } from './providerMcpBridge';
+import { renderActionSurface } from './actions/render';
+import type { VibeRavenActionsManifest } from './actions/types';
 
-type GateStatus = 'clear' | 'not_clear' | 'not_checked';
-type GapSeverity = 'critical' | 'warning' | 'info';
 
-type LocalGap = {
-  id: string;
-  title: string;
-  detail: string;
-  severity: GapSeverity;
-  category: string;
-  primaryMapCategory: string;
-};
 
-type LocalArtifact = {
-  version: 1;
-  scannedAt: string;
-  workspacePath: string;
-  score: number;
-  scoreLabel: string;
-  summary: string;
-  archetype: string;
-  gaps: LocalGap[];
-  missionGraph: { areas: Array<{ key: string; label: string; readinessPercent: number }> };
-  stackWiring: { detected: string[] };
-  providerRegistry: { providers: Array<{ provider: string; label: string }> };
-  verificationSummary: { status: Exclude<GateStatus, 'not_checked'>; checkedAt: string };
-  productionCorePercent: number;
-};
+export function printHelp(): void {
 
-type PublicProviderState = 'not_detected' | 'repo_evidence_found' | 'needs_repo_fix' | 'connect_live' | 'blocked';
-type PublicPathState = 'not_checked' | 'ready' | 'needs_fix' | 'needs_connect' | 'blocked';
-type PublicProviderSeed = {
-  id: string;
-  label: string;
-  area: string;
-  stateWhenDetected: PublicProviderState;
-  aliases: string[];
-  iconHtml: string;
-  rows: Array<{
-    id: string;
-    title: string;
-    whyItMatters: string;
-    whatToChange: string;
-    verifyWith: string;
-    keywords: string[];
-  }>;
-};
+  console.log(`viberaven ${VERSION} — launch readiness for AI-built apps
 
-function brandSvg(title: string, fill: string, path: string): string {
-  return `<svg viewBox="0 0 24 24" role="img" aria-label="${title} logo" fill="${fill}"><title>${title}</title><path d="${path}"/></svg>`;
+
+
+Usage:
+
+  viberaven              Open the local launch console for human TTY use
+
+  viberaven ui [path]    Open the local launch console
+
+  viberaven tui          Same interactive menu
+
+  viberaven login [--api-url <url>]
+
+  viberaven logout
+
+  viberaven status
+
+  viberaven actions [--json] [path]
+                       Print current chat-native production action surface
+
+  viberaven preview [--agent-mode] [--json]
+                       Local production rehearsal for videos and onboarding; no login or API spend
+
+  viberaven connect --session <id> --token <token> [--once] [--api-url <url>]
+                       Handshake, save runner session, then watch for jobs (Ctrl+C to stop)
+
+  viberaven watch [--api-url <url>]
+                       Poll runner jobs using saved session credentials until Ctrl+C
+
+  viberaven scan [--open] [--json] [--api-url <url>] [path]
+
+  viberaven --agent-mode [--json|--jsonl] [path]
+                       Agent-first scan; writes tasklist, gate-result, context-map, and per-gap JSON
+
+  viberaven --strict[=warning] [path]
+                       Fail when production gate is not clear; warning mode also fails on warnings
+
+  viberaven --condense [path]
+                       Refresh .viberaven/context-map.json from the last scan
+
+  viberaven report [--open] [path]
+                       Rebuild report.html from last scan (no new API scan)
+
+  viberaven prompt [--gap <id>] [--provider <key>] [--area <key>] [--no-copy]
+
+  viberaven stack set <area> <provider>
+
+  viberaven stack clear <area>
+
+  viberaven stack list
+
+  viberaven stack recommend
+                       Suggest agent-default stack from package.json
+
+  viberaven next [--json] [path]
+                       Next action from last scan (repo fix, provider guide, or upgrade)
+
+  viberaven guide <provider> [--step N] [--json]
+                       Provider setup wizard (vercel, supabase, stripe, auth-supabase)
+
+  viberaven open [provider|url]
+                       Open dashboard URL from next action or playbook
+
+  viberaven init [--agents all|codex,claude,...] [--dry-run] [path]
+                       Install bounded VibeRaven agent rules (${PUBLIC_INIT_ALL_COMMAND})
+
+  viberaven doctor --agents [path]
+                       Verify agent instruction files and canonical commands
+
+  viberaven audit --vercel-supabase [--json] [path]
+                       Local Vercel/Supabase repo evidence audit (RLS, pooler, secrets)
+
+
+
+Agent workflow (Claude Code / Codex):
+
+  ${PUBLIC_AGENT_MODE_COMMAND}
+
+  Read .viberaven/agent-tasklist.md first, .viberaven/gate-result.json for the machine verdict, then .viberaven/context-map.json
+
+  viberaven next --json → guide/open → scan again
+
+
+
+Humans: run \`viberaven\` for the local launch console or \`VIBERAVEN_TUI=1 viberaven\` for the older menu.
+
+Agents: use \`${PUBLIC_AGENT_MODE_COMMAND}\` directly (no --open required).
+
+
+
+Environment:
+
+  VIBERAVEN_API_URL   Managed API base URL (same server as the VS Code extension)
+
+Security:
+
+  CLI scans use VibeRaven login — not OPENAI_API_KEY. See packages/cli/SECURITY.md.
+
+`);
+
 }
 
-const PUBLIC_PROVIDER_CATALOG: PublicProviderSeed[] = [
-  {
-    id: 'supabase',
-    label: 'Supabase',
-    area: 'database',
-    stateWhenDetected: 'needs_repo_fix',
-    aliases: ['supabase', 'rls', 'row level security', 'row-level security', 'migration', 'database'],
-    iconHtml: brandSvg('Supabase', '#3FCF8E', 'M11.9 1.036c-.015-.986-1.26-1.41-1.874-.637L.764 12.05C-.33 13.427.65 15.455 2.409 15.455h9.579l.113 7.51c.014.985 1.259 1.408 1.873.636l9.262-11.653c1.093-1.375.113-3.403-1.645-3.403h-9.642z'),
-    rows: [
-      { id: 'schema-migrations', title: 'Schema and migrations', whyItMatters: 'Production data shape needs repo-owned evidence before real users write to it.', whatToChange: 'Add or update migration files that prove the production schema and indexes.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['schema', 'migration', 'database'] },
-      { id: 'rls-policies', title: 'RLS policies', whyItMatters: 'User data must be protected by row ownership rules before launch.', whatToChange: 'Add policy SQL that enables RLS and restricts reads and writes to the authenticated owner.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['rls', 'policy', 'row'] },
-      { id: 'auth-callbacks', title: 'Auth callbacks', whyItMatters: 'Authentication breaks when production callback URLs are missing or local-only.', whatToChange: 'Document production site URL and redirect URL evidence without secrets.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['auth', 'callback', 'redirect'] },
-      { id: 'production-env', title: 'Production env', whyItMatters: 'Production database URLs and keys must be explicit and safely scoped.', whatToChange: 'Add safe env placeholders for URL, anon key, and server-only service-role boundaries.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['env', 'secret', 'url'] },
-    ],
-  },
-  {
-    id: 'vercel',
-    label: 'Vercel',
-    area: 'deployment',
-    stateWhenDetected: 'repo_evidence_found',
-    aliases: ['vercel', 'deployment', 'deploy', 'hosting', 'preview'],
-    iconHtml: brandSvg('Vercel', '#000000', 'm12 1.608 12 20.784H0Z'),
-    rows: [
-      { id: 'preview-gate', title: 'Preview deployment gate', whyItMatters: 'Every production change should have a reproducible preview path.', whatToChange: 'Add repo evidence for preview deploys, build command, and required checks.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['preview', 'deploy', 'ci'] },
-      { id: 'production-env', title: 'Production env', whyItMatters: 'Production runtime variables must be named without leaking values.', whatToChange: 'Document required production env names in repo evidence.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['env', 'secret'] },
-      { id: 'domain-routing', title: 'Domain and routing', whyItMatters: 'The launch URL needs canonical HTTPS and predictable routes.', whatToChange: 'Add evidence for the production domain, redirects, and framework routing assumptions.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['domain', 'route'] },
-    ],
-  },
-  {
-    id: 'stripe',
-    label: 'Stripe',
-    area: 'payments',
-    stateWhenDetected: 'connect_live',
-    aliases: ['stripe', 'payment', 'checkout', 'subscription', 'webhook'],
-    iconHtml: brandSvg('Stripe', '#635BFF', 'M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.594-7.305h.003z'),
-    rows: [
-      { id: 'checkout-route', title: 'Checkout route', whyItMatters: 'Money movement needs a trusted server-side path.', whatToChange: 'Add checkout or subscription route evidence with stable price env names.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['checkout', 'price'] },
-      { id: 'webhook-authenticity', title: 'Webhook authenticity', whyItMatters: 'Payment state must be reconciled from trusted server events.', whatToChange: 'Add webhook route evidence with authenticity checks and idempotency.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['webhook', 'authenticity'] },
-      { id: 'customer-portal', title: 'Customer portal', whyItMatters: 'Users need a way to manage subscription state without support.', whatToChange: 'Add repo evidence for customer portal or account payment routes.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['portal', 'customer'] },
-    ],
-  },
-  {
-    id: 'github',
-    label: 'GitHub',
-    area: 'testing',
-    stateWhenDetected: 'repo_evidence_found',
-    aliases: ['github', 'actions', 'workflow', 'pull request', 'ci'],
-    iconHtml: brandSvg('GitHub', '#181717', 'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'),
-    rows: [
-      { id: 'required-checks', title: 'Required checks', whyItMatters: 'Unsafe changes should not merge without automated proof.', whatToChange: 'Add workflow evidence for tests, typecheck, build, or public export verification.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['actions', 'workflow', 'ci'] },
-      { id: 'branch-protection', title: 'Branch protection', whyItMatters: 'CI is advisory unless merge rules require it.', whatToChange: 'Document required checks or owner review expectations in repo evidence.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['branch', 'review'] },
-    ],
-  },
-  {
-    id: 'sentry',
-    label: 'Sentry',
-    area: 'monitoring',
-    stateWhenDetected: 'blocked',
-    aliases: ['sentry', 'error', 'monitoring', 'trace', 'dsn'],
-    iconHtml: brandSvg('Sentry', '#362D59', 'M13.91 2.505c-.873-1.448-2.972-1.448-3.844 0L6.904 7.92a15.478 15.478 0 0 1 8.53 12.811h-2.221A13.301 13.301 0 0 0 5.784 9.814l-2.926 5.06a7.65 7.65 0 0 1 4.435 5.848H2.194a.365.365 0 0 1-.298-.534l1.413-2.402a5.16 5.16 0 0 0-1.614-.913L.296 19.275a2.182 2.182 0 0 0 .812 2.999 2.24 2.24 0 0 0 1.086.288h6.983a9.322 9.322 0 0 0-3.845-8.318l1.11-1.922a11.47 11.47 0 0 1 4.95 10.24h5.915a17.242 17.242 0 0 0-7.885-15.28l2.244-3.845a.37.37 0 0 1 .504-.13c.255.14 9.75 16.708 9.928 16.9a.365.365 0 0 1-.327.543h-2.287c.029.612.029 1.223 0 1.831h2.297a2.206 2.206 0 0 0 1.922-3.31z'),
-    rows: [
-      { id: 'runtime-capture', title: 'Runtime capture', whyItMatters: 'Production errors need a destination before users report them.', whatToChange: 'Add Sentry DSN env evidence and runtime initialization proof.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['dsn', 'error'] },
-      { id: 'release-context', title: 'Release context', whyItMatters: 'Errors need commit and release metadata to be actionable.', whatToChange: 'Add release, environment, or source-map evidence.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['release', 'source map'] },
-    ],
-  },
-  {
-    id: 'clerk',
-    label: 'Clerk',
-    area: 'auth',
-    stateWhenDetected: 'connect_live',
-    aliases: ['clerk', 'auth', 'session', 'middleware'],
-    iconHtml: brandSvg('Clerk', '#6C47FF', 'm21.47 20.829-2.881-2.881a.572.572 0 0 0-.7-.084 6.854 6.854 0 0 1-7.081 0 .576.576 0 0 0-.7.084l-2.881 2.881a.576.576 0 0 0-.103.69.57.57 0 0 0 .166.186 12 12 0 0 0 14.113 0 .58.58 0 0 0 .239-.423.576.576 0 0 0-.172-.453Zm.002-17.668-2.88 2.88a.569.569 0 0 1-.701.084A6.857 6.857 0 0 0 8.724 8.08a6.862 6.862 0 0 0-1.222 3.692 6.86 6.86 0 0 0 .978 3.764.573.573 0 0 1-.083.699l-2.881 2.88a.567.567 0 0 1-.864-.063A11.993 11.993 0 0 1 6.771 2.7a11.99 11.99 0 0 1 14.637-.405.566.566 0 0 1 .232.418.57.57 0 0 1-.168.448Zm-7.118 12.261a3.427 3.427 0 1 0 0-6.854 3.427 3.427 0 0 0 0 6.854Z'),
-    rows: [
-      { id: 'session-boundary', title: 'Session boundary', whyItMatters: 'Protected routes need server-side identity checks.', whatToChange: 'Add evidence for session middleware and protected API boundaries.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['session', 'middleware'] },
-      { id: 'callback-urls', title: 'Callback URLs', whyItMatters: 'Auth flows fail when production redirects are missing.', whatToChange: 'Document production callback and redirect env names.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['callback', 'redirect'] },
-    ],
-  },
-  {
-    id: 'posthog',
-    label: 'PostHog',
-    area: 'analytics',
-    stateWhenDetected: 'connect_live',
-    aliases: ['posthog', 'analytics', 'event', 'funnel'],
-    iconHtml: brandSvg('PostHog', '#000000', 'M9.854 14.5 5 9.647.854 5.5A.5.5 0 0 0 0 5.854V8.44a.5.5 0 0 0 .146.353L5 13.647l.147.146L9.854 18.5l.146.147v-.049c.065.03.134.049.207.049h2.586a.5.5 0 0 0 .353-.854L9.854 14.5zm0-5-4-4a.487.487 0 0 0-.409-.144.515.515 0 0 0-.356.21.493.493 0 0 0-.089.288V8.44a.5.5 0 0 0 .147.353l9 9a.5.5 0 0 0 .853-.354v-2.585a.5.5 0 0 0-.146-.354l-5-5zm1-4a.5.5 0 0 0-.854.354V8.44a.5.5 0 0 0 .147.353l4 4a.5.5 0 0 0 .853-.354V9.854a.5.5 0 0 0-.146-.354l-4-4zm12.647 11.515a3.863 3.863 0 0 1-2.232-1.1l-4.708-4.707a.5.5 0 0 0-.854.354v6.585a.5.5 0 0 0 .5.5H23.5a.5.5 0 0 0 .5-.5v-.6c0-.276-.225-.497-.499-.532zm-5.394.032a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6zM.854 15.5a.5.5 0 0 0-.854.354v2.293a.5.5 0 0 0 .5.5h2.293c.222 0 .39-.135.462-.309a.493.493 0 0 0-.109-.545L.854 15.5zM5 14.647.854 10.5a.5.5 0 0 0-.854.353v2.586a.5.5 0 0 0 .146.353L4.854 18.5l.146.147h2.793a.5.5 0 0 0 .353-.854L5 14.647z'),
-    rows: [
-      { id: 'event-taxonomy', title: 'Event taxonomy', whyItMatters: 'Analytics should answer launch questions, not just count views.', whatToChange: 'Add named events for account creation, activation, and conversion points.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['event', 'taxonomy'] },
-      { id: 'privacy-boundary', title: 'Capture boundary', whyItMatters: 'Session capture can expose sensitive fields if unchecked.', whatToChange: 'Add masking, opt-out, or capture-boundary evidence.', verifyWith: 'Run npx -y viberaven --verify.', keywords: ['privacy', 'capture'] },
-    ],
-  },
-];
 
-function haystack(value: unknown): string {
-  return JSON.stringify(value ?? {}).toLowerCase();
-}
 
-function gapMatchesProvider(gap: LocalArtifact['gaps'][number], provider: PublicProviderSeed): boolean {
-  const text = [gap.id, gap.title, gap.detail, gap.category, gap.primaryMapCategory].join(' ').toLowerCase();
-  return provider.aliases.some((alias) => text.includes(alias));
-}
+export function parseArgs(argv: string[]): {
 
-function artifactHasEvidenceForProvider(artifact: LocalArtifact | undefined, provider: PublicProviderSeed): boolean {
-  if (!artifact) return false;
-  const text = haystack({
-    stackWiring: artifact.stackWiring,
-    providerRegistry: artifact.providerRegistry,
-    missionGraph: artifact.missionGraph,
-  });
-  return provider.aliases.some((alias) => text.includes(alias));
-}
+  command: string;
 
-function gapForProvider(artifact: LocalArtifact | undefined, provider: PublicProviderSeed): LocalArtifact['gaps'][number] | undefined {
-  return artifact?.gaps.find((gap) => gapMatchesProvider(gap, provider));
-}
+  flags: Record<string, string | boolean>;
 
-function pathState(providerState: PublicProviderState, rowId: string, focusedRowId: string | undefined): PublicPathState {
-  if (focusedRowId === rowId) {
-    if (providerState === 'blocked') return 'blocked';
-    if (providerState === 'connect_live') return 'needs_connect';
-    return 'needs_fix';
-  }
-  if (providerState === 'repo_evidence_found') return 'ready';
-  return 'not_checked';
-}
+  positional: string[];
 
-function rowForGap(provider: PublicProviderSeed, gap: LocalArtifact['gaps'][number] | undefined) {
-  if (!gap) return provider.id === 'supabase' ? provider.rows[1] ?? provider.rows[0] : provider.rows[0];
-  const text = [gap.id, gap.title, gap.detail, gap.category, gap.primaryMapCategory].join(' ').toLowerCase();
-  const scored = provider.rows
-    .map((row) => ({
-      row,
-      score: row.keywords.reduce((total, keyword) => (text.includes(keyword.toLowerCase()) ? total + keyword.length : total), 0),
-    }))
-    .sort((left, right) => right.score - left.score);
-  return scored[0]?.score ? scored[0].row : provider.rows[0];
-}
+} {
 
-export interface PublicLocalUiServerHandle {
-  url: string;
-  origin: string;
-  port: number;
-  close: () => Promise<void>;
-}
+  const flags: Record<string, string | boolean> = {};
 
-function send(res: ServerResponse, status: number, body: string, contentType: string): void {
-  res.writeHead(status, {
-    'content-type': contentType,
-    'cache-control': 'no-store',
-  });
-  res.end(body);
-}
+  const positional: string[] = [];
 
-function sendJson(res: ServerResponse, status: number, body: unknown): void {
-  send(res, status, JSON.stringify(body), 'application/json; charset=utf-8');
-}
+  let command = '';
 
-function workspaceFrom(input: string | undefined): string {
-  return resolve(process.cwd(), input ?? '.');
-}
 
-async function readOptional(path: string): Promise<string> {
-  try {
-    return await readFile(path, 'utf8');
-  } catch {
-    return '';
-  }
-}
 
-async function buildArtifact(workspacePath: string): Promise<LocalArtifact> {
-  const packageJson = await readOptional(join(workspacePath, 'package.json'));
-  const envExample = await readOptional(join(workspacePath, '.env.example'));
-  const vercelJson = await readOptional(join(workspacePath, 'vercel.json'));
-  const hasTests = /"test"\s*:|vitest|jest|playwright/i.test(packageJson);
-  const hasDeploy = Boolean(vercelJson) || /vercel|netlify|render|railway/i.test(packageJson);
-  const hasSupabase = existsSync(join(workspacePath, 'supabase')) || /supabase/i.test(packageJson);
-  const gaps: LocalGap[] = [];
+  for (let i = 0; i < argv.length; i += 1) {
 
-  if (!packageJson) {
-    gaps.push({
-      id: 'LOCAL-PACKAGE-001',
-      title: 'Missing package manifest',
-      detail: 'No package.json was found at the scan root.',
-      severity: 'warning',
-      category: 'appFlow',
-      primaryMapCategory: 'appFlow',
-    });
-  }
-  if (!envExample) {
-    gaps.push({
-      id: 'LOCAL-ENV-001',
-      title: 'Missing env example',
-      detail: 'Add .env.example with non-secret placeholders for required variables.',
-      severity: 'warning',
-      category: 'security',
-      primaryMapCategory: 'security',
-    });
-  }
-  if (!hasTests) {
-    gaps.push({
-      id: 'LOCAL-TEST-001',
-      title: 'Missing test command evidence',
-      detail: 'Add a package.json test script or test dependency so local verification has repo evidence.',
-      severity: 'warning',
-      category: 'testing',
-      primaryMapCategory: 'testing',
-    });
-  }
-  if (!hasDeploy) {
-    gaps.push({
-      id: 'LOCAL-DEPLOY-001',
-      title: 'Missing deployment evidence',
-      detail: 'Add deployment configuration or package metadata showing the intended production target.',
-      severity: 'info',
-      category: 'deployment',
-      primaryMapCategory: 'deployment',
-    });
-  }
-  if (hasSupabase && !existsSync(join(workspacePath, 'supabase', 'migrations'))) {
-    gaps.push({
-      id: 'LOCAL-SUPABASE-001',
-      title: 'Missing Supabase migration evidence',
-      detail: 'Supabase appears in the repo, but no supabase/migrations directory was found.',
-      severity: 'warning',
-      category: 'database',
-      primaryMapCategory: 'database',
-    });
-  }
+    const arg = argv[i];
 
-  const score = Math.max(0, 100 - gaps.length * 15);
-  const status = gaps.some((gap) => gap.severity !== 'info') ? 'not_clear' : 'clear';
-  return {
-    version: 1,
-    scannedAt: new Date().toISOString(),
-    workspacePath,
-    score,
-    scoreLabel: status === 'clear' ? 'Local evidence clear' : 'Local evidence needs work',
-    summary: status === 'clear' ? 'Local repo evidence is present for the checked surfaces.' : 'Local repo evidence gaps were found.',
-    archetype: 'local-first-public-cli',
-    gaps,
-    missionGraph: {
-      areas: [
-        { key: 'appFlow', label: 'App flow', readinessPercent: packageJson ? 100 : 50 },
-        { key: 'security', label: 'Security', readinessPercent: envExample ? 100 : 50 },
-        { key: 'testing', label: 'Testing', readinessPercent: hasTests ? 100 : 50 },
-        { key: 'deployment', label: 'Deployment', readinessPercent: hasDeploy ? 100 : 50 },
-        {
-          key: 'database',
-          label: 'Database',
-          readinessPercent: hasSupabase ? (existsSync(join(workspacePath, 'supabase', 'migrations')) ? 100 : 50) : 100,
-        },
-      ],
-    },
-    stackWiring: {
-      detected: [packageJson && 'package.json', envExample && '.env.example', hasDeploy && 'deployment-config', hasSupabase && 'supabase'].filter(Boolean) as string[],
-    },
-    providerRegistry: {
-      providers: [
-        { provider: 'local-readiness', label: 'Local readiness' },
-        { provider: 'vercel', label: 'Vercel' },
-        { provider: 'supabase', label: 'Supabase' },
-      ],
-    },
-    verificationSummary: { status, checkedAt: new Date().toISOString() },
-    productionCorePercent: score,
-  };
-}
+    if (arg === '--help' || arg === '-h') {
 
-function gateResult(artifact: LocalArtifact) {
-  return {
-    gate: { status: artifact.verificationSummary.status, checkedAt: artifact.verificationSummary.checkedAt },
-    summary: artifact.summary,
-    gaps: artifact.gaps.map((gap) => ({ id: gap.id, title: gap.title, severity: gap.severity, status: 'open' })),
-  };
-}
+      flags.help = true;
 
-function tasklist(artifact: LocalArtifact): string {
-  const lines = ['# VibeRaven Local Tasklist', '', `Workspace: ${artifact.workspacePath}`, `Gate: ${artifact.verificationSummary.status}`, ''];
-  if (artifact.gaps.length === 0) {
-    lines.push('No local repo-evidence gaps found.');
-  } else {
-    for (const gap of artifact.gaps) {
-      lines.push(`## ${gap.id}: ${gap.title}`, '', gap.detail, '', `Severity: ${gap.severity}`, '');
+      continue;
+
     }
+
+    if (arg === '--version' || arg === '-v') {
+
+      flags.version = true;
+
+      continue;
+
+    }
+
+    if (arg.startsWith('--')) {
+
+      const equalsIndex = arg.indexOf('=');
+
+      const key = equalsIndex === -1 ? arg.slice(2) : arg.slice(2, equalsIndex);
+
+      if (equalsIndex !== -1) {
+
+        flags[key] = arg.slice(equalsIndex + 1);
+
+        continue;
+
+      }
+
+      const next = argv[i + 1];
+
+      if (
+        next &&
+        !isBooleanFlag(command, key) &&
+        (!next.startsWith('-') || shouldConsumeLeadingHyphenValue(command, key, next))
+      ) {
+
+        flags[key] = next;
+
+        i += 1;
+
+      } else {
+
+        flags[key] = true;
+
+      }
+
+      continue;
+
+    }
+
+    if (!command) {
+
+      command = arg;
+
+    } else {
+
+      positional.push(arg);
+
+    }
+
   }
-  return `${lines.join('\n').trim()}\n`;
+
+
+
+  return { command, flags, positional };
+
 }
 
-function escapeHtml(value: unknown): string {
-  return String(value ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
+function isBooleanFlag(command: string, key: string): boolean {
+  if ([
+    'agent-mode',
+    'json',
+    'jsonl',
+    'condense',
+    'heal',
+    'plan',
+    'prompt',
+    'apply',
+    'yes',
+    'no-verify',
+    'force-scan',
+  ].includes(key)) {
+    return true;
+  }
+  if (key === 'strict') return true;
+  if (key === 'open' && (command === '' || command === 'scan' || command === 'report')) return true;
+  if (key === 'verify' && command === '') return true;
+  if (key === 'vercel-supabase' && command === 'audit') return true;
+  if (key === 'json' && command === 'validate-npm-package') return true;
+  if (key === 'dry-run' && command === 'init') return true;
+  if (key === 'agents' && command === 'doctor') return true;
+  return false;
 }
 
-function reportHtml(artifact: LocalArtifact): string {
-  const gaps = artifact.gaps.length
-    ? artifact.gaps
-        .map(
-          (gap) => `<article class="gap">
-            <div><strong>${escapeHtml(gap.title)}</strong><span>${escapeHtml(gap.severity)}</span></div>
-            <p>${escapeHtml(gap.detail)}</p>
-            <code>${escapeHtml(gap.id)}</code>
-          </article>`,
-        )
-        .join('')
-    : '<p class="empty">No local repo-evidence gaps found.</p>';
-  const areas = artifact.missionGraph.areas
-    .map(
-      (area) => `<li><span>${escapeHtml(area.label)}</span><strong>${escapeHtml(area.readinessPercent)}%</strong></li>`,
-    )
-    .join('');
-  return `<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VibeRaven Local Report</title>
-  <style>
-    body { margin: 0; background: #fbfbfa; color: #111417; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    main { max-width: 920px; margin: 0 auto; padding: 42px 24px; }
-    h1 { margin: 0 0 8px; font-size: 32px; line-height: 1.1; }
-    .meta { color: #475467; margin: 0 0 28px; }
-    .summary, .gap, .areas { border: 1px solid #e4e7ec; background: #fff; border-radius: 12px; box-shadow: 0 12px 28px rgba(16, 24, 40, 0.035); }
-    .summary { padding: 22px; margin-bottom: 20px; }
-    .status { display: inline-flex; gap: 8px; align-items: center; padding: 7px 11px; border-radius: 999px; background: #fff2e5; color: #ff7a00; font-weight: 700; }
-    .status[data-clear="true"] { background: #e9f8f1; color: #24b26b; }
-    .areas { list-style: none; padding: 8px 18px; margin: 0 0 22px; }
-    .areas li { display: flex; justify-content: space-between; gap: 18px; padding: 12px 0; border-bottom: 1px solid #eef0f4; }
-    .areas li:last-child { border-bottom: 0; }
-    .gap { padding: 18px; margin: 12px 0; }
-    .gap div { display: flex; justify-content: space-between; gap: 16px; }
-    .gap span { color: #ff7a00; font-size: 13px; font-weight: 700; }
-    .gap p { color: #475467; line-height: 1.45; }
-    code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13px; }
-    .empty { border: 1px dashed #d0d5dd; border-radius: 10px; padding: 16px; background: #fff; color: #475467; }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>VibeRaven Local Report</h1>
-    <p class="meta">${escapeHtml(artifact.workspacePath)} · ${escapeHtml(artifact.scannedAt)}</p>
-    <section class="summary">
-      <p class="status" data-clear="${artifact.verificationSummary.status === 'clear'}">${escapeHtml(artifact.verificationSummary.status)}</p>
-      <h2>${escapeHtml(artifact.scoreLabel)}</h2>
-      <p>${escapeHtml(artifact.summary)}</p>
-    </section>
-    <ul class="areas">${areas}</ul>
-    <h2>Open gaps</h2>
-    ${gaps}
-  </main>
-</body>
-</html>`;
+function shouldConsumeLeadingHyphenValue(command: string, key: string, value: string): boolean {
+
+  return command === 'connect' && (key === 'session' || key === 'token') && !value.startsWith('--');
+
 }
 
-async function writeArtifacts(workspacePath: string, artifact: LocalArtifact): Promise<void> {
-  const out = join(workspacePath, '.viberaven');
-  await mkdir(out, { recursive: true });
-  await writeFile(join(out, 'last-scan.json'), `${JSON.stringify(artifact, null, 2)}\n`);
-  await writeFile(join(out, 'gate-result.json'), `${JSON.stringify(gateResult(artifact), null, 2)}\n`);
-  await writeFile(join(out, 'agent-tasklist.md'), tasklist(artifact));
-  await writeFile(
-    join(out, 'context-map.json'),
-    `${JSON.stringify(
-      {
-        version: 1,
-        generatedAt: artifact.scannedAt,
-        workspacePath,
-        gateStatus: artifact.verificationSummary.status,
-        openGapIds: artifact.gaps.map((gap) => gap.id),
-        detectedEvidence: artifact.stackWiring.detected,
-      },
-      null,
-      2,
-    )}\n`,
-  );
-  await writeFile(join(out, 'mission-map.md'), `# VibeRaven Local Mission Map\n\n${artifact.missionGraph.areas.map((area) => `- ${area.label}: ${area.readinessPercent}%`).join('\n')}\n`);
-  await writeFile(join(out, 'agent-summary.md'), `# VibeRaven Local Summary\n\n${artifact.summary}\n`);
-  await writeFile(join(out, 'launch-playbook.md'), '# VibeRaven Local Launch Playbook\n\nRun viberaven --verify after each repo-code fix.\n');
+function hasFlag(flags: Record<string, string | boolean>, key: string): boolean {
+  return flags[key] === true || typeof flags[key] === 'string';
 }
 
-async function runLocalScan(workspacePath: string): Promise<LocalArtifact> {
-  const artifact = await buildArtifact(workspacePath);
-  await writeArtifacts(workspacePath, artifact);
-  return artifact;
-}
+async function guardEarlyVerifyScan(input: {
+  flags: Record<string, string | boolean>;
+  positional: string[];
+  wantsStrict: boolean;
+}): Promise<number | undefined> {
+  if (input.flags['force-scan'] === true) {
+    return undefined;
+  }
 
-async function loadArtifact(workspacePath: string): Promise<LocalArtifact | undefined> {
+  const verifyLike = input.flags.verify === true || input.wantsStrict;
+  if (!verifyLike) {
+    return undefined;
+  }
+
+  const workspacePath = input.positional[0]
+    ? join(process.cwd(), input.positional[0])
+    : await resolveWorkspaceRoot(process.cwd());
+  const loopState = await loadLoopState(workspacePath);
+  if (loopState.batchApplied <= 0) {
+    return undefined;
+  }
+
+  let artifact;
   try {
-    return JSON.parse(await readFile(join(workspacePath, '.viberaven', 'last-scan.json'), 'utf8')) as LocalArtifact;
+    artifact = await loadLastArtifact(workspacePath);
   } catch {
     return undefined;
   }
+
+  const plan = artifact.plan ?? (await loadCredentials())?.plan ?? 'free';
+  const batchSize = plan === 'pro' ? 10 : 3;
+  if (loopState.batchApplied >= batchSize) {
+    return undefined;
+  }
+
+  const appliedGapIds = new Set(loopState.appliedGapIdsSinceScan ?? []);
+  const remainingRepoCodeTasks = buildTaskList(artifact).filter(
+    (task) =>
+      task.fixType === 'repo-code' &&
+      task.requiresUserAction === false &&
+      !appliedGapIds.has(task.gapId)
+  );
+
+  if (remainingRepoCodeTasks.length === 0) {
+    return undefined;
+  }
+
+  const nextTask = remainingRepoCodeTasks[0];
+  console.error('SCAN_DEFERRED: Local heal batch is not full yet, so VibeRaven is protecting scan quota.');
+  console.error(`Batch progress: ${loopState.batchApplied}/${batchSize} local heals applied since the last scan.`);
+  console.error(`Next local heal: npx -y viberaven --heal --apply --gap ${nextTask.gapId} --yes`);
+  console.error('Run verify again after the batch is full, or add --force-scan if the user explicitly wants to spend a scan now.');
+  return 4;
 }
 
-function projectFiles(workspacePath: string) {
-  return [
-    { label: 'Environment', path: '.env', exists: existsSync(join(workspacePath, '.env')) },
-    { label: 'Local environment', path: '.env.local', exists: existsSync(join(workspacePath, '.env.local')) },
-    { label: 'Env example', path: '.env.example', exists: existsSync(join(workspacePath, '.env.example')) },
-    { label: 'Package manifest', path: 'package.json', exists: existsSync(join(workspacePath, 'package.json')) },
-    { label: 'Vercel config', path: 'vercel.json', exists: existsSync(join(workspacePath, 'vercel.json')) },
-    { label: 'Supabase migrations', path: 'supabase/migrations', exists: existsSync(join(workspacePath, 'supabase', 'migrations')) },
-  ];
+export type DefaultEntrypointMode = 'local-ui' | 'interactive' | 'agent-scan';
+
+export function resolveDefaultEntrypointMode(options: {
+  stdinIsTTY: boolean;
+  stdoutIsTTY: boolean;
+  env: Record<string, string | undefined>;
+}): DefaultEntrypointMode {
+  if (options.env.VIBERAVEN_TUI === '1') return 'interactive';
+  if (options.env.VIBERAVEN_AGENT === '1') return 'agent-scan';
+  return 'local-ui';
 }
 
-function localState(cwd: string, artifact?: LocalArtifact) {
-  const firstGap = artifact?.gaps[0];
-  const providers = PUBLIC_PROVIDER_CATALOG.map((seed) => {
-    const assignedGap = gapForProvider(artifact, seed);
-    const focusedGap = assignedGap ?? (seed.id === 'supabase' ? firstGap : undefined);
-    const focusedRow = rowForGap(seed, focusedGap);
-    const hasEvidence = artifactHasEvidenceForProvider(artifact, seed);
-    const providerState: PublicProviderState = focusedGap
-      ? seed.id === 'sentry'
-        ? 'blocked'
-        : 'needs_repo_fix'
-      : hasEvidence
-        ? 'repo_evidence_found'
-        : artifact
-          ? seed.stateWhenDetected
-          : seed.stateWhenDetected;
-    const launchPath = seed.rows.map((row) => ({
-      id: row.id,
-      title: row.title,
-      whyItMatters: row.whyItMatters,
-      whatToChange: row.whatToChange,
-      verifyWith: row.verifyWith,
-      keywords: row.keywords,
-      area: seed.area,
-      state: pathState(providerState, row.id, focusedGap ? focusedRow.id : undefined),
-    }));
-    const defaultNextFix =
-      !artifact && seed.id === 'supabase'
-        ? {
-            gapId: 'LOCAL-SCAN-001',
-            launchPathItemId: focusedRow.id,
-            launchPathTitle: focusedRow.title,
-            currentIssue: 'VibeRaven has not checked this project yet.',
-            whyItMatters: 'The launch console needs repo evidence before it can focus the correct provider risk.',
-            whatToChange: 'Click Verify so VibeRaven can map package, env, deployment, test, and provider evidence.',
-            verifyWith: 'Click Verify or run npx -y viberaven --verify.',
-            prompt: [
-              `Run VibeRaven evidence discovery for ${basename(cwd) || cwd}.`,
-              '',
-              'Requirements:',
-              '- Inspect package, env example, deployment, test, auth, data, payment, and monitoring evidence.',
-              '- Identify the first repo-owned launch gap.',
-              '- Keep all findings local and do not add secret values.',
-              '- Re-run npx -y viberaven --verify after the first repo-code fix.',
-              '',
-              'Return the first concrete fix to make this app safer to ship.',
-            ].join('\n'),
-          }
-        : undefined;
-    if (defaultNextFix) {
-      const focused = launchPath.find((item) => item.id === defaultNextFix.launchPathItemId);
-      if (focused) focused.state = 'needs_fix';
+export type RunScanCommandResult = {
+  exitCode: number;
+  artifacts?: WriteArtifactsResult;
+};
+
+export function formatScanJsonStdout(artifact: Parameters<typeof sanitizeArtifactForDisk>[0]): string {
+
+  return JSON.stringify(sanitizeArtifactForDisk(artifact), null, 2);
+
+}
+
+
+
+async function cmdLogin(flags: Record<string, string | boolean>): Promise<void> {
+
+  const apiBaseUrl = resolveApiBaseUrl(typeof flags['api-url'] === 'string' ? flags['api-url'] : undefined);
+
+  await runDeviceLogin(apiBaseUrl);
+
+}
+
+
+
+async function cmdLogout(): Promise<void> {
+
+  await clearCredentials();
+
+  console.log('Signed out.');
+
+}
+
+async function cmdProviderVerify(
+  flags: Record<string, string | boolean>,
+  positional: string[]
+): Promise<number> {
+  const provider = typeof flags.provider === 'string' ? flags.provider : positional[0];
+  const check = typeof flags.check === 'string' ? flags.check : positional[1];
+
+  if (!provider || !check) {
+    console.error('Usage: viberaven provider-verify --provider <supabase|vercel> --check <id> [--plan free|pro]');
+    return 1;
+  }
+
+  let plan = typeof flags.plan === 'string' ? flags.plan : 'free';
+  if (!flags.plan) {
+    const creds = await loadCredentials();
+    if (creds?.plan === 'pro' || creds?.plan === 'free') {
+      plan = creds.plan;
     }
-    const provider = {
-      id: seed.id,
-      label: seed.label,
-      area: seed.area,
-      state: providerState,
-      iconHtml: seed.iconHtml,
-      launchPath,
-      nextFix: focusedGap
-        ? {
-            gapId: focusedGap.id,
-            launchPathItemId: focusedRow.id,
-            launchPathTitle: focusedRow.title,
-            currentIssue: focusedGap.detail,
-            whyItMatters: focusedRow.whyItMatters,
-            whatToChange: focusedRow.whatToChange,
-            verifyWith: focusedRow.verifyWith,
-            prompt: [
-              `Fix the ${seed.label} launch path for ${basename(cwd) || cwd}.`,
-              '',
-              `Current VibeRaven gap: ${focusedGap.id} - ${focusedGap.detail}`,
-              '',
-              'Requirements:',
-              `- Address ${focusedRow.title}.`,
-              `- ${focusedRow.whatToChange}`,
-              '- Keep changes repo-only and do not add secret values.',
-              '- Re-run npx -y viberaven --verify when done.',
-              '',
-              'Return a concise summary of what changed.',
-            ].join('\n'),
-          }
-        : defaultNextFix,
-    };
-    return provider;
+  }
+
+  const result = await verifyProviderGap({
+    provider,
+    check,
+    cwd: process.cwd(),
+    plan,
   });
 
-  const selectedProvider =
-    providers.find((provider) => provider.nextFix) ??
-    providers.find((provider) => provider.id === 'supabase') ??
-    providers[0];
-
-  return {
-    version: 1,
-    generatedAt: new Date().toISOString(),
-    project: {
-      name: basename(cwd) || cwd,
-      workspacePath: cwd,
-      score: artifact?.score,
-      scoreLabel: artifact?.scoreLabel,
-      summary: artifact?.summary,
-      gateStatus: artifact?.verificationSummary.status ?? 'not_checked',
-      files: projectFiles(cwd),
-    },
-    providers,
-    selectedProviderId: selectedProvider.id,
-    command: 'npx -y viberaven',
-  };
+  console.log(JSON.stringify(result, null, 2));
+  return result.verified ? 0 : 1;
 }
 
-async function route(req: IncomingMessage, res: ServerResponse, options: { cwd: string; token: string }): Promise<void> {
-  const url = new URL(req.url ?? '/', 'http://127.0.0.1');
-  if (req.method === 'GET' && (url.pathname === '/assets/extension-icon.png' || url.pathname === '/favicon.ico')) {
-    try {
-      const icon = await readFile(join(__dirname, 'extension-icon.png'));
-      res.writeHead(200, {
-        'content-type': 'image/png',
-        'cache-control': 'public, max-age=31536000, immutable',
-      });
-      res.end(icon);
-    } catch {
-      sendJson(res, 404, { error: 'Asset not found' });
-    }
-    return;
+
+
+async function cmdStatus(
+  flags: Record<string, string | boolean>,
+  positional: string[]
+): Promise<number> {
+
+  const creds = await loadCredentials();
+
+  if (!creds?.accessToken) {
+
+    console.log('Not signed in. Run: viberaven login');
+
+    return 1;
+
   }
 
-  if (req.method === 'GET' && url.pathname === '/') {
-    send(res, 200, renderLocalUiHtml(), 'text/html; charset=utf-8');
-    return;
-  }
-  if (url.pathname.startsWith('/api/') && !isLocalApiRequestAuthorized(req, url, options.token)) {
-    sendJson(res, 401, { error: 'Unauthorized local UI request.' });
-    return;
-  }
-  if (req.method === 'GET' && url.pathname === '/api/project') {
-    sendJson(res, 200, localState(options.cwd, await loadArtifact(options.cwd)));
-    return;
-  }
-  if (req.method === 'GET' && url.pathname === '/api/providers') {
-    const state = localState(options.cwd, await loadArtifact(options.cwd));
-    sendJson(res, 200, { providers: state.providers, selectedProviderId: state.selectedProviderId });
-    return;
-  }
-  if (req.method === 'GET' && url.pathname === '/api/tasklist') {
-    let artifact = await loadArtifact(options.cwd);
-    if (!artifact) {
-      artifact = await runLocalScan(options.cwd);
-    }
-    send(res, 200, tasklist(artifact), 'text/plain; charset=utf-8');
-    return;
-  }
-  if (req.method === 'GET' && url.pathname === '/api/report') {
-    let artifact = await loadArtifact(options.cwd);
-    if (!artifact) {
-      artifact = await runLocalScan(options.cwd);
-    }
-    send(res, 200, reportHtml(artifact), 'text/html; charset=utf-8');
-    return;
-  }
-  if (req.method === 'POST' && (url.pathname === '/api/scan' || url.pathname === '/api/verify')) {
-    const artifact = await runLocalScan(options.cwd);
-    sendJson(res, 200, { ...localState(options.cwd, artifact), exitCode: artifact.verificationSummary.status === 'clear' ? 0 : 1 });
-    return;
-  }
-  sendJson(res, 404, { error: 'Not found' });
-}
-
-function tokenMatches(actual: string | null, expected: string): boolean {
-  if (!actual) return false;
-  const actualBuffer = Buffer.from(actual);
-  const expectedBuffer = Buffer.from(expected);
-  return actualBuffer.length === expectedBuffer.length && timingSafeEqual(actualBuffer, expectedBuffer);
-}
-
-function isLocalHostHeader(host: string | undefined, port: number | undefined): boolean {
-  if (!host || !port) return false;
-  const allowed = new Set([`127.0.0.1:${port}`, `localhost:${port}`]);
-  return allowed.has(host.toLowerCase());
-}
-
-function isLocalOrigin(origin: string | undefined, port: number | undefined): boolean {
-  if (!origin || !port) return true;
+  const startDir = positional[0] ? join(process.cwd(), positional[0]) : process.cwd();
+  let artifact: Awaited<ReturnType<typeof loadLastArtifact>> | undefined;
   try {
-    const parsed = new URL(origin);
-    return (
-      parsed.protocol === 'http:' &&
-      (parsed.hostname === '127.0.0.1' || parsed.hostname === 'localhost') &&
-      parsed.port === String(port)
-    );
+    artifact = await loadLastArtifact(startDir);
   } catch {
-    return false;
+    artifact = undefined;
   }
-}
 
-function isLocalApiRequestAuthorized(req: IncomingMessage, url: URL, token: string): boolean {
-  const port = req.socket.localPort;
-  if (!isLocalHostHeader(req.headers.host, port) || !isLocalOrigin(req.headers.origin, port)) {
-    return false;
+  try {
+
+    const synced = await syncCredentialsFromAccount(creds);
+    const usage = synced.account.usage;
+    const next = artifact ? resolveNextAction(artifact) : undefined;
+
+    if (flags.json) {
+      console.log(
+        JSON.stringify(
+          {
+            email: synced.email ?? creds.email ?? null,
+            plan: synced.plan ?? creds.plan ?? usage.plan,
+            scansUsed: usage.used,
+            scansLimit: usage.limit,
+            period: usage.period,
+            productionCorePercent: artifact?.productionCorePercent ?? null,
+            score: artifact?.score ?? null,
+            unlockedLanes: usage.unlockedMapCategoryKeys.length,
+            totalLanes: PRODUCTION_MAP_CATEGORY_KEYS_ALL.length,
+            next: next ?? null,
+            apiBaseUrl: synced.apiBaseUrl
+          },
+          null,
+          2
+        )
+      );
+      return 0;
+    }
+
+    console.log(`Signed in: ${synced.email ?? '(email unknown)'}`);
+
+    console.log(`Plan: ${synced.plan ?? 'unknown'}`);
+
+    console.log(formatUsageLine(usage));
+
+    if (artifact) {
+      console.log(`Production core: ${artifact.productionCorePercent}% · Score ${artifact.score}`);
+      console.log(
+        `Lanes: ${usage.unlockedMapCategoryKeys.length}/${PRODUCTION_MAP_CATEGORY_KEYS_ALL.length} unlocked`
+      );
+      if (next) {
+        console.log(`Next: ${next.title}`);
+      }
+    } else {
+      console.log('No local scan yet. Run: viberaven scan');
+    }
+
+    console.log(`API: ${synced.apiBaseUrl}`);
+
+    return 0;
+
+  } catch (error) {
+
+    console.log(`Signed in (cached): ${creds.email ?? '(email unknown)'}`);
+
+    console.log(`Plan: ${creds.plan ?? 'unknown'}`);
+
+    console.log(`API: ${creds.apiBaseUrl}`);
+
+    console.warn(error instanceof Error ? error.message : String(error));
+
+    return 1;
+
   }
-  const provided = req.headers['x-viberaven-local-ui-token'];
-  const headerToken = Array.isArray(provided) ? provided[0] : provided;
-  return tokenMatches(headerToken ?? url.searchParams.get('vr_token'), token);
+
 }
 
-function printHelp(): void {
-  console.log(`viberaven ${VERSION}
-
-Usage:
-  viberaven [path]
-  viberaven ui [path] [--port <port>]
-                       Local launch console
-  viberaven scan [path]
-  viberaven --agent-mode [path]
-  viberaven --verify [path]
-  viberaven --help
-  viberaven --version
-
-This npm package runs deterministic local repo-evidence checks and the localhost UI.
-`);
-}
-
-function parsePort(argv: string[]): number {
-  const index = argv.indexOf('--port');
-  if (index === -1) return 4177;
-  const parsed = Number.parseInt(argv[index + 1] ?? '', 10);
-  return Number.isInteger(parsed) && parsed >= 0 ? parsed : 4177;
-}
-
-function firstPathArg(argv: string[]): string | undefined {
-  const commands = new Set(['ui', 'scan', 'version']);
-  const flagsWithValues = new Set(['--port']);
-  for (let index = 0; index < argv.length; index += 1) {
-    const arg = argv[index];
-    if (commands.has(arg)) {
-      continue;
-    }
-    if (flagsWithValues.has(arg)) {
-      index += 1;
-      continue;
-    }
-    if (arg.startsWith('--')) {
-      continue;
-    }
-    return arg;
-  }
-  return undefined;
-}
-
-function listen(server: Server, port: number): Promise<number> {
-  return new Promise((resolveListen, reject) => {
-    const onError = (error: Error) => {
-      server.off('listening', onListening);
-      reject(error);
-    };
-    const onListening = () => {
-      server.off('error', onError);
-      const address = server.address();
-      resolveListen(typeof address === 'object' && address ? address.port : port);
-    };
-    server.once('error', onError);
-    server.once('listening', onListening);
-    server.listen(port, '127.0.0.1');
-  });
-}
-
-export async function startLocalUiServer(port: number, cwd: string): Promise<PublicLocalUiServerHandle> {
-  const token = randomBytes(18).toString('base64url');
-  const server = createServer((req, res) => {
-    route(req, res, { cwd, token }).catch((error) => {
-      sendJson(res, 500, { error: error instanceof Error ? error.message : String(error) });
-    });
-  });
-  const actualPort = await listen(server, port);
-  const origin = `http://127.0.0.1:${actualPort}`;
-  const url = `${origin}/?vr_token=${encodeURIComponent(token)}`;
-  const close = async () => {
-    await new Promise<void>((resolveClose, reject) => {
-      server.close((error) => {
-        if (error) reject(error);
-        else resolveClose();
-      });
-    });
+function createRunnerWatchAbortController(): AbortController {
+  const controller = new AbortController();
+  const onSigint = () => {
+    console.log('\nStopping runner watch...');
+    controller.abort();
   };
-  return { url, origin, port: actualPort, close };
+  process.once('SIGINT', onSigint);
+  controller.signal.addEventListener(
+    'abort',
+    () => {
+      process.off('SIGINT', onSigint);
+    },
+    { once: true }
+  );
+  return controller;
 }
 
-export async function main(argv = process.argv.slice(2)): Promise<number> {
-  if (argv.includes('--help') || argv.includes('-h')) {
-    printHelp();
-    return 0;
-  }
-  if (argv.includes('--version') || argv.includes('-v') || argv[0] === 'version') {
-    console.log(VERSION);
-    return 0;
+async function cmdConnect(flags: Record<string, string | boolean>): Promise<number> {
+  let connectArgs;
+
+  try {
+    connectArgs = parseRunnerConnectFlags(flags);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    return 1;
   }
 
-  if (argv[0] === 'scan' || argv.includes('--agent-mode') || argv.includes('--verify')) {
-    const workspace = workspaceFrom(firstPathArg(argv));
-    const artifact = await runLocalScan(workspace);
-    console.log(`VibeRaven local scan wrote ${join(workspace, '.viberaven')}`);
-    if (argv.includes('--agent-mode')) {
-      console.log(tasklist(artifact).trimEnd());
+  const apiBaseUrl = resolveApiBaseUrl(typeof flags['api-url'] === 'string' ? flags['api-url'] : undefined);
+  const workspaceRoot = await resolveWorkspaceRoot(process.cwd());
+
+  try {
+    console.log(`Connecting VibeRaven runner from ${workspaceRoot}...`);
+    const result = await runRunnerConnect({
+      ...connectArgs,
+      apiBaseUrl,
+      workspaceRoot,
+      runnerVersion: VERSION
+    });
+
+    const repoMatch = formatRepoMatch(result.repoMatch);
+    console.log(`Connected runner session: ${result.runnerSession.id}`);
+    console.log(`Repo match: ${repoMatch}`);
+
+    if (result.repoMatch !== 'matched') {
+      console.log('The web cockpit remains the command center. Return there to review the repo mismatch before continuing.');
     }
-    return argv.includes('--verify') && artifact.verificationSummary.status !== 'clear' ? 1 : 0;
+
+    if (!connectArgs.once) {
+      console.log('Watching for runner jobs. Press Ctrl+C to stop.');
+      const watchController = createRunnerWatchAbortController();
+      await runRunnerWatchLoop({
+        ...buildRunnerWatchOptions({
+          apiBaseUrl,
+          workspaceRoot,
+          handshake: result,
+          oneTimeToken: connectArgs.oneTimeToken
+        }),
+        signal: watchController.signal,
+        onPollError: (error) => {
+          console.warn(error instanceof Error ? error.message : String(error));
+        }
+      });
+    }
+
+    return 0;
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    console.error('The web cockpit remains the command center. Return there to create a fresh runner command if needed.');
+    return 1;
+  }
+}
+
+async function cmdWatch(flags: Record<string, string | boolean>): Promise<number> {
+  const savedRunner = await loadRunnerSessionCredentials();
+  if (!savedRunner) {
+    console.error('No saved runner session. Run: viberaven connect --session <id> --token <token>');
+    return 1;
   }
 
-  if (argv[0] === 'ui' || argv.length === 0 || firstPathArg(argv)) {
-    const pathArg = firstPathArg(argv);
-    if (argv[0] !== 'ui' && pathArg && !existsSync(workspaceFrom(pathArg))) {
-      console.error(`Unknown command or missing path: ${argv[0]}`);
-      printHelp();
+  const apiBaseUrl = resolveApiBaseUrl(
+    typeof flags['api-url'] === 'string' ? flags['api-url'] : savedRunner.apiBaseUrl
+  );
+  const workspaceRoot = await resolveWorkspaceRoot(process.cwd());
+  const watchController = createRunnerWatchAbortController();
+
+  try {
+    console.log(`Watching runner jobs for session ${savedRunner.runnerSessionId} from ${workspaceRoot}...`);
+    console.log('Press Ctrl+C to stop.');
+    await runRunnerWatchLoop({
+      apiBaseUrl,
+      workspaceRoot,
+      runnerSessionId: savedRunner.runnerSessionId,
+      runnerAccessToken: savedRunner.runnerAccessToken,
+      signal: watchController.signal,
+      onPollError: (error) => {
+        console.warn(error instanceof Error ? error.message : String(error));
+      }
+    });
+    return 0;
+  } catch (error) {
+    if (watchController.signal.aborted) {
+      return 0;
+    }
+    console.error(error instanceof Error ? error.message : String(error));
+    return 1;
+  }
+}
+
+
+
+export async function runScanCommand(
+
+  flags: Record<string, string | boolean>,
+
+  positional: string[],
+
+  options?: { deferMachineOutput?: boolean }
+
+): Promise<RunScanCommandResult> {
+
+  const workspacePath = positional[0]
+    ? join(process.cwd(), positional[0])
+    : await resolveWorkspaceRoot(process.cwd());
+
+  const apiBaseUrl = resolveApiBaseUrl(typeof flags['api-url'] === 'string' ? flags['api-url'] : undefined);
+
+
+
+  let accessToken: string;
+
+  try {
+
+    ({ accessToken } = await requireCredentials(apiBaseUrl));
+
+  } catch (error) {
+
+    const message = error instanceof Error ? error.message : String(error);
+
+    if (message.startsWith(`${LOGIN_REQUIRED}:`)) {
+      console.log('LOGIN_REQUIRED: Starting VibeRaven browser sign-in so this scan can continue.');
+      console.log('AGENT_ACTION: Open the VibeRaven approval URL for the user if the browser does not open automatically.');
+      await runDeviceLogin(apiBaseUrl);
+      console.log('LOGIN_RESUME: Sign-in complete. Continuing the original scan.');
+      try {
+        ({ accessToken } = await requireCredentials(apiBaseUrl));
+      } catch (retryError) {
+        console.error(retryError instanceof Error ? retryError.message : String(retryError));
+        return { exitCode: 1 };
+      }
+    } else {
+      console.error(message);
+      return { exitCode: 1 };
+    }
+
+  }
+
+
+
+  if (!options?.deferMachineOutput) {
+    console.log(`Scanning ${workspacePath}…`);
+  }
+
+  const result = await runProjectScan({ workspacePath, accessToken, apiBaseUrl });
+
+
+
+  if (!result.ok) {
+
+    if (result.kind === 'scan_limit') {
+
+      console.error(formatScanLimitMessage(result.upgradeUrl));
+
+      try {
+
+        const account = await fetchAccountMe(apiBaseUrl, accessToken);
+
+        console.error(formatUsageLine(account.usage));
+
+      } catch {
+
+        // usage refresh is best-effort when blocked
+
+      }
+
+      console.error('Tip: `viberaven report` rebuilds from last-scan.json without using a scan.');
+
+      return { exitCode: 2 };
+
+    }
+
+    if (result.kind === 'auth_required' || result.kind === 'session_invalid') {
+      console.error(formatAgentStatus(LOGIN_REQUIRED, result.message));
+      return { exitCode: 1 };
+    }
+
+    console.error(formatAgentStatus(ERROR, result.message));
+
+    return { exitCode: 1 };
+
+  }
+
+
+
+  const artifact = await enrichArtifactWithAccount(result.artifact, apiBaseUrl, accessToken);
+
+  const paths = await writeScanArtifacts({ artifact, cwd: workspacePath });
+
+
+
+  if (flags.json && !options?.deferMachineOutput) {
+
+    console.log(formatScanJsonStdout(artifact));
+
+    return { exitCode: 0, artifacts: paths };
+
+  }
+
+  if (!options?.deferMachineOutput) {
+    printScanSummary(artifact, paths);
+  }
+
+  if (artifact.usage && !options?.deferMachineOutput) {
+
+    console.log(formatUsageLine(artifact.usage));
+
+  }
+
+  if (flags['agent-mode'] && !options?.deferMachineOutput) {
+    const loopState = await loadLoopState(workspacePath);
+    const openGapCount = artifact.gaps.length;
+    const updatedState = resetBatch(loopState, openGapCount);
+    const tasks = buildTaskList(artifact);
+    const plan = artifact.plan ?? 'free';
+    const block = buildNextActionBlock(tasks, updatedState, plan);
+    printNextActionBlock(block);
+    printProviderActionBlock(tasks);
+    try {
+      const manifest = JSON.parse(await readFile(paths.actionsPath, 'utf8')) as VibeRavenActionsManifest;
+      console.log(renderActionSurface(manifest, { limit: 5 }).trimEnd());
+    } catch (error) {
+      console.warn(error instanceof Error ? error.message : String(error));
+    }
+    await saveLoopState(workspacePath, updatedState);
+  }
+
+  if (flags.open) {
+
+    try {
+
+      await openPathInBrowser(paths.reportPath);
+
+    } catch (error) {
+
+      console.warn(error instanceof Error ? error.message : String(error));
+
+    }
+
+  }
+
+
+
+  return { exitCode: 0, artifacts: paths };
+
+}
+
+
+
+async function cmdReport(
+  flags: Record<string, string | boolean>,
+  positional: string[]
+): Promise<number> {
+  const startDir = positional[0] ? join(process.cwd(), positional[0]) : process.cwd();
+
+  try {
+    const paths = await refreshReportFromDisk(startDir);
+    console.log(`Report refreshed: ${paths.reportPath}`);
+
+    if (flags.open) {
+      try {
+        await openPathInBrowser(paths.reportPath);
+      } catch (error) {
+        console.warn(error instanceof Error ? error.message : String(error));
+      }
+    }
+
+    return 0;
+  } catch (error) {
+    if (isScanNotFoundError(error)) {
+      console.error(error.message);
       return 1;
     }
-    const handle = await startLocalUiServer(parsePort(argv), workspaceFrom(pathArg));
-    console.log(`VibeRaven local UI: ${handle.url}`);
+    console.error(error instanceof Error ? error.message : String(error));
+    return 1;
+  }
+}
+
+async function cmdPrompt(
+
+  flags: Record<string, string | boolean>,
+
+  positional: string[]
+
+): Promise<number> {
+
+  const startDir = positional[0] ? join(process.cwd(), positional[0]) : process.cwd();
+
+  let artifact;
+
+  try {
+
+    artifact = await loadLastArtifact(startDir);
+
+  } catch (error) {
+
+    console.error(error instanceof Error ? error.message : 'No scan found. Run: viberaven scan');
+
+    return 1;
+
+  }
+
+
+
+  const gap = pickGap(artifact, {
+
+    gapId: typeof flags.gap === 'string' ? flags.gap : undefined,
+
+    provider: typeof flags.provider === 'string' ? flags.provider : undefined,
+
+    area: typeof flags.area === 'string' ? flags.area : undefined
+
+  });
+
+
+
+  if (!gap) {
+
+    console.error('No matching gap. Run `viberaven scan` or pass --gap <id>.');
+
+    return 1;
+
+  }
+
+
+
+  const skipCopy = flags['no-copy'] === true;
+
+  if (!skipCopy) {
+    try {
+      await copyToClipboard(gap.copyPrompt);
+      console.log(`Copied to clipboard: ${gap.title}`);
+      return 0;
+    } catch (error) {
+      console.warn(error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  console.log(gap.copyPrompt);
+
+  return 0;
+
+}
+
+
+
+const STACK_AREAS = new Set(['database', 'auth', 'payments', 'deployment', 'monitoring', 'security']);
+
+
+
+async function cmdStack(positional: string[]): Promise<number> {
+
+  const cwd = process.cwd();
+
+  const sub = positional[0];
+
+
+
+  if (sub === 'recommend') {
+    const rec = await recommendStack(cwd);
+    console.log(JSON.stringify(rec, null, 2));
     return 0;
   }
 
-  console.error(`Unknown command: ${argv[0]}`);
-  printHelp();
+  if (sub === 'list' || !sub) {
+
+    const file = await loadStackChoicesFile(cwd);
+
+    const entries = Object.entries(file.choices);
+
+    if (entries.length === 0) {
+
+      console.log('No provider overrides. Detection runs from repo evidence.');
+
+      return 0;
+
+    }
+
+    for (const [area, choice] of entries) {
+
+      console.log(`${area}: ${choice.provider}`);
+
+    }
+
+    return 0;
+
+  }
+
+
+
+  if (sub === 'set') {
+
+    const area = positional[1];
+
+    const provider = positional[2];
+
+    if (!area || !provider) {
+
+      console.error('Usage: viberaven stack set <area> <provider>');
+
+      return 1;
+
+    }
+
+    if (!STACK_AREAS.has(area)) {
+
+      console.error(`Unknown area "${area}". Valid: ${[...STACK_AREAS].join(', ')}`);
+
+      return 1;
+
+    }
+
+    const file = await loadStackChoicesFile(cwd);
+
+    file.choices[area] = { provider, selectedAt: new Date().toISOString() };
+
+    await saveStackChoicesFile(cwd, file);
+
+    console.log(`Set ${area} → ${provider}. Run \`viberaven scan\` to re-map.`);
+
+    return 0;
+
+  }
+
+
+
+  if (sub === 'clear') {
+
+    const area = positional[1];
+
+    const file = await loadStackChoicesFile(cwd);
+
+    if (area) {
+
+      delete file.choices[area];
+
+    } else {
+
+      file.choices = {};
+
+    }
+
+    await saveStackChoicesFile(cwd, file);
+
+    console.log(area ? `Cleared ${area}.` : 'Cleared all provider overrides.');
+
+    return 0;
+
+  }
+
+
+
+  console.error(`Unknown stack subcommand "${sub}". Use set, clear, or list.`);
+
   return 1;
+
 }
 
-if (require.main === module) {
-  main()
-    .then((code) => {
-      process.exitCode = code;
-    })
-    .catch((error) => {
-      console.error(error instanceof Error ? error.message : String(error));
-      process.exitCode = 1;
+
+
+export async function main(): Promise<number> {
+
+  const { command, flags, positional } = parseArgs(process.argv.slice(2));
+
+
+
+  if (flags.help) {
+
+    printHelp();
+
+    return 0;
+
+  }
+
+  if (flags.version || command === 'version') {
+
+    console.log(VERSION);
+
+    return 0;
+
+  }
+
+  const isAgentMode = hasFlag(flags, 'agent-mode');
+  const wantsJson = hasFlag(flags, 'json');
+  const wantsJsonl = hasFlag(flags, 'jsonl');
+  const wantsStrict = hasFlag(flags, 'strict');
+
+  if (flags.condense) {
+    const cwd = positional[0] ? join(process.cwd(), positional[0]) : process.cwd();
+    const result = await runCondenseCommand({ cwd });
+    console.log(`VibeRaven context map refreshed: ${result.contextMapPath}`);
+    return 0;
+  }
+
+  if (flags.heal) {
+    const mode = flags.apply ? 'apply' : flags.prompt ? 'prompt' : 'plan';
+    const result = await runHealCommand({
+      cwd: process.cwd(),
+      mode,
+      target: typeof flags.target === 'string' ? flags.target : undefined,
+      gapId: typeof flags.gap === 'string' ? flags.gap : undefined,
+      yes: flags.yes === true,
+      noVerify: flags['no-verify'] === true,
     });
+    console.log(JSON.stringify(result, null, 2));
+    return result.status.startsWith('refused') || result.status === 'failed' ? 1 : 0;
+  }
+
+  if (!command && flags.verify === true && typeof flags.action === 'string') {
+    return runVerifyActionCommand({
+      cwd: positional[0] ? join(process.cwd(), positional[0]) : process.cwd(),
+      actionId: flags.action,
+    });
+  }
+
+  if (!command && (isAgentMode || flags.verify === true || wantsJson || wantsJsonl || wantsStrict)) {
+    const guardedExitCode = await guardEarlyVerifyScan({ flags, positional, wantsStrict });
+    if (guardedExitCode !== undefined) {
+      return guardedExitCode;
+    }
+
+    const deferMachineOutput = wantsJson || wantsJsonl;
+    const scanResult = await runScanCommand(flags, positional, { deferMachineOutput });
+
+    if ((wantsJson || wantsJsonl) && !scanResult.artifacts) {
+      console.error('VibeRaven could not produce machine output because scan artifacts were not written.');
+      return 3;
+    }
+
+    const gateResult =
+      scanResult.artifacts && (wantsJson || wantsJsonl || wantsStrict)
+        ? (JSON.parse(await readFile(scanResult.artifacts.gateResultPath, 'utf8')) as GateResult)
+        : undefined;
+    const strictExitCode =
+      wantsStrict && gateResult
+        ? exitCodeForStrictGate(gateResult, { failOnWarnings: flags.strict === 'warning' })
+        : scanResult.exitCode;
+
+    if (wantsJson && gateResult) {
+      process.stdout.write(renderGateResultJson(gateResult));
+      return strictExitCode;
+    }
+
+    if (wantsJsonl && gateResult) {
+      process.stdout.write(renderJsonlEvents(gateResult));
+      return strictExitCode;
+    }
+
+    if (wantsStrict && gateResult) {
+      return strictExitCode;
+    }
+
+    return scanResult.exitCode;
+  }
+
+  if (!command) {
+    const mode = resolveDefaultEntrypointMode({
+      stdinIsTTY: Boolean(process.stdin.isTTY),
+      stdoutIsTTY: Boolean(process.stdout.isTTY),
+      env: process.env
+    });
+
+    if (mode === 'local-ui') {
+      const cwd = positional[0] ? join(process.cwd(), positional[0]) : process.cwd();
+      const handle = await startLocalUiServer({ cwd });
+      console.log(`VibeRaven local UI: ${handle.url}`);
+      await waitForServerShutdown();
+      await handle.close();
+      return 0;
+    }
+
+    if (mode === 'interactive') {
+      await runInteractiveSession();
+      return 0;
+    }
+
+    const scanResult = await runScanCommand({ 'agent-mode': true }, positional);
+    return scanResult.exitCode;
+  }
+
+
+
+  switch (command) {
+
+    case 'tui':
+
+    case 'interactive':
+
+      await runInteractiveSession();
+
+      return 0;
+
+    case 'ui': {
+      const cwd = positional[0] ? join(process.cwd(), positional[0]) : process.cwd();
+      const handle = await startLocalUiServer({ cwd });
+      console.log(`VibeRaven local UI: ${handle.url}`);
+      await waitForServerShutdown();
+      await handle.close();
+      return 0;
+    }
+
+    case 'login':
+
+      await cmdLogin(flags);
+
+      return 0;
+
+    case 'logout':
+
+      await cmdLogout();
+
+      return 0;
+
+    case 'status':
+
+      return cmdStatus(flags, positional);
+
+    case 'actions':
+      return runActionsCommand({
+        cwd: positional[0] ? join(process.cwd(), positional[0]) : process.cwd(),
+        json: Boolean(flags.json),
+      });
+
+    case 'preview':
+      return runPreviewCommand({
+        cwd: positional[0] ? join(process.cwd(), positional[0]) : process.cwd(),
+        agentMode: flags['agent-mode'] === true,
+        json: Boolean(flags.json),
+      });
+
+    case 'next':
+
+      return runNextCommand({
+        json: Boolean(flags.json),
+        cwd: positional[0] ? join(process.cwd(), positional[0]) : process.cwd()
+      });
+
+    case 'guide': {
+      const provider = positional[0];
+      if (!provider) {
+        console.error('Usage: viberaven guide <provider> [--step N] [--json]');
+        return 1;
+      }
+      const stepRaw = flags.step;
+      const step = typeof stepRaw === 'string' ? Number.parseInt(stepRaw, 10) : undefined;
+      return runGuideCommand({
+        provider,
+        step: Number.isFinite(step) ? step : undefined,
+        json: Boolean(flags.json)
+      });
+    }
+
+    case 'open':
+      return runOpenCommand({
+        target: positional[0],
+        cwd: process.cwd()
+      });
+
+    case 'connect':
+
+      return cmdConnect(flags);
+
+    case 'watch':
+
+      return cmdWatch(flags);
+
+    case 'scan': {
+
+      const scanResult = await runScanCommand(flags, positional);
+      return scanResult.exitCode;
+    }
+
+    case 'report':
+
+      return cmdReport(flags, positional);
+
+    case 'prompt':
+
+      return cmdPrompt(flags, positional);
+
+    case 'stack':
+
+      return cmdStack(positional);
+
+    case 'provider-verify':
+
+      return cmdProviderVerify(flags, positional);
+
+    case 'init': {
+      const cwd = positional[0] ? join(process.cwd(), positional[0]) : process.cwd();
+      const agents = typeof flags.agents === 'string' ? flags.agents : undefined;
+      return runInitCommand({
+        cwd,
+        agents,
+        dryRun: flags['dry-run'] === true,
+      });
+    }
+
+    case 'doctor':
+      if (flags.agents !== true) {
+        console.error('Usage: viberaven doctor --agents [path]');
+        return 1;
+      }
+      return runDoctorAgentsCommand({
+        cwd: positional[0] ? join(process.cwd(), positional[0]) : process.cwd(),
+      });
+
+    case 'validate-npm-package':
+      return runValidateNpmPackageCommand({
+        names: positional,
+        json: Boolean(flags.json),
+      });
+
+    case 'audit':
+      if (flags['vercel-supabase'] !== true) {
+        console.error('Usage: viberaven audit --vercel-supabase [--json] [path]');
+        return 1;
+      }
+      return runAuditCommand({
+        cwd: positional[0] ? join(process.cwd(), positional[0]) : process.cwd(),
+        json: Boolean(flags.json),
+      });
+
+    default:
+
+      console.error(`Unknown command: ${command}`);
+
+      printHelp();
+
+      return 1;
+
+  }
+
+}
+
+
+
+if (require.main === module) {
+
+  main()
+
+    .then((code) => {
+
+      if (code !== 0) {
+
+        process.exitCode = code;
+
+      }
+
+    })
+
+    .catch((error) => {
+
+      console.error(error instanceof Error ? error.message : String(error));
+
+      process.exitCode = 1;
+
+    });
+
 }
