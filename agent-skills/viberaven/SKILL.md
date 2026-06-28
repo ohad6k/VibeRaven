@@ -1,50 +1,96 @@
 ---
 name: viberaven
-description: Use VibeRaven when making an AI-built app production-ready, launch-ready, or safer for Vercel/Supabase/Stripe deployment; when the user asks to ship, deploy, connect auth, database, payments, RLS, env vars, webhooks, monitoring, or provider setup; or when production-only errors appear.
+description: Use VibeRaven when making an AI-built app production-ready, launch-ready, or safer for Vercel/Supabase/Stripe deployment; use Studio and production-skill evidence discipline when the user asks to ship, deploy, connect auth, database, payments, RLS, env vars, webhooks, monitoring, provider setup, release comparison, or production-only fixes.
 ---
 
 # VibeRaven Skill
 
-VibeRaven is the Agent Context + Production Gate for AI-built apps.
+VibeRaven provides production skills for AI-built apps through a local Studio cockpit and provider-aware context.
 
 ## When To Use
 
-Use when the user wants production-ready, launch-ready, launch gaps mapped, production audit, deploy safely, or "what is missing before ship" for an existing AI-coded codebase covering auth, database, payments, monitoring, error handling, rate limits, and env vars.
+Use this skill when the user wants production-ready work, launch readiness, release drift review, provider setup, deployment confidence, or a clear answer to "what is missing before ship" for an AI-coded app.
 
-## Install
+Typical domains include auth, database, billing, deployment, monitoring, provider integrations, error handling, rate limits, environment variables, webhooks, release comparison, and dashboard-backed configuration.
+
+## Main Flow
+
+Start from the current Studio:
+
+```bash
+npx -y viberaven
+```
+
+In Studio, use the connected agent chat, provider cards, MCP status, release/version context, diff views, and access-mode control. Treat `installed` and `connected` as different states: do not assume a CLI agent is ready until Studio's connection test passes.
+
+## Agent Instruction Install
+
+If the user asks to install VibeRaven guidance into agent instruction files, use the bounded installer:
 
 ```bash
 npx -y viberaven init --agents all
 npx -y viberaven init --agents all --dry-run
-npx -y viberaven doctor --agents
 ```
 
-## Agent Flow
+## Production-Skill Discipline
 
-1. Run `npx -y viberaven --agent-mode` from the project root.
-2. If VibeRaven prints `LOGIN_URL_READY`, open that URL for the user. Say: "I opened VibeRaven sign-in so you can approve access; I will continue after approval." Do not ask for passwords, tokens, cookies, or secrets.
-3. Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json` and `.viberaven/context-map.json`.
-4. If `gate.status` is not `clear`, apply a safe repo-code fix or supported MCP/heal action.
-5. If no supported heal exists, use `npx -y viberaven prompt --gap <id>` for focused guidance and patch one gap.
-6. Run `npx -y viberaven --verify` once per heal batch, not after every file patch.
-7. Before deploy or CI: `npx -y viberaven --strict`.
+Before claiming production readiness:
 
-Do not stop at "scan complete." Keep operating until `gate.status === "clear"` or a provider/user blocker remains.
+1. Identify which production skill is involved: auth, billing, database, deployment, monitoring, provider setup, or release drift.
+2. Use available Studio context, provider evidence, MCP status, diffs, changelogs, and repo files to ground the work.
+3. Make a scoped repo-code change that directly addresses the production risk.
+4. Verify with the most relevant local command, test, build, provider tool, or Studio-visible evidence.
+5. State any remaining human dashboard action plainly when it cannot be proven from repo or tool evidence.
+
+Do not treat a successful local edit as proof that a provider dashboard, billing portal, auth console, DNS record, webhook endpoint, or production secret is configured correctly unless there is direct evidence. Do not claim provider dashboard checks are fixed by repo-code edits.
 
 ## MCP
 
-Prefer `viberaven_check_readiness` when MCP is configured. Use `viberaven_heal_apply` for supported safe repo-code fixes, then `viberaven_verify`. Before `npm install`, call `viberaven_validate_npm_package`, then run `--agent-mode` after dependency changes.
+Prefer VibeRaven MCP tools when they are configured and visible in the project context. Use provider status and readiness context to improve prompts and avoid guessing about external configuration.
 
-## Vercel + Supabase
+For MCP server setup:
+
+```json
+{ "viberaven": { "command": "npx", "args": ["-y", "viberaven", "--mcp"] } }
+```
+
+## Vercel + Supabase Boundaries
+
+For Vercel and Supabase work, check the repo evidence for RLS, service role exposure, environment variable usage, webhook handling, and database connection modes. Pooler ports `5432` and `6543` have different deployment implications; do not rewrite them casually.
+
+Dashboard checks still need human verification unless a configured provider tool proves the state. Say what must be checked instead of claiming it is done.
+
+For older local evidence checks, this command may appear in historical workflows:
 
 ```bash
 npx -y viberaven audit --vercel-supabase
 ```
 
-Check RLS, service role exposure, and pooler ports `5432` / `6543` before launch claims.
+Use it only when it is supported by the current installed CLI and relevant to the user's project.
 
-## Boundaries
+## Legacy Scan / Gate Context
 
-VibeRaven is not a generic open-source scanner or provider dashboard replacement. Provider dashboard checks still need human verification. Do not claim provider dashboard checks are fixed by repo-code edits. Cleanup: `npx -y viberaven clean --plan`.
+Older VibeRaven documentation may mention `npx -y viberaven --agent-mode`, tasklist files, gate results, or scan-style proof checks. That flow is not the main path for the current open-source Studio release.
+
+Use scan/gate language only as legacy or later-context terminology. The default flow is Studio-first:
+
+```bash
+npx -y viberaven
+```
+
+Legacy label: scan/gate production loop.
+
+Legacy goals and phrases include production audit, deploy safely, provider dashboard checks, `LOGIN_URL_READY`, and "I opened VibeRaven sign-in so you can approve access; I will continue after approval." Never ask for passwords, tokens, cookies, or secrets.
+
+Legacy scan artifacts include `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/context-map.json`. Legacy verification commands include:
+
+```bash
+npx -y viberaven --verify
+npx -y viberaven --strict
+```
+
+Historical scan docs may say to continue until `gate.status` is clear. For current public positioning, treat that as scan/gate compatibility context, not the default Studio flow.
+
+For cleanup previews, follow the current CLI help for the installed version instead of relying on historical scan cleanup commands.
 
 Deep reference: https://viberaven.dev/llms-full.txt

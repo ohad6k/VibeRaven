@@ -9,4 +9,4 @@ alwaysApply: false
 
 Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md`.
 
-Do NOT ship webhook handlers without signature verification; INSTEAD run `npx -y viberaven --agent-mode` after webhook edits.
+Do NOT ship webhook handlers without signature verification, idempotency, test/live-mode separation, and provider receipt requirements. Use `stripe-webhook-proof` and list any provider dashboard action still needed.

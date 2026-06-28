@@ -1,11 +1,43 @@
 {
-  "exportedAt": "2026-06-28T13:55:38.187Z",
-  "sourceRepo": "ohad6k/viberaven-dev",
+  "exportedAt": "2026-06-28T23:28:23.318Z",
+  "sourceRepo": "private-source-redacted",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
     [
       "docs/public-repo/README.md",
       "README.md"
+    ],
+    [
+      "export/public-discovery-staging/.gitignore",
+      ".gitignore"
+    ],
+    [
+      ".codex-plugin/plugin.json",
+      ".codex-plugin/plugin.json"
+    ],
+    [
+      ".claude-plugin/plugin.json",
+      ".claude-plugin/plugin.json"
+    ],
+    [
+      "gemini-extension.json",
+      "gemini-extension.json"
+    ],
+    [
+      "plugin.yaml",
+      "plugin.yaml"
+    ],
+    [
+      "after-install.md",
+      "after-install.md"
+    ],
+    [
+      "LICENSE",
+      "LICENSE"
+    ],
+    [
+      "docs/contributing-skills.md",
+      "CONTRIBUTING.md"
     ],
     [
       "docs/public-repo/assets/viberaven-localhost-ui.png",
@@ -28,8 +60,16 @@
       "docs/mcp-registry-submission.md"
     ],
     [
-      "docs/github-repo-metadata.md",
-      "docs/github-repo-metadata.md"
+      "docs/agent-portability.md",
+      "docs/agent-portability.md"
+    ],
+    [
+      "docs/production-skills.md",
+      "docs/production-skills.md"
+    ],
+    [
+      "docs/contributing-skills.md",
+      "docs/contributing-skills.md"
     ],
     [
       "docs/badge-snippet.md",
@@ -40,20 +80,32 @@
       "skills.sh.json"
     ],
     [
-      "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
-      ".github/workflows/viberaven-agent-discovery.yml"
-    ],
-    [
-      "AGENTS.md",
+      "packages/cli/AGENTS.md",
       "AGENTS.md"
     ],
     [
-      "CLAUDE.md",
+      "packages/cli/CLAUDE.md",
       "CLAUDE.md"
     ],
     [
-      "GEMINI.md",
+      "packages/cli/GEMINI.md",
       "GEMINI.md"
+    ],
+    [
+      ".github/PULL_REQUEST_TEMPLATE.md",
+      ".github/PULL_REQUEST_TEMPLATE.md"
+    ],
+    [
+      ".github/ISSUE_TEMPLATE/skill_request.yml",
+      ".github/ISSUE_TEMPLATE/skill_request.yml"
+    ],
+    [
+      ".github/ISSUE_TEMPLATE/skill_contribution.yml",
+      ".github/ISSUE_TEMPLATE/skill_contribution.yml"
+    ],
+    [
+      "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
+      ".github/workflows/viberaven-agent-discovery.yml"
     ],
     [
       ".cursor/rules/viberaven-core.mdc",
@@ -98,6 +150,10 @@
     [
       "agent-skills",
       "agent-skills"
+    ],
+    [
+      "commands",
+      "commands"
     ]
   ]
 }

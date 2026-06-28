@@ -1,0 +1,45 @@
+name: Production Skill Request
+description: Request a production skill that would prevent a real launch failure.
+title: "[Skill request]: "
+labels:
+  - artifact:skill
+  - triage
+  - help wanted
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request one public-safe production skill. Do not include secrets, customer data, live provider IDs, or private screenshots.
+  - type: input
+    id: failure-prevented
+    attributes:
+      label: Failure prevented
+      description: What production mistake should this skill help an agent avoid?
+      placeholder: "Example: claiming Stripe webhooks work without signature verification evidence"
+    validations:
+      required: true
+  - type: textarea
+    id: repo-signals
+    attributes:
+      label: Repo signals
+      description: What files, config, commands, tests, or diffs should the agent inspect?
+      placeholder: "Example: webhook route handlers, env examples, package scripts, release diff"
+    validations:
+      required: true
+  - type: textarea
+    id: provider-human-boundary
+    attributes:
+      label: Provider or human boundary
+      description: What dashboard state or external account setting requires human verification?
+      placeholder: "Example: live webhook destination must be checked in the provider dashboard"
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: This request includes no secrets, customer data, live provider IDs, or private screenshots.
+          required: true
+        - label: This request can be discussed in a public open-source repository.
+          required: true

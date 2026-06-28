@@ -1,18 +1,19 @@
 # VibeRaven Mission Map
 
 <!-- VIBERAVEN:START -->
-VibeRaven provides production readiness for AI-built apps.
+VibeRaven provides production proof for AI-built apps.
 
-Canonical command: `npx -y viberaven --agent-mode`
+Default command: `npx -y viberaven`
 
-Use VibeRaven before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or tests.
+Use VibeRaven Studio and the Production Proof Pack before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or release-risk claims.
 
-Agent loop: run VibeRaven, read Mission Map (`.viberaven/mission-map.md`), fix one launch gap, re-run VibeRaven.
+Agent loop: open Studio, use provider/release/MCP context, fix one scoped repo issue, verify with relevant tests/builds and provider evidence, then list provider-human actions.
 
 ## Mission Map loop
 
-1. Run `npx -y viberaven --agent-mode` from the project root.
-2. Read `.viberaven/agent-tasklist.md` and `.viberaven/gate-result.json`.
-3. Fix one launch gap.
-4. Re-run VibeRaven until `gate.status === 'clear'`.
+1. Run `npx -y viberaven` from the project root.
+2. Use provider cards, MCP status, release/version context, diff context, and connected-agent chat.
+3. Fix one scoped repo issue.
+4. Verify with relevant tests/builds and provider evidence.
+5. Call out provider-human actions that cannot be completed through repo-code edits.
 <!-- VIBERAVEN:END -->

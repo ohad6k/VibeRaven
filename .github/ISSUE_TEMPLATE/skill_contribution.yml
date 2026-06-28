@@ -1,0 +1,59 @@
+name: Production Skill Contribution
+description: Propose or submit one public-safe production skill.
+title: "[Skill contribution]: "
+labels:
+  - artifact:skill
+  - triage
+  - help wanted
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for one skill folder under `agent-skills/`. The folder name must match `name:` in `SKILL.md`.
+  - type: input
+    id: skill-name
+    attributes:
+      label: Skill name
+      description: The folder name and `name:` value.
+      placeholder: "stripe-webhook-proof"
+    validations:
+      required: true
+  - type: input
+    id: failure-prevented
+    attributes:
+      label: Failure prevented
+      description: What production mistake does this skill prevent?
+    validations:
+      required: true
+  - type: textarea
+    id: repo-signals
+    attributes:
+      label: Repo signals
+      description: What files, config, commands, tests, or diffs does the skill tell the agent to inspect?
+    validations:
+      required: true
+  - type: textarea
+    id: concrete-checks
+    attributes:
+      label: Concrete Checks
+      description: What concrete checks does the skill include?
+    validations:
+      required: true
+  - type: textarea
+    id: provider-human-boundary
+    attributes:
+      label: Provider or human boundary
+      description: What dashboard state or external account setting does the skill route to a human?
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: The contribution includes no secrets, customer data, live provider IDs, or private screenshots.
+          required: true
+        - label: The contribution is public-repo-safe.
+          required: true
+        - label: The skill folder name matches `name:` in `SKILL.md`.
+          required: true

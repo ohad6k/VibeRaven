@@ -1,0 +1,20 @@
+name: viberaven-production-proof-pack
+version: 1.2.4
+description: VibeRaven Production Proof Pack for AI-built apps, packaged for agents that support plugin-style skill bundles.
+author: VibeRaven
+provides_commands:
+  - viberaven-help
+  - viberaven-proof
+  - viberaven-launch
+  - viberaven-human-actions
+provides_skills:
+  - viberaven
+  - supabase-rls-proof
+  - stripe-webhook-proof
+  - vercel-env-drift
+  - clerk-callback-drift
+  - sentry-proof-of-signal
+  - release-diff-risk
+  - provider-human-actions
+  - launch-receipts
+  - do-not-guess-production

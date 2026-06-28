@@ -1,0 +1,29 @@
+{
+  "name": "viberaven-production-proof-pack",
+  "version": "1.2.4",
+  "description": "Production proof skills for AI-built apps: RLS, webhooks, env drift, auth callbacks, monitoring signal, release risk, and launch receipts.",
+  "author": {
+    "name": "VibeRaven",
+    "url": "https://github.com/ohad6k/VibeRaven"
+  },
+  "homepage": "https://github.com/ohad6k/VibeRaven",
+  "repository": "https://github.com/ohad6k/VibeRaven",
+  "license": "MIT",
+  "keywords": ["production", "ai-built-apps", "supabase", "stripe", "vercel", "sentry", "skills"],
+  "skills": "./agent-skills/",
+  "interface": {
+    "displayName": "VibeRaven Production Proof Pack",
+    "shortDescription": "Make agents prove production claims before launch.",
+    "longDescription": "A plugin-style skill pack for AI coding agents that need evidence for RLS, webhooks, env vars, callbacks, monitoring, release diffs, and launch readiness.",
+    "developerName": "VibeRaven",
+    "category": "Developer Tools",
+    "capabilities": ["Instructions", "Skills", "Production proof"],
+    "websiteURL": "https://github.com/ohad6k/VibeRaven",
+    "defaultPrompt": [
+      "Use VibeRaven Production Proof Pack before calling this app launch-ready.",
+      "Run the launch receipts skill and list missing provider evidence.",
+      "Review this release diff for auth, billing, database, env, monitoring, and provider risk."
+    ],
+    "brandColor": "#0f766e"
+  }
+}

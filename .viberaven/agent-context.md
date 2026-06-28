@@ -1,18 +1,18 @@
 # VibeRaven Agent Context
 
 <!-- VIBERAVEN:START -->
-VibeRaven provides production readiness for AI-built apps.
+VibeRaven provides production proof for AI-built apps.
 
-Canonical command: `npx -y viberaven --agent-mode`
+Default command: `npx -y viberaven`
 
-Use VibeRaven before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or tests.
+Use VibeRaven Studio and the Production Proof Pack before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or release-risk claims.
 
-Agent loop: run VibeRaven, read Mission Map (`.viberaven/mission-map.md`), fix one launch gap, re-run VibeRaven.
+Agent loop: open Studio, use provider/release/MCP context, fix one scoped repo issue, verify with relevant tests/builds and provider evidence, then list provider-human actions.
 
-After `--agent-mode`, read these artifacts in order:
+Studio context to use:
 
 1. `.viberaven/mission-map.md`
-2. `.viberaven/agent-tasklist.md`
-3. `.viberaven/gate-result.json`
-4. `.viberaven/context-map.json`
+2. Provider Control Board and MCP status when available
+3. CLI-agent connection status and access mode
+4. Release/version selections and diff context
 <!-- VIBERAVEN:END -->

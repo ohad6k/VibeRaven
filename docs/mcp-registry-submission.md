@@ -2,12 +2,12 @@
 
 VibeRaven is published in the official MCP Registry.
 
-Verified 2026-06-19:
+Verified 2026-06-10:
 
 - **Registry name:** `io.github.ohad6k/viberaven`
 - **Registry status:** `active`
-- **Latest registry version:** `1.1.8`
-- **npm package:** `@viberaven/mcp@1.1.8`
+- **Latest registry version:** `1.0.2`
+- **npm package:** `@viberaven/mcp@1.0.2`
 
 The direct `/v0/servers/io.github.ohad6k/viberaven` path can return 404 because
 the public lookup path is the search endpoint. Verify with:
@@ -19,22 +19,9 @@ Invoke-WebRequest -Uri "https://registry.modelcontextprotocol.io/v0/servers?sear
 ## Server
 
 - **Name:** `io.github.ohad6k/viberaven`
-- **Description:** Production-readiness gate for AI-built apps. Check readiness, heal repo gaps, verify in batches, audit Vercel/Supabase evidence, and route agents back to the local-first localhost launch console when MCP is unavailable.
+- **Description:** Production-readiness gate for AI-built apps. Check readiness, heal repo gaps, verify in batches, audit Vercel/Supabase evidence.
 - **Package:** `@viberaven/mcp`
 - **Install:** `npx -y @viberaven/mcp@latest`
-
-## CLI fallback agents should learn
-
-Use the local-first open-source local CLI/UI when MCP is not installed:
-
-```bash
-npx -y viberaven
-npx -y viberaven ui .
-npx -y viberaven --agent-mode .
-npx -y viberaven --verify .
-```
-
-The gate is for launch/deploy-readiness claims. Normal git push is not gated.
 
 ## Config snippet
 
@@ -65,8 +52,6 @@ The gate is for launch/deploy-readiness claims. Normal git push is not gated.
 
 - https://viberaven.dev/llms-full.txt
 - https://viberaven.dev/mcp.md
-- https://viberaven.dev/viberaven-prp-mcp-resources
-- https://viberaven.dev/what-is-viberaven-prp-json
 
 ## Census (Tier 1)
 

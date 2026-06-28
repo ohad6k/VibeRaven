@@ -1,0 +1,10 @@
+{
+  "name": "viberaven-production-proof-pack",
+  "version": "1.2.4",
+  "description": "VibeRaven Production Proof Pack for AI-built apps: RLS, webhooks, env drift, auth callbacks, monitoring signal, release risk, and launch receipts.",
+  "author": {
+    "name": "VibeRaven",
+    "url": "https://github.com/ohad6k/VibeRaven"
+  },
+  "skills": "./agent-skills/"
+}

@@ -1,28 +1,56 @@
 # VibeRaven Agent Skills
 
-This directory contains the public VibeRaven skill for AI coding agents.
+This directory contains the public VibeRaven skill library for AI coding agents. It is designed to be browsed, installed, shared, and used as the front door for VibeRaven.
 
-After this directory is published in the public VibeRaven GitHub repository, users can install it with the Agent Skills CLI:
+The library is organized around production skills for AI-built apps: auth, billing, database, deployment, monitoring, provider setup, and release drift. Its job is to teach agents to use evidence, provider context, and human-action boundaries while they work, not to make unsupported "production ready" claims.
+
+Install the Studio/context skill with the Agent Skills CLI:
 
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill viberaven
 ```
 
-The skill teaches agents to use VibeRaven as the Agent Context + Production Gate:
+The existing `agent-skills/viberaven` skill is the Studio and context skill. It points agents toward the current local Studio:
 
 ```bash
-npx -y viberaven --agent-mode
+npx -y viberaven
 ```
 
-Agents read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/context-map.json`, fix one repo-code gap, then run:
+Agents should use Studio context, provider evidence, MCP status when available, and release comparison before changing production-sensitive code. Provider dashboard checks still need human verification when they cannot be proven from repo or tool evidence.
 
-```bash
-npx -y viberaven --verify
-npx -y viberaven --strict
-```
+## Plugin-Style Pack
 
-For Vercel + Supabase launch checks:
+The same skills are packaged as the **VibeRaven Production Proof Pack** for hosts that support plugin-style skill bundles:
 
-```bash
-npx -y viberaven audit --vercel-supabase
-```
+- Codex: `.codex-plugin/plugin.json`
+- Claude Code: `.claude-plugin/plugin.json`
+- Gemini CLI: `gemini-extension.json`
+- Generic plugin hosts: `plugin.yaml`
+- Command prompts: `commands/viberaven-*.toml`
+
+See `docs/agent-portability.md` for the portability matrix. Adapter files stay thin; `agent-skills/*/SKILL.md` remains the canonical source.
+
+## Production Skills Pack
+
+The first production skills library includes:
+
+- `supabase-rls-proof`: prove tenants cannot read each other before launch.
+- `stripe-webhook-proof`: prove billing events are signed, mode-aware, and idempotent before money moves.
+- `vercel-env-drift`: prove local, preview, and production env assumptions match before deploy.
+- `clerk-callback-drift`: prove auth redirects survive localhost, preview, and production URLs.
+- `sentry-proof-of-signal`: prove errors actually reach Sentry instead of stopping at "SDK installed."
+- `release-diff-risk`: prove a release diff has been reviewed for provider, auth, billing, env, data, and monitoring risk.
+- `provider-human-actions`: separate code fixes from dashboard steps that require a human or connected provider tool.
+- `launch-receipts`: collect the receipts needed before calling an AI-built app launch-ready.
+- `do-not-guess-production`: force evidence labels and escalate unknown provider state instead of guessing.
+
+Each production skill includes concrete checks, failure modes, acceptable proof, provider references, and a shared output contract:
+
+1. evidence found
+2. evidence missing
+3. repo-code fixes or none
+4. provider or human action needed
+
+See `docs/production-skills.md` for the browsable landing doc.
+
+Older scan/gate commands may appear in historical docs, but they are not the default public flow for the current open-source release.
