@@ -1,6 +1,6 @@
 # Agent Portability
 
-VibeRaven Production Proof Pack is an agent-portable skill distribution. The canonical skills live in `agent-skills/`; adapters only point agents at those skills or wrap them as command prompts.
+VibeRaven Production Skills is an agent-portable skill distribution. The canonical skills live in `agent-skills/`; adapters only point agents at those skills or wrap them as command prompts.
 
 ## Supported Surfaces
 
@@ -18,22 +18,22 @@ VibeRaven Production Proof Pack is an agent-portable skill distribution. The can
 ## Commands
 
 - `/viberaven-help`: show the pack and output contract.
-- `/viberaven-proof`: run a production proof pass across provider risks.
-- `/viberaven-launch`: collect launch receipts before saying ready.
+- `/viberaven-check`: run a production check across provider risks.
+- `/viberaven-launch`: run launch readiness before saying ready.
 - `/viberaven-human-actions`: separate repo-code fixes from provider dashboard work.
 
 ## Canonical Skill Inventory
 
 - `viberaven`
-- `supabase-rls-proof`
-- `stripe-webhook-proof`
-- `vercel-env-drift`
-- `clerk-callback-drift`
-- `sentry-proof-of-signal`
-- `release-diff-risk`
-- `provider-human-actions`
-- `launch-receipts`
-- `do-not-guess-production`
+- `supabase-rls`
+- `stripe-webhooks`
+- `vercel-env-sync`
+- `clerk-callbacks`
+- `sentry-signal`
+- `release-review`
+- `provider-actions`
+- `launch-readiness`
+- `evidence-first`
 
 ## Adapter Rules
 

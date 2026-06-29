@@ -6,15 +6,15 @@
       "title": "Production",
       "description": "Skills for taking AI-built apps from local demo to launch-ready production.",
       "skills": [
-        "clerk-callback-drift",
-        "do-not-guess-production",
-        "launch-receipts",
-        "provider-human-actions",
-        "release-diff-risk",
-        "sentry-proof-of-signal",
-        "stripe-webhook-proof",
-        "supabase-rls-proof",
-        "vercel-env-drift",
+        "clerk-callbacks",
+        "evidence-first",
+        "launch-readiness",
+        "provider-actions",
+        "release-review",
+        "sentry-signal",
+        "stripe-webhooks",
+        "supabase-rls",
+        "vercel-env-sync",
         "viberaven"
       ]
     }

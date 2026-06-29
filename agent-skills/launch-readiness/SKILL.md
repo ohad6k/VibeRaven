@@ -1,9 +1,9 @@
 ---
-name: launch-receipts
+name: launch-readiness
 description: Collect evidence before saying an AI-built app is ready to launch.
 ---
 
-# Launch Receipts
+# Launch Readiness
 
 ## When To Use
 
@@ -33,14 +33,14 @@ Use this when the user asks whether an AI-built app is launch-ready, production-
 - Ignoring preview-to-production drift in Vercel env vars, Clerk redirect URLs, Stripe endpoints, Supabase policies, or Sentry projects.
 - Hiding uncertainty in vague phrases instead of naming the exact receipt needed to close each launch gap.
 
-## Acceptable Proof
+## Acceptable Evidence
 
 - Fresh command output for the changed app surface, such as typecheck, tests, build, migration verification, or smoke checks.
 - Provider receipts for each touched external system, including project/environment, setting path, expected value, and evidence source.
 - A release-diff risk summary that calls out migrations, env changes, provider SDK changes, rollback limits, and dashboard actions.
 - A final launch classification: ready, ready after named human/provider actions, or not ready because required evidence is missing.
 
-## What Must Be Proven
+## What Must Be Verified
 
 - The app has fresh local verification evidence for the changed surfaces.
 - Auth, database, billing, env, deployment, and monitoring risks have been checked when applicable.

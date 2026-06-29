@@ -1,9 +1,9 @@
 ---
-name: do-not-guess-production
+name: evidence-first
 description: Force evidence-based production claims and escalate unknown provider state.
 ---
 
-# Do Not Guess Production
+# Evidence First
 
 ## When To Use
 
@@ -34,14 +34,14 @@ Use this when an agent is about to claim production readiness, provider setup, l
 - Inferring secret values, live/test mode, callback URLs, webhook registration, RLS status, or alert routing without evidence.
 - Asking for sensitive values in chat instead of requesting redacted receipts, dashboard screenshots, exports, or connected provider evidence.
 
-## Acceptable Proof
+## Acceptable Evidence
 
 - Every production claim is labeled as repo evidence, command output, provider/tool evidence, human receipt, or unknown.
 - Unknowns are converted into exact evidence requests that name the provider, project/environment, setting path, and expected proof.
 - Repo fixes are phrased as repo fixes, while dashboard changes are phrased as pending or verified external actions.
 - Final output includes no secrets, no requests for secrets, and no unsupported launch-ready language.
 
-## What Must Be Proven
+## What Must Be Verified
 
 - Every production claim has repo evidence, command output, provider evidence, or an explicit uncertainty label.
 - Unknown provider state is escalated instead of guessed.

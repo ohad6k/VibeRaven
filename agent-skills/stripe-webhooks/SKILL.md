@@ -1,9 +1,9 @@
 ---
-name: stripe-webhook-proof
+name: stripe-webhooks
 description: Verify Stripe webhook signature handling, test/live separation, and provider dashboard evidence.
 ---
 
-# Stripe Webhook Proof
+# Stripe Webhooks
 
 ## When To Use
 
@@ -42,7 +42,7 @@ Use this when a repo accepts Stripe events, updates billing state, gates paid fe
 - Client code receives `STRIPE_SECRET_KEY` or webhook secrets instead of only publishable keys.
 - The dashboard endpoint URL, subscribed events, or live/test mode is not proven, but the agent says webhooks are ready.
 
-## Acceptable Proof
+## Acceptable Evidence
 
 - Code evidence of raw-body signature verification using the official Stripe library or an equivalent verified library path.
 - A failing-path test or handler branch that rejects missing/invalid `Stripe-Signature` or `STRIPE_WEBHOOK_SECRET`.
@@ -50,7 +50,7 @@ Use this when a repo accepts Stripe events, updates billing state, gates paid fe
 - Environment examples showing separate server secret key, publishable key, and webhook secret names.
 - Stripe Dashboard or CLI receipt showing the correct endpoint URL, subscribed event types, signing secret source, and live/test mode.
 
-## What Must Be Proven
+## What Must Be Verified
 
 - Webhook handlers verify Stripe signatures against the raw request body.
 - Billing mutations are idempotent for repeated Stripe events.

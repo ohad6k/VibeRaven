@@ -1,9 +1,9 @@
 ---
-name: supabase-rls-proof
+name: supabase-rls
 description: Verify Supabase row-level security evidence before claiming an AI-built app is production-ready.
 ---
 
-# Supabase RLS Proof
+# Supabase RLS
 
 ## When To Use
 
@@ -42,7 +42,7 @@ Use this when a repo uses Supabase and stores user-owned, tenant-owned, private,
 - A view, RPC, security-definer function, or exposed schema bypasses the policy the agent claims is protecting the data.
 - The repo treats seed data, local tests, or generated types as proof of live dashboard policy state.
 
-## Acceptable Proof
+## Acceptable Evidence
 
 - Migration SQL showing `alter table <schema>.<table> enable row level security` for each relevant table.
 - Policy SQL showing operation-specific `using` and `with check` clauses that match the app's user/tenant model.
@@ -51,7 +51,7 @@ Use this when a repo uses Supabase and stores user-owned, tenant-owned, private,
 - Provider/MCP/dashboard export confirming live production policies when repo migrations are incomplete or the dashboard was edited manually.
 - A clear "not proven" finding when live dashboard state is unknown.
 
-## What Must Be Proven
+## What Must Be Verified
 
 - RLS is enabled on every exposed user-owned or tenant-owned table.
 - Policies match the real auth model and operation semantics.

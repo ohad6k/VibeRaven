@@ -1,9 +1,9 @@
 ---
-name: release-diff-risk
+name: release-review
 description: Review release diffs for provider, auth, billing, env, and data-risk changes.
 ---
 
-# Release Diff Risk
+# Release Review
 
 ## When To Use
 
@@ -34,14 +34,14 @@ Use this when comparing versions, reviewing a release diff, explaining drift, or
 - Claiming provider dashboards are updated when the diff only changes repo files.
 - Missing env, callback URL, webhook endpoint, DNS, or monitoring changes because they are outside the changed source files.
 
-## Acceptable Proof
+## Acceptable Evidence
 
 - A fresh diff summary grouped by auth, billing, database, deployment, monitoring, and provider-dashboard risk.
 - Local verification output for changed surfaces, such as tests, typecheck, build, migration dry run, or targeted smoke checks.
 - Release notes or PR notes that name migration order, rollback constraints, env changes, and human/provider actions.
 - Provider evidence when dashboard state matters, such as exported config, connected MCP/tool context, or a human receipt.
 
-## What Must Be Proven
+## What Must Be Verified
 
 - Provider-sensitive code changes are identified and grouped by risk area.
 - Database migrations and data-shape changes are called out.

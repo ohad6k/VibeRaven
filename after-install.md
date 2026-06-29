@@ -1,4 +1,4 @@
-# VibeRaven Production Proof Pack Installed
+# VibeRaven Production Skills Installed
 
 Use the pack before an AI-built app is described as production-ready, launch-ready, or safe to deploy.
 
@@ -8,10 +8,10 @@ Start with:
 /viberaven-help
 ```
 
-Use the proof pass:
+Run a production check:
 
 ```text
-/viberaven-proof
+/viberaven-check
 ```
 
 Use the launch gate:

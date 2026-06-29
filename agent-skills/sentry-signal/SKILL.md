@@ -1,9 +1,9 @@
 ---
-name: sentry-proof-of-signal
-description: Distinguish Sentry SDK installed from proof that errors reach the project.
+name: sentry-signal
+description: Distinguish Sentry SDK installed from evidence that errors reach the project.
 ---
 
-# Sentry Proof Of Signal
+# Sentry Signal
 
 ## When To Use
 
@@ -48,7 +48,7 @@ Use this when a repo claims monitoring is ready, Sentry is installed, release he
 - A tunnel route exists but middleware blocks it, so browser events never arrive.
 - The agent says monitoring is ready without a fresh event in the Sentry project.
 
-## Acceptable Proof
+## Acceptable Evidence
 
 - Sentry init files for the app's actual runtimes plus `withSentryConfig` when source maps or build integration are expected.
 - Evidence of release and environment tags in config or deployment scripts.
@@ -56,7 +56,7 @@ Use this when a repo claims monitoring is ready, Sentry is installed, release he
 - A Sentry dashboard receipt, event ID, test error, smoke route output, or provider/MCP evidence proving current signal reaches the intended project.
 - A clear statement of which runtime is still unproven if only some runtimes have signal.
 
-## What Must Be Proven
+## What Must Be Verified
 
 - The Sentry SDK is initialized in the runtime paths the app uses.
 - DSNs and auth tokens are scoped correctly for public and server use.

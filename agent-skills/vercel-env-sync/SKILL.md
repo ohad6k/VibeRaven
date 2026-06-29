@@ -1,9 +1,9 @@
 ---
-name: vercel-env-drift
+name: vercel-env-sync
 description: Compare local, preview, and production environment assumptions before deploy.
 ---
 
-# Vercel Env Drift
+# Vercel Env Sync
 
 ## When To Use
 
@@ -42,7 +42,7 @@ Use this when a repo deploys on Vercel and environment variables, build-time con
 - A branch-specific preview variable overrides the general preview value and creates a hard-to-reproduce failure.
 - Provider dashboard values are unknown, but the agent claims env drift is resolved from repo evidence alone.
 
-## Acceptable Proof
+## Acceptable Evidence
 
 - Env inventory mapping each required variable to repo usage, example documentation, environment scope, and public/server classification.
 - Validation code or startup checks that fail fast when required env vars are missing or malformed.
@@ -50,7 +50,7 @@ Use this when a repo deploys on Vercel and environment variables, build-time con
 - Deployment receipt proving env changes were included in a new deployment.
 - A clear list of provider callbacks/webhooks that must be updated after base URL changes.
 
-## What Must Be Proven
+## What Must Be Verified
 
 - Required variables are documented or validated before runtime.
 - Preview and production URL assumptions are explicit.

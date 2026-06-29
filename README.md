@@ -5,7 +5,7 @@
 <h1 align="center">VibeRaven</h1>
 
 <p align="center">
-  <strong>Ship AI-built apps with proof, not vibes.</strong>
+  <strong>Ship AI-built apps with evidence, not vibes.</strong>
 </p>
 
 <p align="center">
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="./assets/viberaven-studio-demo.mp4">
-    <img src="./assets/viberaven-studio-demo.gif" alt="VibeRaven Studio cockpit UI with agent chat, provider board, release versions, access controls, and proof actions">
+    <img src="./assets/viberaven-studio-demo.gif" alt="VibeRaven Studio cockpit UI with agent chat, provider board, release versions, access controls, and production actions">
   </a>
 </p>
 
@@ -27,13 +27,13 @@
   <a href="./assets/viberaven-studio-demo.mp4"><strong>Open the full-quality MP4 demo</strong></a>
 </p>
 
-VibeRaven is the **VibeRaven Production Proof Pack** plus a local Studio cockpit for AI-built apps. Use it while building, fixing, reviewing releases, or preparing a launch when an agent needs provider context, release context, approval-aware chat, and evidence before it claims the work is ready.
+VibeRaven is the **VibeRaven Production Skills** plus a local Studio cockpit for AI-built apps. Use it while building, fixing, reviewing releases, or preparing a launch when an agent needs provider context, release context, approval-aware chat, and evidence before it claims the work is ready.
 
 ```bash
 npx -y viberaven
 ```
 
-The public repo is the agent discovery and installation surface: plugin-style metadata, portable slash commands, production proof skills, MCP notes, and AI-readable docs.
+The public repo is the agent discovery and installation surface: plugin-style metadata, portable slash commands, production skills, MCP notes, and AI-readable docs.
 
 ## Why It Exists
 
@@ -86,8 +86,8 @@ VibeRaven ships as a portable skill/plugin-style pack:
 Command entry points:
 
 - `/viberaven-help`: show the pack and output contract.
-- `/viberaven-proof`: run a production proof pass.
-- `/viberaven-launch`: collect launch receipts before saying ready.
+- `/viberaven-check`: run a production check.
+- `/viberaven-launch`: run launch readiness before saying ready.
 - `/viberaven-human-actions`: separate repo-code fixes from dashboard work.
 
 See [docs/agent-portability.md](./docs/agent-portability.md).
@@ -96,17 +96,17 @@ See [docs/agent-portability.md](./docs/agent-portability.md).
 
 Browse the skill library in [docs/production-skills.md](./docs/production-skills.md).
 
-| Skill | What It Forces The Agent To Prove |
+| Skill | What It Checks |
 | --- | --- |
-| `supabase-rls-proof` | RLS and database access are not guessed from app code alone. |
-| `stripe-webhook-proof` | Billing routes, signature checks, and entitlement effects are separated from Stripe dashboard state. |
-| `vercel-env-drift` | Local, preview, and production env assumptions are checked before deploy claims. |
-| `clerk-callback-drift` | Auth callback and session behavior are treated as provider-boundary work. |
-| `sentry-proof-of-signal` | Monitoring is not called ready until real signal or explicit missing evidence is documented. |
-| `release-diff-risk` | Release/version changes are compared before a risky fix is waved through. |
-| `provider-human-actions` | Dashboard-only work is not falsely marked fixed by repo edits. |
-| `launch-receipts` | Final readiness claims include receipts, gaps, and next actions. |
-| `do-not-guess-production` | Agents must say unknown when they lack production evidence. |
+| `supabase-rls` | RLS and database access are not guessed from app code alone. |
+| `stripe-webhooks` | Billing routes, signature checks, and entitlement effects are separated from Stripe dashboard state. |
+| `vercel-env-sync` | Local, preview, and production env assumptions are checked before deploy claims. |
+| `clerk-callbacks` | Auth callback and session behavior are treated as provider-boundary work. |
+| `sentry-signal` | Monitoring is not called ready until real signal or explicit missing evidence is documented. |
+| `release-review` | Release/version changes are compared before a risky fix is waved through. |
+| `provider-actions` | Dashboard-only work is not falsely marked fixed by repo edits. |
+| `launch-readiness` | Final readiness claims include receipts, gaps, and next actions. |
+| `evidence-first` | Agents must say unknown when they lack production evidence. |
 
 ## Install As A skills.sh Skill
 
@@ -135,7 +135,7 @@ Use MCP output as provider and readiness context for Studio-aware agents. The re
 - [skills.json](https://viberaven.dev/skills.json)
 - [skills.sh.json](./skills.sh.json)
 - [Production Protocol guide](https://viberaven.dev/viberaven-production-protocol-ai-built-apps.md)
-- [Example proof artifacts](./examples/proof/)
+- [Example evidence artifacts](./examples/proof/)
 
 ## Legacy Compatibility
 

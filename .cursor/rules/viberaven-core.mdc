@@ -1,5 +1,5 @@
 ---
-description: VibeRaven Studio and Production Proof Pack context
+description: VibeRaven Studio and Production Skills context
 alwaysApply: true
 ---
 
@@ -7,7 +7,7 @@ Default command: `npx -y viberaven`.
 
 Use Studio-visible provider context, MCP status, CLI-agent connection status, access mode, release/version selections, and diff context before production-sensitive edits.
 
-Use the Production Proof Pack before claiming launch readiness: prove RLS, webhooks, env vars, auth callbacks, monitoring signal, release risk, and provider-human actions.
+Use VibeRaven Production Skills before claiming launch readiness: verify RLS, webhooks, env vars, auth callbacks, monitoring signal, release risk, and provider actions.
 
 Before editing production-sensitive files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md`.
 

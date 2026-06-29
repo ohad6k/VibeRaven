@@ -15,7 +15,7 @@ body:
     attributes:
       label: Skill name
       description: The folder name and `name:` value.
-      placeholder: "stripe-webhook-proof"
+      placeholder: "stripe-webhooks"
     validations:
       required: true
   - type: input

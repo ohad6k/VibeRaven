@@ -1,9 +1,9 @@
 ---
-name: provider-human-actions
+name: provider-actions
 description: Separate repo-code fixes from provider dashboard actions that require a human.
 ---
 
-# Provider Human Actions
+# Provider Actions
 
 ## When To Use
 
@@ -35,14 +35,14 @@ Use this when a task mixes code changes with provider dashboard setup, secrets, 
 - Giving vague dashboard instructions that do not name the provider, setting path, expected value, and evidence needed.
 - Forgetting that DNS, OAuth app settings, Stripe product setup, Vercel env values, and Supabase project settings live outside the repo.
 
-## Acceptable Proof
+## Acceptable Evidence
 
 - A table or grouped list that separates repo-code fixes, provider dashboard actions, and evidence requests.
-- Human-action receipts with provider, project/environment, dashboard path, expected setting, and acceptable proof format.
+- Human-action receipts with provider, project/environment, dashboard path, expected setting, and acceptable evidence format.
 - Connected provider or MCP evidence when available, cited as evidence without exposing secrets.
 - Final wording that says exactly what was fixed in code and exactly what still requires dashboard or human action.
 
-## What Must Be Proven
+## What Must Be Verified
 
 - Repo-code fixes are separated from provider dashboard actions.
 - Secrets, tokens, cookies, passwords, and signing keys are not requested in chat.

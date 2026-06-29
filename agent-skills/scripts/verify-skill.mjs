@@ -29,15 +29,15 @@ if (missing.length > 0) {
 }
 
 const productionSkills = [
-  'supabase-rls-proof',
-  'stripe-webhook-proof',
-  'vercel-env-drift',
-  'clerk-callback-drift',
-  'sentry-proof-of-signal',
-  'release-diff-risk',
-  'provider-human-actions',
-  'launch-receipts',
-  'do-not-guess-production',
+  'supabase-rls',
+  'stripe-webhooks',
+  'vercel-env-sync',
+  'clerk-callbacks',
+  'sentry-signal',
+  'release-review',
+  'provider-actions',
+  'launch-readiness',
+  'evidence-first',
 ];
 
 const requiredProductionHeadings = [
@@ -45,8 +45,8 @@ const requiredProductionHeadings = [
   '## Repo Signals To Inspect',
   '## Concrete Checks',
   '## Failure Modes To Catch',
-  '## Acceptable Proof',
-  '## What Must Be Proven',
+  '## Acceptable Evidence',
+  '## What Must Be Verified',
   '## Human-Action Boundary',
   '## Provider References',
   '## Output',
@@ -67,23 +67,23 @@ const requiredPluginFiles = [
   'after-install.md',
   'docs/agent-portability.md',
   'commands/viberaven-help.toml',
-  'commands/viberaven-proof.toml',
+  'commands/viberaven-check.toml',
   'commands/viberaven-launch.toml',
   'commands/viberaven-human-actions.toml',
 ];
 
 const requiredPluginStrings = [
-  'VibeRaven Production Proof Pack',
+  'VibeRaven Production Skills',
   'agent-skills',
-  'supabase-rls-proof',
-  'stripe-webhook-proof',
-  'vercel-env-drift',
-  'clerk-callback-drift',
-  'sentry-proof-of-signal',
-  'release-diff-risk',
-  'provider-human-actions',
-  'launch-receipts',
-  'do-not-guess-production',
+  'supabase-rls',
+  'stripe-webhooks',
+  'vercel-env-sync',
+  'clerk-callbacks',
+  'sentry-signal',
+  'release-review',
+  'provider-actions',
+  'launch-readiness',
+  'evidence-first',
 ];
 
 const skillDirs = readdirSync(resolve('agent-skills'), { withFileTypes: true })
@@ -168,16 +168,16 @@ for (const dir of productionSkills) {
     }
   }
 
-  const acceptableProof = content.match(/## Acceptable Proof\r?\n\r?\n([\s\S]*?)(?=\r?\n## |$)/);
+  const acceptableProof = content.match(/## Acceptable Evidence\r?\n\r?\n([\s\S]*?)(?=\r?\n## |$)/);
   if (!acceptableProof) {
-    metadataErrors.push(`${skillPath} is missing an Acceptable Proof section`);
+    metadataErrors.push(`${skillPath} is missing an Acceptable Evidence section`);
   } else {
     const bulletCount = acceptableProof[1]
       .split(/\r?\n/)
       .filter((line) => line.trim().startsWith('- '))
       .length;
     if (bulletCount < 3) {
-      metadataErrors.push(`${skillPath} must include at least 3 Acceptable Proof bullets`);
+      metadataErrors.push(`${skillPath} must include at least 3 Acceptable Evidence bullets`);
     }
   }
 
@@ -209,7 +209,7 @@ for (const jsonFile of ['.codex-plugin/plugin.json', '.claude-plugin/plugin.json
     continue;
   }
   const serialized = JSON.stringify(data);
-  for (const text of ['viberaven-production-proof-pack', 'Production Proof']) {
+  for (const text of ['viberaven-production-skills', 'Production Skills']) {
     if (!serialized.includes(text)) {
       metadataErrors.push(`${absPath} is missing "${text}"`);
     }
@@ -235,11 +235,11 @@ for (const file of ['.codex-plugin/plugin.json', '.claude-plugin/plugin.json', '
     continue;
   }
   const content = readFileSync(absPath, 'utf8');
-  if (!content.includes('viberaven-production-proof-pack')) {
+  if (!content.includes('viberaven-production-skills')) {
     metadataErrors.push(`${absPath} is missing plugin pack id`);
   }
-  if (!content.includes('Production Proof')) {
-    metadataErrors.push(`${absPath} is missing Production Proof positioning`);
+  if (!content.includes('Production Skills')) {
+    metadataErrors.push(`${absPath} is missing Production Skills positioning`);
   }
 }
 
@@ -255,7 +255,7 @@ if (existsSync(pluginYaml)) {
 
 for (const file of [
   'commands/viberaven-help.toml',
-  'commands/viberaven-proof.toml',
+  'commands/viberaven-check.toml',
   'commands/viberaven-launch.toml',
   'commands/viberaven-human-actions.toml',
 ]) {

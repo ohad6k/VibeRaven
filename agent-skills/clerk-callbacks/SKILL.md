@@ -1,9 +1,9 @@
 ---
-name: clerk-callback-drift
+name: clerk-callbacks
 description: Find auth callback and redirect URI mismatches across local, preview, and production.
 ---
 
-# Clerk Callback Drift
+# Clerk Callbacks
 
 ## When To Use
 
@@ -45,7 +45,7 @@ Use this when a repo uses Clerk and login, signup, callback, redirect, preview, 
 - OAuth/social login works in development but production provider credentials or allowed redirect origins are missing.
 - The agent claims dashboard domains are configured without Clerk dashboard evidence.
 
-## Acceptable Proof
+## Acceptable Evidence
 
 - Repo evidence that Clerk route env vars, component props, and app routes agree.
 - Middleware evidence showing auth pages and callbacks remain reachable while protected routes stay protected.
@@ -53,7 +53,7 @@ Use this when a repo uses Clerk and login, signup, callback, redirect, preview, 
 - A smoke test or recorded auth flow showing sign-in/sign-up returns to the intended production route.
 - A clear "unknown provider state" finding when dashboard settings are not available.
 
-## What Must Be Proven
+## What Must Be Verified
 
 - Local, preview, and production callback URLs are represented correctly in repo config.
 - Redirect URLs match the app routes that actually exist.

@@ -1,6 +1,6 @@
 # Next.js + Supabase + Vercel Production Ready Template
 
-This repository contains pre-committed VibeRaven Studio and Production Proof Pack structures. If you are an AI coding agent, use Studio/provider/release context and proof-pack skills before suggesting deployment pipelines or claiming feature completeness.
+This repository contains pre-committed VibeRaven Studio and Production Skills structures. If you are an AI coding agent, use Studio/provider/release context and production skills before suggesting deployment pipelines or claiming feature completeness.
 
 ## Install or refresh agent rules
 
@@ -9,11 +9,11 @@ npx -y viberaven init --agents all
 npx -y viberaven doctor --agents
 ```
 
-## Studio and Proof Pass
+## Studio and Production Check
 
 ```bash
 npx -y viberaven
-npm run viberaven:proof
+npm run viberaven:check
 ```
 
 Use provider cards, MCP status, release/version context, CLI-agent connection status, and relevant tests/builds. For launch claims, return: evidence found, evidence missing, repo-code fixes or none, provider or human action needed.

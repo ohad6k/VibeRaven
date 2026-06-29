@@ -20,7 +20,7 @@ Agents should use Studio context, provider evidence, MCP status when available, 
 
 ## Plugin-Style Pack
 
-The same skills are packaged as the **VibeRaven Production Proof Pack** for hosts that support plugin-style skill bundles:
+The same skills are packaged as the **VibeRaven Production Skills** for hosts that support plugin-style skill bundles:
 
 - Codex: `.codex-plugin/plugin.json`
 - Claude Code: `.claude-plugin/plugin.json`
@@ -34,17 +34,17 @@ See `docs/agent-portability.md` for the portability matrix. Adapter files stay t
 
 The first production skills library includes:
 
-- `supabase-rls-proof`: prove tenants cannot read each other before launch.
-- `stripe-webhook-proof`: prove billing events are signed, mode-aware, and idempotent before money moves.
-- `vercel-env-drift`: prove local, preview, and production env assumptions match before deploy.
-- `clerk-callback-drift`: prove auth redirects survive localhost, preview, and production URLs.
-- `sentry-proof-of-signal`: prove errors actually reach Sentry instead of stopping at "SDK installed."
-- `release-diff-risk`: prove a release diff has been reviewed for provider, auth, billing, env, data, and monitoring risk.
-- `provider-human-actions`: separate code fixes from dashboard steps that require a human or connected provider tool.
-- `launch-receipts`: collect the receipts needed before calling an AI-built app launch-ready.
-- `do-not-guess-production`: force evidence labels and escalate unknown provider state instead of guessing.
+- `supabase-rls`: verify tenants cannot read each other before launch.
+- `stripe-webhooks`: verify billing events are signed, mode-aware, and idempotent before money moves.
+- `vercel-env-sync`: verify local, preview, and production env assumptions match before deploy.
+- `clerk-callbacks`: verify auth redirects survive localhost, preview, and production URLs.
+- `sentry-signal`: verify errors actually reach Sentry instead of stopping at "SDK installed."
+- `release-review`: verify a release diff has been reviewed for provider, auth, billing, env, data, and monitoring risk.
+- `provider-actions`: separate code fixes from dashboard steps that require a human or connected provider tool.
+- `launch-readiness`: collect the evidence needed before calling an AI-built app launch-ready.
+- `evidence-first`: force evidence labels and escalate unknown provider state instead of guessing.
 
-Each production skill includes concrete checks, failure modes, acceptable proof, provider references, and a shared output contract:
+Each production skill includes concrete checks, failure modes, acceptable evidence, provider references, and a shared output contract:
 
 1. evidence found
 2. evidence missing
