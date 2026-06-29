@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-28T23:28:23.318Z",
+  "exportedAt": "2026-06-29T08:31:54.453Z",
   "sourceRepo": "private-source-redacted",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -38,6 +38,18 @@
     [
       "docs/contributing-skills.md",
       "CONTRIBUTING.md"
+    ],
+    [
+      "docs/public-repo/assets/raven-mascot.png",
+      "assets/raven-mascot.png"
+    ],
+    [
+      "docs/public-repo/assets/viberaven-studio-ui.jpg",
+      "assets/viberaven-studio-ui.jpg"
+    ],
+    [
+      "docs/public-repo/assets/viberaven-studio-demo.mp4",
+      "assets/viberaven-studio-demo.mp4"
     ],
     [
       "docs/public-repo/assets/viberaven-localhost-ui.png",
