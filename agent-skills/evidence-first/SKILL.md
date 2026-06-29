@@ -20,7 +20,7 @@ Use this when an agent is about to claim production readiness, provider setup, l
 - verification command output
 - Studio provider status and MCP context when available
 
-## Concrete Checks
+## Agent Actions
 
 - Mark every production claim as proven by repo evidence, proven by command output, proven by provider/tool evidence, or unknown.
 - Replace unsupported language such as "configured", "ready", or "fixed" with evidence-missing language when provider state is unknown.

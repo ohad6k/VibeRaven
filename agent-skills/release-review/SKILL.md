@@ -20,7 +20,7 @@ Use this when comparing versions, reviewing a release diff, explaining drift, or
 - auth, billing, env, database, monitoring, and deployment files
 - Studio release/version context when available
 
-## Concrete Checks
+## Agent Actions
 
 - Review package, lockfile, framework config, provider SDK, and deployment config changes for production-sensitive behavior shifts.
 - Inspect migrations, schema files, seed changes, and data-access diffs for destructive or tenant/user isolation risks.

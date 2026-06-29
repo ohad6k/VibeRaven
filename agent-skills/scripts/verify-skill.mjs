@@ -43,7 +43,7 @@ const productionSkills = [
 const requiredProductionHeadings = [
   '## When To Use',
   '## Repo Signals To Inspect',
-  '## Concrete Checks',
+  '## Agent Actions',
   '## Failure Modes To Catch',
   '## Acceptable Evidence',
   '## What Must Be Verified',
@@ -67,9 +67,9 @@ const requiredPluginFiles = [
   'after-install.md',
   'docs/agent-portability.md',
   'commands/viberaven-help.toml',
-  'commands/viberaven-check.toml',
+  'commands/viberaven-work.toml',
   'commands/viberaven-launch.toml',
-  'commands/viberaven-human-actions.toml',
+  'commands/viberaven-provider-actions.toml',
 ];
 
 const requiredPluginStrings = [
@@ -142,16 +142,16 @@ for (const dir of productionSkills) {
     }
   }
 
-  const concreteChecks = content.match(/## Concrete Checks\r?\n\r?\n([\s\S]*?)(?=\r?\n## |$)/);
+  const concreteChecks = content.match(/## Agent Actions\r?\n\r?\n([\s\S]*?)(?=\r?\n## |$)/);
   if (!concreteChecks) {
-    metadataErrors.push(`${skillPath} is missing a Concrete Checks section`);
+    metadataErrors.push(`${skillPath} is missing an Agent Actions section`);
   } else {
     const bulletCount = concreteChecks[1]
       .split(/\r?\n/)
       .filter((line) => line.trim().startsWith('- '))
       .length;
     if (bulletCount < 3) {
-      metadataErrors.push(`${skillPath} must include at least 3 Concrete Checks bullets`);
+      metadataErrors.push(`${skillPath} must include at least 3 Agent Actions bullets`);
     }
   }
 
@@ -255,9 +255,9 @@ if (existsSync(pluginYaml)) {
 
 for (const file of [
   'commands/viberaven-help.toml',
-  'commands/viberaven-check.toml',
+  'commands/viberaven-work.toml',
   'commands/viberaven-launch.toml',
-  'commands/viberaven-human-actions.toml',
+  'commands/viberaven-provider-actions.toml',
 ]) {
   const absPath = resolve(file);
   if (!existsSync(absPath)) {

@@ -19,7 +19,7 @@ Use this when the user asks whether an AI-built app is launch-ready, production-
 - release notes and diffs
 - Studio provider context and CLI agent evidence when available
 
-## Concrete Checks
+## Agent Actions
 
 - Collect fresh build, typecheck, lint, unit test, integration test, or smoke-test command output for the surfaces being launched.
 - Review provider receipts for auth callbacks, database RLS, billing webhooks, env vars, deployment settings, DNS, and monitoring signal when applicable.
@@ -54,7 +54,7 @@ The repo cannot prove live provider dashboards, payment account status, DNS prop
 
 ## Provider References
 
-- Vercel production checklist: https://vercel.com/docs/production-checklist
+- Vercel production workflowlist: https://vercel.com/docs/production-checklist
 - Vercel environment variables: https://vercel.com/docs/environment-variables
 - Supabase row-level security: https://supabase.com/docs/guides/database/postgres/row-level-security
 - Stripe webhooks: https://docs.stripe.com/webhooks

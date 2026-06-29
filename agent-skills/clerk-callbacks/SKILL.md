@@ -27,7 +27,7 @@ Use this when a repo uses Clerk and login, signup, callback, redirect, preview, 
 - `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL`
 - production and preview domain references
 
-## Concrete Checks
+## Agent Actions
 
 - Compare Clerk sign-in/sign-up route env vars and component props against actual app routes; every URL or path should resolve in local, preview, and production.
 - Check force and fallback redirect variables for both sign-in and sign-up; Clerk recommends defining both sides because users can switch between flows.

@@ -23,7 +23,7 @@ Use this when a repo deploys on Vercel and environment variables, build-time con
 - `VERCEL_ENV`, `VERCEL_TARGET_ENV`, `VERCEL_URL`, `VERCEL_BRANCH_URL`, `VERCEL_PROJECT_PRODUCTION_URL`
 - auth, OAuth, webhook, email, monitoring, and billing callback URL variables
 
-## Concrete Checks
+## Agent Actions
 
 - Build an env inventory from code reads and compare it to `.env*` examples and validation schemas; every required variable needs a documented name and failure behavior.
 - Separate build-time variables from runtime variables; values read during build cannot be fixed by changing a provider dashboard value after the deployment is already built.

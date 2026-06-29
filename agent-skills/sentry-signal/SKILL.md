@@ -28,7 +28,7 @@ Use this when a repo claims monitoring is ready, Sentry is installed, release he
 - release and environment config
 - server routes, jobs, and actions with exception handling
 
-## Concrete Checks
+## Agent Actions
 
 - Verify Sentry initializes in every runtime the app uses: browser/client, Node server, edge runtime, and React/App Router error boundaries where applicable.
 - Check `next.config.*` for `withSentryConfig` when source maps, release creation, or build-time integration are expected.

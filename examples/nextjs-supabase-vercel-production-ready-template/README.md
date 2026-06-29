@@ -9,11 +9,11 @@ npx -y viberaven init --agents all
 npx -y viberaven doctor --agents
 ```
 
-## Studio and Production Check
+## Studio and Production Work
 
 ```bash
 npx -y viberaven
-npm run viberaven:check
+npm run viberaven:work
 ```
 
 Use provider cards, MCP status, release/version context, CLI-agent connection status, and relevant tests/builds. For launch claims, return: evidence found, evidence missing, repo-code fixes or none, provider or human action needed.

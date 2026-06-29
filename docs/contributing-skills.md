@@ -16,7 +16,7 @@ and expected output shape.
 - The folder name must exactly match the `name:` value in `SKILL.md`.
 - Keep the skill focused on one production failure mode.
 - Include repo signals the agent should inspect before making a claim.
-- Include Concrete Checks that can be run or verified from the repo when
+- Include Agent Actions that can be run or verified from the repo when
   possible.
 - Include a human-action boundary for any provider dashboard state, account
   setting, billing setting, live project setting, webhook destination, DNS
@@ -43,9 +43,9 @@ release diffs, lockfiles, or package scripts.
 Be specific enough that another contributor can tell whether the skill is
 actionable, but do not hard-code private project identifiers.
 
-## Concrete Checks
+## Agent Actions
 
-Every skill should include a Concrete Checks section. Prefer checks that are
+Every skill should include an Agent Actions section. Prefer actions that are
 fast, local, and evidence-based, such as:
 
 - files or directories to inspect;
@@ -54,7 +54,7 @@ fast, local, and evidence-based, such as:
 - provider evidence that must be supplied by a human when it cannot be read
   from the repo.
 
-If a check cannot be automated from repo code, state that clearly and route it
+If an action cannot be completed from repo code, state that clearly and route it
 to the human-action boundary.
 
 ## Expected Output
@@ -82,7 +82,7 @@ Then confirm:
 
 - the skill folder name matches `name:` in `SKILL.md`;
 - the skill includes repo signals to inspect;
-- the skill includes Concrete Checks;
+- the skill includes Agent Actions;
 - the human-action boundary is explicit;
 - no secrets, live provider IDs, customer data, or private screenshots are
   included.

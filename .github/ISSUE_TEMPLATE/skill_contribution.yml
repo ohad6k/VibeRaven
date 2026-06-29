@@ -33,10 +33,10 @@ body:
     validations:
       required: true
   - type: textarea
-    id: concrete-checks
+    id: agent-actions
     attributes:
-      label: Concrete Checks
-      description: What concrete checks does the skill include?
+      label: Agent Actions
+      description: What agent actions does the skill include?
     validations:
       required: true
   - type: textarea

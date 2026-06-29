@@ -81,7 +81,7 @@ Rescan and refresh VibeRaven production-readiness artifacts after a fix.
 ---
 
 ### viberaven_audit
-Run local Vercel/Supabase production checks for RLS, service-role boundaries, and Vercel pooler usage.
+Run local Vercel/Supabase production workflows for RLS, service-role boundaries, and Vercel pooler usage.
 
 ```json
 {

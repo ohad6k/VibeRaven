@@ -18,9 +18,9 @@ VibeRaven Production Skills is an agent-portable skill distribution. The canonic
 ## Commands
 
 - `/viberaven-help`: show the pack and output contract.
-- `/viberaven-check`: run a production check across provider risks.
+- `/viberaven-work`: use Production Skills on a task; agents may inspect, edit repo code when requested, use MCP/provider context when available, and report evidence.
 - `/viberaven-launch`: run launch readiness before saying ready.
-- `/viberaven-human-actions`: separate repo-code fixes from provider dashboard work.
+- `/viberaven-provider-actions`: separate repo-code fixes from MCP/provider-tool work, provider dashboard work, and human actions.
 
 ## Canonical Skill Inventory
 

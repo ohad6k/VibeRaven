@@ -22,7 +22,7 @@ Use this when a repo uses Supabase and stores user-owned, tenant-owned, private,
 - server routes, actions, jobs, edge functions, or cron jobs that read/write user data
 - client calls to `.from(...).select()`, `.insert()`, `.update()`, `.delete()`, `.rpc()`
 
-## Concrete Checks
+## Agent Actions
 
 - Build a table inventory from migrations and mark every table in an exposed schema such as `public`; each user-owned or tenant-owned table needs `alter table ... enable row level security`.
 - Match every user-owned table to policies for the operations it supports: `select` with `using`, `insert` with `with check`, `update` with both `using` and `with check`, and `delete` with `using`.

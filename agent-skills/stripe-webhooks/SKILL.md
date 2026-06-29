@@ -23,7 +23,7 @@ Use this when a repo accepts Stripe events, updates billing state, gates paid fe
 - `checkout.session.completed`, `invoice.paid`, `customer.subscription.*`, and other handled event names
 - database writes that store Stripe event IDs, subscription IDs, customer IDs, or entitlement state
 
-## Concrete Checks
+## Agent Actions
 
 - Inspect the webhook route for raw body handling; signature verification must receive the exact body Stripe sent, not a parsed/re-serialized JSON object.
 - Confirm the handler reads the `Stripe-Signature` header and calls `stripe.webhooks.constructEvent(requestBody, signature, endpointSecret)` or an equivalent official-library verification path.

@@ -13,14 +13,14 @@
   "skills": "./agent-skills/",
   "interface": {
     "displayName": "VibeRaven Production Skills",
-    "shortDescription": "Give agents production context, checks, and evidence boundaries.",
-    "longDescription": "A plugin-style skill pack for AI coding agents that need evidence for RLS, webhooks, env vars, callbacks, monitoring, release diffs, and launch readiness.",
+    "shortDescription": "Give agents production workflows, context, and evidence boundaries.",
+    "longDescription": "A plugin-style skill pack for AI coding agents that need to implement, repair, review, or verify RLS, webhooks, env vars, callbacks, monitoring, release diffs, and launch readiness.",
     "developerName": "VibeRaven",
     "category": "Developer Tools",
     "capabilities": ["Instructions", "Skills", "Production skills"],
     "websiteURL": "https://github.com/ohad6k/VibeRaven",
     "defaultPrompt": [
-      "Use VibeRaven Production Skills before calling this app launch-ready.",
+      "Use VibeRaven Production Skills while working on this production-sensitive task.",
       "Run the launch-readiness skill and list missing provider evidence.",
       "Use release-review for auth, billing, database, env, monitoring, and provider risk."
     ],

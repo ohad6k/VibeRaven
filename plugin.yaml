@@ -4,9 +4,9 @@ description: VibeRaven Production Skills for AI-built apps, packaged for agents 
 author: VibeRaven
 provides_commands:
   - viberaven-help
-  - viberaven-check
+  - viberaven-work
   - viberaven-launch
-  - viberaven-human-actions
+  - viberaven-provider-actions
 provides_skills:
   - viberaven
   - supabase-rls

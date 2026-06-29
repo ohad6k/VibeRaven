@@ -27,7 +27,7 @@
   <a href="./assets/viberaven-studio-demo.mp4"><strong>Open the full-quality MP4 demo</strong></a>
 </p>
 
-VibeRaven is the **VibeRaven Production Skills** plus a local Studio cockpit for AI-built apps. Use it while building, fixing, reviewing releases, or preparing a launch when an agent needs provider context, release context, approval-aware chat, and evidence before it claims the work is ready.
+VibeRaven is the **VibeRaven Production Skills** plus a local Studio cockpit for AI-built apps. Use it while building, fixing, reviewing releases, or preparing a launch when an agent needs provider context, release context, approval-aware chat, safe repo changes, and evidence before it claims the work is ready.
 
 ```bash
 npx -y viberaven
@@ -37,11 +37,14 @@ The public repo is the agent discovery and installation surface: plugin-style me
 
 ## Why It Exists
 
-AI coding agents are good at patching code and bad at knowing what they cannot prove. VibeRaven gives agents a contract:
+AI coding agents are good at patching code and bad at knowing what they cannot prove. VibeRaven Production Skills are not passive reports; they are task workflows an agent can use while implementing, reviewing, debugging, or preparing launch-sensitive work.
+
+VibeRaven gives agents a contract:
 
 - say what evidence was found;
 - say what evidence is missing;
 - separate repo-code fixes from provider dashboard work;
+- use MCP or connected provider context when available;
 - keep release and version context visible;
 - ask for approval before risky local changes.
 
@@ -86,9 +89,9 @@ VibeRaven ships as a portable skill/plugin-style pack:
 Command entry points:
 
 - `/viberaven-help`: show the pack and output contract.
-- `/viberaven-check`: run a production check.
+- `/viberaven-work`: use Production Skills on a task.
 - `/viberaven-launch`: run launch readiness before saying ready.
-- `/viberaven-human-actions`: separate repo-code fixes from dashboard work.
+- `/viberaven-provider-actions`: separate repo-code fixes from dashboard work.
 
 See [docs/agent-portability.md](./docs/agent-portability.md).
 
@@ -96,17 +99,17 @@ See [docs/agent-portability.md](./docs/agent-portability.md).
 
 Browse the skill library in [docs/production-skills.md](./docs/production-skills.md).
 
-| Skill | What It Checks |
+| Skill | What It Helps Agents Do |
 | --- | --- |
-| `supabase-rls` | RLS and database access are not guessed from app code alone. |
-| `stripe-webhooks` | Billing routes, signature checks, and entitlement effects are separated from Stripe dashboard state. |
-| `vercel-env-sync` | Local, preview, and production env assumptions are checked before deploy claims. |
-| `clerk-callbacks` | Auth callback and session behavior are treated as provider-boundary work. |
-| `sentry-signal` | Monitoring is not called ready until real signal or explicit missing evidence is documented. |
-| `release-review` | Release/version changes are compared before a risky fix is waved through. |
-| `provider-actions` | Dashboard-only work is not falsely marked fixed by repo edits. |
-| `launch-readiness` | Final readiness claims include receipts, gaps, and next actions. |
-| `evidence-first` | Agents must say unknown when they lack production evidence. |
+| `supabase-rls` | Design or repair RLS work while separating repo SQL from live dashboard state. |
+| `stripe-webhooks` | Implement safer webhook handling, idempotency, mode separation, and provider follow-up. |
+| `vercel-env-sync` | Fix env assumptions across local, preview, and production without guessing dashboard values. |
+| `clerk-callbacks` | Debug auth callback, redirect, preview URL, and route-protection drift. |
+| `sentry-signal` | Wire or review monitoring so installed SDKs are not mistaken for working signal. |
+| `release-review` | Review diffs and guide release-risk fixes for provider, auth, billing, env, data, and monitoring changes. |
+| `provider-actions` | Split what the agent can edit in repo from what a human or MCP/provider tool must handle. |
+| `launch-readiness` | Pull together implementation status, verification output, provider gaps, and next actions. |
+| `evidence-first` | Keep claims honest when repo code, MCP context, or provider evidence is incomplete. |
 
 ## Install As A skills.sh Skill
 

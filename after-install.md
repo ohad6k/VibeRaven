@@ -8,10 +8,10 @@ Start with:
 /viberaven-help
 ```
 
-Run a production check:
+Use Production Skills on a task:
 
 ```text
-/viberaven-check
+/viberaven-work
 ```
 
 Use the launch gate:
@@ -20,4 +20,4 @@ Use the launch gate:
 /viberaven-launch
 ```
 
-The pack does not ask for secrets. When provider dashboard state is unknown, it asks for a redacted receipt, exported config, connected provider evidence, or a human check.
+The pack does not ask for secrets. It can guide repo edits and verification, and when provider dashboard state is unknown it asks for a redacted receipt, exported config, connected MCP/provider evidence, or a human action.

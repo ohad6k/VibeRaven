@@ -4,7 +4,7 @@
   "description": "Agent-ready Next.js + Supabase + Vercel template with VibeRaven Studio and Production Skills scripts.",
   "scripts": {
     "viberaven:studio": "npx -y viberaven",
-    "viberaven:check": "echo \"Use /viberaven-check or agent-skills/launch-readiness before claiming launch readiness.\"",
+    "viberaven:work": "echo \"Use /viberaven-work for repo work, MCP/provider context, and launch-readiness evidence before claiming launch readiness.\"",
     "viberaven:agents": "npx -y viberaven init --agents all --dry-run"
   }
 }

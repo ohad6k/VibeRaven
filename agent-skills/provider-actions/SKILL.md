@@ -21,7 +21,7 @@ Use this when a task mixes code changes with provider dashboard setup, secrets, 
 - README launch instructions
 - Studio provider cards and MCP status when available
 
-## Concrete Checks
+## Agent Actions
 
 - Identify dashboard-only actions such as DNS/domain setup, OAuth app settings, webhook endpoint registration, billing product setup, and provider project toggles.
 - Separate each finding into repo-code change, provider dashboard action, or evidence request.
