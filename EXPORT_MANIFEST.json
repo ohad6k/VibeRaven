@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-29T08:31:54.453Z",
+  "exportedAt": "2026-06-29T08:48:50.402Z",
   "sourceRepo": "private-source-redacted",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -42,6 +42,10 @@
     [
       "docs/public-repo/assets/raven-mascot.png",
       "assets/raven-mascot.png"
+    ],
+    [
+      "docs/public-repo/assets/viberaven-studio-demo.gif",
+      "assets/viberaven-studio-demo.gif"
     ],
     [
       "docs/public-repo/assets/viberaven-studio-ui.jpg",

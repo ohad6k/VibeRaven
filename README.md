@@ -19,12 +19,12 @@
 
 <p align="center">
   <a href="./assets/viberaven-studio-demo.mp4">
-    <img src="./assets/viberaven-studio-ui.jpg" alt="VibeRaven Studio cockpit UI with agent chat, provider board, release versions, access controls, and proof actions">
+    <img src="./assets/viberaven-studio-demo.gif" alt="VibeRaven Studio cockpit UI with agent chat, provider board, release versions, access controls, and proof actions">
   </a>
 </p>
 
 <p align="center">
-  <a href="./assets/viberaven-studio-demo.mp4"><strong>Watch the 36-second Studio demo</strong></a>
+  <a href="./assets/viberaven-studio-demo.mp4"><strong>Open the full-quality MP4 demo</strong></a>
 </p>
 
 VibeRaven is the **VibeRaven Production Proof Pack** plus a local Studio cockpit for AI-built apps. Use it while building, fixing, reviewing releases, or preparing a launch when an agent needs provider context, release context, approval-aware chat, and evidence before it claims the work is ready.
