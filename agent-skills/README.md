@@ -1,22 +1,21 @@
 # VibeRaven Agent Skills
 
-This directory contains the public VibeRaven skill library for AI coding agents. It is designed to be browsed, installed, shared, and used as the front door for VibeRaven.
+This directory contains the public VibeRaven skill library for AI coding agents. The point is simple: agents should know what changed, what evidence exists, and what provider context is still missing before they patch real apps.
 
-The library is organized around production skills for AI-built apps: auth, billing, database, deployment, monitoring, provider setup, and release drift. Its job is to teach agents to use evidence, provider context, MCP context when available, and human-action boundaries while they work, not to make unsupported "production ready" claims.
-
-Install the Studio/context skill with the Agent Skills CLI:
+Install the Studio/context skill and the version-context skill with the Agent Skills CLI:
 
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill viberaven
+npx -y skills add ohad6k/VibeRaven --skill what-broke
 ```
 
-The existing `agent-skills/viberaven` skill is the Studio and context skill. It points agents toward the current local Studio:
+`viberaven` points agents toward the local Studio:
 
 ```bash
 npx -y viberaven
 ```
 
-Agents should use Studio context, provider evidence, MCP status when available, and release comparison while changing production-sensitive code. The skills can guide repo edits, tests, release review, provider handoff, and evidence collection. Provider dashboard actions still need human verification when they cannot be completed through repo code or proven through connected tools.
+`what-broke` teaches agents to stop guessing which version broke the app. It builds version/release context from git tags, version names, changelog entries, and git diffs, then connects the change to provider context such as database, storage, deployment, and external runtime behavior.
 
 ## Plugin-Style Pack
 
@@ -32,8 +31,9 @@ See `docs/agent-portability.md` for the portability matrix. Adapter files stay t
 
 ## Production Skills Pack
 
-The first production skills library includes:
+The public skill library includes:
 
+- `what-broke`: find which version changed behavior from release names, changelogs, tags, and git diffs before patching blind.
 - `supabase-rls`: design or repair RLS work while separating repo SQL from live dashboard state.
 - `stripe-webhooks`: implement safer webhook handling, idempotency, mode separation, and provider follow-up.
 - `vercel-env-sync`: fix env assumptions across local, preview, and production without guessing dashboard values.

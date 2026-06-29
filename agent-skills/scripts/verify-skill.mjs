@@ -1,32 +1,98 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
-const skill = readFileSync(resolve('agent-skills/viberaven/SKILL.md'), 'utf8');
+function readRequiredFile(path) {
+  const resolved = resolve(path);
+  if (!existsSync(resolved)) {
+    console.error(`Missing required file: ${path}`);
+    process.exit(1);
+  }
+  return readFileSync(resolved, 'utf8');
+}
 
-const required = [
+function verifyIncludes(label, content, required) {
+  const missing = required.filter((text) => !content.includes(text));
+  if (missing.length > 0) {
+    console.error(`${label} is missing required text:\n${missing.join('\n')}`);
+    process.exit(1);
+  }
+}
+
+const skill = readRequiredFile('agent-skills/viberaven/SKILL.md');
+const whatBrokeSkill = readRequiredFile('agent-skills/what-broke/SKILL.md');
+const whatBrokeAgentMetadata = readRequiredFile('agent-skills/what-broke/agents/openai.yaml');
+const skillsManifest = readRequiredFile('skills.sh.json');
+
+verifyIncludes('VibeRaven skill', skill, [
   'name: viberaven',
-  'description: Use VibeRaven when making an AI-built app production-ready, launch-ready, or safer for Vercel/Supabase/Stripe deployment',
-  'Studio',
-  'Vercel',
-  'Supabase',
+  'AI agents can code. They still need to know what changed.',
+  'release drift',
+  'version context',
+  'provider context',
+  'which version broke',
+  'what changed',
+  'Studio-first',
+  'old gate language',
   'provider dashboard checks',
   'npx -y viberaven',
-  'npx -y viberaven audit --vercel-supabase',
   'npx -y viberaven init --agents all',
   'npx -y viberaven init --agents all --dry-run',
+  'npx -y viberaven --agent-mode',
+  '.viberaven/agent-tasklist.md',
+  '.viberaven/gate-result.json',
+  '.viberaven/context-map.json',
+  'npx -y viberaven --verify',
+  'npx -y viberaven --strict',
+  'LOGIN_URL_READY',
   'passwords, tokens, cookies, or secrets',
-  'RLS',
-  'service role',
-  '6543',
-  '5432',
   'Do not claim provider dashboard checks are fixed by repo-code edits',
-];
+]);
 
-const missing = required.filter((text) => !skill.includes(text));
-if (missing.length > 0) {
-  console.error(`Missing required skill text:\n${missing.join('\n')}`);
+verifyIncludes('What Broke skill', whatBrokeSkill, [
+  'name: what-broke',
+  'description: Use when an AI agent needs to stop guessing, find which version broke an app',
+  'Find the version that changed behavior',
+  'version/release context',
+  'git tag',
+  'git diff',
+  'git log',
+  'CHANGELOG',
+  'version name',
+  'provider context',
+  'database',
+  'storage',
+  'deployment',
+  'external runtime behavior',
+  'Do not infer the breaking version from file timestamps alone',
+  'Evidence Packet',
+  'Risk Map',
+  'Fix Plan',
+]);
+
+if (/webhooks|env vars|auth callbacks/i.test(whatBrokeSkill)) {
+  console.error('What Broke skill reintroduced default env/auth/webhook examples.');
   process.exit(1);
 }
+
+verifyIncludes('What Broke agent metadata', whatBrokeAgentMetadata, [
+  'display_name: "What Broke"',
+  'short_description: "Find the version that broke the app"',
+  'default_prompt: "Use $what-broke to find which version changed behavior before editing."',
+]);
+
+verifyIncludes('skills.sh manifest', skillsManifest, [
+  '"clerk-callbacks"',
+  '"evidence-first"',
+  '"launch-readiness"',
+  '"provider-actions"',
+  '"release-review"',
+  '"sentry-signal"',
+  '"stripe-webhooks"',
+  '"supabase-rls"',
+  '"vercel-env-sync"',
+  '"viberaven"',
+  '"what-broke"',
+]);
 
 const productionSkills = [
   'supabase-rls',
@@ -282,4 +348,4 @@ if (metadataErrors.length > 0) {
   process.exit(1);
 }
 
-console.log('VibeRaven agent skill verification passed.');
+console.log('VibeRaven agent skills verification passed.');

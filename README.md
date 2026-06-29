@@ -102,6 +102,7 @@ Browse the skill library in [docs/production-skills.md](./docs/production-skills
 | Skill | What It Helps Agents Do |
 | --- | --- |
 | `supabase-rls` | Design or repair RLS work while separating repo SQL from live dashboard state. |
+| `what-broke` | Find which version changed behavior from release names, changelogs, tags, and git diffs before patching blind. |
 | `stripe-webhooks` | Implement safer webhook handling, idempotency, mode separation, and provider follow-up. |
 | `vercel-env-sync` | Fix env assumptions across local, preview, and production without guessing dashboard values. |
 | `clerk-callbacks` | Debug auth callback, redirect, preview URL, and route-protection drift. |
@@ -115,6 +116,7 @@ Browse the skill library in [docs/production-skills.md](./docs/production-skills
 
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill viberaven
+npx -y skills add ohad6k/VibeRaven --skill what-broke
 ```
 
 ## MCP
