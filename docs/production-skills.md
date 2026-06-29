@@ -17,6 +17,7 @@ Each skill should return:
 
 - `supabase-rls`: design or repair RLS work while separating repo SQL from live dashboard state.
 - `what-broke`: find which version changed behavior from release names, changelogs, tags, and git diffs before patching blind.
+- `go-live`: take a local app through GitHub push, Vercel deploy, official auth/dashboard handoff, and live URL proof.
 - `stripe-webhooks`: implement safer webhook handling, idempotency, mode separation, and provider follow-up.
 - `vercel-env-sync`: fix env assumptions across local, preview, and production without guessing dashboard values.
 - `clerk-callbacks`: debug auth callback, redirect, preview URL, and route-protection drift.

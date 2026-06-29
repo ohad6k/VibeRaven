@@ -21,6 +21,8 @@ function verifyIncludes(label, content, required) {
 const skill = readRequiredFile('agent-skills/viberaven/SKILL.md');
 const whatBrokeSkill = readRequiredFile('agent-skills/what-broke/SKILL.md');
 const whatBrokeAgentMetadata = readRequiredFile('agent-skills/what-broke/agents/openai.yaml');
+const goLiveSkill = readRequiredFile('agent-skills/go-live/SKILL.md');
+const goLiveAgentMetadata = readRequiredFile('agent-skills/go-live/agents/openai.yaml');
 const skillsManifest = readRequiredFile('skills.sh.json');
 
 verifyIncludes('VibeRaven skill', skill, [
@@ -80,9 +82,31 @@ verifyIncludes('What Broke agent metadata', whatBrokeAgentMetadata, [
   'default_prompt: "Use $what-broke to find which version changed behavior before editing."',
 ]);
 
+verifyIncludes('Go Live skill', goLiveSkill, [
+  'name: go-live',
+  'connected to GitHub',
+  'deployed to Vercel',
+  'git status --short',
+  'gh auth status',
+  'vercel whoami',
+  'Open official pages',
+  'GitHub repo URL',
+  'Vercel deployment URL',
+  'Do not ask for passwords, cookies, tokens, API keys, or secret values',
+  'evidence found',
+  'provider or human action needed',
+]);
+
+verifyIncludes('Go Live agent metadata', goLiveAgentMetadata, [
+  'display_name: "Go Live"',
+  'short_description: "Push a local app to GitHub and Vercel"',
+  'default_prompt: "Use $go-live to connect this project to GitHub and Vercel, then produce live deployment proof."',
+]);
+
 verifyIncludes('skills.sh manifest', skillsManifest, [
   '"clerk-callbacks"',
   '"evidence-first"',
+  '"go-live"',
   '"launch-readiness"',
   '"provider-actions"',
   '"release-review"',
@@ -96,6 +120,7 @@ verifyIncludes('skills.sh manifest', skillsManifest, [
 
 const productionSkills = [
   'supabase-rls',
+  'go-live',
   'stripe-webhooks',
   'vercel-env-sync',
   'clerk-callbacks',
@@ -104,6 +129,7 @@ const productionSkills = [
   'provider-actions',
   'launch-readiness',
   'evidence-first',
+  'go-live',
 ];
 
 const requiredProductionHeadings = [
@@ -150,6 +176,7 @@ const requiredPluginStrings = [
   'provider-actions',
   'launch-readiness',
   'evidence-first',
+  'go-live',
 ];
 
 const skillDirs = readdirSync(resolve('agent-skills'), { withFileTypes: true })

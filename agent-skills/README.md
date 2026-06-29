@@ -7,6 +7,7 @@ Install the Studio/context skill and the version-context skill with the Agent Sk
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill viberaven
 npx -y skills add ohad6k/VibeRaven --skill what-broke
+npx -y skills add ohad6k/VibeRaven --skill go-live
 ```
 
 `viberaven` points agents toward the local Studio:
@@ -16,6 +17,8 @@ npx -y viberaven
 ```
 
 `what-broke` teaches agents to stop guessing which version broke the app. It builds version/release context from git tags, version names, changelog entries, and git diffs, then connects the change to provider context such as database, storage, deployment, and external runtime behavior.
+
+`go-live` teaches agents to connect a local app to GitHub, push it safely, deploy it to Vercel, open official GitHub/Vercel pages when auth or dashboard setup is needed, and return live deployment proof.
 
 ## Plugin-Style Pack
 
@@ -34,6 +37,7 @@ See `docs/agent-portability.md` for the portability matrix. Adapter files stay t
 The public skill library includes:
 
 - `what-broke`: find which version changed behavior from release names, changelogs, tags, and git diffs before patching blind.
+- `go-live`: take a local app through GitHub push, Vercel deploy, official auth/dashboard handoff, and live URL proof.
 - `supabase-rls`: design or repair RLS work while separating repo SQL from live dashboard state.
 - `stripe-webhooks`: implement safer webhook handling, idempotency, mode separation, and provider follow-up.
 - `vercel-env-sync`: fix env assumptions across local, preview, and production without guessing dashboard values.

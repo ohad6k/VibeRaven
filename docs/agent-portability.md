@@ -25,6 +25,7 @@ VibeRaven Production Skills is an agent-portable skill distribution. The canonic
 ## Canonical Skill Inventory
 
 - `viberaven`
+- `go-live`
 - `supabase-rls`
 - `stripe-webhooks`
 - `vercel-env-sync`

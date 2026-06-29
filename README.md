@@ -117,6 +117,7 @@ Browse the skill library in [docs/production-skills.md](./docs/production-skills
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill viberaven
 npx -y skills add ohad6k/VibeRaven --skill what-broke
+npx -y skills add ohad6k/VibeRaven --skill go-live
 ```
 
 ## MCP

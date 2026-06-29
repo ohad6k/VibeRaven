@@ -1,7 +1,7 @@
 {
   "name": "viberaven-production-skills",
   "version": "1.2.4",
-  "description": "Production skills for AI-built apps: RLS, webhooks, env sync, auth callbacks, monitoring signal, release review, and launch readiness.",
+  "description": "Production skills for AI-built apps: GitHub/Vercel go-live, RLS, webhooks, env sync, auth callbacks, monitoring signal, release review, and launch readiness.",
   "author": {
     "name": "VibeRaven",
     "url": "https://github.com/ohad6k/VibeRaven"
@@ -14,13 +14,14 @@
   "interface": {
     "displayName": "VibeRaven Production Skills",
     "shortDescription": "Give agents production workflows, context, and evidence boundaries.",
-    "longDescription": "A plugin-style skill pack for AI coding agents that need to implement, repair, review, or verify RLS, webhooks, env vars, callbacks, monitoring, release diffs, and launch readiness.",
+    "longDescription": "A plugin-style skill pack for AI coding agents that need to connect GitHub/Vercel, implement, repair, review, or verify RLS, webhooks, env vars, callbacks, monitoring, release diffs, and launch readiness.",
     "developerName": "VibeRaven",
     "category": "Developer Tools",
     "capabilities": ["Instructions", "Skills", "Production skills"],
     "websiteURL": "https://github.com/ohad6k/VibeRaven",
     "defaultPrompt": [
       "Use VibeRaven Production Skills while working on this production-sensitive task.",
+      "Use go-live when the user wants GitHub push, Vercel deploy, official auth/dashboard handoff, and live URL proof.",
       "Run the launch-readiness skill and list missing provider evidence.",
       "Use release-review for auth, billing, database, env, monitoring, and provider risk."
     ],

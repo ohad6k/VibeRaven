@@ -1,6 +1,6 @@
 {
   "name": "viberaven-production-skills",
   "version": "1.2.4",
-  "description": "VibeRaven Production Skills for AI-built apps. Use before claiming RLS, webhooks, env vars, callbacks, monitoring, releases, or launch readiness are safe.",
+  "description": "VibeRaven Production Skills for AI-built apps. Use before claiming GitHub/Vercel launch, RLS, webhooks, env vars, callbacks, monitoring, releases, or launch readiness are safe.",
   "contextFileName": "AGENTS.md"
 }
