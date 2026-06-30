@@ -9,6 +9,16 @@ AI agents can write code. Before they write code, they need the map a senior eng
 
 Use this skill at the start of real app work: new feature, bugfix, provider setup, release/version work, migration, auth, billing, webhook, deploy, or production-sensitive refactor.
 
+## Agent Contract
+
+Read this first, then act:
+
+- Boundary first: name the system boundary before naming files.
+- Questions second: ask only for missing facts that change the plan.
+- Plan third: plan around product path, architecture boundary, provider state, and version/release context.
+- Skill route fourth: choose `what-broke`, `production-context`, `viberaven`, or `go-live`.
+- Edit last: change the smallest repo surface the evidence supports.
+
 ## First Move
 
 Before planning or editing:

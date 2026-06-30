@@ -18,6 +18,32 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 
 ## Skills
 
+## AI Agent Quick Contract
+
+Use this order before editing real app code:
+
+1. `architecture-context` - map product path, architecture boundary, missing questions, and plan.
+2. `what-broke` - use when behavior changed or a version broke.
+3. `production-context` - record durable architecture/provider/release memory.
+4. `viberaven` - use Studio/MCP/provider/release context during active work.
+5. `go-live` - push/deploy only when live proof is the task.
+
+Expected pre-edit output:
+
+```text
+Architecture boundary:
+- ...
+
+Questions/blockers:
+- ... or none
+
+Plan:
+- ...
+
+VibeRaven skill/context:
+- ...
+```
+
 ### `architecture-context`
 
 Makes agents start like senior engineers: map the product path, architecture boundary, missing questions, and suited VibeRaven skill before planning or editing.

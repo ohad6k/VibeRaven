@@ -31,6 +31,32 @@ Repo context tells the agent what exists. Production context tells it what is da
 
 VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local Studio so agents can find what changed, understand provider risk, and make the next fix without guessing.
 
+## AI Agent Quick Read
+
+If you are an AI coding agent, use this order:
+
+1. Start with `architecture-context` for real app work: product path, architecture boundary, missing questions, and plan.
+2. Use `what-broke` when behavior changed or a version broke.
+3. Use `production-context` to keep `.viberaven/production-context.md` small, current, and evidence-linked.
+4. Use `viberaven` when Studio, MCP/provider context, releases, diffs, connected agents, or access modes matter.
+5. Use `go-live` only when the user wants push/deploy/live proof.
+
+Output before editing:
+
+```text
+Architecture boundary:
+- ...
+
+Questions/blockers:
+- ... or none
+
+Plan:
+- ...
+
+VibeRaven skill/context:
+- ...
+```
+
 ## Plugin + Skills
 
 Use the skills when you want the agent behavior change immediately. `architecture-context` is the startup discipline: the agent maps the app boundary, asks only the missing questions, picks the suited VibeRaven skill, then plans. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
@@ -65,6 +91,10 @@ repo fix + provider proof</code></pre>
     </td>
   </tr>
 </table>
+
+<p align="center">
+  <img src="./assets/viberaven-terminal-architecture-proof.png" alt="Real terminal proof comparing agent behavior without VibeRaven versus with VibeRaven architecture context">
+</p>
 
 Real terminal proof:
 
@@ -109,7 +139,7 @@ $ viberaven next action
 Next action: fix redirect fallback in code, then verify provider callback URL + RLS policy before claiming safe release.
 ```
 
-Reproducible script: [`examples/proof/live-evidence-demo.mjs`](./examples/proof/live-evidence-demo.mjs)
+Reproducible script: [`examples/proof/live-evidence-demo.mjs`](./examples/proof/live-evidence-demo.mjs). The image above is rendered from the transcript that script writes to `.tmp/live-evidence-demo/transcript.txt`.
 
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill architecture-context
@@ -157,7 +187,7 @@ That is only the first move. VibeRaven should not just explain what broke. It sh
 npx -y viberaven
 ```
 
-The Studio is the cockpit after the instant skill hook: agentic chat, draggable providers, draggable versions/releases, release diffs, provider MCP context, terminal output, CLI-agent connection checks, and access-mode control.
+The Studio is the cockpit for deeper work: agentic chat, draggable providers, draggable versions/releases, release diffs, provider MCP context, terminal output, CLI-agent connection checks, and access-mode control.
 
 Current npm latest: `viberaven@1.2.4` and `@viberaven/cli@1.2.4`.
 
@@ -179,7 +209,7 @@ The local-first boundary matters: the open-source local CLI/UI does not require 
 
 ## Install Agent Guidance
 
-Make AI agents carry release and provider context before they patch the repo:
+Make AI agents carry architecture, release, and provider context before they patch the repo:
 
 ```bash
 npx -y viberaven init --agents all

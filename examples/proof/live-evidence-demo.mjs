@@ -173,6 +173,59 @@ main{padding:42px;height:100%}.shell{height:100%;border:1px solid var(--line);bo
 `;
 }
 
+function renderTerminalProofHtml(evidence) {
+  const transcriptLines = [
+    '$ git diff --name-only v1.2.3..v1.2.4',
+    ...evidence.git.files,
+    '',
+    '$ git diff --stat v1.2.3..v1.2.4',
+    '.env.example                                   | 3 ++-',
+    'app/auth/callback.ts                           | 3 ++-',
+    'supabase/migrations/002_profile_rls_update.sql | 6 ++++++',
+    '3 files changed, 10 insertions(+), 2 deletions(-)',
+    '',
+    '$ node local-live-check.mjs',
+    `HTTP ${evidence.live.status} ${evidence.live.statusText} ${evidence.live.url}`,
+    `body: ${evidence.live.body}`,
+    '',
+    '$ viberaven architecture map',
+    ...evidence.architectureContext,
+    '',
+    '$ viberaven next action',
+    'Repo fix: redirect fallback.',
+    'Provider proof: verify callback URL + Supabase RLS policy.',
+  ];
+  const terminalText = transcriptLines.join('\n');
+  const withoutText = [
+    '$ npm test',
+    'PASS  all tests',
+    '',
+    '$ node local-live-check.mjs',
+    `HTTP ${evidence.live.status} ${evidence.live.statusText} ${evidence.live.url}`,
+    '',
+    '$ agent plan',
+    'Edit auth middleware.',
+    'Ship it.',
+    '',
+    'missed:',
+    '- v1.2.3 -> v1.2.4 changed auth callback',
+    '- Supabase RLS migration changed',
+    '- provider dashboard proof is unknown',
+  ].join('\n');
+
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VibeRaven terminal proof</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--green:#3fb950;--link:#58a6ff}
+*{box-sizing:border-box}html,body{margin:0;width:1200px;min-height:1320px;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+main{padding:22px 18px 30px}h1{font-size:32px;line-height:1.25;margin:0 0 12px;font-weight:650;border-bottom:1px solid var(--border);padding-bottom:12px}h2{font-size:25px;line-height:1.3;margin:26px 0 12px;font-weight:650;border-bottom:1px solid var(--border);padding-bottom:8px}p{font-size:17px;line-height:1.5;margin:12px 0;color:var(--text)}strong{font-weight:700}.muted{color:var(--muted)}
+pre{margin:0 0 14px;background:var(--panel);border-radius:6px;border:1px solid #21262d;padding:18px;overflow:hidden}
+code{font:16px/1.43 ui-monospace,SFMono-Regular,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;color:var(--text);white-space:pre-wrap}
+.caption{font-size:16px}.green{color:var(--green)}.link{color:var(--link)}
+</style></head><body><main><h1>VibeRaven Architecture Proof</h1><p><strong>Task:</strong> "Login broke after deploy. The app still returns 200 OK."</p><p class="muted">This screenshot is rendered from <code>node examples/proof/live-evidence-demo.mjs --show</code>. The script creates a temp git repo, tags <code>v1.2.3</code> and <code>v1.2.4</code>, runs real <code>git diff</code>, and starts a local HTTP check.</p><h2>Without VibeRaven</h2><pre><code>${htmlEscape(withoutText)}</code></pre><p>A green local check makes the agent patch the nearest auth file. It misses the release diff and provider proof boundary.</p><h2>With VibeRaven</h2><pre><code>${htmlEscape(terminalText)}</code></pre><p><strong>Result:</strong> same green check, but the plan changes before the patch. VibeRaven maps auth, data/RLS, deploy/env, and provider proof boundaries first.</p><p class="caption muted">Generated from: <span class="link">${htmlEscape(evidence.git.source)}</span> + <span class="link">${htmlEscape(evidence.live.source)}</span></p></main></body></html>`;
+}
+
 async function main() {
   await createDemoRepo();
   const live = await httpCheck();
@@ -243,12 +296,14 @@ async function main() {
   };
   await writeFile(join(outDir, 'evidence.json'), `${JSON.stringify(evidence, null, 2)}\n`, 'utf8');
   await writeFile(join(outDir, 'evidence-board.html'), renderHtml(evidence), 'utf8');
+  await writeFile(join(outDir, 'terminal-proof.html'), renderTerminalProofHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'transcript.txt'), terminalTranscript, 'utf8');
   if (process.argv.includes('--show')) {
     console.log(terminalTranscript);
   }
   console.log(`Wrote ${join(outDir, 'evidence.json')}`);
   console.log(`Wrote ${join(outDir, 'evidence-board.html')}`);
+  console.log(`Wrote ${join(outDir, 'terminal-proof.html')}`);
   console.log(`Wrote ${join(outDir, 'transcript.txt')}`);
 }
 
