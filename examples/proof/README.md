@@ -15,10 +15,17 @@ node examples/proof/live-evidence-demo.mjs --show
 node examples/proof/live-evidence-demo.mjs --terminal-card
 ```
 
+To run it from a disposable repo directory outside the VibeRaven checkout:
+
+```bash
+node /path/to/VibeRaven/examples/proof/live-evidence-demo.mjs --out-dir .viberaven-proof --terminal-card
+```
+
 This writes:
 
 - `.tmp/live-evidence-demo/transcript.txt`
 - `.tmp/live-evidence-demo/terminal-card.txt`
+- `.tmp/live-evidence-demo/diff-proof.html`
 - `.tmp/live-evidence-demo/terminal-proof.html`
 - `.tmp/live-evidence-demo/evidence.json`
 

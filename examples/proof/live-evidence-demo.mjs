@@ -6,8 +6,17 @@ import { execFileSync } from 'node:child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..', '..');
-const outDir = join(root, '.tmp', 'live-evidence-demo');
-const demoRepo = join(outDir, 'repo');
+
+function argValue(name) {
+  const index = process.argv.indexOf(name);
+  if (index === -1 || index + 1 >= process.argv.length) {
+    return null;
+  }
+  return process.argv[index + 1];
+}
+
+const outDir = resolve(process.env.VIBERAVEN_PROOF_OUT_DIR || argValue('--out-dir') || join(root, '.tmp', 'live-evidence-demo'));
+const demoRepo = join(outDir, 'oss-next-supabase-demo');
 
 function run(command, args, cwd = demoRepo) {
   return execFileSync(command, args, {
@@ -229,6 +238,7 @@ code{font:16px/1.43 ui-monospace,SFMono-Regular,SFMono-Regular,Consolas,"Liberat
 function renderTerminalCard(evidence) {
   return [
     'VibeRaven architecture proof',
+    `Temp repo: ${evidence.demoRepo}`,
     'Task: login broke after deploy, but the app still returns 200 OK.',
     '',
     'WITHOUT VIBERAVEN',
@@ -261,6 +271,47 @@ function renderTerminalCard(evidence) {
   ].join('\n');
 }
 
+function diffLineClass(line) {
+  if (line.startsWith('+++') || line.startsWith('---')) return 'meta';
+  if (line.startsWith('@@')) return 'hunk';
+  if (line.startsWith('+')) return 'add';
+  if (line.startsWith('-')) return 'del';
+  if (line.startsWith('diff --git') || line.startsWith('index ')) return 'meta';
+  return 'ctx';
+}
+
+function renderDiffProofHtml(evidence) {
+  const diffRows = evidence.git.patch
+    .split(/\r?\n/)
+    .filter((line) => line.trim() !== '')
+    .slice(0, 42)
+    .map((line) => `<div class="line ${diffLineClass(line)}"><span>${htmlEscape(line)}</span></div>`)
+    .join('');
+
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VibeRaven release drift proof</title>
+<style>
+:root{color-scheme:dark;--bg:#111827;--panel:#151b26;--border:#7d8797;--text:#edf2f7;--muted:#b8c1d1;--green:#6ee7b7;--green-bg:rgba(22,101,52,.62);--red:#fca5a5;--red-bg:rgba(127,29,29,.58);--blue:#93c5fd;--gold:#fde68a}
+*{box-sizing:border-box}html,body{margin:0;width:1200px;height:675px;overflow:hidden;background:#10151f;color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body:before{content:"";position:absolute;inset:-120px;background:radial-gradient(circle at 22% 95%,rgba(59,130,246,.38),transparent 34%),radial-gradient(circle at 78% 3%,rgba(34,197,94,.34),transparent 38%),linear-gradient(125deg,#111827 0%,#1f2937 48%,#273549 100%);filter:blur(18px);transform:scale(1.05)}
+main{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:54px}
+.terminal{width:920px;height:470px;border:5px solid rgba(209,213,219,.75);border-radius:28px;background:rgba(16,22,33,.96);box-shadow:0 30px 100px rgba(0,0,0,.48);overflow:hidden}
+.bar{height:44px;display:flex;align-items:center;gap:9px;padding:0 20px;border-bottom:1px solid rgba(148,163,184,.26);background:rgba(8,13,22,.85);font:13px/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--muted)}
+.dot{width:12px;height:12px;border-radius:50%}.r{background:#fb7185}.y{background:#facc15}.g{background:#4ade80}.path{margin-left:12px;color:#dbeafe;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.body{display:grid;grid-template-columns:1fr 1.72fr;gap:0;height:426px}
+.side{padding:24px 22px;border-right:1px solid rgba(148,163,184,.22);background:rgba(15,23,42,.8)}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:800}
+h1{font-size:34px;line-height:1.05;margin:8px 0 16px;letter-spacing:0}
+.check{margin:14px 0;padding:13px 14px;border-radius:12px;background:rgba(22,163,74,.14);border:1px solid rgba(74,222,128,.32);font:15px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:#d1fae5}
+.miss{margin-top:18px}.miss b,.fix b{display:block;margin-bottom:7px;font-size:14px}.miss p,.fix p{margin:0 0 7px;color:var(--muted);font-size:14px;line-height:1.25}
+.diff{padding:17px 18px;font:13px/1.34 ui-monospace,SFMono-Regular,Consolas,monospace;overflow:hidden}.diffTitle{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.diffTitle b{font-size:16px;color:white}.diffTitle span{font-size:12px;color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.line{height:18px;padding:0 8px;white-space:pre;overflow:hidden;text-overflow:ellipsis;border-left:3px solid transparent}.line span{opacity:.98}
+.add{background:var(--green-bg);color:#dcfce7;border-left-color:var(--green)}.del{background:var(--red-bg);color:#fee2e2;border-left-color:var(--red)}.hunk{color:var(--blue);background:rgba(30,64,175,.25)}.meta{color:#9ca3af}.ctx{color:#e5e7eb}
+.caption{position:absolute;right:76px;bottom:40px;color:rgba(229,231,235,.76);font-size:18px}.caption strong{color:white}
+</style></head><body><main><section class="terminal"><div class="bar"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i><span class="path">${htmlEscape(evidence.demoRepo)} > git diff v1.2.3..v1.2.4</span></div><div class="body"><aside class="side"><div class="eyebrow">Without VibeRaven</div><h1>Green check. Wrong fix.</h1><div class="check">$ npm test<br>PASS all tests<br><br>$ node local-live-check.mjs<br>HTTP ${htmlEscape(evidence.live.status)} ${htmlEscape(evidence.live.statusText)}</div><div class="miss"><b>Agent missed:</b><p>release changed auth callback</p><p>Supabase RLS changed too</p><p>provider proof still unknown</p></div></aside><section class="diff"><div class="diffTitle"><span>With VibeRaven</span><b>Map version drift before patching</b></div>${diffRows}</section></div></section><div class="caption"><strong>Real proof:</strong> temp repo, real git tags, real diff, real HTTP check. VibeRaven catches provider boundary before the agent edits.</div></main></body></html>`;
+}
+
 async function main() {
   await createDemoRepo();
   const live = await httpCheck();
@@ -268,6 +319,7 @@ async function main() {
   const log = run('git', ['log', '--oneline', '--decorate', '--all']);
   const diffFiles = run('git', ['diff', '--name-only', 'v1.2.3..v1.2.4']).split(/\r?\n/).filter(Boolean);
   const diffStat = run('git', ['diff', '--stat', 'v1.2.3..v1.2.4']);
+  const diffPatch = run('git', ['diff', '--unified=2', 'v1.2.3..v1.2.4']);
   const commitRange = run('git', ['log', '--oneline', 'v1.2.3..v1.2.4']);
   const terminalTranscript = [
     '$ node examples/proof/live-evidence-demo.mjs --show',
@@ -308,8 +360,9 @@ async function main() {
   const evidence = {
     generatedAt: new Date().toISOString(),
     claim: 'Same app. Same green check. Different decision boundary.',
+    demoRepo,
     version: { from: 'v1.2.3', to: 'v1.2.4' },
-    git: { source: 'git diff --name-only v1.2.3..v1.2.4', files: diffFiles, stat: diffStat, commits: commitRange },
+    git: { source: 'git diff --name-only v1.2.3..v1.2.4', files: diffFiles, stat: diffStat, patch: diffPatch, commits: commitRange },
     live: { source: 'local HTTP check', url: live.url, status: live.status, statusText: live.statusText, body: live.body },
     missingProof: [
       { item: 'Supabase detected from repo', source: 'package.json and supabase/migrations' },
@@ -331,6 +384,7 @@ async function main() {
   };
   await writeFile(join(outDir, 'evidence.json'), `${JSON.stringify(evidence, null, 2)}\n`, 'utf8');
   await writeFile(join(outDir, 'evidence-board.html'), renderHtml(evidence), 'utf8');
+  await writeFile(join(outDir, 'diff-proof.html'), renderDiffProofHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'terminal-proof.html'), renderTerminalProofHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'transcript.txt'), terminalTranscript, 'utf8');
   await writeFile(join(outDir, 'terminal-card.txt'), renderTerminalCard(evidence), 'utf8');
@@ -343,6 +397,7 @@ async function main() {
   }
   console.log(`Wrote ${join(outDir, 'evidence.json')}`);
   console.log(`Wrote ${join(outDir, 'evidence-board.html')}`);
+  console.log(`Wrote ${join(outDir, 'diff-proof.html')}`);
   console.log(`Wrote ${join(outDir, 'terminal-proof.html')}`);
   console.log(`Wrote ${join(outDir, 'transcript.txt')}`);
   console.log(`Wrote ${join(outDir, 'terminal-card.txt')}`);
