@@ -1,63 +1,43 @@
 {
-  "exportedAt": "2026-06-29T09:31:37.450Z",
-  "sourceRepo": "private-source-redacted",
+  "exportedAt": "2026-06-30T11:15:42.534Z",
+  "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
     [
-      "docs/public-repo/README.md",
-      "README.md"
-    ],
-    [
-      "export/public-discovery-staging/.gitignore",
+      ".gitignore",
       ".gitignore"
     ],
     [
-      ".codex-plugin/plugin.json",
-      ".codex-plugin/plugin.json"
-    ],
-    [
-      ".claude-plugin/plugin.json",
-      ".claude-plugin/plugin.json"
-    ],
-    [
-      "gemini-extension.json",
-      "gemini-extension.json"
-    ],
-    [
-      "plugin.yaml",
-      "plugin.yaml"
-    ],
-    [
-      "after-install.md",
-      "after-install.md"
+      "CONTRIBUTING.md",
+      "CONTRIBUTING.md"
     ],
     [
       "LICENSE",
       "LICENSE"
     ],
     [
-      "docs/contributing-skills.md",
-      "CONTRIBUTING.md"
+      "docs/public-repo/README.md",
+      "README.md"
     ],
     [
       "docs/public-repo/assets/raven-mascot.png",
       "assets/raven-mascot.png"
     ],
     [
+      "docs/public-repo/assets/viberaven-localhost-ui.png",
+      "assets/viberaven-localhost-ui.png"
+    ],
+    [
+      "docs/public-repo/assets/viberaven-real-studio.png",
+      "assets/viberaven-real-studio.png"
+    ],
+    [
       "docs/public-repo/assets/viberaven-studio-demo.gif",
       "assets/viberaven-studio-demo.gif"
     ],
     [
-      "docs/public-repo/assets/viberaven-studio-ui.jpg",
-      "assets/viberaven-studio-ui.jpg"
-    ],
-    [
       "docs/public-repo/assets/viberaven-studio-demo.mp4",
       "assets/viberaven-studio-demo.mp4"
-    ],
-    [
-      "docs/public-repo/assets/viberaven-localhost-ui.png",
-      "assets/viberaven-localhost-ui.png"
     ],
     [
       "llms.txt",
@@ -76,16 +56,8 @@
       "docs/mcp-registry-submission.md"
     ],
     [
-      "docs/agent-portability.md",
-      "docs/agent-portability.md"
-    ],
-    [
-      "docs/production-skills.md",
-      "docs/production-skills.md"
-    ],
-    [
-      "docs/contributing-skills.md",
-      "docs/contributing-skills.md"
+      "docs/github-repo-metadata.md",
+      "docs/github-repo-metadata.md"
     ],
     [
       "docs/badge-snippet.md",
@@ -96,32 +68,52 @@
       "skills.sh.json"
     ],
     [
-      "packages/cli/AGENTS.md",
-      "AGENTS.md"
+      "export/public-discovery-staging/.codex-plugin/plugin.json",
+      ".codex-plugin/plugin.json"
     ],
     [
-      "packages/cli/CLAUDE.md",
-      "CLAUDE.md"
+      "export/public-discovery-staging/.claude-plugin/plugin.json",
+      ".claude-plugin/plugin.json"
     ],
     [
-      "packages/cli/GEMINI.md",
-      "GEMINI.md"
+      "export/public-discovery-staging/plugin.yaml",
+      "plugin.yaml"
     ],
     [
-      ".github/PULL_REQUEST_TEMPLATE.md",
-      ".github/PULL_REQUEST_TEMPLATE.md"
+      "export/public-discovery-staging/gemini-extension.json",
+      "gemini-extension.json"
     ],
     [
-      ".github/ISSUE_TEMPLATE/skill_request.yml",
-      ".github/ISSUE_TEMPLATE/skill_request.yml"
+      "export/public-discovery-staging/commands/viberaven-help.toml",
+      "commands/viberaven-help.toml"
     ],
     [
-      ".github/ISSUE_TEMPLATE/skill_contribution.yml",
-      ".github/ISSUE_TEMPLATE/skill_contribution.yml"
+      "export/public-discovery-staging/commands/viberaven-work.toml",
+      "commands/viberaven-work.toml"
+    ],
+    [
+      "export/public-discovery-staging/commands/viberaven-production-context.toml",
+      "commands/viberaven-production-context.toml"
+    ],
+    [
+      "export/public-discovery-staging/commands/viberaven-launch.toml",
+      "commands/viberaven-launch.toml"
     ],
     [
       "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
       ".github/workflows/viberaven-agent-discovery.yml"
+    ],
+    [
+      "AGENTS.md",
+      "AGENTS.md"
+    ],
+    [
+      "CLAUDE.md",
+      "CLAUDE.md"
+    ],
+    [
+      "GEMINI.md",
+      "GEMINI.md"
     ],
     [
       ".cursor/rules/viberaven-core.mdc",
@@ -166,10 +158,6 @@
     [
       "agent-skills",
       "agent-skills"
-    ],
-    [
-      "commands",
-      "commands"
     ]
   ]
 }

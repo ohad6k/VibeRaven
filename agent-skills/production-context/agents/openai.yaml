@@ -1,0 +1,8 @@
+interface:
+  display_name: "Production Context"
+  short_description: "Keep agent fixes tied to production risk"
+  brand_color: "#7c3aed"
+  default_prompt: "Use $production-context to record what changed, why it is dangerous, what was verified, and what provider or human action remains."
+
+policy:
+  allow_implicit_invocation: true

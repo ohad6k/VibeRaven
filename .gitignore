@@ -1,7 +1,26 @@
 node_modules/
-*.log
-.env
-.env.*
-!.env.example
+out/
 dist/
-build/
+.env
+.env.local
+.viberaven/
+tmp-*.log
+.superpowers/
+.vscode-test/
+.worktrees/
+.codex/
+.tmp/
+export/public-discovery/
+
+.vercel
+
+# Local VSIX builds — ship only versioned copies under landing/public/downloads/
+*.vsix
+!landing/public/downloads/*.vsix
+
+supabase/.temp/
+
+# MCP Registry auth artifacts
+.mcpregistry_github_token
+.mcpregistry_registry_token
+mcp-publisher.exe

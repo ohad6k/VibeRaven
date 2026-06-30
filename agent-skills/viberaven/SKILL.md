@@ -1,6 +1,6 @@
 ---
 name: viberaven
-description: Use VibeRaven when an AI-built app or agent needs release drift, version context, provider context, or a clear answer to what changed before editing, shipping, deploying, or debugging production-only behavior.
+description: Use VibeRaven when an AI-built app or agent needs release drift, version context, provider context, production-context memory, or a clear answer to what changed before editing, shipping, deploying, or debugging production-only behavior.
 ---
 
 # VibeRaven Skill
@@ -24,6 +24,16 @@ npx -y viberaven
 ```
 
 Use the Studio chat, provider cards, MCP status, release/version context, diff views, access-mode control, and CLI agent connection. Treat installed and connected as different states: do not assume a CLI agent is ready until Studio's connection test passes.
+
+## Production Context Memory
+
+Before production-sensitive work, check for `.viberaven/production-context.md`.
+
+- If it exists, read the relevant sections before proposing or making changes.
+- If it is missing and the user asked for implementation, create a compact entry when the task touches releases, providers, migrations, auth, billing, webhooks, env vars, monitoring, deployment, incidents, rollback notes, or fragile customer paths.
+- After a scoped fix, update the file with what changed, why it is dangerous, what verified the fix, and what provider/human action remains.
+
+Use the `production-context` skill for the exact file shape and update rules.
 
 ## Agent Instruction Install
 

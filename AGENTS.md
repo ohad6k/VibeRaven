@@ -1,41 +1,57 @@
-<!-- VIBERAVEN:START -->
-VibeRaven is the local Studio and production-skill layer for AI-built apps.
+## Current VibeRaven Product Focus
 
-Default command: `npx -y viberaven`
+This repo is currently focused on the open-source VibeRaven `1.2.4` product:
 
-Use the Studio cockpit, provider context, MCP status, and release/version context where available. Treat VibeRaven output as production-skill evidence guidance: connect repo evidence, provider evidence, relevant tests/builds, and explicit provider-human actions before claiming launch readiness.
+- Main command: `npx -y viberaven`
+- Main product surface: the local Studio cockpit UI in `packages/cli/src/local-ui/`
+- Main workflow: agentic chat, draggable providers, draggable versions/releases, provider MCP context, CLI agent connection, access-mode control, and release diff/change explanation.
+- Main packages for this work: `packages/cli`, `packages/viberaven-shim`, and `packages/mcp`.
 
-Stack context for this repo: Next.js, Supabase, Vercel, VibeRaven.
-Use Studio-visible provider state, MCP chips/status, CLI-agent connection status, access mode, version/release selections, and diff context as first-class task context.
-Installed is not connected/ready. Test the Codex, Claude, or Gemini CLI connection before real chat control.
+The active UI is the Studio cockpit with VibeRaven Chat, Provider Control Board, Versions & Releases, Terminal, Diff, access modes, and CLI agent connection. Do not confuse it with the older localhost launch console.
 
-## Studio-First Evidence Discipline
+## What Is Legacy / Put Aside
 
-Use Studio-visible context, provider evidence, relevant tests/builds, release/version context, and MCP status before claiming production readiness.
+Treat these as legacy or side surfaces unless the user explicitly asks to work on them:
 
-- Do not confuse installed CLIs with connected/ready CLIs. Test connection before letting Studio chat control Codex, Claude, or Gemini.
-- Do not claim provider dashboard work is fixed by repo-code edits.
-- Provider dashboard checks are not cleared by repo-code edits.
-- Do not ask for passwords, tokens, cookies, or secrets.
-- Call out provider-human actions that cannot be completed through repo-code edits.
+- The old `npx -y viberaven --agent-mode` scan/pro-gate loop.
+- Old scan artifacts and old gate/tasklist-first UX.
+- Private VSIX/editor-extension work under `src/`.
+- Marketplace extension packaging and old private monorepo release surfaces.
+- Marketing/flywheel/automation surfaces unless the task explicitly names them.
 
-## Legacy Scan / Gate Compatibility
+Do not base new UI work on old scan pages, old launch-gate cards, old agent-mode command flows, or private extension UI.
 
-The legacy scan/gate path remains available for projects or users that intentionally use it. Treat these commands and artifacts as compatibility support, not the default Studio flow.
+## Working Rules For This Repo
 
-- Legacy scan command: `npx -y viberaven --agent-mode`
-- Legacy verify command: `npx -y viberaven --verify`
-- Legacy strict gate command: `npx -y viberaven --strict`
-- Legacy task artifacts: `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, `.viberaven/context-map.json`, `.viberaven/agent-summary.md`, and `.viberaven/launch-playbook.md`
-<!-- VIBERAVEN:END -->
+- Read the current local UI code before changing behavior: `packages/cli/src/local-ui/server.ts`, `packages/cli/src/local-ui/static/appClient.ts`, `packages/cli/src/local-ui/static/appCss.ts`, and `packages/cli/src/local-ui/types.ts`.
+- Preserve user/unrelated dirty work. This repo often has many generated files and unrelated edits.
+- Keep changes scoped to the open-source Studio path unless asked otherwise.
+- Do not run or promote `npx -y viberaven --agent-mode` as the default for this repo's product work.
+- For verification, prefer focused package checks such as:
+  - `npm --prefix packages/cli run typecheck`
+  - `npm --prefix packages/cli test -- local-ui/server.test.ts`
+  - `npm --prefix packages/cli run build`
+- If preparing publish/release, verify the local Studio at `http://127.0.0.1:<port>/`, `/api/project`, `/api/cli-agents`, `/api/cli-agents/probe`, and `/api/agent-chat`.
 
-# VibeRaven CLI - Agent Instructions
+## Current Product Contract
 
-Use VibeRaven when the user asks whether an app is production-ready, launch-ready, safe to deploy, or missing auth, database, payments, deployment, monitoring, security, provider setup, Vercel, Supabase, provider context, MCP status, or release/version drift checks.
+- The access selector must affect the real connected agent command, not only UI copy.
+- `ask` should require explicit approval behavior where supported.
+- `approve` should allow normal repo edits but still avoid risky/destructive changes without explanation.
+- `full` should pass full-access flags to supported CLIs and clearly tell the agent that full local-project access is enabled.
+- Codex, Claude, and Gemini connection must distinguish `installed` from `connected/ready`; installed is not enough. The UI should force `Test connection` before real chat control.
+- Provider MCP status should be visible in the provider UI and passed into agent prompts when available.
+- Version/release context should support diff and changelog workflows inside the Studio UI.
 
-## Current machine-readable docs
+## Public Repo Direction
 
-- Skill: https://viberaven.dev/SKILL.md
-- Agent rules: https://viberaven.dev/AGENTS.md
-- CLI docs: https://viberaven.dev/cli.md
-- MCP config: https://viberaven.dev/mcp.md
+Public GitHub/NPM work should present VibeRaven as the open-source local Studio for AI-built apps:
+
+- lead with the plain pain: AI agents can code, but they still need to know what changed;
+- default to release drift, which version broke it, version/release context, provider context, and post-launch drift explanation;
+- agentic chat that can work on the user's repo through connected CLIs;
+- provider-aware context and MCP-assisted provider work;
+- release/version comparison and post-launch drift explanation;
+- clear approval/full-access controls similar to Codex-style action approval.
+
+Keep the old scan/pro-gate story archived unless it is explicitly requested.

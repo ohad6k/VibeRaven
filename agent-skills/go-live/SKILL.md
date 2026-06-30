@@ -1,91 +1,107 @@
 ---
 name: go-live
-description: Use when a user wants a local AI-built project connected to GitHub, pushed safely, deployed to Vercel, and verified with a live URL receipt.
+description: Use when a user wants an AI-built local project pushed to GitHub and deployed live on Vercel with the least friction, while keeping git, secrets, provider setup, and live proof explicit.
 ---
 
 # Go Live
 
-Use this skill when the user asks to put a local app online, connect it to GitHub, deploy it to Vercel, publish a shareable URL, or make the launch path as automatic as possible.
+Use this skill when the user has a local app and asks to put it online, connect it to GitHub, deploy it to Vercel, or make a shareable live URL.
 
-Do the safe work for the user. Stop only for authentication, secrets, destructive git risk, billing, or ambiguous repo/project ownership.
+The goal is not a checklist. The goal is a working path from local project to GitHub repo to Vercel production URL, with clear proof of what actually happened. Do every safe step for the user instead of describing it, and stop only for authentication, secrets, destructive git risk, billing, or ambiguous project ownership.
 
-## When To Use
+## Autopilot Contract
 
-- The user asks to push a local project to GitHub.
-- The user asks to deploy a local project to Vercel.
-- The user wants one workflow from local build proof to GitHub remote to Vercel live URL.
-- The user wants the agent to open GitHub or Vercel pages when login, import, env vars, domains, or dashboard proof is needed.
+Default to action:
 
-## Repo Signals To Inspect
+1. Run the local inspection commands yourself.
+2. Run install/build/test commands yourself when they are normal project commands.
+3. Use authenticated GitHub and Vercel CLIs or MCP tools when available.
+4. Open official GitHub/Vercel pages when the next step needs user login, repo creation confirmation, project import, env var entry, domain setup, or dashboard proof.
+5. Continue after the user completes auth or dashboard steps, then verify the live result.
 
-- `git status --short`, `git remote -v`, and `git branch --show-current`.
-- `package.json` package manager, scripts, framework, build command, and start command.
-- `vercel.json`, `.vercel/project.json`, `.gitignore`, README deploy notes, and framework config.
-- Existing `.github/workflows`, deployment docs, env examples, and generated/build output that must not be committed.
-- VibeRaven Studio/provider context when available: `npx -y viberaven`.
-
-## Agent Actions
-
-- Run local inspection commands yourself before giving advice: git status, remotes, branch, package scripts, and Vercel config.
-- Detect GitHub and Vercel automation: `gh --version`, `gh auth status`, `vercel --version` or `npx vercel --version`, and `vercel whoami` or `npx vercel whoami`.
-- Run the narrowest build/typecheck/test command that proves the app can ship.
-- If `gh` is authenticated and repo ownership/visibility are clear, create or verify the GitHub repo, commit only intended files, and push normally.
-- If Vercel CLI is authenticated and project linkage is clear, run `vercel link` when needed and deploy with `vercel --prod` or `vercel deploy --prod`.
-- When auth or dashboard setup blocks automation, open the right official page instead of only describing it.
-- After GitHub or Vercel work, collect a launch receipt with URLs, branch, commit SHA, build proof, deployment URL, and remaining provider actions.
-
-## Failure Modes To Catch
-
-- Accidentally committing `.env`, secrets, local credentials, build output, or unrelated dirty work.
-- Creating a new GitHub repo when the project already has the intended remote.
-- Force pushing, overwriting branch history, deleting provider config, or changing billing/domain settings without explicit user approval.
-- Treating a local build as proof that Vercel production env vars, domains, redirects, OAuth callbacks, or provider dashboards are configured.
-- Claiming the app is live without a Vercel deployment URL and a lightweight live check when possible.
-
-## Acceptable Evidence
-
-- GitHub repo URL, active branch, pushed commit SHA, and remote URL from `git remote -v`.
-- Local proof command and result, such as build, typecheck, focused tests, or framework deployment build.
-- Vercel project name when known, deployment URL, production URL when known, and deployment command output.
-- HTTP status or browser check against the deployed URL when possible.
-- Dashboard/manual proof labels for env vars, domains, redirects, OAuth callbacks, database/storage, billing, or provider settings that cannot be proven from repo code.
-
-## What Must Be Verified
-
-- The repo has the intended remote and branch before push.
-- The committed file list excludes secrets, `.env`, generated build output, and unrelated dirty work.
-- The app builds locally or the exact failing build evidence is reported.
-- The Vercel deployment completed and returned a URL, or the exact auth/dashboard blocker is named.
-- Any manual provider action is separated from completed repo-code work.
-
-## Human-Action Boundary
-
-Open official pages when the user must act:
+Useful official pages:
 
 - GitHub login: https://github.com/login
 - New GitHub repo: https://github.com/new
-- GitHub CLI auth: https://cli.github.com/manual/gh_auth_login
+- GitHub CLI auth docs: https://cli.github.com/manual/gh_auth_login
 - Vercel login: https://vercel.com/login
 - New Vercel project/import: https://vercel.com/new
 - Vercel dashboard: https://vercel.com/dashboard
 
-Do not ask for passwords, cookies, tokens, API keys, or secret values. Do not enter secrets for the user. Ask the user to authenticate through official CLIs or dashboards, then continue with verification.
+## First Pass
 
-## Provider References
+1. Inspect repo state before changing anything:
+   - `git status --short`
+   - `git remote -v`
+   - `git branch --show-current`
+   - package manager and build scripts from `package.json`
+   - deployment hints: `vercel.json`, `.vercel/project.json`, framework config, env examples, README deploy notes.
+2. Read .viberaven/production-context.md when it exists. Treat open provider/human actions as launch blockers unless there is fresh provider evidence, MCP evidence, or human receipt.
+3. Identify whether GitHub and Vercel CLIs or MCP tools are available:
+   - `gh --version`
+   - `gh auth status`
+   - `vercel --version` or `npx vercel --version`
+   - `vercel whoami` or `npx vercel whoami`
+   Do not require them if browser/dashboard steps are the only available path.
+4. If VibeRaven is available, open the Studio with `npx -y viberaven` and use Vercel/GitHub provider context, release diff, and access-mode control before running irreversible commands.
+5. Never ask for passwords, cookies, tokens, API keys, or secret values. Ask the user to authenticate through official CLIs or provider dashboards.
 
-- GitHub CLI auth: https://cli.github.com/manual/gh_auth_login
-- GitHub repo creation: https://cli.github.com/manual/gh_repo_create
-- Vercel CLI deploy: https://vercel.com/docs/cli/deploy
-- Vercel project import: https://vercel.com/new
-- Vercel environment variables: https://vercel.com/docs/environment-variables
+## Launch Path
 
-## Output
+Work in this order:
 
-Return exactly four sections:
+1. Local proof: install dependencies if needed, run the narrowest build/typecheck/test command that proves the app can ship.
+2. Git proof: confirm branch, dirty files, ignored/generated files, and remote state.
+3. GitHub connection:
+   - If repo already has a remote, verify it matches the intended destination.
+   - If no remote exists, prefer `gh repo create` when `gh` is authenticated and the repo name/visibility are clear.
+   - If `gh` is not authenticated, run or open the official auth path: `gh auth login` or https://github.com/login. If repo creation must be manual, open https://github.com/new.
+   - Commit only the intended files. Do not include `.env`, secrets, build output, or unrelated dirty work.
+   - Push normally. Do not force push unless the user explicitly asks and the risk is explained.
+4. Vercel connection:
+   - Prefer `vercel link` for an existing project or `vercel --prod` / `vercel deploy --prod` when the CLI is authenticated.
+   - If Vercel CLI is not authenticated, run or open the official auth path: `npx vercel login` or https://vercel.com/login.
+   - If CLI deploy is blocked but GitHub is pushed, open https://vercel.com/new so the user can import the GitHub repo.
+   - If env vars are required, identify names only. Direct the user to Vercel dashboard or CLI secret commands; do not collect values in chat.
+   - Verify build command, output directory, framework preset, install command, and Node version when the repo suggests them.
+5. Live proof:
+   - Capture the Vercel deployment URL.
+   - Run a lightweight HTTP check when possible.
+   - Report any remaining dashboard action separately from completed repo work.
 
-1. evidence found
-2. evidence missing
-3. repo-code fixes or none
-4. provider or human action needed
+## Approval Rules
 
-Include the launch receipt inside those sections: GitHub repo/branch/SHA, Vercel deployment URL, local proof command, live proof result, links opened, and the next concrete action.
+- In ask mode: ask before commits, remote creation, pushes, deployments, or provider-linking commands.
+- In approve mode: safe repo edits and normal commits are allowed; still pause before creating public repos, pushing a new remote, setting env vars, or deploying production if unclear.
+- In full mode: the agent may run normal launch commands, but must still avoid destructive git operations, secret capture, provider deletion, billing changes, or force pushes without explicit explanation.
+
+## Open The Right Page
+
+When a browser/open-url tool is available, open the next official page for the user instead of saying "go to GitHub" or "go to Vercel":
+
+- Not signed into GitHub: open https://github.com/login and say to complete GitHub auth, then continue.
+- No GitHub repo and CLI creation is not available: open https://github.com/new.
+- Not signed into Vercel: open https://vercel.com/login.
+- GitHub repo is pushed but no Vercel project exists: open https://vercel.com/new.
+- Vercel env vars, domains, redirects, or deployment settings are missing: open https://vercel.com/dashboard and name the exact project setting to check.
+
+After opening a page, keep the state alive: summarize what is waiting, what will run next, and what proof you will collect after the user finishes.
+
+## Evidence Packet
+
+Before saying "live", return:
+
+- GitHub: repo URL, branch, commit SHA or "not pushed".
+- Vercel: project name if known, deployment URL, production URL if known, and whether the deployment was actually verified.
+- Local proof: build/test/typecheck command and result.
+- Production context: entries read, entries updated, open provider/human actions, and whether any action blocks launch.
+- Provider gaps: env vars, domain, redirects, OAuth callbacks, database/storage, or billing work that still needs dashboard proof.
+- Next action: one concrete command or dashboard step, not a generic launch checklist.
+
+## Common Mistakes
+
+- Do not deploy before checking whether the repo contains secrets.
+- Do not claim Vercel production is configured just because a local build passed.
+- Do not create a new GitHub repo when the project already has a real remote.
+- Do not hide CLI auth requirements. Say which official command or dashboard login is needed.
+- Do not rewrite the project just to make it deploy. Make the smallest deployment compatibility fix, verify it, then continue.

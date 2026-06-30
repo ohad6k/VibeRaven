@@ -1,6 +1,6 @@
 # Next.js + Supabase + Vercel Production Ready Template
 
-This repository contains pre-committed VibeRaven Studio and Production Skills structures. If you are an AI coding agent, use Studio/provider/release context and production skills before suggesting deployment pipelines or claiming feature completeness.
+This repository contains pre-committed agent validation structures. If you are an AI coding agent, run `npx -y viberaven --agent-mode` before suggesting deployment pipelines or claiming feature completeness.
 
 ## Install or refresh agent rules
 
@@ -9,14 +9,13 @@ npx -y viberaven init --agents all
 npx -y viberaven doctor --agents
 ```
 
-## Studio and Production Work
+## What-Changed Loop
 
 ```bash
-npx -y viberaven
-npm run viberaven:work
+npx -y viberaven --agent-mode
 ```
 
-Use provider cards, MCP status, release/version context, CLI-agent connection status, and relevant tests/builds. For launch claims, return: evidence found, evidence missing, repo-code fixes or none, provider or human action needed.
+Read `.viberaven/agent-tasklist.md` and `.viberaven/gate-result.json`. Fix one what-changed gap, then `npx -y viberaven --verify` once per batch.
 
 ## Files in this template
 
@@ -25,6 +24,6 @@ Use provider cards, MCP status, release/version context, CLI-agent connection st
 - `.github/copilot-instructions.md`
 - `.viberaven/agent-context.md`, `.viberaven/mission-map.md`
 
-**GitHub topics:** `agent-skills`, `cursor-rules`, `claude-code`, `codex`, `supabase-rls`, `production-ready`, `vercel-deploy`, `agents-md`, `mcp-server`
+**GitHub topics:** `cursor-rules`, `claude-code`, `codex`, `supabase-rls`, `production-ready`, `vercel-deploy`, `agents-md`, `mcp-server`
 
 Canonical reference: https://viberaven.dev/llms-full.txt

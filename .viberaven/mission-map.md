@@ -1,19 +1,18 @@
 # VibeRaven Mission Map
 
 <!-- VIBERAVEN:START -->
-VibeRaven provides production skills for AI-built apps.
+VibeRaven gives AI-built apps the what-changed context agents need before editing.
 
-Default command: `npx -y viberaven`
+Canonical command: `npx -y viberaven --agent-mode`
 
-Use VibeRaven Studio and Production Skills before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or release-risk claims.
+Use VibeRaven when the agent needs to know what changed, which version broke, or what provider context matters before editing.
 
-Agent loop: open Studio, use provider/release/MCP context, fix one scoped repo issue, verify with relevant tests/builds and provider evidence, then list provider actions.
+Agent loop: run VibeRaven, read Mission Map (`.viberaven/mission-map.md`), fix one what-changed gap, re-run VibeRaven.
 
 ## Mission Map loop
 
-1. Run `npx -y viberaven` from the project root.
-2. Use provider cards, MCP status, release/version context, diff context, and connected-agent chat.
-3. Fix one scoped repo issue.
-4. Verify with relevant tests/builds and provider evidence.
-5. Call out provider actions that cannot be completed through repo-code edits.
+1. Run `npx -y viberaven --agent-mode` from the project root.
+2. Read `.viberaven/agent-tasklist.md` and `.viberaven/gate-result.json`.
+3. Fix one what-changed gap.
+4. Re-run VibeRaven until `gate.status === 'clear'`.
 <!-- VIBERAVEN:END -->

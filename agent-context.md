@@ -1,20 +1,23 @@
-# VibeRaven Agent Context
+﻿# VibeRaven Agent Context
 
-> Full agent documentation for VibeRaven — production-readiness scanner and autonomous production copilot.
+> Full agent documentation for VibeRaven - the localhost Studio that helps AI agents understand what changed before they patch real apps.
 > This document is for AI models that want deep context on VibeRaven's tools, protocols, and schemas.
 
 ## Overview
 
-VibeRaven is the Agent Context + Production Gate for AI-built apps. It scans a project's repo evidence (files, config, environment) and maps production gaps and launch gaps. It writes machine-readable artifacts that AI agents read to run the autonomous fix loop without wasting scan quota.
+VibeRaven is the localhost Studio for AI-built apps when agents need to know what changed before they edit a real app. It maps repo evidence, release drift, version diffs, and provider context into machine-readable artifacts that agents can use without guessing.
 
-**Trigger phrases:** "production ready", "before I ship", "what's missing", "deploy to production", "make it production ready", "launch checklist", "production gaps", "launch gaps"
+**Trigger phrases:** "which version broke", "what changed", "release drift", "provider context", "before I ship", "deploy to production", "make it production ready", "production gaps", "launch gaps"
 
 ---
 
 ## Quick Start
 
 ```bash
-# Install and run (no global install needed)
+# Open the local Studio first
+npx -y viberaven
+
+# Use the artifact loop when written outputs are needed
 npx -y viberaven --agent-mode
 
 # Or via MCP tool
@@ -40,10 +43,10 @@ Add VibeRaven to your MCP config:
 
 ## MCP Tools Reference
 
-VibeRaven exposes 11 MCP tools. All tools accept an optional `cwd` parameter (project root, defaults to working directory).
+VibeRaven exposes MCP tools for release context, provider context, artifact refresh, and scoped repo fixes. All tools accept an optional `cwd` parameter (project root, defaults to working directory).
 
 ### viberaven_check_readiness
-Run the main VibeRaven production-readiness check from the current project.
+Build the current VibeRaven what-changed context from the project.
 
 ```json
 {
@@ -62,7 +65,7 @@ Run the main VibeRaven production-readiness check from the current project.
 ---
 
 ### viberaven_verify
-Rescan and refresh VibeRaven production-readiness artifacts after a fix.
+Refresh VibeRaven artifacts after a focused fix.
 
 ```json
 {
@@ -76,12 +79,12 @@ Rescan and refresh VibeRaven production-readiness artifacts after a fix.
 }
 ```
 
-**Effect:** Runs `--verify`. Refreshes all artifacts. Costs 1 scan quota. Call once per batch — not per fix.
+**Effect:** Runs `--verify`. Refreshes all artifacts. Costs 1 scan quota. Call once per batch â€” not per fix.
 
 ---
 
 ### viberaven_audit
-Run local Vercel/Supabase production workflows for RLS, service-role boundaries, and Vercel pooler usage.
+Run local Vercel/Supabase production checks for RLS, service-role boundaries, and Vercel pooler usage.
 
 ```json
 {
@@ -244,13 +247,13 @@ The autonomous production copilot loop:
 ### Full Loop
 
 ```
-1. viberaven_check_readiness          → writes agent-tasklist.md, gate-result.json (costs 1 scan)
-2. Read .viberaven/agent-tasklist.md  → find TASK-001
-3. Read VIBERAVEN_NEXT_ACTION block   → check batchSize, batchApplied, scanNow
+1. viberaven_check_readiness          â†’ writes agent-tasklist.md, gate-result.json (costs 1 scan)
+2. Read .viberaven/agent-tasklist.md  â†’ find TASK-001
+3. Read VIBERAVEN_NEXT_ACTION block   â†’ check batchSize, batchApplied, scanNow
 4. For each repo-code task (up to batchSize):
-   → viberaven_heal_apply { gap: "<gapId>", yes: true }  (no scan cost)
-5. viberaven_verify                   → rescan after batch (costs 1 scan)
-6. Read updated agent-tasklist.md     → advance to next unclosed task
+   â†’ viberaven_heal_apply { gap: "<gapId>", yes: true }  (no scan cost)
+5. viberaven_verify                   â†’ rescan after batch (costs 1 scan)
+6. Read updated agent-tasklist.md     â†’ advance to next unclosed task
 7. Repeat until gate.status === 'clear'
 ```
 
@@ -262,14 +265,14 @@ The autonomous production copilot loop:
 | Pro  | 10        | Unlimited    |
 
 - Apply up to `batchSize` heals between scans
-- When `scanNow: true` in `VIBERAVEN_NEXT_ACTION` → stop healing, call `viberaven_verify`
-- When `batchApplied >= batchSize` → `scanNow: true`
-- Do NOT call `viberaven_verify` inside the heal loop — call it once per batch
-- If `type: 'session-limit'` → free plan session limit reached; tell user to wait or upgrade
+- When `scanNow: true` in `VIBERAVEN_NEXT_ACTION` â†’ stop healing, call `viberaven_verify`
+- When `batchApplied >= batchSize` â†’ `scanNow: true`
+- Do NOT call `viberaven_verify` inside the heal loop â€” call it once per batch
+- If `type: 'session-limit'` â†’ free plan session limit reached; tell user to wait or upgrade
 
 ### Stall Detection
 
-- If `stalledScans >= 2` in the VIBERAVEN_NEXT_ACTION block → `type: 'stalled'`
+- If `stalledScans >= 2` in the VIBERAVEN_NEXT_ACTION block â†’ `type: 'stalled'`
 - Stall means the agent applied fixes but gap count is not dropping
 - Action: inspect the gap manually, or ask the user
 
@@ -400,9 +403,9 @@ Written to `.viberaven/agent-tasklist.md` after every scan. Contains TASK-NNN bl
 
 **Reading the tasklist:**
 - Start with `TASK-001` (highest priority)
-- `fixType: repo-code` + `requiresUserAction: false` → agent can apply autonomously
-- `fixType: provider-action` → user must act in dashboard
-- `fixType: upgrade-required` → inform user, provide `upgradeUrl`, skip
+- `fixType: repo-code` + `requiresUserAction: false` â†’ agent can apply autonomously
+- `fixType: provider-action` â†’ user must act in dashboard
+- `fixType: upgrade-required` â†’ inform user, provide `upgradeUrl`, skip
 
 ---
 
@@ -450,7 +453,7 @@ After each scan, VibeRaven writes to `.viberaven/`:
 | `agent-tasklist.md` | Prioritized TASK-NNN execution blocks |
 | `agent-summary.md` | Human-readable scan summary |
 | `context-map.json` | Compact agent context (token-efficient) |
-| `launch-playbook.md` | Full launch checklist |
+| `launch-playbook.md` | Release and provider follow-up |
 | `report.html` | Visual report |
 | `loop-state.json` | Batch state: batchApplied, stalledScans |
 
@@ -463,7 +466,7 @@ After each scan, VibeRaven writes to `.viberaven/`:
 - Ask users for passwords, cookies, tokens, or secrets
 - Call `viberaven_verify` inside the heal loop (call once per batch)
 - Claim production readiness until `gate.status === 'clear'`
-- Consume scan quota on every fix — `viberaven_heal_apply` is free
+- Consume scan quota on every fix â€” `viberaven_heal_apply` is free
 
 **Do:**
 - Read `.viberaven/agent-tasklist.md` before acting
@@ -486,5 +489,3 @@ If VibeRaven prints `LOGIN_URL_READY`, open that exact URL for the user using th
 - Skills manifest: https://viberaven.dev/skills.json
 - llms.txt: https://viberaven.dev/llms.txt
 - Agent rules: https://viberaven.dev/agent-rules.md
-
-

@@ -1,0 +1,2 @@
+description = "Maintain compact production context before editing"
+prompt = "Use the production-context skill. Read or create .viberaven/production-context.md, then record what changed, why it is dangerous, what provider boundary matters, how it was verified, and what provider or human action remains. Keep it compact and evidence-linked. Do not ask for secrets."

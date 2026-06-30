@@ -1,14 +1,25 @@
 ---
-description: VibeRaven Studio and Production Skills context
+description: VibeRaven what-changed layer - release and provider context before agent edits
 alwaysApply: true
 ---
 
-Default command: `npx -y viberaven`.
+AI agents can code. They still need to know what changed.
 
-Use Studio-visible provider context, MCP status, CLI-agent connection status, access mode, release/version selections, and diff context before production-sensitive edits.
+Open Studio when the user asks which version broke, what changed since the last working release, or what provider context matters:
 
-Use VibeRaven Production Skills before claiming launch readiness: verify RLS, webhooks, env vars, auth callbacks, monitoring signal, release risk, and provider actions.
+```bash
+npx -y viberaven
+```
 
-Before editing production-sensitive files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md`.
+Use the artifact loop only when machine-readable context is needed:
 
-Full production rules: `AGENTS.md` / `CLAUDE.md` (installed by `npx -y viberaven init --agents all`).
+```bash
+npx -y viberaven --agent-mode
+```
+
+Read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/mission-map.md`.
+Fix one scoped repo-owned gap, then run `npx -y viberaven --verify`. Before CI or production promote, run `npx -y viberaven --strict`.
+
+Context is not clear until the current release/provider evidence is understood. Do not claim provider dashboard setup is fixed by repo-code edits.
+
+Full rules: `AGENTS.md` / `CLAUDE.md` (installed by `npx -y viberaven init --agents all`).

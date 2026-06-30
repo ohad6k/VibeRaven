@@ -1,48 +1,50 @@
 # VibeRaven
 
-> VibeRaven is the local Studio and production-skill layer for AI-built apps.
+> AI agents can code. They still need to know what changed.
 
-Default command:
+VibeRaven is the open-source localhost Studio for release drift, version context, and provider context. Use it when an agent needs to know which version broke the app, what changed since the last working release, and which provider context matters before editing.
+
+`npx -y viberaven` is the primary entry point. It opens the local Studio so the user or agent can compare releases, inspect provider context, and decide the next repo-owned fix before another patch.
+
+Canonical Studio command:
 
 ```bash
 npx -y viberaven
 ```
 
-Use the Studio cockpit for agentic chat, provider context, MCP status, release/version context, release diffs, terminal output, and access-mode control. Treat `installed` and `connected/ready` as different states for Codex, Claude Code, Gemini, and other coding CLIs; test the connection before real chat control.
+Non-interactive artifact loop when the Studio UI is not the right fit:
 
-Production skills help agents separate repo-code fixes from provider-human actions. Use Studio-visible context, MCP-backed provider evidence when available, relevant local tests/builds, and release/version evidence before claiming launch readiness.
+```bash
+npx -y viberaven --agent-mode
+```
 
-Access modes matter:
-
-- `ask`: require explicit approval behavior where supported.
-- `approve`: allow normal repo edits while avoiding risky or destructive changes without explanation.
-- `full`: pass full-access flags to supported CLIs and tell the connected agent that full local-project access is enabled.
-
-Install agent rules into this repo or any repo:
+Install agent rules into this repo (or any repo):
 
 ```bash
 npx -y viberaven init --agents all
 npx -y viberaven doctor --agents
 ```
 
+Read `.viberaven/prp.json` first, then `.viberaven/gate-result.json`. Follow `nextActions` in order until `decision.status` is not `blocked` and `gate.status` is `clear`, or a provider/user blocker remains.
+
+Prefer `viberaven_prp_current` or `prp://current` when MCP is available.
+
 ## Full canonical reference
 
 - https://viberaven.dev/llms-full.txt
 
-## Studio-first links
+## Links
 
 - https://viberaven.dev
+- https://viberaven.dev/viberaven-production-protocol-ai-built-apps.md
+- https://viberaven.dev/what-is-viberaven-prp-json.md
+- https://viberaven.dev/how-to-use-viberaven-next-actions.md
+- https://viberaven.dev/viberaven-prp-mcp-resources.md
 - https://viberaven.dev/agent-context.md
 - https://viberaven.dev/skills.json
 - https://www.npmjs.com/package/viberaven
 
-## Legacy scan / gate compatibility
-
-Older VibeRaven docs may mention agent-mode scans, gate results, PRP resources, and scan-derived `nextActions`. Treat those as compatibility context, not the default public product surface. Prefer the Studio command above unless the user intentionally asks for the older scan/gate path.
-
-- Legacy scan command: `npx -y viberaven --agent-mode`
-
 ## Optional
 
-- Blog archives and release notes are safe to omit under context pressure.
+- Blog archives and release notes (safe to omit under context pressure)
 - https://viberaven.dev/.well-known/agent-honeypot.txt

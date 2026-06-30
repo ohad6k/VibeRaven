@@ -1,10 +1,10 @@
 {
   "name": "nextjs-supabase-vercel-production-ready-template",
   "private": true,
-  "description": "Agent-ready Next.js + Supabase + Vercel template with VibeRaven Studio and Production Skills scripts.",
+  "description": "Agent-ready Next.js + Supabase + Vercel template with VibeRaven what-changed scripts.",
   "scripts": {
-    "viberaven:studio": "npx -y viberaven",
-    "viberaven:work": "echo \"Use /viberaven-work for repo work, MCP/provider context, and launch-readiness evidence before claiming launch readiness.\"",
-    "viberaven:agents": "npx -y viberaven init --agents all --dry-run"
+    "viberaven:gate": "npx -y viberaven --agent-mode",
+    "viberaven:verify": "npx -y viberaven --verify",
+    "viberaven:strict": "npx -y viberaven --strict"
   }
 }

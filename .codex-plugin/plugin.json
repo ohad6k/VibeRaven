@@ -1,7 +1,7 @@
 {
-  "name": "viberaven-production-skills",
+  "name": "viberaven",
   "version": "1.2.4",
-  "description": "Production skills for AI-built apps: GitHub/Vercel go-live, RLS, webhooks, env sync, auth callbacks, monitoring signal, release review, and launch readiness.",
+  "description": "VibeRaven Studio and production-context skills for AI-built apps.",
   "author": {
     "name": "VibeRaven",
     "url": "https://github.com/ohad6k/VibeRaven"
@@ -9,22 +9,22 @@
   "homepage": "https://github.com/ohad6k/VibeRaven",
   "repository": "https://github.com/ohad6k/VibeRaven",
   "license": "MIT",
-  "keywords": ["production", "ai-built-apps", "supabase", "stripe", "vercel", "sentry", "skills"],
+  "keywords": ["ai-built-apps", "production-context", "release-drift", "provider-context", "skills"],
   "skills": "./agent-skills/",
   "interface": {
-    "displayName": "VibeRaven Production Skills",
-    "shortDescription": "Give agents production workflows, context, and evidence boundaries.",
-    "longDescription": "A plugin-style skill pack for AI coding agents that need to connect GitHub/Vercel, implement, repair, review, or verify RLS, webhooks, env vars, callbacks, monitoring, release diffs, and launch readiness.",
+    "displayName": "VibeRaven",
+    "shortDescription": "Give agents release and production context before fixes.",
+    "longDescription": "Open the VibeRaven Studio with npx -y viberaven, or install the skills pack so coding agents carry what changed, why it is dangerous, which provider boundary matters, and what proof remains before editing.",
     "developerName": "VibeRaven",
     "category": "Developer Tools",
-    "capabilities": ["Instructions", "Skills", "Production skills"],
+    "capabilities": ["Instructions", "Skills", "Local Studio", "Production context"],
     "websiteURL": "https://github.com/ohad6k/VibeRaven",
     "defaultPrompt": [
-      "Use VibeRaven Production Skills while working on this production-sensitive task.",
-      "Use go-live when the user wants GitHub push, Vercel deploy, official auth/dashboard handoff, and live URL proof.",
-      "Run the launch-readiness skill and list missing provider evidence.",
-      "Use release-review for auth, billing, database, env, monitoring, and provider risk."
+      "Use VibeRaven when an AI-built app needs release, provider, or production context before a fix.",
+      "Use production-context to maintain .viberaven/production-context.md.",
+      "Use what-broke to find what changed before editing.",
+      "Use go-live when the user wants GitHub push, Vercel deploy, and live URL proof."
     ],
-    "brandColor": "#0f766e"
+    "brandColor": "#7c3aed"
   }
 }

@@ -1,18 +1,18 @@
 # VibeRaven Agent Context
 
 <!-- VIBERAVEN:START -->
-VibeRaven provides production skills for AI-built apps.
+VibeRaven gives AI-built apps the what-changed context agents need before editing.
 
-Default command: `npx -y viberaven`
+Canonical command: `npx -y viberaven --agent-mode`
 
-Use VibeRaven Studio and Production Skills before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or release-risk claims.
+Use VibeRaven when the agent needs to know what changed, which version broke, or what provider context matters before editing.
 
-Agent loop: open Studio, use provider/release/MCP context, fix one scoped repo issue, verify with relevant tests/builds and provider evidence, then list provider actions.
+Agent loop: run VibeRaven, read Mission Map (`.viberaven/mission-map.md`), fix one what-changed gap, re-run VibeRaven.
 
-Studio context to use:
+After `--agent-mode`, read these artifacts in order:
 
 1. `.viberaven/mission-map.md`
-2. Provider Control Board and MCP status when available
-3. CLI-agent connection status and access mode
-4. Release/version selections and diff context
+2. `.viberaven/agent-tasklist.md`
+3. `.viberaven/gate-result.json`
+4. `.viberaven/context-map.json`
 <!-- VIBERAVEN:END -->

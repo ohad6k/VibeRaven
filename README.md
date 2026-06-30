@@ -5,14 +5,14 @@
 <h1 align="center">VibeRaven</h1>
 
 <p align="center">
-  <strong>Ship AI-built apps with evidence, not vibes.</strong>
+  <strong>Stop your agent from patching blind.</strong>
 </p>
 
 <p align="center">
   <a href="https://github.com/ohad6k/VibeRaven/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/ohad6k/VibeRaven?style=flat-square&label=stars"></a>
   <a href="https://www.npmjs.com/package/viberaven"><img alt="npm version" src="https://img.shields.io/npm/v/viberaven?style=flat-square&label=npm"></a>
   <a href="https://www.npmjs.com/package/viberaven"><img alt="npm downloads" src="https://img.shields.io/npm/dm/viberaven?style=flat-square&label=npm%20downloads"></a>
-  <img alt="skills" src="https://img.shields.io/badge/skills-11-7c3aed?style=flat-square">
+  <img alt="skills" src="https://img.shields.io/badge/skills-4-7c3aed?style=flat-square">
   <img alt="works with Codex Claude Gemini Cursor" src="https://img.shields.io/badge/agents-Codex%20%7C%20Claude%20%7C%20Gemini%20%7C%20Cursor-111827?style=flat-square">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-111827?style=flat-square">
 </p>
@@ -27,45 +27,86 @@
   <a href="./assets/viberaven-studio-demo.mp4"><strong>Open the full-quality MP4 demo</strong></a>
 </p>
 
-VibeRaven is the **VibeRaven Production Skills** plus a local Studio cockpit for AI-built apps. Use it while building, fixing, reviewing releases, or preparing a launch when an agent needs provider context, release context, approval-aware chat, safe repo changes, and evidence before it claims the work is ready.
+Repo context tells the agent what exists. Production context tells it what is dangerous.
+
+VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local Studio so agents can find what changed, understand provider risk, and make the next fix without guessing.
+
+## Plugin + Skills
+
+Use the skills when you want the agent behavior change immediately. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
+
+<p align="center">
+  <img src="./assets/viberaven-real-studio.png" alt="Real VibeRaven Studio screenshot showing chat, provider context, release versions, and agent controls">
+</p>
+
+```bash
+npx -y skills add ohad6k/VibeRaven --skill production-context
+npx -y skills add ohad6k/VibeRaven --skill what-broke
+npx -y skills add ohad6k/VibeRaven --skill viberaven
+npx -y skills add ohad6k/VibeRaven --skill go-live
+```
+
+| Skill | What It Makes The Agent Do |
+| --- | --- |
+| `production-context` | Maintain `.viberaven/production-context.md`: what changed, why dangerous, what was verified, and what provider/human proof remains. |
+| `what-broke` | Ask what changed before editing, then fix the smallest repo-code surface the evidence supports. |
+| `viberaven` | Use Studio, provider cards, release/version context, MCP status, and access modes during real work. |
+| `go-live` | Push and deploy with build, live URL proof, and clear provider/human boundaries. |
+
+## Instant Hook
+
+`what-broke` is the fast entry point: a skill that makes an agent ask what changed before editing, then move toward the fix.
+
+```text
+User:
+Login broke after deploy.
+
+Normal agent:
+Starts editing middleware.
+
+With VibeRaven:
+Stop. What changed?
+- last working version: v1.2.3
+- changed since then: auth callback route + preview env
+- repo-code fix: update redirect fallback
+- human/provider action: add callback URL in the auth dashboard
+```
+
+That is only the first move. VibeRaven should not just explain what broke. It should carry production context into the next safe repo fix, then separate anything that still needs a provider dashboard, MCP tool, or human action.
+
+## Open the Full Studio
 
 ```bash
 npx -y viberaven
 ```
 
-The public repo is the agent discovery and installation surface: plugin-style metadata, portable slash commands, production skills, MCP notes, and AI-readable docs.
+The Studio is the cockpit after the instant skill hook: agentic chat, draggable providers, draggable versions/releases, release diffs, provider MCP context, terminal output, CLI-agent connection checks, and access-mode control.
 
-## Why It Exists
+Current npm latest: `viberaven@1.2.4` and `@viberaven/cli@1.2.4`.
 
-AI coding agents are good at patching code and bad at knowing what they cannot prove. VibeRaven Production Skills are not passive reports; they are task workflows an agent can use while implementing, reviewing, debugging, or preparing launch-sensitive work.
+If this repo helps, star it so other AI app builders can find production context for agents. Use **Watch -> Custom -> Releases** if you want release notifications.
 
-VibeRaven gives agents a contract:
+> VibeRaven public repo is the agent discovery and installation surface. Product source code and service internals live in a private repository.
 
-- say what evidence was found;
-- say what evidence is missing;
-- separate repo-code fixes from provider dashboard work;
-- use MCP or connected provider context when available;
-- keep release and version context visible;
-- ask for approval before risky local changes.
+**Repositories:** Public discovery -> [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven) (this repo). Private product development -> `ohad6k/viberaven-dev` (not public).
 
-That matters during feature work, auth fixes, billing changes, deploy debugging, release comparison, post-launch drift, and production readiness.
+The local-first boundary matters: the open-source local CLI/UI does not require login and does not use Ohad's OpenAI API key.
 
-## Start The Studio
+## What VibeRaven Adds
 
-Open the local cockpit from any project:
-
-```bash
-npx -y viberaven
-```
-
-Studio gives you agentic chat, draggable providers, draggable versions/releases, provider MCP context, terminal output, diff context, access-mode control, and CLI-agent connection checks. Installed is not the same as connected; test the agent connection before real chat control.
+- **Version context:** tags, release names, changelogs, PR links, git diffs, rollback notes, and recent deploy history.
+- **Production danger context:** provider config drift, migration history, incidents, fragile customer paths, auth/billing/database/deploy boundaries.
+- **Fix boundaries:** repo-code fixes are applied or prompted separately from provider dashboard work that needs proof.
+- **Agent control:** ask/approve/full access modes for connected Codex, Claude Code, Gemini, and other CLI agents.
+- **MCP context:** provider and readiness context can be pulled into the agent without pretending MCP itself is the user-facing feature.
 
 ## Install Agent Guidance
 
-Install bounded VibeRaven guidance for Codex, Claude Code, Cursor, Copilot, Gemini, and related agents:
+Make AI agents carry release and provider context before they patch the repo:
 
 ```bash
 npx -y viberaven init --agents all
+npx -y viberaven doctor --agents
 ```
 
 Preview without writing files:
@@ -74,90 +115,61 @@ Preview without writing files:
 npx -y viberaven init --agents all --dry-run
 ```
 
-The installer writes rules into supported agent instruction files, including `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, Cursor rules, Copilot instructions, and `.viberaven` context files.
+This installs bounded rules (`<!-- VIBERAVEN:START -->` ... `<!-- VIBERAVEN:END -->`) into:
 
-## Plugin-Style Pack
+- `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`
+- `.cursor/rules/viberaven-core.mdc` (+ scoped Supabase, deploy, payments rules)
+- `.github/copilot-instructions.md`
+- `.viberaven/agent-context.md`, `.viberaven/mission-map.md`
 
-VibeRaven ships as a portable skill/plugin-style pack:
+## Non-interactive Artifact Loop
 
-- Codex: `.codex-plugin/plugin.json`
-- Claude Code: `.claude-plugin/plugin.json`
-- Gemini CLI: `gemini-extension.json`
-- Generic plugin hosts: `plugin.yaml`
-- Slash-command prompts: `commands/`
-
-Command entry points:
-
-- `/viberaven-help`: show the pack and output contract.
-- `/viberaven-work`: use Production Skills on a task.
-- `/viberaven-launch`: run launch readiness before saying ready.
-- `/viberaven-provider-actions`: separate repo-code fixes from dashboard work.
-
-See [docs/agent-portability.md](./docs/agent-portability.md).
-
-## Production Skills
-
-Browse the skill library in [docs/production-skills.md](./docs/production-skills.md).
-
-| Skill | What It Helps Agents Do |
-| --- | --- |
-| `supabase-rls` | Design or repair RLS work while separating repo SQL from live dashboard state. |
-| `what-broke` | Find which version changed behavior from release names, changelogs, tags, and git diffs before patching blind. |
-| `stripe-webhooks` | Implement safer webhook handling, idempotency, mode separation, and provider follow-up. |
-| `vercel-env-sync` | Fix env assumptions across local, preview, and production without guessing dashboard values. |
-| `clerk-callbacks` | Debug auth callback, redirect, preview URL, and route-protection drift. |
-| `sentry-signal` | Wire or review monitoring so installed SDKs are not mistaken for working signal. |
-| `release-review` | Review diffs and guide release-risk fixes for provider, auth, billing, env, data, and monitoring changes. |
-| `provider-actions` | Split what the agent can edit in repo from what a human or MCP/provider tool must handle. |
-| `launch-readiness` | Pull together implementation status, verification output, provider gaps, and next actions. |
-| `evidence-first` | Keep claims honest when repo code, MCP context, or provider evidence is incomplete. |
-
-## Install As A skills.sh Skill
+Use this only when written artifacts are needed outside the Studio:
 
 ```bash
-npx -y skills add ohad6k/VibeRaven --skill viberaven
-npx -y skills add ohad6k/VibeRaven --skill what-broke
-npx -y skills add ohad6k/VibeRaven --skill go-live
+npx -y viberaven --agent-mode .
+npx -y viberaven --verify .
+npx -y viberaven --strict
 ```
 
-## MCP
+Read `.viberaven/prp.json` first, then `.viberaven/gate-result.json` and `.viberaven/context-map.json`. Apply safe repo-code fixes directly when VibeRaven provides a supported heal or MCP action. Respect `batchSize`, verify once per batch, and do not claim production-ready while `decision.status` is `blocked` or `gate.status` is not `clear`.
 
-VibeRaven can be exposed to MCP-aware agents:
+For Vercel + Supabase local evidence:
 
-```json
-{ "viberaven": { "command": "npx", "args": ["-y", "viberaven", "--mcp"] } }
+```bash
+npx -y viberaven audit --vercel-supabase
 ```
 
-Use MCP output as provider and readiness context for Studio-aware agents. The repo also keeps MCP registry metadata in [docs/mcp-registry-submission.md](./docs/mcp-registry-submission.md) so maintainers can verify the public MCP discovery surface alongside npm and skills.sh metadata.
+Normal git push is not gated. VibeRaven gate language is about launch/deploy-readiness claims, not ordinary pushes.
 
-## Agent-Ready Starter Template
+## Agent-ready Starter Template
 
-[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) includes agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
+[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) - agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
 
-## Machine-Readable Docs
+## Machine-readable Docs
 
 - [llms-full.txt](https://viberaven.dev/llms-full.txt)
 - [llms.txt](./llms.txt)
 - [skills.json](https://viberaven.dev/skills.json)
 - [skills.sh.json](./skills.sh.json)
 - [Production Protocol guide](https://viberaven.dev/viberaven-production-protocol-ai-built-apps.md)
-- [Example evidence artifacts](./examples/proof/)
+- [What is `.viberaven/prp.json`?](https://viberaven.dev/what-is-viberaven-prp-json.md)
+- [How to use `nextActions`](https://viberaven.dev/how-to-use-viberaven-next-actions.md)
+- [PRP MCP resources](https://viberaven.dev/viberaven-prp-mcp-resources.md)
+- [Example proof artifacts](./examples/proof/)
 
-## Legacy Compatibility
+## MCP
 
-Older VibeRaven docs and compatibility tools may mention agent-mode scans, task lists, gate results, PRP resources, or scan-derived action manifests. Treat that language as compatibility context, not the main public product surface.
+VibeRaven is listed in the MCP registry for agents that prefer tools over raw terminal commands.
 
-The current default is the Studio:
-
-```bash
-npx -y viberaven
+```json
+{ "viberaven": { "command": "npx", "args": ["-y", "viberaven", "--mcp"] } }
 ```
 
-Normal git push is not gated. VibeRaven language about readiness is about production-change confidence, release review, provider-aware evidence, and agent boundaries, not blocking ordinary repository work.
+Prefer `viberaven_prp_current` or `prp://current` when MCP is available; use `viberaven_validate_npm_package` before adding npm dependencies.
 
-## Links
+## Get the Product
 
 - Website: [viberaven.dev](https://viberaven.dev)
 - npm: [viberaven](https://www.npmjs.com/package/viberaven)
 - Issues: [ohad6k/VibeRaven/issues](https://github.com/ohad6k/VibeRaven/issues)
-- Public discovery repo: [ohad6k/VibeRaven](https://github.com/ohad6k/VibeRaven)

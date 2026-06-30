@@ -1,7 +1,7 @@
 {
-  "name": "viberaven-production-skills",
+  "name": "viberaven",
   "version": "1.2.4",
-  "description": "VibeRaven Production Skills for AI-built apps: GitHub/Vercel go-live, RLS, webhooks, env sync, auth callbacks, monitoring signal, release review, and launch readiness.",
+  "description": "VibeRaven Studio and production-context skills for AI-built apps.",
   "author": {
     "name": "VibeRaven",
     "url": "https://github.com/ohad6k/VibeRaven"

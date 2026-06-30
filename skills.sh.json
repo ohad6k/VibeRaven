@@ -6,18 +6,10 @@
       "title": "Production",
       "description": "Skills for helping AI agents find what changed, which version broke, and what provider context matters before they patch real apps.",
       "skills": [
-        "clerk-callbacks",
-        "evidence-first",
-        "go-live",
-        "launch-readiness",
-        "provider-actions",
-        "release-review",
-        "sentry-signal",
-        "stripe-webhooks",
-        "supabase-rls",
-        "vercel-env-sync",
         "viberaven",
-        "what-broke"
+        "production-context",
+        "what-broke",
+        "go-live"
       ]
     }
   ]

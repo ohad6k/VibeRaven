@@ -1,60 +1,78 @@
 # VibeRaven Agent Skills
 
-This directory contains the public VibeRaven skill library for AI coding agents. The point is simple: agents should know what changed, what evidence exists, and what provider context is still missing before they patch real apps.
+This directory contains public VibeRaven skills for AI coding agents.
 
-Install the Studio/context skill and the version-context skill with the Agent Skills CLI:
+The point is not to make agents read another checklist. The point is to change what they do before and during a fix.
+
+Repo context tells the agent what exists. Production context tells it what is dangerous.
+
+## Install
 
 ```bash
-npx -y skills add ohad6k/VibeRaven --skill viberaven
+npx -y skills add ohad6k/VibeRaven --skill production-context
 npx -y skills add ohad6k/VibeRaven --skill what-broke
+npx -y skills add ohad6k/VibeRaven --skill viberaven
 npx -y skills add ohad6k/VibeRaven --skill go-live
 ```
 
-`viberaven` points agents toward the local Studio:
+## Skills
+
+### `production-context`
+
+Maintains the small production memory the other skills reuse.
+
+Use it when the agent changes, reviews, deploys, or documents production-sensitive work. It records what changed, why it is dangerous, how it was verified, and what provider or human action remains in `.viberaven/production-context.md`.
+
+### `what-broke`
+
+Stops agents from patching blind.
+
+Use it when the app worked before and now something broke. The agent compares the last working version to the current version, reads changelog/PR/tag/diff context, checks provider-adjacent changes, and then proposes or applies the smallest repo-code fix that the evidence supports.
+
+It should output:
+
+1. what changed
+2. why it is dangerous in production
+3. the repo-code fix to try first
+4. the provider or human action that cannot be proven from code
+
+### `viberaven`
+
+Uses the full VibeRaven product context: Studio, provider cards, release/version context, MCP status, connected CLI agents, and access modes.
+
+Use it when the agent needs production context while it is actively working, not just a one-time diagnosis.
 
 ```bash
 npx -y viberaven
 ```
 
-`what-broke` teaches agents to stop guessing which version broke the app. It builds version/release context from git tags, version names, changelog entries, and git diffs, then connects the change to provider context such as database, storage, deployment, and external runtime behavior.
+### `go-live`
 
-`go-live` teaches agents to connect a local app to GitHub, push it safely, deploy it to Vercel, open official GitHub/Vercel pages when auth or dashboard setup is needed, and return live deployment proof.
+Moves a local app toward GitHub and Vercel with build, push, deployment, and live URL proof.
 
-## Plugin-Style Pack
+Use it when the user wants the agent to do the work, verify the result, and clearly separate local repo changes from provider/dashboard steps.
 
-The same skills are packaged as the **VibeRaven Production Skills** for hosts that support plugin-style skill bundles:
+## What Production Context Means
 
-- Codex: `.codex-plugin/plugin.json`
-- Claude Code: `.claude-plugin/plugin.json`
-- Gemini CLI: `gemini-extension.json`
-- Generic plugin hosts: `plugin.yaml`
-- Command prompts: `commands/viberaven-*.toml`
+Useful context is small enough to fit in the agent's next action, but specific enough to catch provider and release mistakes:
 
-See `docs/agent-portability.md` for the portability matrix. Adapter files stay thin; `agent-skills/*/SKILL.md` remains the canonical source.
+- recent deploys and rollback notes
+- changelog entries with PR links
+- migration history and schema changes
+- provider config diffs between versions
+- incidents linked to releases or customer paths
+- auth, billing, database, email, webhook, storage, and deploy boundaries
 
-## Production Skills Pack
+VibeRaven skills should never claim a provider dashboard is fixed by a repo edit alone. They should either use MCP/provider evidence, ask for proof, or name the human action plainly.
 
-The public skill library includes:
+## Non-interactive Artifact Workflow
 
-- `what-broke`: find which version changed behavior from release names, changelogs, tags, and git diffs before patching blind.
-- `go-live`: take a local app through GitHub push, Vercel deploy, official auth/dashboard handoff, and live URL proof.
-- `supabase-rls`: design or repair RLS work while separating repo SQL from live dashboard state.
-- `stripe-webhooks`: implement safer webhook handling, idempotency, mode separation, and provider follow-up.
-- `vercel-env-sync`: fix env assumptions across local, preview, and production without guessing dashboard values.
-- `clerk-callbacks`: debug auth callback, redirect, preview URL, and route-protection drift.
-- `sentry-signal`: wire or review monitoring so installed SDKs are not mistaken for working signal.
-- `release-review`: review diffs and guide release-risk fixes for provider, auth, billing, env, data, and monitoring changes.
-- `provider-actions`: separate code fixes from dashboard steps that require a human or connected provider tool.
-- `launch-readiness`: collect the evidence needed before calling an AI-built app launch-ready.
-- `evidence-first`: force evidence labels and escalate unknown provider state instead of guessing.
+Use this only when written artifacts are needed outside the Studio:
 
-Each production skill includes agent actions, failure modes, acceptable evidence, MCP/provider boundaries, provider references, and a shared output contract:
+```bash
+npx -y viberaven --agent-mode
+npx -y viberaven --verify
+npx -y viberaven --strict
+```
 
-1. evidence found
-2. evidence missing
-3. repo-code fixes or none
-4. provider or human action needed
-
-See `docs/production-skills.md` for the browsable landing doc.
-
-Older scan/gate commands may appear in historical docs, but they are not the default public flow for the current open-source release.
+Agents read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/context-map.json`, fix one repo-code gap when evidence supports it, then verify.

@@ -1,88 +1,42 @@
-# Contributing Production Skills
+# Contributing to VibeRaven
 
-The easiest useful contribution to VibeRaven is one production skill: a small,
-public-safe folder of agent instructions that prevents a real launch mistake.
-Good skills help an agent inspect repo evidence, say what is missing, separate
-code fixes from provider work, and avoid guessing about production state.
+This repo is the private monorepo (`ohad6k/viberaven-dev`). The public
+open-source repo is [`ohad6k/VibeRaven`](https://github.com/ohad6k/VibeRaven).
 
-Production skills live under [`agent-skills/`](../agent-skills/). See
-[`docs/production-skills.md`](production-skills.md) for the current skill list
-and expected output shape.
+## Open-Core Promise
 
-## Skill Shape
+The local Studio, provider/release context, MCP server, and local production
+readiness checks are **free forever** for individual use. Paid plans
+(Pro / Enterprise) cover only team and organization features such as RBAC,
+cloud dashboards, multi-project history, and compliance reports.
 
-- Add one folder per skill under `agent-skills/`.
-- Put the skill instructions in `agent-skills/<skill-name>/SKILL.md`.
-- The folder name must exactly match the `name:` value in `SKILL.md`.
-- Keep the skill focused on one production failure mode.
-- Include repo signals the agent should inspect before making a claim.
-- Include Agent Actions that can be run or verified from the repo when
-  possible.
-- Include a human-action boundary for any provider dashboard state, account
-  setting, billing setting, live project setting, webhook destination, DNS
-  record, OAuth redirect, or other external state the agent cannot safely
-  change from repo code alone.
+See [`docs/open-core-promise.md`](docs/open-core-promise.md) for the binding
+statement.
 
-## Public Safety Rules
+## How To Contribute
 
-Do not include secrets, live provider IDs, customer data, or private
-screenshots. Use placeholders and describe the kind of evidence to look for
-instead.
-
-Production skills must be public-repo-safe. They should teach an agent how to
-find evidence without exposing a real user's app, provider account, tenant,
-customer, or environment.
-
-## Repo Signals
-
-List the files, config, commands, or test patterns the agent should inspect.
-Examples include route handlers, webhook handlers, auth callback config,
-environment variable examples, provider SDK setup, migrations, policy files,
-release diffs, lockfiles, or package scripts.
-
-Be specific enough that another contributor can tell whether the skill is
-actionable, but do not hard-code private project identifiers.
-
-## Agent Actions
-
-Every skill should include an Agent Actions section. Prefer actions that are
-fast, local, and evidence-based, such as:
-
-- files or directories to inspect;
-- commands to run when the repo has the matching package scripts;
-- tests that should exist or be added;
-- provider evidence that must be supplied by a human when it cannot be read
-  from the repo.
-
-If an action cannot be completed from repo code, state that clearly and route it
-to the human-action boundary.
-
-## Expected Output
-
-Each skill should instruct the agent to return:
-
-1. evidence found;
-2. evidence missing;
-3. repo-code fixes, or `none`;
-4. provider or human action needed.
-
-The output should make unknowns visible. If provider dashboard state is
-required and unavailable, the skill should say that a human must verify it
-instead of claiming production readiness.
-
-## Review Checklist
-
-Before opening a PR, run:
+1. Open an issue first for anything beyond a typo fix.
+2. Keep changes minimal and targeted to one product surface.
+3. Do not add runtime dependencies unless the issue explicitly requires them.
+4. Run the affected package tests before requesting review:
 
 ```bash
-npm run agent-skills:verify
+npm --prefix packages/cli test
+npm --prefix packages/mcp test
 ```
 
-Then confirm:
+5. Do not weaken checks, rules, or tests to make a release pass. If a check is
+   wrong, fix the check with a test that proves the new behavior.
 
-- the skill folder name matches `name:` in `SKILL.md`;
-- the skill includes repo signals to inspect;
-- the skill includes Agent Actions;
-- the human-action boundary is explicit;
-- no secrets, live provider IDs, customer data, or private screenshots are
-  included.
+## Licensing
+
+By contributing, you agree your contributions are licensed under the MIT
+license that covers the OSS-publishable surface: `packages/cli`,
+`packages/mcp`, `packages/viberaven-shim`, templates, and public docs.
+
+## Code Of Conduct
+
+Be honest in public claims. Do not inject coercive rules into other people's
+repos, ask for secrets, or spam maintainers with unsolicited PRs. The growth
+model is useful open-source software and verifiable release quality, not
+growth hacks.
