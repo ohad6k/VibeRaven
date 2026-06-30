@@ -48,7 +48,7 @@ const pluginManifest = existsSync(resolve('export/public-discovery-staging/plugi
 
 verifyMaxWords('VibeRaven skill', viberavenSkill, 500);
 verifyMaxWords('Architecture Context skill', architectureContextSkill, 1100);
-verifyMaxWords('Architecture Plan skill', architecturePlanSkill, 700);
+verifyMaxWords('Architecture Plan skill', architecturePlanSkill, 850);
 verifyMaxWords('What Broke skill', whatBrokeSkill, 500);
 verifyMaxWords('Production Context skill', productionContextSkill, 450);
 verifyMaxWords('Go Live skill', goLiveSkill, 500);
@@ -144,15 +144,24 @@ verifyIncludes('Architecture Plan skill', architecturePlanSkill, [
   '# VibeRaven: Architecture Plan',
   'Plan before edits.',
   'If called from `architecture-context`, treat the user\'s numbered answers as source material.',
-  'write the full plan to a Markdown file',
+  'Always write the full plan to a Markdown file first',
   '.viberaven/plans/YYYY-MM-DD-<slug>-architecture-plan.md',
   'Architecture plan:',
+  'Superpowers workstream plan',
   '## Objective',
   '## Workstreams',
+  '## Execution Tasks',
   '## Implementation Sequence',
+  '## Test Matrix',
   '## Verification Plan',
-  '800-1800 words',
+  '## Rollout And Rollback',
+  '## Decision Log',
+  '2500-5000 words',
+  'under 2000 words for nontrivial provider/data/auth work',
   'Each workstream must include:',
+  'Execution tasks must use checkbox syntax',
+  '4-8 workstreams',
+  'A test matrix covering happy path, unauthorized access, deleted/archived data, provider failure, and regression checks.',
   'Next skill:',
   'production-context',
   'what-broke',
@@ -164,7 +173,7 @@ verifyIncludes('Architecture Plan agent metadata', architecturePlanAgentMetadata
   'display_name: "VibeRaven: Architecture Plan"',
   'short_description: "Write the architecture plan before editing"',
   'brand_color: "#ff4d1f"',
-  'default_prompt: "Use $architecture-plan to turn answered product questions and repo evidence into a workstream architecture plan before any implementation."',
+  'default_prompt: "Use $architecture-plan to write a large file-based workstream architecture plan from answered product questions and repo evidence before any implementation."',
 ]);
 
 verifyIncludes('What Broke skill', whatBrokeSkill, [
