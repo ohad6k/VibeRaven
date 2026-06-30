@@ -35,11 +35,41 @@ VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local S
 
 Use the skills when you want the agent behavior change immediately. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
 
-<p align="center">
-  <img src="./assets/viberaven-live-evidence.png" alt="Live VibeRaven evidence receipt showing repo diff, HTTP check, missing provider proof, and safer next action">
-</p>
+Real terminal proof:
 
-Receipt generator: [`examples/proof/live-evidence-demo.mjs`](./examples/proof/live-evidence-demo.mjs)
+```bash
+node examples/proof/live-evidence-demo.mjs --show
+```
+
+What it does:
+
+- creates a temporary repo with tags `v1.2.3` and `v1.2.4`
+- changes auth callback code, preview env, and Supabase RLS migration files
+- runs real `git diff` / `git log` commands
+- starts a local HTTP server and proves the app still returns `200 OK`
+- prints the VibeRaven decision boundary: green live check is not enough when provider proof is missing
+
+Example output:
+
+```console
+$ git diff --name-only v1.2.3..v1.2.4
+.env.example
+app/auth/callback.ts
+supabase/migrations/002_profile_rls_update.sql
+
+$ node local-live-check.mjs
+HTTP 200 OK http://127.0.0.1:<port>/
+body: ok
+
+$ viberaven decision
+Same app. Same green check. Different decision boundary.
+Repo evidence: auth callback changed, Supabase migration touched, preview redirect env added.
+Live evidence: app responds 200 OK.
+Missing production proof: auth callback dashboard and Supabase RLS provider state are not proven by repo code.
+Next action: fix redirect fallback in code, then verify provider callback URL + RLS policy before claiming safe release.
+```
+
+Reproducible script: [`examples/proof/live-evidence-demo.mjs`](./examples/proof/live-evidence-demo.mjs)
 
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill production-context

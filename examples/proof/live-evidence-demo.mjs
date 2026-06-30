@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { createServer } from 'node:http';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -30,6 +29,32 @@ async function createDemoRepo() {
 
   run('git', ['init', '-q']);
   await write('package.json', `${JSON.stringify({ scripts: { start: 'node server.js' }, dependencies: { '@supabase/supabase-js': '^2.0.0' } }, null, 2)}\n`);
+  await write('local-live-check.mjs', [
+    "import { createServer } from 'node:http';",
+    '',
+    'const server = createServer((_request, response) => {',
+    "  response.writeHead(200, { 'content-type': 'text/plain' });",
+    "  response.end('ok');",
+    '});',
+    '',
+    "await new Promise((resolveServer) => server.listen(0, '127.0.0.1', resolveServer));",
+    'const address = server.address();',
+    "if (!address || typeof address === 'string') throw new Error('Unexpected server address.');",
+    'const url = `http://127.0.0.1:${address.port}/`;',
+    '',
+    'try {',
+    '  const response = await fetch(url);',
+    '  console.log(JSON.stringify({',
+    '    url,',
+    '    status: response.status,',
+    "    statusText: response.statusText || 'OK',",
+    '    body: await response.text(),',
+    '  }));',
+    '} finally {',
+    '  await new Promise((resolveClose) => server.close(resolveClose));',
+    '}',
+    '',
+  ].join('\n'));
   await write('app/auth/callback.ts', [
     'export function redirectAfterLogin(origin: string) {',
     '  return `${origin}/dashboard`;',
@@ -87,20 +112,7 @@ async function createDemoRepo() {
 }
 
 async function httpCheck() {
-  const server = createServer((_request, response) => {
-    response.writeHead(200, { 'content-type': 'text/plain' });
-    response.end('ok');
-  });
-  await new Promise((resolveServer) => server.listen(0, '127.0.0.1', resolveServer));
-  const address = server.address();
-  if (!address || typeof address === 'string') throw new Error('Unexpected server address.');
-  const url = `http://127.0.0.1:${address.port}/`;
-  try {
-    const response = await fetch(url);
-    return { url, status: response.status, statusText: response.statusText || 'OK', body: await response.text() };
-  } finally {
-    await new Promise((resolveClose) => server.close(resolveClose));
-  }
+  return JSON.parse(run('node', ['local-live-check.mjs']));
 }
 
 function htmlEscape(value) {
@@ -164,9 +176,39 @@ main{padding:42px;height:100%}.shell{height:100%;border:1px solid var(--line);bo
 async function main() {
   await createDemoRepo();
   const live = await httpCheck();
+  const tags = run('git', ['tag', '--list']);
+  const log = run('git', ['log', '--oneline', '--decorate', '--all']);
   const diffFiles = run('git', ['diff', '--name-only', 'v1.2.3..v1.2.4']).split(/\r?\n/).filter(Boolean);
   const diffStat = run('git', ['diff', '--stat', 'v1.2.3..v1.2.4']);
   const commitRange = run('git', ['log', '--oneline', 'v1.2.3..v1.2.4']);
+  const terminalTranscript = [
+    '$ node examples/proof/live-evidence-demo.mjs --show',
+    `created demo repo: ${demoRepo}`,
+    '',
+    '$ git tag --list',
+    tags,
+    '',
+    '$ git log --oneline --decorate --all',
+    log,
+    '',
+    '$ git diff --name-only v1.2.3..v1.2.4',
+    ...diffFiles,
+    '',
+    '$ git diff --stat v1.2.3..v1.2.4',
+    diffStat,
+    '',
+    '$ node local-live-check.mjs',
+    `HTTP ${live.status} ${live.statusText} ${live.url}`,
+    `body: ${live.body}`,
+    '',
+    '$ viberaven decision',
+    'Same app. Same green check. Different decision boundary.',
+    'Repo evidence: auth callback changed, Supabase migration touched, preview redirect env added.',
+    'Live evidence: app responds 200 OK.',
+    'Missing production proof: auth callback dashboard and Supabase RLS provider state are not proven by repo code.',
+    'Next action: fix redirect fallback in code, then verify provider callback URL + RLS policy before claiming safe release.',
+    '',
+  ].join('\n');
   const evidence = {
     generatedAt: new Date().toISOString(),
     claim: 'Same app. Same green check. Different decision boundary.',
@@ -187,19 +229,10 @@ async function main() {
   };
   await writeFile(join(outDir, 'evidence.json'), `${JSON.stringify(evidence, null, 2)}\n`, 'utf8');
   await writeFile(join(outDir, 'evidence-board.html'), renderHtml(evidence), 'utf8');
-  await writeFile(join(outDir, 'transcript.txt'), [
-    '$ git diff --name-only v1.2.3..v1.2.4',
-    ...diffFiles,
-    '',
-    '$ node local-live-check.js',
-    `HTTP ${live.status} ${live.statusText} ${live.url}`,
-    '',
-    '$ viberaven decision',
-    'Do not patch blind.',
-    'Repo fix: redirect fallback.',
-    'Provider action: verify callback URL + Supabase RLS policy.',
-    '',
-  ].join('\n'), 'utf8');
+  await writeFile(join(outDir, 'transcript.txt'), terminalTranscript, 'utf8');
+  if (process.argv.includes('--show')) {
+    console.log(terminalTranscript);
+  }
   console.log(`Wrote ${join(outDir, 'evidence.json')}`);
   console.log(`Wrote ${join(outDir, 'evidence-board.html')}`);
   console.log(`Wrote ${join(outDir, 'transcript.txt')}`);
