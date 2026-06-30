@@ -17,6 +17,7 @@ function argValue(name) {
 
 const outDir = resolve(process.env.VIBERAVEN_PROOF_OUT_DIR || argValue('--out-dir') || join(root, '.tmp', 'live-evidence-demo'));
 const demoRepo = join(outDir, 'oss-next-supabase-demo');
+const displayRepo = '~/tmp/oss-next-supabase-demo';
 
 function run(command, args, cwd = demoRepo) {
   return execFileSync(command, args, {
@@ -346,6 +347,72 @@ main{position:relative;height:100%;display:flex;align-items:center;justify-conte
 </style></head><body><main><section class="frame"><div class="bar"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i><span class="title">${htmlEscape(evidence.demoRepo)}  --  viberaven proof</span></div><div class="grid"><aside class="left"><div class="tag">Without VibeRaven</div><div class="big">Green check.<br>Wrong fix.</div><div class="box">$ npm test<br>PASS all tests<br><br>$ node local-live-check.mjs<br>HTTP ${htmlEscape(evidence.live.status)} ${htmlEscape(evidence.live.statusText)}</div><div class="miss"><b>what the agent misses</b><span>v1.2.4 changed auth callback</span><span>Supabase RLS changed in same release</span><span>provider dashboard proof is unknown</span></div></aside><section class="right"><div class="rightHead"><span>With VibeRaven</span><b>version drift before patch</b></div>${colored}</section></div></section><div class="punch"><strong>Same app. Same 200 OK. Different decision.</strong><span class="proof">temp repo + real git tags + real diff + real HTTP check</span></div></main></body></html>`;
 }
 
+function renderBrowserTerminalProofHtml(evidence) {
+  const prompt = '~/tmp/oss-next-supabase-demo $';
+  const terminalRows = [
+    { type: 'section', text: 'WITHOUT VIBERAVEN' },
+    { type: 'cmd', text: `${prompt} npm test` },
+    { type: 'pass', text: 'PASS all tests' },
+    { type: 'blank', text: '' },
+    { type: 'cmd', text: `${prompt} node local-live-check.mjs` },
+    { type: 'pass', text: `HTTP ${evidence.live.status} ${evidence.live.statusText} http://127.0.0.1:<port>/` },
+    { type: 'blank', text: '' },
+    { type: 'cmd', text: `${prompt} agent plan` },
+    { type: 'plain', text: 'Edit auth middleware.' },
+    { type: 'plain', text: 'Ship it.' },
+    { type: 'blank', text: '' },
+    { type: 'warn', text: 'missed:' },
+    { type: 'warn', text: '- v1.2.3 -> v1.2.4 changed auth callback' },
+    { type: 'warn', text: '- Supabase RLS migration changed in the same release' },
+    { type: 'warn', text: '- provider dashboard proof is unknown' },
+    { type: 'blank', text: '' },
+    { type: 'section', text: 'WITH VIBERAVEN' },
+    { type: 'cmd', text: `${prompt} git diff --name-only v1.2.3..v1.2.4` },
+    ...evidence.git.files.map((text) => ({ type: 'file', text })),
+    { type: 'blank', text: '' },
+    { type: 'cmd', text: `${prompt} viberaven architecture map` },
+    ...evidence.architectureContext.map((text) => ({ type: text.startsWith('Fix boundary') ? 'fix' : 'map', text })),
+    { type: 'blank', text: '' },
+    { type: 'cmd', text: `${prompt} viberaven next action` },
+    { type: 'fix', text: 'Repo fix: redirect fallback.' },
+    { type: 'fix', text: 'Provider proof: verify callback URL + Supabase RLS policy.' },
+    { type: 'blank', text: '' },
+    { type: 'cmd', text: prompt },
+  ];
+  const rows = terminalRows
+    .map((row) => `<span class="${row.type}">${htmlEscape(row.text || ' ')}</span>`)
+    .join('\n');
+
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VibeRaven browser terminal proof</title>
+<style>
+:root{color-scheme:dark;--bg:#08090c;--fg:#f2f5f8;--muted:#7d8596;--cmd:#8cc8ff;--pass:#8dff9a;--warn:#ffd166;--file:#d7b8ff;--map:#a6e3a1;--fix:#f9e2af;--section:#ff7ab6}
+html,body{margin:0;width:1200px;height:675px;overflow:hidden;background:var(--bg);color:var(--fg)}
+body{font:15.5px/1.2 Consolas,"Cascadia Mono","SFMono-Regular",Menlo,monospace}
+main{height:100%;padding:22px 34px;background:radial-gradient(circle at 92% 8%,rgba(124,58,237,.14),transparent 32%),radial-gradient(circle at 5% 94%,rgba(14,165,233,.13),transparent 30%),#08090c}.meta{color:var(--muted);font-size:12px;margin:0 0 10px}.meta b{color:#d7d7d7;font-weight:600}
+pre{margin:0;white-space:pre-wrap}.section{color:var(--section);font-weight:700}.cmd{color:var(--cmd)}.pass{color:var(--pass)}.warn{color:var(--warn)}.file{color:var(--file)}.map{color:var(--map)}.fix{color:var(--fix)}.plain{color:var(--fg)}.blank{color:var(--fg)}.cursor{display:inline-block;width:10px;height:21px;background:#f2f2f2;vertical-align:-4px;margin-left:2px}
+</style></head><body><main><div class="meta"><b>browser-captured proof</b> / disposable temp repo / real git tags / real HTTP check / sanitized path</div><pre>${rows}</pre><span class="cursor"></span></main></body></html>`;
+}
+
+function renderCodexChatProofHtml(evidence) {
+  const files = evidence.git.files.map((file) => `<li>${htmlEscape(file)}</li>`).join('');
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VibeRaven Codex chat proof</title>
+<style>
+:root{color-scheme:light;--bg:#fafafa;--panel:#fff;--ink:#242424;--muted:#8b8b8b;--line:#e8e8e8;--soft:#f4f4f4;--green:#1f7a4d;--orange:#9a6700;--blue:#2563eb}
+*{box-sizing:border-box}html,body{margin:0;width:1200px;height:675px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif}
+main{width:980px;margin:0 auto;padding:28px 0 36px}.top{height:34px;display:flex;align-items:center;justify-content:space-between;color:#a0a0a0;font-size:13px;border-bottom:1px solid var(--line);margin-bottom:18px}.chat{display:flex;flex-direction:column;gap:14px}.row{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:start}.who{font-size:13px;color:var(--muted);padding-top:6px}.bubble{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:15px 17px;box-shadow:0 1px 2px rgba(0,0,0,.03)}.bubble.plain{border-color:transparent;background:transparent;box-shadow:none;padding-top:8px}.bubble p{margin:0 0 8px;font-size:16px;line-height:1.42}.bubble p:last-child{margin-bottom:0}.tool{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px;margin:3px 0 6px}.icon{width:16px;height:16px;border:1px solid #cfcfcf;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#888;background:#fff}.result{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:13.5px/1.35 ui-monospace,SFMono-Regular,Consolas,monospace;color:#333;white-space:pre-wrap}.split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}.card{border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:#fff}.card h3{margin:0 0 8px;font-size:14px}.bad h3{color:var(--orange)}.good h3{color:var(--green)}ul{margin:0;padding-left:18px;font-size:14px;line-height:1.48}.final{border-left:3px solid var(--green);padding-left:14px}.small{font-size:13px;color:var(--muted)}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f1f1f1;padding:1px 4px;border-radius:4px}
+</style></head><body><main><div class="top"><span>Codex work log</span><span>sanitized browser capture / temp repo proof</span></div><section class="chat">
+<div class="row"><div class="who">User</div><div class="bubble plain"><p>Login broke after deploy. The app still returns <code>200 OK</code>.</p></div></div>
+<div class="row"><div class="who">Codex</div><div class="bubble"><div class="tool"><span class="icon">$</span><span>Ran <code>npm test</code> and <code>node local-live-check.mjs</code></span></div><div class="result">PASS all tests
+HTTP ${htmlEscape(evidence.live.status)} ${htmlEscape(evidence.live.statusText)} http://127.0.0.1:&lt;port&gt;/</div><div class="split"><div class="card bad"><h3>Without VibeRaven</h3><ul><li>Agent patches nearest auth middleware</li><li>Ships because tests and local HTTP are green</li><li>Misses release drift and provider state</li></ul></div><div class="card good"><h3>With VibeRaven</h3><ul><li>Ask what changed before editing</li><li>Map auth, data/RLS, deploy boundaries</li><li>Separate repo fix from provider proof</li></ul></div></div></div></div>
+<div class="row"><div class="who">Codex</div><div class="bubble"><div class="tool"><span class="icon">$</span><span>Ran <code>git diff --name-only v1.2.3..v1.2.4</code></span></div><div class="result">${htmlEscape(evidence.git.files.join('\n'))}</div><p class="small">The green check is real. It is just not enough evidence for a production login failure.</p></div></div>
+<div class="row"><div class="who">Codex</div><div class="bubble final"><p><strong>VibeRaven decision:</strong> fix the redirect fallback in repo code, then verify provider callback URL and Supabase RLS policy before claiming the release is safe.</p><p class="small">Proof source: disposable repo, real git tags, real diff, real local HTTP check. Path and port are sanitized.</p></div></div>
+</section></main></body></html>`;
+}
+
 async function main() {
   await createDemoRepo();
   const live = await httpCheck();
@@ -357,7 +424,7 @@ async function main() {
   const commitRange = run('git', ['log', '--oneline', 'v1.2.3..v1.2.4']);
   const terminalTranscript = [
     '$ node examples/proof/live-evidence-demo.mjs --show',
-    `created demo repo: ${demoRepo}`,
+    `created demo repo: ${displayRepo}`,
     '',
     '$ git tag --list',
     tags,
@@ -394,7 +461,7 @@ async function main() {
   const evidence = {
     generatedAt: new Date().toISOString(),
     claim: 'Same app. Same green check. Different decision boundary.',
-    demoRepo,
+    demoRepo: displayRepo,
     version: { from: 'v1.2.3', to: 'v1.2.4' },
     git: { source: 'git diff --name-only v1.2.3..v1.2.4', files: diffFiles, stat: diffStat, patch: diffPatch, commits: commitRange },
     live: { source: 'local HTTP check', url: live.url, status: live.status, statusText: live.statusText, body: live.body },
@@ -420,6 +487,8 @@ async function main() {
   await writeFile(join(outDir, 'evidence-board.html'), renderHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'diff-proof.html'), renderDiffProofHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'viral-terminal-proof.html'), renderViralTerminalHtml(evidence), 'utf8');
+  await writeFile(join(outDir, 'browser-terminal-proof.html'), renderBrowserTerminalProofHtml(evidence), 'utf8');
+  await writeFile(join(outDir, 'codex-chat-proof.html'), renderCodexChatProofHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'terminal-proof.html'), renderTerminalProofHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'transcript.txt'), terminalTranscript, 'utf8');
   await writeFile(join(outDir, 'terminal-card.txt'), renderTerminalCard(evidence), 'utf8');
@@ -434,6 +503,8 @@ async function main() {
   console.log(`Wrote ${join(outDir, 'evidence-board.html')}`);
   console.log(`Wrote ${join(outDir, 'diff-proof.html')}`);
   console.log(`Wrote ${join(outDir, 'viral-terminal-proof.html')}`);
+  console.log(`Wrote ${join(outDir, 'browser-terminal-proof.html')}`);
+  console.log(`Wrote ${join(outDir, 'codex-chat-proof.html')}`);
   console.log(`Wrote ${join(outDir, 'terminal-proof.html')}`);
   console.log(`Wrote ${join(outDir, 'transcript.txt')}`);
   console.log(`Wrote ${join(outDir, 'terminal-card.txt')}`);
