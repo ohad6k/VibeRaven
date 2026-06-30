@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-30T11:22:41.543Z",
+  "exportedAt": "2026-06-30T11:57:16.501Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -28,8 +28,8 @@
       "assets/viberaven-localhost-ui.png"
     ],
     [
-      "docs/public-repo/assets/viberaven-github-skills-real.png",
-      "assets/viberaven-github-skills-real.png"
+      "docs/public-repo/assets/viberaven-live-evidence.png",
+      "assets/viberaven-live-evidence.png"
     ],
     [
       "docs/public-repo/assets/viberaven-real-studio.png",
