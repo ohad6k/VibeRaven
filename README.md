@@ -50,10 +50,12 @@ Before VibeRaven, the agent sees a green check and edits the nearest file. With 
 ## Proof
 
 <p align="center">
-  <img src="./assets/viberaven-codex-chat-proof.png" alt="Codex-style browser capture comparing green checks without VibeRaven versus version drift context with VibeRaven">
+  <img src="./assets/viberaven-real-codex-proof.png" alt="Real Codex chat proof showing VibeRaven-style production context separating repo fix from provider proof">
 </p>
 
-Reproduce it:
+The screenshot is a real Codex chat run: local tests passed, the repo-side redirect fix was made, and the final answer still keeps the Supabase dashboard callback/RLS proof separate from the code fix.
+
+Reproduce the demo proof artifacts:
 
 ```bash
 node examples/proof/live-evidence-demo.mjs --out-dir .viberaven-proof --show
