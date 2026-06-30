@@ -6,6 +6,12 @@ The point is not to make agents read another checklist. The point is to change w
 
 Repo context tells the agent what exists. Production context tells it what is dangerous. Architecture context tells it where the safe fix belongs.
 
+The number of skills is not the point. The point is one agent flow:
+
+```text
+architecture -> version/release context -> provider boundary -> MCP/Studio context -> smallest safe fix
+```
+
 ## Install
 
 ```bash
@@ -23,7 +29,7 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 Use this order before editing real app code:
 
 1. `architecture-context` - map product path, architecture boundary, missing questions, and plan.
-2. `what-broke` - use when behavior changed or a version broke.
+2. `what-broke` - use version control as context when behavior changed or a version broke.
 3. `production-context` - record durable architecture/provider/release memory.
 4. `viberaven` - use Studio/MCP/provider/release context during active work.
 5. `go-live` - push/deploy only when live proof is the task.

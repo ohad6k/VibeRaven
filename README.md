@@ -29,17 +29,23 @@
 
 Repo context tells the agent what exists. Production context tells it what is dangerous.
 
-VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local Studio so agents can find what changed, understand provider risk, and make the next fix without guessing.
+VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local Studio so agents can work like senior engineers before they patch: map the architecture, inspect version/release drift, respect provider boundaries, and use MCP/Studio context when repo code is not enough.
+
+The skill count is not the product. The flow is:
+
+```text
+architecture -> version/release context -> provider boundary -> MCP/Studio context -> smallest safe fix
+```
 
 ## AI Agent Quick Read
 
 If you are an AI coding agent, use this order:
 
-1. Start with `architecture-context` for real app work: product path, architecture boundary, missing questions, and plan.
-2. Use `what-broke` when behavior changed or a version broke.
-3. Use `production-context` to keep `.viberaven/production-context.md` small, current, and evidence-linked.
-4. Use `viberaven` when Studio, MCP/provider context, releases, diffs, connected agents, or access modes matter.
-5. Use `go-live` only when the user wants push/deploy/live proof.
+1. Architecture: start with `architecture-context` for product path, system boundary, missing questions, and plan.
+2. Version control: use `what-broke` when behavior changed, a version broke, or release drift matters.
+3. Production memory: use `production-context` to keep `.viberaven/production-context.md` small, current, and evidence-linked.
+4. Providers + MCP: use `viberaven` when Studio, MCP/provider context, releases, diffs, connected agents, or access modes matter.
+5. Shipping proof: use `go-live` only when the user wants push/deploy/live proof.
 
 Output before editing:
 
@@ -153,8 +159,8 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 | --- | --- |
 | `architecture-context` | Start real app work like a senior engineer: map product path, architecture boundary, missing questions, and suited VibeRaven skill before editing. |
 | `production-context` | Maintain `.viberaven/production-context.md`: architecture boundaries, what changed, why dangerous, what was verified, and what provider/human proof remains. |
-| `what-broke` | Ask what changed before editing, map the affected architecture boundary, then fix the smallest repo-code surface the evidence supports. |
-| `viberaven` | Use Studio, provider cards, release/version context, architecture context, MCP status, and access modes during real work. |
+| `what-broke` | Use version control as context: compare working/broken releases, ask what changed, map the affected architecture boundary, then fix the smallest repo-code surface the evidence supports. |
+| `viberaven` | Use Studio, provider cards, release/version context, architecture context, MCP status, and access modes during real work. This is the provider/MCP cockpit. |
 | `go-live` | Push and deploy with build, live URL proof, and clear provider/human boundaries. |
 
 ## Architecture Context

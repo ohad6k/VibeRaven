@@ -9,6 +9,12 @@ AI agents can write code. Before they write code, they need the map a senior eng
 
 Use this skill at the start of real app work: new feature, bugfix, provider setup, release/version work, migration, auth, billing, webhook, deploy, or production-sensitive refactor.
 
+VibeRaven's flow is:
+
+```text
+architecture -> version/release context -> provider boundary -> MCP/Studio context -> smallest safe fix
+```
+
 ## Agent Contract
 
 Read this first, then act:

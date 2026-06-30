@@ -14,13 +14,14 @@
   "interface": {
     "displayName": "VibeRaven",
     "shortDescription": "Give agents architecture, release, and provider context before fixes.",
-    "longDescription": "Open the VibeRaven Studio with npx -y viberaven, or install the skills pack so coding agents orient architecture, ask missing context questions, carry what changed, identify provider boundaries, and plan the next safe fix before editing.",
+    "longDescription": "Open the VibeRaven Studio with npx -y viberaven, or install the skills pack so coding agents follow one senior-engineer flow: architecture, version/release context, provider boundary, MCP/Studio context, then the smallest safe fix.",
     "developerName": "VibeRaven",
     "category": "Developer Tools",
     "capabilities": ["Instructions", "Skills", "Local Studio", "Architecture context", "Production context"],
     "websiteURL": "https://github.com/ohad6k/VibeRaven",
     "defaultPrompt": [
       "Use architecture-context at the start of real app work to map the product path, architecture boundary, missing questions, and suited VibeRaven skill before a fix.",
+      "Use the VibeRaven flow: architecture -> version/release context -> provider boundary -> MCP/Studio context -> smallest safe fix.",
       "Ask concise missing-context questions before planning when architecture, last working version, provider, or deploy target is unclear.",
       "Use production-context to maintain .viberaven/production-context.md.",
       "Use what-broke to find what changed and which architecture boundary is affected before editing.",
