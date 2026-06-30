@@ -34,26 +34,20 @@ VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local S
 The skill count is not the product. The flow is:
 
 ```text
-architecture -> version/release context -> provider boundary -> MCP/Studio context -> smallest safe fix
+route -> ask -> evidence -> fix -> verify -> remember -> next action
 ```
 
 ## AI Agent Quick Read
 
-If you are an AI coding agent, start with `architecture-context`, use `what-broke` when a release changed behavior, keep `.viberaven/production-context.md` current with `production-context`, and use `viberaven` for Studio/provider/MCP/release context. Use `go-live` only when the user wants shipping proof.
+If you are an AI coding agent, start with `viberaven` when unsure. It routes to `architecture-context`, `what-broke`, `production-context`, or `go-live`. When a skill returns `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
 
 ## Plugin + Skills
 
-Use the skills when you want the agent behavior change immediately. `architecture-context` is the startup discipline: the agent maps the app boundary, asks only the missing questions, picks the suited VibeRaven skill, then plans. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
-
-Before VibeRaven, the agent sees a green check and edits the nearest file. With VibeRaven, it first asks what changed, which provider boundary is involved, and what proof is still missing.
+Use the skills when you want the agent behavior change immediately. They work as one plugin flow: route the task, ask low-level product questions, gather repo/provider evidence, make the scoped repo action, verify the claim, record production memory, then hand off to the next skill when needed. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
 
 ## Proof
 
-<p align="center">
-  <img src="./assets/viberaven-real-codex-proof.png" alt="Real Codex chat proof showing VibeRaven-style production context separating repo fix from provider proof">
-</p>
-
-The screenshot is a real Codex chat run: local tests passed, the repo-side redirect fix was made, and the final answer still keeps the Supabase dashboard callback/RLS proof separate from the code fix.
+Before VibeRaven, the agent sees a green check and edits the nearest file. With VibeRaven, it asks low-level product questions, turns the answers into an architecture brief, separates repo work from provider proof, and names the next skill in the loop.
 
 Reproduce the demo proof artifacts:
 
@@ -73,11 +67,11 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 
 | Skill | What It Makes The Agent Do |
 | --- | --- |
-| `architecture-context` | Start real app work like a senior engineer: map product path, architecture boundary, missing questions, and suited VibeRaven skill before editing. |
-| `production-context` | Maintain `.viberaven/production-context.md`: architecture boundaries, what changed, why dangerous, what was verified, and what provider/human proof remains. |
-| `what-broke` | Use version control as context: compare working/broken releases, ask what changed, map the affected architecture boundary, then fix the smallest repo-code surface the evidence supports. |
-| `viberaven` | Use Studio, provider cards, release/version context, architecture context, MCP status, and access modes during real work. This is the provider/MCP cockpit. |
-| `go-live` | Push and deploy with build, live URL proof, and clear provider/human boundaries. |
+| `viberaven` | Router: choose the right VibeRaven skill, Studio/MCP evidence, and next action. |
+| `architecture-context` | Ask low-level product questions, then turn answers into an architecture plan with boundaries, options, risks, sequence, and route. |
+| `what-broke` | Compare working/broken releases, map the changed boundary, implement the scoped repo fix when proven, and name provider proof. |
+| `production-context` | Maintain `.viberaven/production-context.md`: what changed, why dangerous, verification, provider/MCP proof, and open action. |
+| `go-live` | Push and deploy with local proof, GitHub/Vercel evidence, live URL proof, production memory, and provider gaps. |
 
 ## Open the Full Studio
 

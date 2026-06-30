@@ -1,8 +1,8 @@
 interface:
   display_name: "What Broke"
-  short_description: "Find the version that broke the app"
+  short_description: "Find the changed version before patching"
   brand_color: "#5b8def"
-  default_prompt: "Use $what-broke to find which version changed behavior before editing."
+  default_prompt: "Use $what-broke to compare the last working version to the broken version, map the changed boundary, and fix only what the evidence supports."
 
 policy:
   allow_implicit_invocation: true

@@ -1,8 +1,8 @@
 interface:
   display_name: "Architecture Context"
-  short_description: "Map the app boundary before the agent edits"
+  short_description: "Ask senior architecture questions before editing"
   brand_color: "#0f766e"
-  default_prompt: "Use $architecture-context to map the product path, architecture boundary, missing questions, and suited VibeRaven skill before editing."
+  default_prompt: "Use $architecture-context to ask the missing product questions, compare architecture options, recommend a boundary, and route the next VibeRaven skill before editing."
 
 policy:
   allow_implicit_invocation: true

@@ -1,8 +1,8 @@
 interface:
   display_name: "Go Live"
-  short_description: "Push a local app to GitHub and Vercel"
+  short_description: "Ship local work with live proof"
   brand_color: "#10b981"
-  default_prompt: "Use $go-live to connect this project to GitHub and Vercel, then produce live deployment proof."
+  default_prompt: "Use $go-live to inspect local proof, connect GitHub/Vercel when safe, verify the live URL, record production context, and name provider gaps."
 
 policy:
   allow_implicit_invocation: true

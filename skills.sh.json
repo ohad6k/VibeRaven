@@ -4,7 +4,7 @@
   "groupings": [
     {
       "title": "Production",
-      "description": "Skills for helping AI agents find what changed, which version broke, which architecture boundary is affected, and what provider context matters before they patch real apps.",
+      "description": "Token-efficient VibeRaven loops that route AI agents through architecture questions, release/provider evidence, MCP context when available, verification, and production memory before they patch real apps.",
       "skills": [
         "viberaven",
         "architecture-context",

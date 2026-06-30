@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-30T14:00:39.050Z",
+  "exportedAt": "2026-06-30T15:59:58.464Z",
   "sourceRepo": "private development repository",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -42,10 +42,6 @@
     [
       "docs/public-repo/assets/viberaven-studio-demo.mp4",
       "assets/viberaven-studio-demo.mp4"
-    ],
-    [
-      "docs/public-repo/assets/viberaven-real-codex-proof.png",
-      "assets/viberaven-real-codex-proof.png"
     ],
     [
       "llms.txt",

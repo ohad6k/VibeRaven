@@ -1,83 +1,82 @@
 ---
 name: viberaven
-description: Use VibeRaven when an AI-built app or agent needs release drift, version context, architecture context, provider context, production-context memory, or a clear answer to what changed before editing, shipping, deploying, or debugging production-only behavior.
+description: Use when an AI-built app needs architecture context, release drift, version context, provider context, MCP evidence, production memory, connected-agent context, or a clear answer to what changed before editing, debugging, shipping, or deploying.
 ---
 
-# VibeRaven Skill
+# VibeRaven
 
-AI agents can code. They still need to know what changed.
+Agents can code. VibeRaven makes them stop guessing.
 
-VibeRaven is the localhost Studio for AI agents that need release/version context, architecture context, provider context, and repo evidence before they edit a real app.
+## Hard Rule
 
-## When To Use
+Before touching production-sensitive code, run the VibeRaven loop:
 
-Use when the user wants to know which version broke, what changed since the last working release, what architecture boundary is affected, what provider context matters, or whether the next fix belongs in repo code or outside the repo.
+```text
+route -> ask -> evidence -> fix -> verify -> remember -> next action
+```
 
-Default to the user's pain, not a checklist. Lead with release history, diffs, architecture boundaries, versions, provider state, and the gap between "it worked yesterday" and "the agent is guessing today."
+Do not skip to the nearest file.
 
-Do not use stale provider checklist examples, tool-name lists, or old gate language as the hook unless the user explicitly says that is the pain.
+## Plugin Route
 
-## Main Flow
+Pick the right sub-skill:
+
+| Task signal | Use |
+| --- | --- |
+| Vague feature or product work | `architecture-context` |
+| Worked before, broke now, version changed | `what-broke` |
+| Provider/release/migration risk needs durable memory | `production-context` |
+| Push, deploy, live URL, GitHub/Vercel proof | `go-live` |
+
+When a sub-skill returns `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
+
+Use this skill itself when Studio, MCP, provider cards, release/version context, connected CLIs, or access modes matter.
+
+## Evidence Sources
+
+Use the cheapest source that proves the next decision:
+
+- Repo: `git status`, tags, changelog, diffs, tests, migrations, env examples.
+- VibeRaven Studio: `npx -y viberaven` for chat, versions, provider cards, diffs, access modes, and CLI connection.
+- MCP: if VibeRaven/provider MCP tools are visible, use them for release history, provider status, project context, and dashboard-adjacent evidence.
+- Memory: `.viberaven/production-context.md` for incidents, rollback notes, migration history, fragile paths, and open provider actions.
+
+If MCP/provider evidence is unavailable, say so and continue with repo evidence. Never ask for secrets.
+
+## Loop
+
+1. Route to the right sub-skill.
+2. Ask only missing questions that change architecture or risk.
+3. Gather version/provider/repo evidence before editing.
+4. Make or propose the scoped repo action the evidence supports.
+5. Verify with the most relevant command or provider/MCP receipt.
+6. Update or propose `.viberaven/production-context.md`.
+7. End with one next action: code, provider check, deploy, or user answer.
+
+If the user asked you to implement and repo evidence is strong, do the repo work. Do not stop at a plan.
+
+## Output
+
+```text
+Boundary:
+Evidence:
+Repo action:
+Provider/MCP action:
+Verification:
+Memory:
+Next skill:
+Next:
+```
+
+## Commands
 
 ```bash
 npx -y viberaven
-```
-
-Use the Studio chat, provider cards, MCP status, release/version context, architecture context, diff views, access-mode control, and CLI agent connection. Treat installed and connected as different states: do not assume a CLI agent is ready until Studio's connection test passes.
-
-For the start of general app work, use `architecture-context` first: map the product path, architecture boundary, missing questions, and suited VibeRaven skill before planning or editing.
-
-## Production Context Memory
-
-Before production-sensitive work, check for `.viberaven/production-context.md`.
-
-- If it exists, read the relevant sections before proposing or making changes.
-- If it is missing and the user asked for implementation, create a compact entry when the task touches releases, architecture boundaries, providers, migrations, auth, billing, webhooks, env vars, monitoring, deployment, incidents, rollback notes, or fragile customer paths.
-- After a scoped fix, update the file with what changed, which architecture boundary it touched, why it is dangerous, what verified the fix, and what provider/human action remains.
-
-Use the `production-context` skill for the exact file shape and update rules.
-
-## Agent Instruction Install
-
-```bash
 npx -y viberaven init --agents all
 npx -y viberaven init --agents all --dry-run
 ```
 
-## Evidence Discipline
-
-Before claiming a fix is grounded:
-
-1. Identify the real context gap: version diff, architecture context, provider context, repo code, or a human dashboard action.
-2. Use available Studio context, provider evidence, MCP status, diffs, changelogs, and repo files to ground the work.
-3. Map the affected architecture boundary before editing: auth/session, data/policy, deploy/env, provider callback, webhook, billing, storage, or UI/API contract.
-4. Make a scoped repo-code change that directly addresses the proven risk.
-5. Verify with the most relevant local command, test, build, provider tool, or Studio-visible evidence.
-6. State any remaining human dashboard action plainly when it cannot be proven from repo or tool evidence.
-
-Do not treat a successful local edit as proof that a provider dashboard, deployment project, billing portal, database policy, storage rule, quota, or production secret is configured correctly unless there is direct evidence. Do not claim provider dashboard checks are fixed by repo-code edits.
-
-## MCP
-
-Prefer VibeRaven MCP tools when they are configured and visible in the project context. Use provider status, release history, and version context to improve prompts and avoid guessing about external configuration.
-
-For MCP server setup:
-
-```json
-{ "viberaven": { "command": "npx", "args": ["-y", "viberaven", "--mcp"] } }
-```
-
-## Legacy Artifact Loop
-
-Older VibeRaven workflows may mention `npx -y viberaven --agent-mode`, `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, `.viberaven/context-map.json`, `--verify`, `--strict`, `audit --vercel-supabase`, `LOGIN_URL_READY`, and `clean --plan`.
-
-Use those only when the installed CLI and the user's workflow call for the non-interactive artifact loop. The current default is Studio-first:
-
-```bash
-npx -y viberaven
-```
-
-Legacy compatibility commands:
+Legacy artifact commands only when the installed workflow requires them:
 
 ```bash
 npx -y viberaven --agent-mode
@@ -85,6 +84,9 @@ npx -y viberaven --verify
 npx -y viberaven --strict
 ```
 
-Never ask for passwords, tokens, cookies, or secrets.
+## Mistakes
 
-Deep reference: https://viberaven.dev/llms-full.txt
+- Treating installed CLI as connected/ready without a connection test.
+- Claiming dashboard, DNS, billing, webhook, RLS, storage, deployment, or secrets are fixed by repo edits alone.
+- Asking for passwords, tokens, cookies, private keys, signing secrets, or raw env values.
+- Returning a checklist when the next useful action is a focused question, diff, test, or provider proof.

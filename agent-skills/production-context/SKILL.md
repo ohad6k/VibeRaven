@@ -1,17 +1,17 @@
 ---
 name: production-context
-description: Use when an AI coding agent is changing, reviewing, debugging, deploying, or documenting production-sensitive work and needs to maintain a compact `.viberaven/production-context.md` memory of what changed, why it is dangerous, how it was verified, and what provider or human action remains.
+description: Use when changing, reviewing, debugging, deploying, or documenting production-sensitive work involving providers, releases, migrations, auth, billing, webhooks, env vars, incidents, rollback notes, fragile customer paths, or architecture boundaries.
 ---
 
 # Production Context
 
-Repo context tells the agent what exists. Production context tells it what is dangerous.
+Repo context says what exists. Production context says what is dangerous.
 
-Use this skill when work touches releases, providers, migrations, auth, billing, webhooks, env vars, monitoring, deployment, customer-critical flows, incidents, rollback notes, architecture boundaries, or launch readiness.
+## Hard Rule
 
-The goal is a small durable context wrapper, not a report dump.
+Keep memory small enough to reuse in the next agent action. Do not create a report dump.
 
-## Context File
+## File
 
 Maintain:
 
@@ -19,78 +19,71 @@ Maintain:
 .viberaven/production-context.md
 ```
 
-If the file is missing and you are allowed to write repo docs, create it. If you are not allowed to write, propose the exact entry instead.
+Create it when allowed and missing. Otherwise propose the exact entry.
 
-Use this file shape:
+## Loop
+
+```text
+read -> isolate risk -> fix/propose -> verify -> record -> open action
+```
+
+1. Read the current file before production-sensitive work.
+2. Identify one relevant boundary: release, auth, data/RLS, provider dashboard, deploy/env, job/webhook, billing, storage, or customer path.
+3. Use repo evidence first: git status, tags, changelog, PR links, diffs, migrations, env examples, tests.
+4. Use VibeRaven/provider MCP evidence when available for provider state, release history, and dashboard-adjacent receipts.
+5. Record only what changes the next decision.
+6. Separate repo fixes from provider/human actions.
+
+When the output names `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
+
+## File Shape
 
 ```md
 # VibeRaven Production Context
 
 ## Current Release / Change Window
-
 ## Recent Changes
-
 ## Architecture Boundaries
-
 ## Provider Boundaries
-
 ## Migration And Data History
-
 ## Incidents And Rollback Notes
-
 ## Fragile Customer Paths
-
 ## Verification Receipts
-
 ## Open Provider Or Human Actions
 ```
 
 ## Entry Shape
 
-Append or update the smallest relevant entry:
-
 ```md
-### YYYY-MM-DD - short change label
+### YYYY-MM-DD - short label
 
-- Change: what changed in repo or release history.
-- Evidence: file, command output, PR/changelog link, tag, migration, or user-provided note.
-- Architecture boundary: request path, auth/session, data/policy, provider/dashboard, deploy/env, job/webhook, billing, storage, or UI/API contract involved.
-- Production danger: why this can pass locally but fail in production.
-- Provider boundary: provider state that matters and whether it is proven.
-- Repo fix: fix made or recommended in repo.
-- Verification: command or receipt that supports the fix.
-- Open action: provider/human action still needed, or `none`.
+- Change:
+- Evidence:
+- Boundary:
+- Danger:
+- Repo fix:
+- Verification:
+- Provider/MCP proof:
+- Open action:
 ```
 
-## Workflow
-
-1. Inspect existing `.viberaven/production-context.md` before production-sensitive work.
-2. Identify the smallest relevant context: release/version, architecture boundary, provider, migration, incident, rollback, or fragile path.
-3. Use normal repo evidence first: `git status --short`, changelog, PR links, tags, diffs, migrations, env examples, provider-adjacent files, and verification output.
-4. Map the affected architecture path before editing: what receives the request/event, what owns auth/session, what owns data/policy, what depends on provider/dashboard state, and what repo file can safely change.
-5. Make or propose the smallest repo-code fix that evidence supports.
-6. Record what changed, which architecture boundary it touched, why it is dangerous, how it was verified, and what provider/human proof remains.
-7. Keep entries compact. Link to files, commands, PRs, changelogs, screenshots, or receipts instead of copying long content.
-
-## Provider Boundaries
-
-Never claim provider dashboards are fixed by repo edits alone.
-
-For unknown provider state, write:
-
-```md
-- Provider boundary: unknown from repo.
-- Open action: verify `<provider>` `<setting>` in dashboard or with read-only provider/MCP evidence.
-```
-
-Do not ask for passwords, tokens, cookies, private keys, signing secrets, or raw env values.
+Use `unknown from repo` when provider state is not proven.
 
 ## Output
 
-Return:
+```text
+Context read:
+Context updated/proposed:
+Boundary:
+Repo action:
+Provider/MCP action:
+Next skill:
+Next:
+```
 
-1. production context read
-2. production context updated or proposed
-3. architecture boundary identified
-4. repo-code fix or none
-5. provider or human action needed
+## Mistakes
+
+- Copying long logs instead of linking commands, files, PRs, screenshots, or receipts.
+- Claiming provider dashboards are fixed by repo edits.
+- Asking for passwords, tokens, cookies, private keys, signing secrets, or raw env values.
+- Recording generic notes that will not change a future agent decision.

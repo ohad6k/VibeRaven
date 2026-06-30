@@ -1,8 +1,8 @@
 interface:
   display_name: "Production Context"
-  short_description: "Keep agent fixes tied to production risk"
+  short_description: "Write compact production memory"
   brand_color: "#7c3aed"
-  default_prompt: "Use $production-context to record what changed, why it is dangerous, what was verified, and what provider or human action remains."
+  default_prompt: "Use $production-context to read or write the compact production memory: changed boundary, evidence, verification, provider/MCP proof, and open human action."
 
 policy:
   allow_implicit_invocation: true

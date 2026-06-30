@@ -1,66 +1,109 @@
 ---
 name: architecture-context
-description: Use when an AI coding agent starts real app work, feature work, provider work, release work, or any task where unclear architecture could cause broad or unsafe changes.
+description: Use when an AI coding agent starts real app work, product feature design, provider work, migrations, auth, billing, storage, webhooks, deploys, or any task where unclear architecture could cause broad or unsafe changes.
 ---
 
 # Architecture Context
 
-AI agents can write code. Before they write code, they need the map a senior engineer would ask for.
+Make the agent behave like a senior product engineer before it edits.
 
-Use this skill at the start of real app work: new feature, bugfix, provider setup, release/version work, migration, auth, billing, webhook, deploy, or production-sensitive refactor.
+## Hard Rule
 
-VibeRaven's flow is:
+For vague work like "build uploads", "add billing", "fix login", "make chat", or "connect Supabase": ask architecture questions first. Do not answer only "loaded".
+
+## Loop
 
 ```text
-architecture -> version/release context -> provider boundary -> MCP/Studio context -> smallest safe fix
+product path -> questions -> options -> boundary -> plan -> route
 ```
 
-## Agent Contract
+1. Name the user path.
+2. Ask 3-6 low-level product questions the user can answer without architecture vocabulary.
+3. Compare practical options.
+4. Recommend one option and why.
+5. Use repo, Studio, or provider MCP evidence when available for existing boundaries.
+6. Route to `what-broke`, `production-context`, `viberaven`, or `go-live` when needed.
+7. Output the Architecture Brief before editing. This is a hard gate.
+8. Edit only after the boundary is clear.
 
-Read this first, then act:
+When the output names `Next skill:`, continue with that VibeRaven skill unless user input is required.
 
-- Boundary first: name the system boundary before naming files.
-- Questions second: ask only for missing facts that change the plan.
-- Plan third: plan around product path, architecture boundary, provider state, and version/release context.
-- Skill route fourth: choose `what-broke`, `production-context`, `viberaven`, or `go-live`.
-- Edit last: change the smallest repo surface the evidence supports.
+## Question Mode
 
-## First Move
-
-Before planning or editing:
-
-1. Identify the product surface and user path.
-2. Map the affected boundary: UI/API, auth/session, data/schema/RLS, provider dashboard, deploy/env, background job/webhook, billing, storage, or release/version drift.
-3. Read existing context when present: `.viberaven/production-context.md`, `.viberaven/agent-context.md`, `.viberaven/mission-map.md`, changelog, tags, PR links, and recent git history.
-4. Ask only questions whose answers change the plan: last working version, provider involved, deploy target, production symptom, data ownership, dashboard proof, rollback note, or customer path.
-5. Build the plan around the boundary first, then the file change.
-
-## Route Skills
-
-- Use `what-broke` when behavior changed, a version broke, or the user says it worked before.
-- Use `production-context` when the work needs durable memory: architecture boundary, provider state, incidents, migrations, rollback notes, release notes, or open human actions.
-- Use `viberaven` when Studio, MCP context, provider cards, release/version context, connected agents, or access modes matter.
-- Use `go-live` when the user wants push/deploy/live URL proof.
-
-## Output Before Implementation
+Ask low-level questions. Do not ask the user to classify "boundary", "runtime", "RLS", "source of truth", or "production invariant". Translate answers later.
 
 ```text
-Architecture boundary:
-- ...
+I need a few product answers before I edit.
 
+1. What are we building or fixing? Example: uploads, billing, login, chat, admin.
+2. Who is this for? Example: one user, team/workspace, admins, paying users, outside services.
+3. Who can see or change it? Example: owner, teammates, link holders, admins only.
+4. What service should handle it? Example: Supabase, Stripe, Clerk, Vercel, email, storage, or "I don't know".
+5. What rule matters most? Example: private, paid-only, rollback, audit log, realtime, local demo.
+6. What already exists? Example: nothing, page, database table, API route, provider setup, or "check the repo".
+
+After you answer, I will translate this into a detailed architecture brief with boundaries, options, workstreams, risks, verification, and route.
+```
+
+Common variants:
+
+| Task | Ask about |
+| --- | --- |
+| Uploads | users, visibility, storage, size/type limits, delete rules |
+| Billing | product, paid access, after-payment behavior, failed payment, test/live |
+| Auth | provider, return URL, protected pages, last working deploy |
+| Chat/AI | history visibility, save/delete, streaming, model/provider, rate limits |
+| Admin | admins, dangerous actions, audit/approval |
+
+Do not ask for secrets or raw env values.
+
+## Options
+
+Use these labels when comparing architecture:
+
+- Client-only: local UI state or non-sensitive demos.
+- Server/API: validation, auth checks, writes, secrets, provider calls.
+- Database/RLS: ownership, team access, privacy, policy enforcement.
+- Provider dashboard: Stripe, Supabase, Clerk, Vercel, email, DNS, storage, webhooks, callbacks.
+- Background job/webhook: retries, delayed events, external state changes.
+- Release/version: changed behavior across deploys, tags, PRs, migrations, env.
+
+Prefer the simplest option that preserves the production invariant.
+
+## Output Before Editing
+
+Always output this brief after the user answers and before code edits:
+
+```text
+Product path:
 Questions/blockers:
-- ... or none
-
-Plan:
-- ...
-
-VibeRaven skill/context:
-- ...
+User answers translated:
+Options:
+Recommended boundary:
+Architecture plan:
+Workstreams:
+Risks:
+Verification:
+VibeRaven route:
+Next skill:
 ```
 
-## Rules
+## Brief Depth
 
-- Do not start from the nearest file. Start from the system boundary.
-- Do not ask broad discovery questions when repo evidence answers them.
-- Do not claim provider dashboard, billing, DNS, webhook, database, or deployment state is fixed by repo edits alone.
-- Do not turn this into a long architecture document. Keep only the context needed for the next safe action.
+The skill file is token-efficient; the brief is not a tiny summary. For nontrivial work, write 2-5 concrete bullets under each brief section and make it detailed enough to guide implementation:
+
+- State objective, user path, and success criteria.
+- Translate user answers into ownership, access, data, provider, and deploy boundaries.
+- Compare 2-3 options with tradeoffs and a recommendation.
+- Break the plan into workstreams with sequence, dependencies, files/areas to inspect, and acceptance signals.
+- Name risks, fallback paths, provider/MCP proof, verification commands, and open questions.
+- If implementation is requested, continue after the brief. If not, stop at the brief and ask for approval.
+
+If answers are missing, stop at Question Mode.
+
+## Mistakes
+
+- Starting from a file instead of the product path.
+- Asking broad questions that repo evidence already answers.
+- Hiding tradeoffs.
+- Claiming provider/dashboard state is fixed by code alone.

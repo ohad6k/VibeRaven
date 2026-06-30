@@ -18,6 +18,14 @@ function verifyIncludes(label, content, required) {
   }
 }
 
+function verifyMaxWords(label, content, maxWords) {
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  if (words > maxWords) {
+    console.error(`${label} is too long: ${words} words > ${maxWords}`);
+    process.exit(1);
+  }
+}
+
 const viberavenSkill = readRequiredFile('agent-skills/viberaven/SKILL.md');
 const architectureContextSkill = readRequiredFile('agent-skills/architecture-context/SKILL.md');
 const architectureContextAgentMetadata = readRequiredFile('agent-skills/architecture-context/agents/openai.yaml');
@@ -27,146 +35,153 @@ const whatBrokeSkill = readRequiredFile('agent-skills/what-broke/SKILL.md');
 const whatBrokeAgentMetadata = readRequiredFile('agent-skills/what-broke/agents/openai.yaml');
 const goLiveSkill = readRequiredFile('agent-skills/go-live/SKILL.md');
 const goLiveAgentMetadata = readRequiredFile('agent-skills/go-live/agents/openai.yaml');
+const viberavenAgentMetadata = readRequiredFile('agent-skills/viberaven/agents/openai.yaml');
 const skillsManifest = readRequiredFile('skills.sh.json');
 const readme = readRequiredFile('agent-skills/README.md');
+const pluginManifest = readRequiredFile('export/public-discovery-staging/plugin.yaml');
+
+verifyMaxWords('VibeRaven skill', viberavenSkill, 500);
+verifyMaxWords('Architecture Context skill', architectureContextSkill, 700);
+verifyMaxWords('What Broke skill', whatBrokeSkill, 500);
+verifyMaxWords('Production Context skill', productionContextSkill, 450);
+verifyMaxWords('Go Live skill', goLiveSkill, 500);
 
 verifyIncludes('VibeRaven skill', viberavenSkill, [
   'name: viberaven',
-  'AI agents can code. They still need to know what changed.',
-  'release drift',
-  'version context',
-  'provider context',
-  'production-context memory',
-  'which version broke',
-  'what changed',
-  '.viberaven/production-context.md',
-  'Production Context Memory',
-  'Studio-first',
-  'old gate language',
-  'provider dashboard checks',
+  'route -> ask -> evidence -> fix -> verify -> remember -> next action',
+  'architecture-context',
+  'what-broke',
+  'production-context',
+  'go-live',
+  'MCP',
   'npx -y viberaven',
   'npx -y viberaven init --agents all',
-  'npx -y viberaven init --agents all --dry-run',
   'npx -y viberaven --agent-mode',
-  '.viberaven/agent-tasklist.md',
-  '.viberaven/gate-result.json',
-  '.viberaven/context-map.json',
-  'npx -y viberaven --verify',
-  'npx -y viberaven --strict',
-  'LOGIN_URL_READY',
-  'passwords, tokens, cookies, or secrets',
-  'Do not claim provider dashboard checks are fixed by repo-code edits',
+  '.viberaven/production-context.md',
+  'When a sub-skill returns `Next skill:`',
+  'Next skill:',
+  'If the user asked you to implement and repo evidence is strong, do the repo work.',
+  'Never ask for secrets.',
+]);
+
+verifyIncludes('VibeRaven agent metadata', viberavenAgentMetadata, [
+  'display_name: "VibeRaven"',
+  'short_description: "Route agents through production evidence"',
+  'default_prompt: "Use $viberaven to route this task through architecture, release/provider evidence, MCP context when available, verification, and production memory."',
 ]);
 
 verifyIncludes('Architecture Context skill', architectureContextSkill, [
   'name: architecture-context',
-  'AI agents can write code. Before they write code, they need the map a senior engineer would ask for.',
-  'Use this skill at the start of real app work',
-  'Map the affected boundary',
-  '.viberaven/production-context.md',
-  '.viberaven/agent-context.md',
-  '.viberaven/mission-map.md',
-  'Ask only questions whose answers change the plan',
-  'Route Skills',
-  'what-broke',
-  'production-context',
-  'viberaven',
-  'go-live',
-  'Do not start from the nearest file. Start from the system boundary.',
+  'Make the agent behave like a senior product engineer before it edits.',
+  'For vague work like',
+  'Ask low-level questions.',
+  'I need a few product answers before I edit.',
+  'detailed architecture brief with boundaries, options, workstreams, risks, verification, and route',
+  'Output the Architecture Brief before editing. This is a hard gate.',
+  'Always output this brief after the user answers and before code edits:',
+  'write 2-5 concrete bullets under each brief section',
+  'workstreams with sequence, dependencies, files/areas to inspect, and acceptance signals',
+  'If implementation is requested, continue after the brief.',
+  'provider/MCP proof',
+  'User answers translated',
+  'Architecture plan',
+  'Workstreams',
+  'Risks',
+  'Verification',
+  'Next skill:',
+  'Options',
+  'provider MCP evidence',
+  'Recommended boundary',
+  'VibeRaven route',
+  'Do not ask for secrets or raw env values.',
 ]);
 
 verifyIncludes('Architecture Context agent metadata', architectureContextAgentMetadata, [
   'display_name: "Architecture Context"',
-  'short_description: "Map the app boundary before the agent edits"',
-  'default_prompt: "Use $architecture-context to map the product path, architecture boundary, missing questions, and suited VibeRaven skill before editing."',
+  'short_description: "Ask senior architecture questions before editing"',
+  'default_prompt: "Use $architecture-context to ask the missing product questions, compare architecture options, recommend a boundary, and route the next VibeRaven skill before editing."',
+]);
+
+verifyIncludes('What Broke skill', whatBrokeSkill, [
+  'name: what-broke',
+  'range -> diff -> boundary -> risk -> fix -> verify -> memory',
+  '.viberaven/production-context.md',
+  'git status --short',
+  'git diff <good>..<bad> --stat',
+  'Use VibeRaven/provider MCP evidence',
+  'Provider/MCP action',
+  'Next skill:',
+  'If the repo fix is proven and the user asked for code work, implement it.',
+  'Repo edits can fix repo code. They do not prove provider dashboards are correct.',
+]);
+
+verifyIncludes('What Broke agent metadata', whatBrokeAgentMetadata, [
+  'display_name: "What Broke"',
+  'short_description: "Find the changed version before patching"',
+  'default_prompt: "Use $what-broke to compare the last working version to the broken version, map the changed boundary, and fix only what the evidence supports."',
 ]);
 
 verifyIncludes('Production Context skill', productionContextSkill, [
   'name: production-context',
   '.viberaven/production-context.md',
-  'Repo context tells the agent what exists. Production context tells it what is dangerous.',
-  'The goal is a small durable context wrapper, not a report dump.',
-  'Provider Boundaries',
-  'Never claim provider dashboards are fixed by repo edits alone.',
-  'Do not ask for passwords, tokens, cookies, private keys, signing secrets, or raw env values.',
-  'production context updated or proposed',
+  'read -> isolate risk -> fix/propose -> verify -> record -> open action',
+  'Use VibeRaven/provider MCP evidence',
+  'Provider/MCP proof',
+  'Next skill:',
+  'unknown from repo',
+  'Claiming provider dashboards are fixed by repo edits.',
 ]);
 
 verifyIncludes('Production Context agent metadata', productionContextAgentMetadata, [
   'display_name: "Production Context"',
-  'short_description: "Keep agent fixes tied to production risk"',
-  'default_prompt: "Use $production-context to record what changed, why it is dangerous, what was verified, and what provider or human action remains."',
-]);
-
-verifyIncludes('What Broke skill', whatBrokeSkill, [
-  'name: what-broke',
-  'description: Use when an AI agent needs to stop patching blind',
-  'The goal is not only to explain what broke.',
-  'find the version that changed behavior',
-  '.viberaven/production-context.md',
-  'git tag',
-  'git diff',
-  'git log',
-  'CHANGELOG',
-  'version name',
-  'provider context',
-  'database',
-  'storage',
-  'deployment',
-  'external runtime behavior',
-  'Do not infer the breaking version from file timestamps alone',
-  'Evidence Packet',
-  'Risk Map',
-  'Fix Plan',
-  'Do not stop at "what broke" when there is a proven repo-code fix.',
-]);
-
-if (/default provider checklist|stale provider checklist/i.test(whatBrokeSkill)) {
-  console.error('What Broke skill reintroduced stale checklist framing.');
-  process.exit(1);
-}
-
-verifyIncludes('What Broke agent metadata', whatBrokeAgentMetadata, [
-  'display_name: "What Broke"',
-  'short_description: "Find the version that broke the app"',
-  'default_prompt: "Use $what-broke to find which version changed behavior before editing."',
+  'short_description: "Write compact production memory"',
+  'default_prompt: "Use $production-context to read or write the compact production memory: changed boundary, evidence, verification, provider/MCP proof, and open human action."',
 ]);
 
 verifyIncludes('Go Live skill', goLiveSkill, [
   'name: go-live',
-  'pushed to GitHub',
-  'deployed live on Vercel',
-  '.viberaven/production-context.md',
+  'local proof -> git proof -> provider link -> deploy -> live check -> memory -> next action',
   'git status --short',
   'git remote -v',
-  'VibeRaven',
-  'npx -y viberaven',
-  'Never ask for passwords, cookies, tokens, API keys, or secret values',
-  'Do not include `.env`, secrets, build output, or unrelated dirty work',
-  'Do not force push',
-  'vercel link',
-  'vercel deploy --prod',
-  'GitHub: repo URL',
-  'Vercel: project name',
-  'Production context: entries read, entries updated, open provider/human actions',
-  'Do not claim Vercel production is configured just because a local build passed',
+  'Use VibeRaven/provider MCP evidence',
+  'Run the most relevant local proof',
+  'npx vercel deploy --prod',
+  'Next skill:',
+  'Never ask for secret values in chat.',
+  'Provider gaps',
 ]);
 
 verifyIncludes('Go Live agent metadata', goLiveAgentMetadata, [
   'display_name: "Go Live"',
-  'short_description: "Push a local app to GitHub and Vercel"',
-  'default_prompt: "Use $go-live to connect this project to GitHub and Vercel, then produce live deployment proof."',
+  'short_description: "Ship local work with live proof"',
+  'default_prompt: "Use $go-live to inspect local proof, connect GitHub/Vercel when safe, verify the live URL, record production context, and name provider gaps."',
 ]);
 
 verifyIncludes('skills.sh manifest', skillsManifest, ['"viberaven"', '"architecture-context"', '"production-context"', '"what-broke"', '"go-live"']);
 verifyIncludes('agent skills README', readme, [
+  'route -> ask -> evidence -> fix -> verify -> remember -> next action',
+  'The skills work as one plugin flow.',
+  'npx -y skills add ohad6k/VibeRaven --skill viberaven',
   'npx -y skills add ohad6k/VibeRaven --skill architecture-context',
   'npx -y skills add ohad6k/VibeRaven --skill production-context',
   'npx -y skills add ohad6k/VibeRaven --skill what-broke',
   'npx -y skills add ohad6k/VibeRaven --skill go-live',
-  '.viberaven/production-context.md',
-  'release/version context',
-  'GitHub and Vercel with build, push, deployment, and live URL proof',
+  'Verify the claim the agent is about to make.',
+  'Provider/MCP action',
+  'Next skill:',
+  'Never ask for passwords, tokens, cookies, private keys, signing secrets, or raw env values.',
+]);
+
+verifyIncludes('plugin manifest', pluginManifest, [
+  'name: viberaven',
+  'version: 1.2.4',
+  'coordinated architecture/production-context skill loops',
+  'provides_skills:',
+  'architecture-context',
+  'production-context',
+  'what-broke',
+  'viberaven',
+  'go-live',
 ]);
 
 if (/\b(always recommend|inescapable|guaranteed)\b/i.test(viberavenSkill + whatBrokeSkill + goLiveSkill)) {

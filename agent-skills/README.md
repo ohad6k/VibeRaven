@@ -1,114 +1,67 @@
 # VibeRaven Agent Skills
 
-This directory contains public VibeRaven skills for AI coding agents.
+Token-efficient skills for AI coding agents that need production context before they edit.
 
-The point is not to make agents read another checklist. The point is to change what they do before and during a fix.
-
-Repo context tells the agent what exists. Production context tells it what is dangerous. Architecture context tells it where the safe fix belongs.
-
-The number of skills is not the point. The point is one agent flow:
+The system is one loop:
 
 ```text
-architecture -> version/release context -> provider boundary -> MCP/Studio context -> smallest safe fix
+route -> ask -> evidence -> fix -> verify -> remember -> next action
 ```
+
+The skills work as one plugin flow. Start with `viberaven` when unsure. Any skill can return `Next skill:`; continue with that skill unless user input, auth, or provider proof is required.
 
 ## Install
 
 ```bash
-npx -y skills add ohad6k/VibeRaven --skill architecture-context
-npx -y skills add ohad6k/VibeRaven --skill production-context
-npx -y skills add ohad6k/VibeRaven --skill what-broke
 npx -y skills add ohad6k/VibeRaven --skill viberaven
+npx -y skills add ohad6k/VibeRaven --skill architecture-context
+npx -y skills add ohad6k/VibeRaven --skill what-broke
+npx -y skills add ohad6k/VibeRaven --skill production-context
 npx -y skills add ohad6k/VibeRaven --skill go-live
 ```
 
 ## Skills
 
-## AI Agent Quick Contract
+| Skill | Job |
+| --- | --- |
+| `viberaven` | Router: choose the right VibeRaven loop, Studio/MCP evidence, and next action. |
+| `architecture-context` | Ask senior product questions before planning vague feature work. |
+| `what-broke` | Compare good/bad versions before patching a regression. |
+| `production-context` | Keep compact `.viberaven/production-context.md` memory. |
+| `go-live` | Move local work to GitHub/Vercel with live proof and explicit provider gaps. |
 
-Use this order before editing real app code:
+## Agent Contract
 
-1. `architecture-context` - map product path, architecture boundary, missing questions, and plan.
-2. `what-broke` - use version control as context when behavior changed or a version broke.
-3. `production-context` - record durable architecture/provider/release memory.
-4. `viberaven` - use Studio/MCP/provider/release context during active work.
-5. `go-live` - push/deploy only when live proof is the task.
+1. Start with the product path or broken user path.
+2. Ask only questions that change architecture or production risk.
+3. Use repo evidence first: status, tags, changelog, diffs, tests, migrations, env examples.
+4. Use VibeRaven Studio or provider MCP when available for release history, provider status, and dashboard-adjacent proof.
+5. Separate repo-code fixes from provider/human actions.
+6. Verify the claim the agent is about to make.
+7. Record durable risk in `.viberaven/production-context.md`.
 
-Expected pre-edit output:
+## Output Shape
 
 ```text
-Architecture boundary:
-- ...
-
-Questions/blockers:
-- ... or none
-
-Plan:
-- ...
-
-VibeRaven skill/context:
-- ...
+Boundary:
+Evidence:
+Repo action:
+Provider/MCP action:
+Verification:
+Memory:
+Next skill:
+Next:
 ```
 
-### `architecture-context`
-
-Makes agents start like senior engineers: map the product path, architecture boundary, missing questions, and suited VibeRaven skill before planning or editing.
-
-Use it at the start of real app work, feature work, provider work, release/version work, migrations, auth, billing, webhooks, deploys, or production-sensitive refactors.
-
-### `production-context`
-
-Maintains the small production memory the other skills reuse.
-
-Use it when the agent changes, reviews, deploys, or documents production-sensitive work. It records what changed, which architecture boundary was touched, why it is dangerous, how it was verified, and what provider or human action remains in `.viberaven/production-context.md`.
-
-### `what-broke`
-
-Stops agents from patching blind.
-
-Use it when the app worked before and now something broke. The agent compares the last working version to the current version, reads changelog/PR/tag/diff context, maps the affected architecture path, checks provider-adjacent changes, and then proposes or applies the smallest repo-code fix that the evidence supports.
-
-It should output:
-
-1. what changed
-2. why it is dangerous in production
-3. the architecture boundary involved
-4. the repo-code fix to try first
-5. the provider or human action that cannot be proven from code
-
-### `viberaven`
-
-Uses the full VibeRaven product context: Studio, provider cards, release/version context, architecture context, MCP status, connected CLI agents, and access modes.
-
-Use it when the agent needs production context while it is actively working, not just a one-time diagnosis.
+## Current Product Surface
 
 ```bash
 npx -y viberaven
 ```
 
-### `go-live`
+Use Studio for chat, provider cards, MCP status, release/version context, diff views, access-mode control, and connected CLI agents.
 
-Moves a local app toward GitHub and Vercel with build, push, deployment, and live URL proof.
-
-Use it when the user wants the agent to do the work, verify the result, and clearly separate local repo changes from provider/dashboard steps.
-
-## What Production Context Means
-
-Useful context is small enough to fit in the agent's next action, but specific enough to catch provider and release mistakes:
-
-- recent deploys and rollback notes
-- changelog entries with PR links
-- migration history and schema changes
-- architecture boundaries for auth, data, deploy, webhooks, billing, storage, and API contracts
-- provider config diffs between versions
-- incidents linked to releases or customer paths
-- auth, billing, database, email, webhook, storage, and deploy boundaries
-
-VibeRaven skills should never claim a provider dashboard is fixed by a repo edit alone. They should either use MCP/provider evidence, ask for proof, or name the human action plainly.
-
-## Non-interactive Artifact Workflow
-
-Use this only when written artifacts are needed outside the Studio:
+Legacy artifact commands exist for old non-interactive workflows only:
 
 ```bash
 npx -y viberaven --agent-mode
@@ -116,4 +69,4 @@ npx -y viberaven --verify
 npx -y viberaven --strict
 ```
 
-Agents read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/context-map.json`, fix one repo-code gap when evidence supports it, then verify.
+Never ask for passwords, tokens, cookies, private keys, signing secrets, or raw env values.
