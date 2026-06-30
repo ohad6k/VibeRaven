@@ -99,7 +99,7 @@ repo fix + provider proof</code></pre>
 </table>
 
 <p align="center">
-  <img src="./assets/viberaven-real-diff-proof.png" alt="Real temp repo diff proof comparing green checks without VibeRaven versus version drift context with VibeRaven">
+  <img src="./assets/viberaven-viral-terminal-proof.png" alt="Terminal proof comparing green checks without VibeRaven versus version drift context with VibeRaven">
 </p>
 
 Real diff proof:

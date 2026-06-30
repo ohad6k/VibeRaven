@@ -312,6 +312,40 @@ h1{font-size:34px;line-height:1.05;margin:8px 0 16px;letter-spacing:0}
 </style></head><body><main><section class="terminal"><div class="bar"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i><span class="path">${htmlEscape(evidence.demoRepo)} > git diff v1.2.3..v1.2.4</span></div><div class="body"><aside class="side"><div class="eyebrow">Without VibeRaven</div><h1>Green check. Wrong fix.</h1><div class="check">$ npm test<br>PASS all tests<br><br>$ node local-live-check.mjs<br>HTTP ${htmlEscape(evidence.live.status)} ${htmlEscape(evidence.live.statusText)}</div><div class="miss"><b>Agent missed:</b><p>release changed auth callback</p><p>Supabase RLS changed too</p><p>provider proof still unknown</p></div></aside><section class="diff"><div class="diffTitle"><span>With VibeRaven</span><b>Map version drift before patching</b></div>${diffRows}</section></div></section><div class="caption"><strong>Real proof:</strong> temp repo, real git tags, real diff, real HTTP check. VibeRaven catches provider boundary before the agent edits.</div></main></body></html>`;
 }
 
+function renderViralTerminalHtml(evidence) {
+  const diffLines = [
+    '$ git diff --name-only v1.2.3..v1.2.4',
+    ...evidence.git.files,
+    '',
+    '$ viberaven architecture map',
+    ...evidence.architectureContext,
+    '',
+    '$ viberaven next action',
+    'repo fix: redirect fallback',
+    'provider proof: callback URL + Supabase RLS policy',
+  ];
+  const colored = diffLines
+    .map((line) => {
+      let klass = 'dim';
+      if (line.startsWith('$')) klass = 'cmd';
+      if (/Auth boundary|Data boundary|Deploy boundary|Fix boundary/.test(line)) klass = 'ok';
+      if (/provider proof|Supabase|callback URL/i.test(line)) klass = 'warn';
+      if (/\.env|app\/auth|supabase\//.test(line)) klass = 'file';
+      return `<div class="${klass}">${htmlEscape(line || ' ')}</div>`;
+    })
+    .join('');
+
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VibeRaven terminal proof</title>
+<style>
+:root{color-scheme:dark;--bg:#05070b;--panel:#090d14;--line:#263142;--text:#e8edf7;--muted:#7f8ca3;--green:#7ee787;--cyan:#79c0ff;--yellow:#f2cc60;--red:#ff7b72;--purple:#d2a8ff}
+*{box-sizing:border-box}html,body{margin:0;width:1200px;height:675px;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body:before{content:"";position:absolute;inset:-90px;background:radial-gradient(circle at 8% 98%,rgba(121,192,255,.22),transparent 32%),radial-gradient(circle at 88% 4%,rgba(126,231,135,.24),transparent 36%),radial-gradient(circle at 48% 45%,rgba(210,168,255,.13),transparent 34%);filter:blur(22px)}
+main{position:relative;height:100%;display:flex;align-items:center;justify-content:center;padding:44px}.frame{width:1010px;height:548px;border:1px solid rgba(148,163,184,.36);border-radius:28px;background:rgba(9,13,20,.96);box-shadow:0 34px 120px rgba(0,0,0,.62),inset 0 0 0 1px rgba(255,255,255,.035);overflow:hidden}.bar{height:48px;display:flex;align-items:center;gap:9px;padding:0 18px;border-bottom:1px solid rgba(148,163,184,.22);background:rgba(4,7,12,.78)}.dot{width:11px;height:11px;border-radius:50%}.r{background:#ff5f57}.y{background:#ffbd2e}.g{background:#28c840}.title{margin-left:12px;font:13px/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:#c9d1d9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.grid{display:grid;grid-template-columns:405px 1fr;height:500px}.left{padding:28px 28px 22px;border-right:1px solid rgba(148,163,184,.22);background:linear-gradient(180deg,rgba(15,23,42,.7),rgba(8,13,22,.7))}.tag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);font-weight:850}.big{font-size:47px;line-height:.95;margin:10px 0 22px;font-weight:860;letter-spacing:0}.box{border:1px solid rgba(126,231,135,.34);border-radius:14px;background:rgba(22,101,52,.13);padding:17px 18px;margin-bottom:18px;font:17px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;color:#e6ffed}.miss{font-size:16px;line-height:1.45;color:#d7dde8}.miss b{display:block;color:white;margin-bottom:8px}.miss span{display:block;color:#aeb9cc}.right{padding:24px 25px;font:15px/1.38 ui-monospace,SFMono-Regular,Consolas,monospace}.rightHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.rightHead span{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:850}.rightHead b{font-size:22px}.cmd{color:var(--cyan);margin-top:9px}.file{color:#e6edf3;padding-left:18px}.ok{color:var(--green)}.warn{color:var(--yellow)}.dim{color:var(--muted)}.punch{position:absolute;left:112px;right:112px;bottom:31px;display:flex;justify-content:space-between;gap:16px;font-size:18px;color:#dbeafe}.punch strong{color:white}.proof{color:#9fb0ca}
+</style></head><body><main><section class="frame"><div class="bar"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i><span class="title">${htmlEscape(evidence.demoRepo)}  --  viberaven proof</span></div><div class="grid"><aside class="left"><div class="tag">Without VibeRaven</div><div class="big">Green check.<br>Wrong fix.</div><div class="box">$ npm test<br>PASS all tests<br><br>$ node local-live-check.mjs<br>HTTP ${htmlEscape(evidence.live.status)} ${htmlEscape(evidence.live.statusText)}</div><div class="miss"><b>what the agent misses</b><span>v1.2.4 changed auth callback</span><span>Supabase RLS changed in same release</span><span>provider dashboard proof is unknown</span></div></aside><section class="right"><div class="rightHead"><span>With VibeRaven</span><b>version drift before patch</b></div>${colored}</section></div></section><div class="punch"><strong>Same app. Same 200 OK. Different decision.</strong><span class="proof">temp repo + real git tags + real diff + real HTTP check</span></div></main></body></html>`;
+}
+
 async function main() {
   await createDemoRepo();
   const live = await httpCheck();
@@ -385,6 +419,7 @@ async function main() {
   await writeFile(join(outDir, 'evidence.json'), `${JSON.stringify(evidence, null, 2)}\n`, 'utf8');
   await writeFile(join(outDir, 'evidence-board.html'), renderHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'diff-proof.html'), renderDiffProofHtml(evidence), 'utf8');
+  await writeFile(join(outDir, 'viral-terminal-proof.html'), renderViralTerminalHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'terminal-proof.html'), renderTerminalProofHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'transcript.txt'), terminalTranscript, 'utf8');
   await writeFile(join(outDir, 'terminal-card.txt'), renderTerminalCard(evidence), 'utf8');
@@ -398,6 +433,7 @@ async function main() {
   console.log(`Wrote ${join(outDir, 'evidence.json')}`);
   console.log(`Wrote ${join(outDir, 'evidence-board.html')}`);
   console.log(`Wrote ${join(outDir, 'diff-proof.html')}`);
+  console.log(`Wrote ${join(outDir, 'viral-terminal-proof.html')}`);
   console.log(`Wrote ${join(outDir, 'terminal-proof.html')}`);
   console.log(`Wrote ${join(outDir, 'transcript.txt')}`);
   console.log(`Wrote ${join(outDir, 'terminal-card.txt')}`);

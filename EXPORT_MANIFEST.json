@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-30T13:28:54.995Z",
+  "exportedAt": "2026-06-30T13:35:29.496Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -46,6 +46,10 @@
     [
       "docs/public-repo/assets/viberaven-terminal-architecture-proof.png",
       "assets/viberaven-terminal-architecture-proof.png"
+    ],
+    [
+      "docs/public-repo/assets/viberaven-viral-terminal-proof.png",
+      "assets/viberaven-viral-terminal-proof.png"
     ],
     [
       "docs/public-repo/assets/viberaven-real-diff-proof.png",

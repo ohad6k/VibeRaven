@@ -25,6 +25,7 @@ This writes:
 
 - `.tmp/live-evidence-demo/transcript.txt`
 - `.tmp/live-evidence-demo/terminal-card.txt`
+- `.tmp/live-evidence-demo/viral-terminal-proof.html`
 - `.tmp/live-evidence-demo/diff-proof.html`
 - `.tmp/live-evidence-demo/terminal-proof.html`
 - `.tmp/live-evidence-demo/evidence.json`
