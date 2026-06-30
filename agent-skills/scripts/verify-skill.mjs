@@ -45,7 +45,7 @@ const pluginManifest = existsSync(resolve('export/public-discovery-staging/plugi
   : readRequiredFile('plugin.yaml');
 
 verifyMaxWords('VibeRaven skill', viberavenSkill, 500);
-verifyMaxWords('Architecture Context skill', architectureContextSkill, 900);
+verifyMaxWords('Architecture Context skill', architectureContextSkill, 1100);
 verifyMaxWords('What Broke skill', whatBrokeSkill, 500);
 verifyMaxWords('Production Context skill', productionContextSkill, 450);
 verifyMaxWords('Go Live skill', goLiveSkill, 500);
@@ -95,12 +95,19 @@ verifyIncludes('Architecture Context skill', architectureContextSkill, [
   '# VibeRaven: Architecture Context',
   'Make the agent behave like a senior product engineer before it edits.',
   'For vague work like',
+  'No plan, no edits.',
+  '## Continuation Turn',
+  'treat it as the answer turn even if it does not mention this skill by name',
+  'Print `Architecture plan:` as the first substantive line.',
+  'If the response would start with "Implemented", "Changed", "Verification", "Done", or a file list',
   'Ask low-level questions.',
   'I need a few product answers before I edit.',
   'detailed architecture plan with boundaries, options, workstreams, risks, verification, and route',
   'Output the Architecture Plan before editing. This is a hard gate.',
   'After the user answers, the next assistant response must start with `Architecture plan:`',
   'Do not replace this with a final "Implemented..." summary.',
+  'Implemented the privacy/delete hardening',
+  'That is a skill failure unless an Architecture Plan appeared earlier in the same assistant turn.',
   'write 600-1200 words or the shortest plan that is still operational',
   'Break the plan into 3-6 workstreams.',
   'Include concrete implementation steps, not only concepts.',
@@ -121,13 +128,14 @@ verifyIncludes('Architecture Context skill', architectureContextSkill, [
   'provider MCP evidence',
   'VibeRaven route',
   'Do not ask for secrets or raw env values.',
+  'Treating the user\'s answers as permission to skip the plan.',
 ]);
 
 verifyIncludes('Architecture Context agent metadata', architectureContextAgentMetadata, [
   'display_name: "VibeRaven: Architecture Context"',
   'short_description: "Plan product architecture before editing"',
   'brand_color: "#ff4d1f"',
-  'default_prompt: "Use $architecture-context to ask the missing product questions, write the architecture plan with workstreams, route the next VibeRaven skill, then edit only after the plan is visible."',
+  'default_prompt: "Use $architecture-context to ask the missing product questions. When the user answers, start with Architecture plan:, include workstreams/sequence/risks/verification/Next skill, then edit only after the plan is visible."',
 ]);
 
 verifyIncludes('What Broke skill', whatBrokeSkill, [

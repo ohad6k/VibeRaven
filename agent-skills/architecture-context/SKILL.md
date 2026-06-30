@@ -11,6 +11,8 @@ Make the agent behave like a senior product engineer before it edits.
 
 For vague work like "build uploads", "add billing", "fix login", "make chat", or "connect Supabase": ask architecture questions first. Do not answer only "loaded".
 
+No plan, no edits. On the turn after the user answers the questions, the assistant must output `Architecture plan:` before any file writes, migrations, API changes, UI edits, commits, or final implementation summary.
+
 ## Loop
 
 ```text
@@ -28,6 +30,19 @@ product path -> questions -> architecture plan -> route -> edit/hand off
 
 When the output names `Next skill:`, continue with that VibeRaven skill unless user input is required.
 
+## Continuation Turn
+
+If the latest user message answers the numbered product questions, treat it as the answer turn even if it does not mention this skill by name. Do not restart Question Mode unless a required answer is missing.
+
+On the answer turn:
+
+1. Run only read-only repo evidence commands if needed.
+2. Print `Architecture plan:` as the first substantive line.
+3. Include workstreams, implementation sequence, risks, verification, provider/MCP proof, and `Next skill:`.
+4. Only then edit, if the user asked for implementation.
+
+If the response would start with "Implemented", "Changed", "Verification", "Done", or a file list, stop and write the Architecture Plan instead.
+
 ## Question Mode
 
 Ask low-level questions. Do not ask the user to classify "boundary", "runtime", "RLS", "source of truth", or "production invariant". Translate answers later.
@@ -42,7 +57,7 @@ I need a few product answers before I edit.
 5. What rule matters most? Example: private, paid-only, rollback, audit log, realtime, local demo.
 6. What already exists? Example: nothing, page, database table, API route, provider setup, or "check the repo".
 
-After you answer, I will translate this into a detailed architecture plan with boundaries, options, workstreams, risks, verification, and route.
+After you answer, I will translate this into a detailed architecture plan with boundaries, options, workstreams, risks, verification, and route before I edit.
 ```
 
 Common variants:
@@ -72,7 +87,7 @@ Prefer the simplest option that preserves the production invariant.
 
 ## Architecture Plan Before Editing
 
-After the user answers, the next assistant response must start with `Architecture plan:` and include this shape before any edits, commands, or implementation summary:
+After the user answers, the next assistant response must start with `Architecture plan:` and include this shape before any edits, write commands, or implementation summary:
 
 ```text
 Architecture plan:
@@ -91,6 +106,16 @@ Next skill:
 ```
 
 Do not replace this with a final "Implemented..." summary. Even when the user asked you to build it, show the plan first, then continue.
+
+Bad output:
+
+```text
+Implemented the privacy/delete hardening...
+Changed:
+Verification:
+```
+
+That is a skill failure unless an Architecture Plan appeared earlier in the same assistant turn.
 
 ## Plan Depth
 
@@ -124,3 +149,4 @@ Never end with `Next skill: None` for production-sensitive work if another VibeR
 - Hiding tradeoffs.
 - Claiming provider/dashboard state is fixed by code alone.
 - Jumping straight to implementation results without first showing the architecture plan.
+- Treating the user's answers as permission to skip the plan.

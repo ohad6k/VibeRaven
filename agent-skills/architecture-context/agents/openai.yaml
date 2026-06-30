@@ -2,7 +2,7 @@ interface:
   display_name: "VibeRaven: Architecture Context"
   short_description: "Plan product architecture before editing"
   brand_color: "#ff4d1f"
-  default_prompt: "Use $architecture-context to ask the missing product questions, write the architecture plan with workstreams, route the next VibeRaven skill, then edit only after the plan is visible."
+  default_prompt: "Use $architecture-context to ask the missing product questions. When the user answers, start with Architecture plan:, include workstreams/sequence/risks/verification/Next skill, then edit only after the plan is visible."
 
 policy:
   allow_implicit_invocation: true
