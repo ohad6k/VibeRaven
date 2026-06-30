@@ -7,6 +7,7 @@
       "description": "Skills for helping AI agents find what changed, which version broke, which architecture boundary is affected, and what provider context matters before they patch real apps.",
       "skills": [
         "viberaven",
+        "architecture-context",
         "production-context",
         "what-broke",
         "go-live"

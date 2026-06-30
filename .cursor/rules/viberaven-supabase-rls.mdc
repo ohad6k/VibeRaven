@@ -5,6 +5,6 @@ globs:
 alwaysApply: false
 ---
 
-Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md`.
+Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md` for what changed, which architecture boundary is affected, and which provider context matters.
 
 Do NOT enable RLS on only one table while leaving related tables open; INSTEAD read `.viberaven/mission-map.md` before migration edits.

@@ -1,13 +1,17 @@
 # VibeRaven Agent Context
 
 <!-- VIBERAVEN:START -->
-VibeRaven gives AI-built apps the what-changed context agents need before editing.
+AI agents can code. They still need senior-engineer context before they change real apps.
 
-Canonical command: `npx -y viberaven --agent-mode`
+Canonical Studio command: `npx -y viberaven`
 
-Use VibeRaven when the agent needs to know what changed, which version broke, or what provider context matters before editing.
+Non-interactive artifact loop: `npx -y viberaven --agent-mode`
 
-Agent loop: run VibeRaven, read Mission Map (`.viberaven/mission-map.md`), fix one what-changed gap, re-run VibeRaven.
+Use VibeRaven at the start of production-sensitive coding work, feature work, provider work, release/version debugging, or launch work, including when the agent needs to know which version broke or what provider context matters.
+
+Default loop: orient the architecture, ask only the missing questions needed for a safe plan, inspect release/provider context, choose the right VibeRaven skill, fix one evidenced change, then verify.
+
+Maps repo evidence, release drift, architecture boundaries, and provider boundaries into agent-readable context.
 
 After `--agent-mode`, read these artifacts in order:
 
@@ -15,4 +19,6 @@ After `--agent-mode`, read these artifacts in order:
 2. `.viberaven/agent-tasklist.md`
 3. `.viberaven/gate-result.json`
 4. `.viberaven/context-map.json`
+
+Before editing, summarize the architecture boundary and missing questions from those artifacts.
 <!-- VIBERAVEN:END -->

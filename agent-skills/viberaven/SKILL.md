@@ -25,6 +25,8 @@ npx -y viberaven
 
 Use the Studio chat, provider cards, MCP status, release/version context, architecture context, diff views, access-mode control, and CLI agent connection. Treat installed and connected as different states: do not assume a CLI agent is ready until Studio's connection test passes.
 
+For the start of general app work, use `architecture-context` first: map the product path, architecture boundary, missing questions, and suited VibeRaven skill before planning or editing.
+
 ## Production Context Memory
 
 Before production-sensitive work, check for `.viberaven/production-context.md`.

@@ -1,6 +1,6 @@
 name: viberaven
 version: 1.2.4
-description: VibeRaven Studio and production-context skills for AI-built apps.
+description: VibeRaven Studio and architecture/production-context skills for AI-built apps.
 author: VibeRaven
 provides_commands:
   - viberaven-help
@@ -8,6 +8,7 @@ provides_commands:
   - viberaven-production-context
   - viberaven-launch
 provides_skills:
+  - architecture-context
   - production-context
   - what-broke
   - viberaven

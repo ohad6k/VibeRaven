@@ -1,25 +1,19 @@
 ---
-description: VibeRaven what-changed layer - release and provider context before agent edits
+description: VibeRaven always-on architecture, release, and provider context for agents
 alwaysApply: true
 ---
 
-AI agents can code. They still need to know what changed.
+At the start of real app work, map the architecture boundary before editing: UI/API, auth/session, data/schema/RLS, provider dashboard, deploy/env, background job/webhook, billing, storage, or release/version drift.
 
-Open Studio when the user asks which version broke, what changed since the last working release, or what provider context matters:
+Ask concise questions only when the answer changes the plan: last working version, production symptom, provider involved, deploy target, or provider/dashboard proof.
 
-```bash
-npx -y viberaven
-```
+Open Studio with `npx -y viberaven` for context. Run `npx -y viberaven --agent-mode` before deploy, provider-sensitive, database-policy, or dependency changes when artifact context is needed.
 
-Use the artifact loop only when machine-readable context is needed:
+Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json` and `.viberaven/mission-map.md`.
+Fix one scoped gap, then `npx -y viberaven --verify`. Before CI or production promote: `npx -y viberaven --strict`.
 
-```bash
-npx -y viberaven --agent-mode
-```
+Context is not clear until the architecture boundary, release/version context, and provider proof boundary are understood. For launch gates, `gate.status === "clear"` is required.
 
-Read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/mission-map.md`.
-Fix one scoped repo-owned gap, then run `npx -y viberaven --verify`. Before CI or production promote, run `npx -y viberaven --strict`.
+Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md` for what changed, which architecture boundary is affected, and which provider context matters.
 
-Context is not clear until the current release/provider evidence is understood. Do not claim provider dashboard setup is fixed by repo-code edits.
-
-Full rules: `AGENTS.md` / `CLAUDE.md` (installed by `npx -y viberaven init --agents all`).
+Full VibeRaven rules: `AGENTS.md` / `CLAUDE.md` (installed by `npx -y viberaven init --agents all`).

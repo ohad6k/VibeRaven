@@ -1,7 +1,7 @@
 {
   "name": "viberaven",
   "version": "1.2.4",
-  "description": "VibeRaven Studio and production-context skills for AI-built apps.",
+  "description": "VibeRaven Studio and architecture/production-context skills for AI-built apps.",
   "author": {
     "name": "VibeRaven",
     "url": "https://github.com/ohad6k/VibeRaven"
@@ -13,16 +13,17 @@
   "skills": "./agent-skills/",
   "interface": {
     "displayName": "VibeRaven",
-    "shortDescription": "Give agents release and production context before fixes.",
-    "longDescription": "Open the VibeRaven Studio with npx -y viberaven, or install the skills pack so coding agents carry what changed, why it is dangerous, which provider boundary matters, and what proof remains before editing.",
+    "shortDescription": "Give agents architecture, release, and provider context before fixes.",
+    "longDescription": "Open the VibeRaven Studio with npx -y viberaven, or install the skills pack so coding agents orient architecture, ask missing context questions, carry what changed, identify provider boundaries, and plan the next safe fix before editing.",
     "developerName": "VibeRaven",
     "category": "Developer Tools",
-    "capabilities": ["Instructions", "Skills", "Local Studio", "Production context"],
+    "capabilities": ["Instructions", "Skills", "Local Studio", "Architecture context", "Production context"],
     "websiteURL": "https://github.com/ohad6k/VibeRaven",
     "defaultPrompt": [
-      "Use VibeRaven when an AI-built app needs release, provider, or production context before a fix.",
+      "Use architecture-context at the start of real app work to map the product path, architecture boundary, missing questions, and suited VibeRaven skill before a fix.",
+      "Ask concise missing-context questions before planning when architecture, last working version, provider, or deploy target is unclear.",
       "Use production-context to maintain .viberaven/production-context.md.",
-      "Use what-broke to find what changed before editing.",
+      "Use what-broke to find what changed and which architecture boundary is affected before editing.",
       "Use go-live when the user wants GitHub push, Vercel deploy, and live URL proof."
     ],
     "brandColor": "#7c3aed"

@@ -19,6 +19,8 @@ function verifyIncludes(label, content, required) {
 }
 
 const viberavenSkill = readRequiredFile('agent-skills/viberaven/SKILL.md');
+const architectureContextSkill = readRequiredFile('agent-skills/architecture-context/SKILL.md');
+const architectureContextAgentMetadata = readRequiredFile('agent-skills/architecture-context/agents/openai.yaml');
 const productionContextSkill = readRequiredFile('agent-skills/production-context/SKILL.md');
 const productionContextAgentMetadata = readRequiredFile('agent-skills/production-context/agents/openai.yaml');
 const whatBrokeSkill = readRequiredFile('agent-skills/what-broke/SKILL.md');
@@ -54,6 +56,29 @@ verifyIncludes('VibeRaven skill', viberavenSkill, [
   'LOGIN_URL_READY',
   'passwords, tokens, cookies, or secrets',
   'Do not claim provider dashboard checks are fixed by repo-code edits',
+]);
+
+verifyIncludes('Architecture Context skill', architectureContextSkill, [
+  'name: architecture-context',
+  'AI agents can write code. Before they write code, they need the map a senior engineer would ask for.',
+  'Use this skill at the start of real app work',
+  'Map the affected boundary',
+  '.viberaven/production-context.md',
+  '.viberaven/agent-context.md',
+  '.viberaven/mission-map.md',
+  'Ask only questions whose answers change the plan',
+  'Route Skills',
+  'what-broke',
+  'production-context',
+  'viberaven',
+  'go-live',
+  'Do not start from the nearest file. Start from the system boundary.',
+]);
+
+verifyIncludes('Architecture Context agent metadata', architectureContextAgentMetadata, [
+  'display_name: "Architecture Context"',
+  'short_description: "Map the app boundary before the agent edits"',
+  'default_prompt: "Use $architecture-context to map the product path, architecture boundary, missing questions, and suited VibeRaven skill before editing."',
 ]);
 
 verifyIncludes('Production Context skill', productionContextSkill, [
@@ -133,8 +158,9 @@ verifyIncludes('Go Live agent metadata', goLiveAgentMetadata, [
   'default_prompt: "Use $go-live to connect this project to GitHub and Vercel, then produce live deployment proof."',
 ]);
 
-verifyIncludes('skills.sh manifest', skillsManifest, ['"viberaven"', '"production-context"', '"what-broke"', '"go-live"']);
+verifyIncludes('skills.sh manifest', skillsManifest, ['"viberaven"', '"architecture-context"', '"production-context"', '"what-broke"', '"go-live"']);
 verifyIncludes('agent skills README', readme, [
+  'npx -y skills add ohad6k/VibeRaven --skill architecture-context',
   'npx -y skills add ohad6k/VibeRaven --skill production-context',
   'npx -y skills add ohad6k/VibeRaven --skill what-broke',
   'npx -y skills add ohad6k/VibeRaven --skill go-live',

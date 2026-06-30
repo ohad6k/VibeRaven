@@ -12,7 +12,7 @@
   <a href="https://github.com/ohad6k/VibeRaven/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/ohad6k/VibeRaven?style=flat-square&label=stars"></a>
   <a href="https://www.npmjs.com/package/viberaven"><img alt="npm version" src="https://img.shields.io/npm/v/viberaven?style=flat-square&label=npm"></a>
   <a href="https://www.npmjs.com/package/viberaven"><img alt="npm downloads" src="https://img.shields.io/npm/dm/viberaven?style=flat-square&label=npm%20downloads"></a>
-  <img alt="skills" src="https://img.shields.io/badge/skills-4-7c3aed?style=flat-square">
+  <img alt="skills" src="https://img.shields.io/badge/skills-5-7c3aed?style=flat-square">
   <img alt="works with Codex Claude Gemini Cursor" src="https://img.shields.io/badge/agents-Codex%20%7C%20Claude%20%7C%20Gemini%20%7C%20Cursor-111827?style=flat-square">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-111827?style=flat-square">
 </p>
@@ -33,7 +33,7 @@ VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local S
 
 ## Plugin + Skills
 
-Use the skills when you want the agent behavior change immediately. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
+Use the skills when you want the agent behavior change immediately. `architecture-context` is the startup discipline: the agent maps the app boundary, asks only the missing questions, picks the suited VibeRaven skill, then plans. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
 
 Before VibeRaven, the agent sees a green check and edits the nearest file. With VibeRaven, it first builds the release and architecture context a senior engineer would ask for.
 
@@ -112,6 +112,7 @@ Next action: fix redirect fallback in code, then verify provider callback URL + 
 Reproducible script: [`examples/proof/live-evidence-demo.mjs`](./examples/proof/live-evidence-demo.mjs)
 
 ```bash
+npx -y skills add ohad6k/VibeRaven --skill architecture-context
 npx -y skills add ohad6k/VibeRaven --skill production-context
 npx -y skills add ohad6k/VibeRaven --skill what-broke
 npx -y skills add ohad6k/VibeRaven --skill viberaven
@@ -120,6 +121,7 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 
 | Skill | What It Makes The Agent Do |
 | --- | --- |
+| `architecture-context` | Start real app work like a senior engineer: map product path, architecture boundary, missing questions, and suited VibeRaven skill before editing. |
 | `production-context` | Maintain `.viberaven/production-context.md`: architecture boundaries, what changed, why dangerous, what was verified, and what provider/human proof remains. |
 | `what-broke` | Ask what changed before editing, map the affected architecture boundary, then fix the smallest repo-code surface the evidence supports. |
 | `viberaven` | Use Studio, provider cards, release/version context, architecture context, MCP status, and access modes during real work. |

@@ -9,6 +9,7 @@ Repo context tells the agent what exists. Production context tells it what is da
 ## Install
 
 ```bash
+npx -y skills add ohad6k/VibeRaven --skill architecture-context
 npx -y skills add ohad6k/VibeRaven --skill production-context
 npx -y skills add ohad6k/VibeRaven --skill what-broke
 npx -y skills add ohad6k/VibeRaven --skill viberaven
@@ -16,6 +17,12 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 ```
 
 ## Skills
+
+### `architecture-context`
+
+Makes agents start like senior engineers: map the product path, architecture boundary, missing questions, and suited VibeRaven skill before planning or editing.
+
+Use it at the start of real app work, feature work, provider work, release/version work, migrations, auth, billing, webhooks, deploys, or production-sensitive refactors.
 
 ### `production-context`
 
