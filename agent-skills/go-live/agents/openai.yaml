@@ -1,8 +1,8 @@
 interface:
-  display_name: "Go Live"
+  display_name: "VibeRaven: Go Live"
   short_description: "Ship local work with live proof"
-  brand_color: "#10b981"
-  default_prompt: "Use $go-live to inspect local proof, connect GitHub/Vercel when safe, verify the live URL, record production context, and name provider gaps."
+  brand_color: "#ff4d1f"
+  default_prompt: "Use $go-live to inspect local proof, connect GitHub/Vercel when safe, verify the live URL, record production context, name provider gaps, and route the next VibeRaven skill."
 
 policy:
   allow_implicit_invocation: true

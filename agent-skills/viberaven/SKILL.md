@@ -3,7 +3,7 @@ name: viberaven
 description: Use when an AI-built app needs architecture context, release drift, version context, provider context, MCP evidence, production memory, connected-agent context, or a clear answer to what changed before editing, debugging, shipping, or deploying.
 ---
 
-# VibeRaven
+# VibeRaven: Router
 
 Agents can code. VibeRaven makes them stop guessing.
 
@@ -19,11 +19,11 @@ Do not skip to the nearest file.
 
 ## Plugin Route
 
-Pick the right sub-skill:
+All VibeRaven skills are one plugin loop. Pick the right sub-skill:
 
 | Task signal | Use |
 | --- | --- |
-| Vague feature or product work | `architecture-context` |
+| Vague feature, product work, or architecture choice | `architecture-context` |
 | Worked before, broke now, version changed | `what-broke` |
 | Provider/release/migration risk needs durable memory | `production-context` |
 | Push, deploy, live URL, GitHub/Vercel proof | `go-live` |
@@ -53,7 +53,7 @@ If MCP/provider evidence is unavailable, say so and continue with repo evidence.
 6. Update or propose `.viberaven/production-context.md`.
 7. End with one next action: code, provider check, deploy, or user answer.
 
-If the user asked you to implement and repo evidence is strong, do the repo work. Do not stop at a plan.
+If the user asked for vague product work, route to `architecture-context` and show its Architecture Plan before implementation. If the user asked you to implement and repo evidence is strong, do the repo work after the required plan/evidence gate.
 
 ## Output
 

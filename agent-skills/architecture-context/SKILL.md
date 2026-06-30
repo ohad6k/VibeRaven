@@ -3,7 +3,7 @@ name: architecture-context
 description: Use when an AI coding agent starts real app work, product feature design, provider work, migrations, auth, billing, storage, webhooks, deploys, or any task where unclear architecture could cause broad or unsafe changes.
 ---
 
-# Architecture Context
+# VibeRaven: Architecture Context
 
 Make the agent behave like a senior product engineer before it edits.
 
@@ -14,17 +14,17 @@ For vague work like "build uploads", "add billing", "fix login", "make chat", or
 ## Loop
 
 ```text
-product path -> questions -> options -> boundary -> plan -> route
+product path -> questions -> architecture plan -> route -> edit/hand off
 ```
 
 1. Name the user path.
 2. Ask 3-6 low-level product questions the user can answer without architecture vocabulary.
 3. Compare practical options.
-4. Recommend one option and why.
+4. Recommend one architecture and why.
 5. Use repo, Studio, or provider MCP evidence when available for existing boundaries.
 6. Route to `what-broke`, `production-context`, `viberaven`, or `go-live` when needed.
-7. Output the Architecture Brief before editing. This is a hard gate.
-8. Edit only after the boundary is clear.
+7. Output the Architecture Plan before editing. This is a hard gate.
+8. Edit only after the plan is visible in chat.
 
 When the output names `Next skill:`, continue with that VibeRaven skill unless user input is required.
 
@@ -42,7 +42,7 @@ I need a few product answers before I edit.
 5. What rule matters most? Example: private, paid-only, rollback, audit log, realtime, local demo.
 6. What already exists? Example: nothing, page, database table, API route, provider setup, or "check the repo".
 
-After you answer, I will translate this into a detailed architecture brief with boundaries, options, workstreams, risks, verification, and route.
+After you answer, I will translate this into a detailed architecture plan with boundaries, options, workstreams, risks, verification, and route.
 ```
 
 Common variants:
@@ -70,36 +70,52 @@ Use these labels when comparing architecture:
 
 Prefer the simplest option that preserves the production invariant.
 
-## Output Before Editing
+## Architecture Plan Before Editing
 
-Always output this brief after the user answers and before code edits:
+After the user answers, the next assistant response must start with `Architecture plan:` and include this shape before any edits, commands, or implementation summary:
 
 ```text
-Product path:
-Questions/blockers:
-User answers translated:
-Options:
-Recommended boundary:
 Architecture plan:
+Product path:
+User answers translated:
+Current repo evidence:
+Options considered:
+Recommended architecture:
 Workstreams:
-Risks:
-Verification:
+Implementation sequence:
+Risks and fallback:
+Verification plan:
+Provider/MCP proof needed:
 VibeRaven route:
 Next skill:
 ```
 
-## Brief Depth
+Do not replace this with a final "Implemented..." summary. Even when the user asked you to build it, show the plan first, then continue.
 
-The skill file is token-efficient; the brief is not a tiny summary. For nontrivial work, write 2-5 concrete bullets under each brief section and make it detailed enough to guide implementation:
+## Plan Depth
+
+The skill file is token-efficient; the plan is useful. For nontrivial work, write 600-1200 words or the shortest plan that is still operational. Make it closer to a concise implementation plan than a status summary:
 
 - State objective, user path, and success criteria.
 - Translate user answers into ownership, access, data, provider, and deploy boundaries.
 - Compare 2-3 options with tradeoffs and a recommendation.
-- Break the plan into workstreams with sequence, dependencies, files/areas to inspect, and acceptance signals.
+- Break the plan into 3-6 workstreams. Each workstream needs purpose, files/areas to inspect, sequence, dependencies, and acceptance signals.
+- Include concrete implementation steps, not only concepts. Use checkbox steps when the work is multi-step.
 - Name risks, fallback paths, provider/MCP proof, verification commands, and open questions.
-- If implementation is requested, continue after the brief. If not, stop at the brief and ask for approval.
+- If implementation is requested, continue after the plan. If not, stop at the plan and ask for approval.
 
 If answers are missing, stop at Question Mode.
+
+## Routing
+
+Use `Next skill:` as the handoff:
+
+- `what-broke` when this is a regression, release drift, or version comparison.
+- `production-context` when the plan touches providers, migrations, auth, billing, storage, webhooks, env, incidents, or fragile customer paths.
+- `go-live` when the next step is GitHub, Vercel, deploy, live URL, or launch proof.
+- `viberaven` when Studio, MCP provider cards, release diff, connected CLI agent, or access mode should drive the work.
+
+Never end with `Next skill: None` for production-sensitive work if another VibeRaven skill should continue the loop.
 
 ## Mistakes
 
@@ -107,3 +123,4 @@ If answers are missing, stop at Question Mode.
 - Asking broad questions that repo evidence already answers.
 - Hiding tradeoffs.
 - Claiming provider/dashboard state is fixed by code alone.
+- Jumping straight to implementation results without first showing the architecture plan.

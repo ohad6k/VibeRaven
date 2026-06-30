@@ -1,8 +1,8 @@
 interface:
-  display_name: "Architecture Context"
-  short_description: "Ask senior architecture questions before editing"
-  brand_color: "#0f766e"
-  default_prompt: "Use $architecture-context to ask the missing product questions, compare architecture options, recommend a boundary, and route the next VibeRaven skill before editing."
+  display_name: "VibeRaven: Architecture Context"
+  short_description: "Plan product architecture before editing"
+  brand_color: "#ff4d1f"
+  default_prompt: "Use $architecture-context to ask the missing product questions, write the architecture plan with workstreams, route the next VibeRaven skill, then edit only after the plan is visible."
 
 policy:
   allow_implicit_invocation: true

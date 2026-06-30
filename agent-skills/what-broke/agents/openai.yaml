@@ -1,8 +1,8 @@
 interface:
-  display_name: "What Broke"
+  display_name: "VibeRaven: What Broke"
   short_description: "Find the changed version before patching"
-  brand_color: "#5b8def"
-  default_prompt: "Use $what-broke to compare the last working version to the broken version, map the changed boundary, and fix only what the evidence supports."
+  brand_color: "#ff4d1f"
+  default_prompt: "Use $what-broke to compare the last working version to the broken version, map the changed boundary, fix only what the evidence supports, and route the next VibeRaven skill."
 
 policy:
   allow_implicit_invocation: true

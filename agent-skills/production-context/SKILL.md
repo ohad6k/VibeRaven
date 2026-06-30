@@ -3,7 +3,7 @@ name: production-context
 description: Use when changing, reviewing, debugging, deploying, or documenting production-sensitive work involving providers, releases, migrations, auth, billing, webhooks, env vars, incidents, rollback notes, fragile customer paths, or architecture boundaries.
 ---
 
-# Production Context
+# VibeRaven: Production Context
 
 Repo context says what exists. Production context says what is dangerous.
 
@@ -35,6 +35,8 @@ read -> isolate risk -> fix/propose -> verify -> record -> open action
 6. Separate repo fixes from provider/human actions.
 
 When the output names `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
+
+Use `Next skill: go-live` when context is recorded and the next step is deploy/live proof. Use `Next skill: what-broke` when context shows a version/release regression. Use `Next skill: architecture-context` when the risk reveals an unclear product boundary.
 
 ## File Shape
 

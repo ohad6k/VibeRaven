@@ -3,7 +3,7 @@ name: what-broke
 description: Use when an app worked before and now fails, a release or deploy may have changed behavior, provider state may be involved, or an AI agent is about to patch without version evidence.
 ---
 
-# What Broke
+# VibeRaven: What Broke
 
 Find the version that changed behavior before patching.
 
@@ -40,6 +40,8 @@ range -> diff -> boundary -> risk -> fix -> verify -> memory
 If the repo fix is proven and the user asked for code work, implement it. Do not stop at diagnosis.
 
 When the output names `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
+
+Use `Next skill: production-context` when the fix touches migrations, providers, auth, env, billing, storage, webhooks, incidents, or fragile customer paths. Use `Next skill: go-live` when the next proof is deploy/live URL. Do not use `Next skill: None` when production memory or live proof is still needed.
 
 ## Evidence Packet
 

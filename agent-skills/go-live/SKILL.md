@@ -3,7 +3,7 @@ name: go-live
 description: Use when a user wants a local app connected to GitHub, pushed, deployed to Vercel, checked with live URL proof, or moved from local work to a shareable production/staging URL.
 ---
 
-# Go Live
+# VibeRaven: Go Live
 
 Move from local repo to live proof without hiding provider gaps.
 
@@ -32,6 +32,8 @@ local proof -> git proof -> provider link -> deploy -> live check -> memory -> n
 8. Update/propose production context with proof and remaining provider actions.
 
 When the output names `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
+
+Use `Next skill: production-context` when deployment leaves provider gaps, rollback notes, migration receipts, env changes, or fragile launch paths that the next agent must remember.
 
 ## Commands
 

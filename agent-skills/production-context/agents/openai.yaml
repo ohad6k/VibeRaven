@@ -1,8 +1,8 @@
 interface:
-  display_name: "Production Context"
+  display_name: "VibeRaven: Production Context"
   short_description: "Write compact production memory"
-  brand_color: "#7c3aed"
-  default_prompt: "Use $production-context to read or write the compact production memory: changed boundary, evidence, verification, provider/MCP proof, and open human action."
+  brand_color: "#ff4d1f"
+  default_prompt: "Use $production-context to read or write compact VibeRaven production memory: changed boundary, evidence, verification, provider/MCP proof, open human action, and next skill."
 
 policy:
   allow_implicit_invocation: true

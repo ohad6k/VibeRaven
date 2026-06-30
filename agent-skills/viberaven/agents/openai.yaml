@@ -2,7 +2,7 @@ interface:
   display_name: "VibeRaven"
   short_description: "Route agents through production evidence"
   brand_color: "#ff4d1f"
-  default_prompt: "Use $viberaven to route this task through architecture, release/provider evidence, MCP context when available, verification, and production memory."
+  default_prompt: "Use $viberaven to route this task through the VibeRaven plugin loop: architecture plan, release/provider evidence, MCP context when available, verification, production memory, and next skill."
 
 policy:
   allow_implicit_invocation: true
