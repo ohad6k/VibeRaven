@@ -12,7 +12,7 @@
   <a href="https://github.com/ohad6k/VibeRaven/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/ohad6k/VibeRaven?style=flat-square&label=stars"></a>
   <a href="https://www.npmjs.com/package/viberaven"><img alt="npm version" src="https://img.shields.io/npm/v/viberaven?style=flat-square&label=npm"></a>
   <a href="https://www.npmjs.com/package/viberaven"><img alt="npm downloads" src="https://img.shields.io/npm/dm/viberaven?style=flat-square&label=npm%20downloads"></a>
-  <img alt="skills" src="https://img.shields.io/badge/skills-5-7c3aed?style=flat-square">
+  <img alt="skills" src="https://img.shields.io/badge/skills-6-7c3aed?style=flat-square">
   <img alt="works with Codex Claude Gemini Cursor" src="https://img.shields.io/badge/agents-Codex%20%7C%20Claude%20%7C%20Gemini%20%7C%20Cursor-111827?style=flat-square">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-111827?style=flat-square">
 </p>
@@ -39,7 +39,7 @@ route -> ask -> evidence -> fix -> verify -> remember -> next action
 
 ## AI Agent Quick Read
 
-If you are an AI coding agent, start with `viberaven` when unsure. It routes to `architecture-context`, `what-broke`, `production-context`, or `go-live`. When a skill returns `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
+If you are an AI coding agent, start with `viberaven` when unsure. It routes to `architecture-context`, `architecture-plan`, `what-broke`, `production-context`, or `go-live`. When a skill returns `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
 
 ## Plugin + Skills
 
@@ -59,6 +59,7 @@ The script creates a disposable repo, tags `v1.2.3` and `v1.2.4`, changes auth/e
 
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill architecture-context
+npx -y skills add ohad6k/VibeRaven --skill architecture-plan
 npx -y skills add ohad6k/VibeRaven --skill production-context
 npx -y skills add ohad6k/VibeRaven --skill what-broke
 npx -y skills add ohad6k/VibeRaven --skill viberaven
@@ -68,7 +69,8 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 | Skill | What It Makes The Agent Do |
 | --- | --- |
 | `viberaven` | Router: choose the right VibeRaven skill, Studio/MCP evidence, and next action. |
-| `architecture-context` | Ask low-level product questions, then turn answers into an architecture plan with boundaries, options, risks, sequence, and route. |
+| `architecture-context` | Ask low-level product questions, then hand answered work to `architecture-plan`. |
+| `architecture-plan` | Write the workstream architecture plan with boundaries, options, risks, sequence, verification, and route before implementation. |
 | `what-broke` | Compare working/broken releases, map the changed boundary, implement the scoped repo fix when proven, and name provider proof. |
 | `production-context` | Maintain `.viberaven/production-context.md`: what changed, why dangerous, verification, provider/MCP proof, and open action. |
 | `go-live` | Push and deploy with local proof, GitHub/Vercel evidence, live URL proof, production memory, and provider gaps. |

@@ -9,6 +9,7 @@ provides_commands:
   - viberaven-launch
 provides_skills:
   - architecture-context
+  - architecture-plan
   - production-context
   - what-broke
   - viberaven

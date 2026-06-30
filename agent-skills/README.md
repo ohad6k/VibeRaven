@@ -15,6 +15,7 @@ The skills work as one VibeRaven plugin flow. Start with `viberaven` when unsure
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill viberaven
 npx -y skills add ohad6k/VibeRaven --skill architecture-context
+npx -y skills add ohad6k/VibeRaven --skill architecture-plan
 npx -y skills add ohad6k/VibeRaven --skill what-broke
 npx -y skills add ohad6k/VibeRaven --skill production-context
 npx -y skills add ohad6k/VibeRaven --skill go-live
@@ -25,7 +26,8 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 | Skill | Job |
 | --- | --- |
 | `viberaven` | Router: choose the right VibeRaven loop, Studio/MCP evidence, and next action. |
-| `architecture-context` | Ask low-level product questions, then write the architecture plan before editing. |
+| `architecture-context` | Ask low-level product questions and hand answered work to `architecture-plan`. |
+| `architecture-plan` | Write the workstream architecture plan before implementation. |
 | `what-broke` | Compare good/bad versions before patching a regression. |
 | `production-context` | Keep compact `.viberaven/production-context.md` memory. |
 | `go-live` | Move local work to GitHub/Vercel with live proof and explicit provider gaps. |
@@ -34,7 +36,7 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 
 1. Start with the product path or broken user path.
 2. Ask only questions that change architecture or production risk.
-3. For vague feature work, output `Architecture plan:` with workstreams, sequence, risks, verification, provider proof, and route before editing.
+3. For vague feature work, use `architecture-context`, then `architecture-plan` after the user answers.
 4. Use repo evidence first: status, tags, changelog, diffs, tests, migrations, env examples.
 5. Use VibeRaven Studio or provider MCP when available for release history, provider status, and dashboard-adjacent proof.
 6. Separate repo-code fixes from provider/human actions.

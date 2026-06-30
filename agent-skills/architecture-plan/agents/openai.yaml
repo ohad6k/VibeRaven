@@ -1,0 +1,5 @@
+interface:
+  display_name: "VibeRaven: Architecture Plan"
+  short_description: "Write the architecture plan before editing"
+  brand_color: "#ff4d1f"
+  default_prompt: "Use $architecture-plan to turn answered product questions and repo evidence into a workstream architecture plan before any implementation."

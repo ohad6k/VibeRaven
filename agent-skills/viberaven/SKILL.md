@@ -24,13 +24,14 @@ All VibeRaven skills are one plugin loop. Pick the right sub-skill:
 | Task signal | Use |
 | --- | --- |
 | Vague feature, product work, or architecture choice | `architecture-context` |
+| Architecture questions are answered and no plan exists | `architecture-plan` |
 | Worked before, broke now, version changed | `what-broke` |
 | Provider/release/migration risk needs durable memory | `production-context` |
 | Push, deploy, live URL, GitHub/Vercel proof | `go-live` |
 
 When a sub-skill returns `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
 
-Use this skill itself when Studio, MCP, provider cards, release/version context, connected CLIs, or access modes matter.
+Use this skill when Studio, MCP, provider cards, releases, connected CLIs, or access modes matter.
 
 ## Evidence Sources
 
@@ -38,7 +39,7 @@ Use the cheapest source that proves the next decision:
 
 - Repo: `git status`, tags, changelog, diffs, tests, migrations, env examples.
 - VibeRaven Studio: `npx -y viberaven` for chat, versions, provider cards, diffs, access modes, and CLI connection.
-- MCP: if VibeRaven/provider MCP tools are visible, use them for release history, provider status, project context, and dashboard-adjacent evidence.
+- MCP: use visible VibeRaven/provider tools for release history, provider status, project context, and dashboard-adjacent evidence.
 - Memory: `.viberaven/production-context.md` for incidents, rollback notes, migration history, fragile paths, and open provider actions.
 
 If MCP/provider evidence is unavailable, say so and continue with repo evidence. Never ask for secrets.
@@ -53,7 +54,7 @@ If MCP/provider evidence is unavailable, say so and continue with repo evidence.
 6. Update or propose `.viberaven/production-context.md`.
 7. End with one next action: code, provider check, deploy, or user answer.
 
-If the user asked for vague product work, route to `architecture-context` and show its Architecture Plan before implementation. If the user asked you to implement and repo evidence is strong, do the repo work after the required plan/evidence gate.
+For vague product work, route to `architecture-context`; after answers, route to `architecture-plan`. If implementation is requested and evidence is strong, work after the plan/evidence gate.
 
 ## Output
 

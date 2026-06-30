@@ -20,8 +20,8 @@
     "capabilities": ["Instructions", "Skills", "Local Studio", "Architecture context", "Production context"],
     "websiteURL": "https://github.com/ohad6k/VibeRaven",
     "defaultPrompt": [
-      "Use architecture-context at the start of real app work to map the product path, architecture boundary, missing questions, and suited VibeRaven skill before a fix.",
-      "Use the VibeRaven flow: architecture -> version/release context -> provider boundary -> MCP/Studio context -> smallest safe fix.",
+      "Use architecture-context at the start of real app work to ask low-level product questions, then route answered work to architecture-plan before a fix.",
+      "Use the VibeRaven flow: architecture questions -> architecture plan -> version/release context -> provider boundary -> MCP/Studio context -> scoped fix.",
       "Ask concise missing-context questions before planning when architecture, last working version, provider, or deploy target is unclear.",
       "Use production-context to maintain .viberaven/production-context.md.",
       "Use what-broke to find what changed and which architecture boundary is affected before editing.",

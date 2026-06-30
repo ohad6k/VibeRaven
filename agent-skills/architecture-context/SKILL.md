@@ -11,12 +11,12 @@ Make the agent behave like a senior product engineer before it edits.
 
 For vague work like "build uploads", "add billing", "fix login", "make chat", or "connect Supabase": ask architecture questions first. Do not answer only "loaded".
 
-No plan, no edits. On the turn after the user answers the questions, the assistant must output `Architecture plan:` before any file writes, migrations, API changes, UI edits, commits, or final implementation summary.
+No plan, no edits. On the turn after the user answers the questions, route to `architecture-plan`. That skill must produce `Architecture plan:` before any file writes, migrations, API changes, UI edits, commits, or final implementation summary.
 
 ## Loop
 
 ```text
-product path -> questions -> architecture plan -> route -> edit/hand off
+product path -> questions -> architecture-plan -> route -> edit/hand off
 ```
 
 1. Name the user path.
@@ -24,9 +24,9 @@ product path -> questions -> architecture plan -> route -> edit/hand off
 3. Compare practical options.
 4. Recommend one architecture and why.
 5. Use repo, Studio, or provider MCP evidence when available for existing boundaries.
-6. Route to `what-broke`, `production-context`, `viberaven`, or `go-live` when needed.
-7. Output the Architecture Plan before editing. This is a hard gate.
-8. Edit only after the plan is visible in chat.
+6. Route answered questions to `architecture-plan`.
+7. Use `architecture-plan` to create the full Architecture Plan before editing. This is a hard gate.
+8. Edit only after the plan exists and is visible in chat.
 
 When the output names `Next skill:`, continue with that VibeRaven skill unless user input is required.
 
@@ -37,8 +37,8 @@ If the latest user message answers the numbered product questions, treat it as t
 On the answer turn:
 
 1. Run only read-only repo evidence commands if needed.
-2. Print `Architecture plan:` as the first substantive line.
-3. Include workstreams, implementation sequence, risks, verification, provider/MCP proof, and `Next skill:`.
+2. Invoke or follow `architecture-plan`; do not continue inside this skill.
+3. The next output must start with `Architecture plan:` and include workstreams, implementation sequence, risks, verification, provider/MCP proof, and `Next skill:`.
 4. Only then edit, if the user asked for implementation.
 
 If the response would start with "Implemented", "Changed", "Verification", "Done", or a file list, stop and write the Architecture Plan instead.
@@ -57,7 +57,7 @@ I need a few product answers before I edit.
 5. What rule matters most? Example: private, paid-only, rollback, audit log, realtime, local demo.
 6. What already exists? Example: nothing, page, database table, API route, provider setup, or "check the repo".
 
-After you answer, I will translate this into a detailed architecture plan with boundaries, options, workstreams, risks, verification, and route before I edit.
+After you answer, I will use `architecture-plan` to create the detailed architecture plan with boundaries, options, workstreams, risks, verification, and route before I edit.
 ```
 
 Common variants:
@@ -85,9 +85,16 @@ Use these labels when comparing architecture:
 
 Prefer the simplest option that preserves the production invariant.
 
-## Architecture Plan Before Editing
+## Architecture Plan Handoff
 
-After the user answers, the next assistant response must start with `Architecture plan:` and include this shape before any edits, write commands, or implementation summary:
+After the user answers, the next step is `architecture-plan`. Pass it:
+
+- the product answers
+- relevant read-only repo evidence
+- any provider/MCP evidence
+- the user-requested implementation scope
+
+The next assistant response must start with `Architecture plan:` and include this shape before any edits, write commands, or implementation summary:
 
 ```text
 Architecture plan:
@@ -105,7 +112,7 @@ VibeRaven route:
 Next skill:
 ```
 
-Do not replace this with a final "Implemented..." summary. Even when the user asked you to build it, show the plan first, then continue.
+Do not replace this with a final "Implemented..." summary. Even when the user asked you to build it, use `architecture-plan` first, then continue.
 
 Bad output:
 
@@ -117,24 +124,13 @@ Verification:
 
 That is a skill failure unless an Architecture Plan appeared earlier in the same assistant turn.
 
-## Plan Depth
-
-The skill file is token-efficient; the plan is useful. For nontrivial work, write 600-1200 words or the shortest plan that is still operational. Make it closer to a concise implementation plan than a status summary:
-
-- State objective, user path, and success criteria.
-- Translate user answers into ownership, access, data, provider, and deploy boundaries.
-- Compare 2-3 options with tradeoffs and a recommendation.
-- Break the plan into 3-6 workstreams. Each workstream needs purpose, files/areas to inspect, sequence, dependencies, and acceptance signals.
-- Include concrete implementation steps, not only concepts. Use checkbox steps when the work is multi-step.
-- Name risks, fallback paths, provider/MCP proof, verification commands, and open questions.
-- If implementation is requested, continue after the plan. If not, stop at the plan and ask for approval.
-
-If answers are missing, stop at Question Mode.
+If answers are missing, stop at Question Mode. If answers are present, do not stop here: use `architecture-plan`.
 
 ## Routing
 
 Use `Next skill:` as the handoff:
 
+- `architecture-plan` when the user has answered the low-level product questions and the plan is not written yet.
 - `what-broke` when this is a regression, release drift, or version comparison.
 - `production-context` when the plan touches providers, migrations, auth, billing, storage, webhooks, env, incidents, or fragile customer paths.
 - `go-live` when the next step is GitHub, Vercel, deploy, live URL, or launch proof.

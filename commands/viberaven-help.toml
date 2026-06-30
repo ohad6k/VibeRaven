@@ -1,2 +1,2 @@
 description = "Quick reference for VibeRaven Studio and skills"
-prompt = "Show the VibeRaven quick reference. Explain the two fast paths: run npx -y viberaven for the local Studio, or install skills from ohad6k/VibeRaven. Explain the skills: production-context, what-broke, viberaven, and go-live. Change nothing unless the user asks for implementation."
+prompt = "Show the VibeRaven quick reference. Explain the two fast paths: run npx -y viberaven for the local Studio, or install skills from ohad6k/VibeRaven. Explain the skills: viberaven, architecture-context, architecture-plan, production-context, what-broke, and go-live. Change nothing unless the user asks for implementation."

@@ -29,6 +29,8 @@ function verifyMaxWords(label, content, maxWords) {
 const viberavenSkill = readRequiredFile('agent-skills/viberaven/SKILL.md');
 const architectureContextSkill = readRequiredFile('agent-skills/architecture-context/SKILL.md');
 const architectureContextAgentMetadata = readRequiredFile('agent-skills/architecture-context/agents/openai.yaml');
+const architecturePlanSkill = readRequiredFile('agent-skills/architecture-plan/SKILL.md');
+const architecturePlanAgentMetadata = readRequiredFile('agent-skills/architecture-plan/agents/openai.yaml');
 const productionContextSkill = readRequiredFile('agent-skills/production-context/SKILL.md');
 const productionContextAgentMetadata = readRequiredFile('agent-skills/production-context/agents/openai.yaml');
 const whatBrokeSkill = readRequiredFile('agent-skills/what-broke/SKILL.md');
@@ -46,6 +48,7 @@ const pluginManifest = existsSync(resolve('export/public-discovery-staging/plugi
 
 verifyMaxWords('VibeRaven skill', viberavenSkill, 500);
 verifyMaxWords('Architecture Context skill', architectureContextSkill, 1100);
+verifyMaxWords('Architecture Plan skill', architecturePlanSkill, 700);
 verifyMaxWords('What Broke skill', whatBrokeSkill, 500);
 verifyMaxWords('Production Context skill', productionContextSkill, 450);
 verifyMaxWords('Go Live skill', goLiveSkill, 500);
@@ -55,6 +58,7 @@ verifyIncludes('VibeRaven skill', viberavenSkill, [
   '# VibeRaven: Router',
   'route -> ask -> evidence -> fix -> verify -> remember -> next action',
   'architecture-context',
+  'architecture-plan',
   'what-broke',
   'production-context',
   'go-live',
@@ -65,8 +69,8 @@ verifyIncludes('VibeRaven skill', viberavenSkill, [
   '.viberaven/production-context.md',
   'When a sub-skill returns `Next skill:`',
   'Next skill:',
-  'show its Architecture Plan before implementation',
-  'If the user asked you to implement and repo evidence is strong, do the repo work after the required plan/evidence gate.',
+  'route to `architecture-plan`',
+  'work after the plan/evidence gate',
   'Never ask for secrets.',
 ]);
 
@@ -80,7 +84,7 @@ verifyIncludes('legacy VibeRaven skill export', legacyViberavenSkill, [
   'name: viberaven',
   '# VibeRaven: Router',
   'route -> ask -> evidence -> fix -> verify -> remember -> next action',
-  'show its Architecture Plan before implementation',
+  'route to `architecture-plan`',
   'Next skill:',
 ]);
 
@@ -98,20 +102,17 @@ verifyIncludes('Architecture Context skill', architectureContextSkill, [
   'No plan, no edits.',
   '## Continuation Turn',
   'treat it as the answer turn even if it does not mention this skill by name',
-  'Print `Architecture plan:` as the first substantive line.',
+  'route to `architecture-plan`',
+  'Invoke or follow `architecture-plan`; do not continue inside this skill.',
   'If the response would start with "Implemented", "Changed", "Verification", "Done", or a file list',
   'Ask low-level questions.',
   'I need a few product answers before I edit.',
   'detailed architecture plan with boundaries, options, workstreams, risks, verification, and route',
-  'Output the Architecture Plan before editing. This is a hard gate.',
-  'After the user answers, the next assistant response must start with `Architecture plan:`',
+  'Use `architecture-plan` to create the full Architecture Plan before editing. This is a hard gate.',
+  'After the user answers, the next step is `architecture-plan`.',
   'Do not replace this with a final "Implemented..." summary.',
   'Implemented the privacy/delete hardening',
   'That is a skill failure unless an Architecture Plan appeared earlier in the same assistant turn.',
-  'write 600-1200 words or the shortest plan that is still operational',
-  'Break the plan into 3-6 workstreams.',
-  'Include concrete implementation steps, not only concepts.',
-  'If implementation is requested, continue after the plan.',
   'provider/MCP proof',
   'Architecture plan:',
   'User answers translated',
@@ -135,7 +136,35 @@ verifyIncludes('Architecture Context agent metadata', architectureContextAgentMe
   'display_name: "VibeRaven: Architecture Context"',
   'short_description: "Plan product architecture before editing"',
   'brand_color: "#ff4d1f"',
-  'default_prompt: "Use $architecture-context to ask the missing product questions. When the user answers, start with Architecture plan:, include workstreams/sequence/risks/verification/Next skill, then edit only after the plan is visible."',
+  'default_prompt: "Use $architecture-context to ask the missing product questions. When the user answers, route to $architecture-plan before any edits or implementation summary."',
+]);
+
+verifyIncludes('Architecture Plan skill', architecturePlanSkill, [
+  'name: architecture-plan',
+  '# VibeRaven: Architecture Plan',
+  'Plan before edits.',
+  'If called from `architecture-context`, treat the user\'s numbered answers as source material.',
+  'write the full plan to a Markdown file',
+  '.viberaven/plans/YYYY-MM-DD-<slug>-architecture-plan.md',
+  'Architecture plan:',
+  '## Objective',
+  '## Workstreams',
+  '## Implementation Sequence',
+  '## Verification Plan',
+  '800-1800 words',
+  'Each workstream must include:',
+  'Next skill:',
+  'production-context',
+  'what-broke',
+  'go-live',
+  'Starting with `Implemented`, `Changed`, `Verification`, `Done`, or a file list.',
+]);
+
+verifyIncludes('Architecture Plan agent metadata', architecturePlanAgentMetadata, [
+  'display_name: "VibeRaven: Architecture Plan"',
+  'short_description: "Write the architecture plan before editing"',
+  'brand_color: "#ff4d1f"',
+  'default_prompt: "Use $architecture-plan to turn answered product questions and repo evidence into a workstream architecture plan before any implementation."',
 ]);
 
 verifyIncludes('What Broke skill', whatBrokeSkill, [
@@ -202,12 +231,13 @@ verifyIncludes('Go Live agent metadata', goLiveAgentMetadata, [
   'default_prompt: "Use $go-live to inspect local proof, connect GitHub/Vercel when safe, verify the live URL, record production context, name provider gaps, and route the next VibeRaven skill."',
 ]);
 
-verifyIncludes('skills.sh manifest', skillsManifest, ['"viberaven"', '"architecture-context"', '"production-context"', '"what-broke"', '"go-live"']);
+verifyIncludes('skills.sh manifest', skillsManifest, ['"viberaven"', '"architecture-context"', '"architecture-plan"', '"production-context"', '"what-broke"', '"go-live"']);
 verifyIncludes('agent skills README', readme, [
   'route -> ask -> evidence -> fix -> verify -> remember -> next action',
   'The skills work as one VibeRaven plugin flow.',
   'npx -y skills add ohad6k/VibeRaven --skill viberaven',
   'npx -y skills add ohad6k/VibeRaven --skill architecture-context',
+  'npx -y skills add ohad6k/VibeRaven --skill architecture-plan',
   'npx -y skills add ohad6k/VibeRaven --skill production-context',
   'npx -y skills add ohad6k/VibeRaven --skill what-broke',
   'npx -y skills add ohad6k/VibeRaven --skill go-live',
@@ -224,6 +254,7 @@ verifyIncludes('plugin manifest', pluginManifest, [
   'coordinated architecture/production-context skill loops',
   'provides_skills:',
   'architecture-context',
+  'architecture-plan',
   'production-context',
   'what-broke',
   'viberaven',
