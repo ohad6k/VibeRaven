@@ -36,7 +36,7 @@ VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local S
 Use the skills when you want the agent behavior change immediately. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
 
 <p align="center">
-  <img src="./assets/viberaven-real-studio.png" alt="Real VibeRaven Studio screenshot showing chat, provider context, release versions, and agent controls">
+  <img src="./assets/viberaven-github-skills-real.png" alt="Real raw GitHub README screenshot showing VibeRaven skill install commands and skills table">
 </p>
 
 ```bash
