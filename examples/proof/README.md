@@ -12,11 +12,13 @@ Run the terminal proof used in the README:
 
 ```bash
 node examples/proof/live-evidence-demo.mjs --show
+node examples/proof/live-evidence-demo.mjs --terminal-card
 ```
 
 This writes:
 
 - `.tmp/live-evidence-demo/transcript.txt`
+- `.tmp/live-evidence-demo/terminal-card.txt`
 - `.tmp/live-evidence-demo/terminal-proof.html`
 - `.tmp/live-evidence-demo/evidence.json`
 

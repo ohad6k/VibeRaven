@@ -99,7 +99,7 @@ repo fix + provider proof</code></pre>
 </table>
 
 <p align="center">
-  <img src="./assets/viberaven-terminal-architecture-proof.png" alt="Real terminal proof comparing agent behavior without VibeRaven versus with VibeRaven architecture context">
+  <img src="./assets/viberaven-real-terminal-proof.png" alt="Real Windows Terminal proof comparing agent behavior without VibeRaven versus with VibeRaven architecture context">
 </p>
 
 Real terminal proof:
@@ -145,7 +145,7 @@ $ viberaven next action
 Next action: fix redirect fallback in code, then verify provider callback URL + RLS policy before claiming safe release.
 ```
 
-Reproducible script: [`examples/proof/live-evidence-demo.mjs`](./examples/proof/live-evidence-demo.mjs). The image above is rendered from the transcript that script writes to `.tmp/live-evidence-demo/transcript.txt`.
+Reproducible script: [`examples/proof/live-evidence-demo.mjs`](./examples/proof/live-evidence-demo.mjs). The image above is a real Windows Terminal screenshot of `node examples/proof/live-evidence-demo.mjs --terminal-card`.
 
 ```bash
 npx -y skills add ohad6k/VibeRaven --skill architecture-context

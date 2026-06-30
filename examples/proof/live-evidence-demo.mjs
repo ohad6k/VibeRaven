@@ -226,6 +226,41 @@ code{font:16px/1.43 ui-monospace,SFMono-Regular,SFMono-Regular,Consolas,"Liberat
 </style></head><body><main><h1>VibeRaven Architecture Proof</h1><p><strong>Task:</strong> "Login broke after deploy. The app still returns 200 OK."</p><p class="muted">This screenshot is rendered from <code>node examples/proof/live-evidence-demo.mjs --show</code>. The script creates a temp git repo, tags <code>v1.2.3</code> and <code>v1.2.4</code>, runs real <code>git diff</code>, and starts a local HTTP check.</p><h2>Without VibeRaven</h2><pre><code>${htmlEscape(withoutText)}</code></pre><p>A green local check makes the agent patch the nearest auth file. It misses the release diff and provider proof boundary.</p><h2>With VibeRaven</h2><pre><code>${htmlEscape(terminalText)}</code></pre><p><strong>Result:</strong> same green check, but the plan changes before the patch. VibeRaven maps auth, data/RLS, deploy/env, and provider proof boundaries first.</p><p class="caption muted">Generated from: <span class="link">${htmlEscape(evidence.git.source)}</span> + <span class="link">${htmlEscape(evidence.live.source)}</span></p></main></body></html>`;
 }
 
+function renderTerminalCard(evidence) {
+  return [
+    'VibeRaven architecture proof',
+    'Task: login broke after deploy, but the app still returns 200 OK.',
+    '',
+    'WITHOUT VIBERAVEN',
+    '$ npm test',
+    'PASS all tests',
+    '',
+    '$ node local-live-check.mjs',
+    `HTTP ${evidence.live.status} ${evidence.live.statusText} ${evidence.live.url}`,
+    '',
+    '$ agent plan',
+    'Edit auth middleware.',
+    'Ship it.',
+    '',
+    'missed:',
+    '- v1.2.3 -> v1.2.4 changed auth callback',
+    '- Supabase RLS migration changed',
+    '- provider dashboard proof is unknown',
+    '',
+    'WITH VIBERAVEN',
+    '$ git diff --name-only v1.2.3..v1.2.4',
+    ...evidence.git.files,
+    '',
+    '$ viberaven architecture map',
+    ...evidence.architectureContext,
+    '',
+    '$ viberaven next action',
+    'Repo fix: redirect fallback.',
+    'Provider proof: verify callback URL + Supabase RLS policy.',
+    '',
+  ].join('\n');
+}
+
 async function main() {
   await createDemoRepo();
   const live = await httpCheck();
@@ -298,6 +333,11 @@ async function main() {
   await writeFile(join(outDir, 'evidence-board.html'), renderHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'terminal-proof.html'), renderTerminalProofHtml(evidence), 'utf8');
   await writeFile(join(outDir, 'transcript.txt'), terminalTranscript, 'utf8');
+  await writeFile(join(outDir, 'terminal-card.txt'), renderTerminalCard(evidence), 'utf8');
+  if (process.argv.includes('--terminal-card')) {
+    console.log(renderTerminalCard(evidence));
+    return;
+  }
   if (process.argv.includes('--show')) {
     console.log(terminalTranscript);
   }
@@ -305,6 +345,7 @@ async function main() {
   console.log(`Wrote ${join(outDir, 'evidence-board.html')}`);
   console.log(`Wrote ${join(outDir, 'terminal-proof.html')}`);
   console.log(`Wrote ${join(outDir, 'transcript.txt')}`);
+  console.log(`Wrote ${join(outDir, 'terminal-card.txt')}`);
 }
 
 main().catch((error) => {
