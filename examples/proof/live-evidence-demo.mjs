@@ -206,6 +206,14 @@ async function main() {
     'Repo evidence: auth callback changed, Supabase migration touched, preview redirect env added.',
     'Live evidence: app responds 200 OK.',
     'Missing production proof: auth callback dashboard and Supabase RLS provider state are not proven by repo code.',
+    '',
+    '$ viberaven architecture map',
+    'Auth boundary: callback route now depends on preview env.',
+    'Data boundary: Supabase RLS migration changed the same release.',
+    'Deploy boundary: app can still return 200 OK while provider config is wrong.',
+    'Fix boundary: repo redirect fallback is code; callback URL and RLS proof are provider actions.',
+    '',
+    '$ viberaven next action',
     'Next action: fix redirect fallback in code, then verify provider callback URL + RLS policy before claiming safe release.',
     '',
   ].join('\n');
@@ -219,6 +227,12 @@ async function main() {
       { item: 'Supabase detected from repo', source: 'package.json and supabase/migrations' },
       { item: 'RLS provider proof missing', source: 'no provider dashboard or MCP receipt attached' },
       { item: 'auth callback dashboard proof missing', source: 'env/callback changed, provider state unknown' },
+    ],
+    architectureContext: [
+      'Auth boundary: callback route now depends on preview env.',
+      'Data boundary: Supabase RLS migration changed the same release.',
+      'Deploy boundary: app can still return 200 OK while provider config is wrong.',
+      'Fix boundary: repo redirect fallback is code; callback URL and RLS proof are provider actions.',
     ],
     viberavenEffect: [
       'Do not patch blind.',

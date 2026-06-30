@@ -7,7 +7,7 @@ description: Use when an AI coding agent is changing, reviewing, debugging, depl
 
 Repo context tells the agent what exists. Production context tells it what is dangerous.
 
-Use this skill when work touches releases, providers, migrations, auth, billing, webhooks, env vars, monitoring, deployment, customer-critical flows, incidents, rollback notes, or launch readiness.
+Use this skill when work touches releases, providers, migrations, auth, billing, webhooks, env vars, monitoring, deployment, customer-critical flows, incidents, rollback notes, architecture boundaries, or launch readiness.
 
 The goal is a small durable context wrapper, not a report dump.
 
@@ -29,6 +29,8 @@ Use this file shape:
 ## Current Release / Change Window
 
 ## Recent Changes
+
+## Architecture Boundaries
 
 ## Provider Boundaries
 
@@ -52,6 +54,7 @@ Append or update the smallest relevant entry:
 
 - Change: what changed in repo or release history.
 - Evidence: file, command output, PR/changelog link, tag, migration, or user-provided note.
+- Architecture boundary: request path, auth/session, data/policy, provider/dashboard, deploy/env, job/webhook, billing, storage, or UI/API contract involved.
 - Production danger: why this can pass locally but fail in production.
 - Provider boundary: provider state that matters and whether it is proven.
 - Repo fix: fix made or recommended in repo.
@@ -62,11 +65,12 @@ Append or update the smallest relevant entry:
 ## Workflow
 
 1. Inspect existing `.viberaven/production-context.md` before production-sensitive work.
-2. Identify the smallest relevant context: release/version, provider, migration, incident, rollback, or fragile path.
+2. Identify the smallest relevant context: release/version, architecture boundary, provider, migration, incident, rollback, or fragile path.
 3. Use normal repo evidence first: `git status --short`, changelog, PR links, tags, diffs, migrations, env examples, provider-adjacent files, and verification output.
-4. Make or propose the smallest repo-code fix that evidence supports.
-5. Record what changed, why it is dangerous, how it was verified, and what provider/human proof remains.
-6. Keep entries compact. Link to files, commands, PRs, changelogs, screenshots, or receipts instead of copying long content.
+4. Map the affected architecture path before editing: what receives the request/event, what owns auth/session, what owns data/policy, what depends on provider/dashboard state, and what repo file can safely change.
+5. Make or propose the smallest repo-code fix that evidence supports.
+6. Record what changed, which architecture boundary it touched, why it is dangerous, how it was verified, and what provider/human proof remains.
+7. Keep entries compact. Link to files, commands, PRs, changelogs, screenshots, or receipts instead of copying long content.
 
 ## Provider Boundaries
 
@@ -87,5 +91,6 @@ Return:
 
 1. production context read
 2. production context updated or proposed
-3. repo-code fix or none
-4. provider or human action needed
+3. architecture boundary identified
+4. repo-code fix or none
+5. provider or human action needed

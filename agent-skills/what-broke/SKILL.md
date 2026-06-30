@@ -7,7 +7,7 @@ description: Use when an AI agent needs to stop patching blind, find what change
 
 Use this skill when the app worked before and the agent is about to patch blind.
 
-The goal is not only to explain what broke. The goal is to recover enough production context to make the next fix safer: find the version that changed behavior, connect the diff to provider reality, apply or propose the smallest evidence-backed repo-code fix, and name any provider/human action separately.
+The goal is not only to explain what broke. The goal is to recover enough production and architecture context to make the next fix safer: find the version that changed behavior, map the architecture boundary it touched, connect the diff to provider reality, apply or propose the smallest evidence-backed repo-code fix, and name any provider/human action separately.
 
 Repo context tells the agent what exists. Production context tells it what is dangerous.
 
@@ -22,6 +22,7 @@ Repo context tells the agent what exists. Production context tells it what is da
 5. Build a narrow diff before editing: `git diff <good>..<bad> --stat`, then `git diff <good>..<bad> --name-only`, then focused `git diff <good>..<bad> -- <path>`.
 6. Read provider-adjacent files touched in the range: migrations, schema files, storage policies, deployment config, provider SDK setup, seed data, and runtime boundary files. Add identity, billing, or event-delivery files only when the diff or user pain points there.
 7. Look for production-history signals that explain why the clean-looking code change is dangerous: recent deploys, rollback notes, linked PRs, migration order, incident notes, fragile customer paths, and provider config drift.
+8. Build a compact architecture map for the affected path before editing: request path, auth/session boundary, data/policy boundary, provider/dashboard boundary, deploy/env boundary, background job/webhook boundary, and the exact repo files that own each boundary.
 
 ## Evidence Packet
 
@@ -30,6 +31,7 @@ Before proposing code changes, produce a short packet:
 - **Range:** good ref, bad/current ref, confidence, and why that range was chosen.
 - **Version name:** semantic version, release name, tag, changelog heading, or "unknown".
 - **Changed surface:** the files or modules that changed, grouped by app code, database, storage, deployment, provider SDK/setup, and external runtime behavior.
+- **Architecture map:** the affected request/data/job path and the boundary where the fix belongs.
 - **Provider context:** what provider-dependent behavior may have changed. Say when dashboard or runtime state is not verifiable from the repo.
 - **Production danger:** why the change can pass local tests while still breaking real users, billing, auth, database access, email, webhooks, storage, or deploy behavior.
 - **What broke path:** the smallest chain from version change to observed breakage.
@@ -81,10 +83,11 @@ Create a Risk Map before editing:
 Only after the Evidence Packet and Risk Map:
 
 1. State the most likely version that introduced the issue.
-2. State the smallest code or config change to test first.
-3. Protect provider boundaries: do not claim database, deployment, billing, storage, identity, or other dashboard state was fixed by repo edits alone.
-4. Add or run the narrowest verification that proves the version-control theory, such as a focused test, migration check, route test, or build.
-5. If evidence is weak, ask for the missing release/log/provider detail instead of guessing.
+2. State the architecture boundary affected: auth/session, data/RLS, deploy/env, provider callback, webhook, billing, storage, or UI/API contract.
+3. State the smallest code or config change to test first.
+4. Protect provider boundaries: do not claim database, deployment, billing, storage, identity, or other dashboard state was fixed by repo edits alone.
+5. Add or run the narrowest verification that proves the version-control theory, such as a focused test, migration check, route test, or build.
+6. If evidence is weak, ask for the missing release/log/provider detail instead of guessing.
 
 When the fix is inside the repo and the user has asked you to work on the code, make the scoped fix directly. When the fix is outside the repo, give the exact provider or human action and do not pretend a code edit solved it.
 
@@ -99,6 +102,9 @@ What changed:
 - ...
 
 Why this is dangerous:
+- ...
+
+Architecture boundary:
 - ...
 
 Repo fix:

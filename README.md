@@ -35,6 +35,37 @@ VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local S
 
 Use the skills when you want the agent behavior change immediately. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
 
+Before VibeRaven, the agent sees a green check and edits the nearest file. With VibeRaven, it first builds the release and architecture context a senior engineer would ask for.
+
+<table>
+  <tr>
+    <th align="left">Without VibeRaven</th>
+    <th align="left">With VibeRaven</th>
+  </tr>
+  <tr>
+    <td valign="top">
+      <pre><code>tests pass
+HTTP 200 OK
+
+agent guess:
+edit auth middleware
+ship it</code></pre>
+    </td>
+    <td valign="top">
+      <pre><code>v1.2.3 -> v1.2.4
+auth callback changed
+Supabase RLS touched
+preview env added
+
+architecture map:
+auth -> provider callback -> session -> RLS
+
+next action:
+repo fix + provider proof</code></pre>
+    </td>
+  </tr>
+</table>
+
 Real terminal proof:
 
 ```bash
@@ -47,6 +78,7 @@ What it does:
 - changes auth callback code, preview env, and Supabase RLS migration files
 - runs real `git diff` / `git log` commands
 - starts a local HTTP server and proves the app still returns `200 OK`
+- maps the affected auth, data, deploy, and fix boundaries
 - prints the VibeRaven decision boundary: green live check is not enough when provider proof is missing
 
 Example output:
@@ -66,6 +98,14 @@ Same app. Same green check. Different decision boundary.
 Repo evidence: auth callback changed, Supabase migration touched, preview redirect env added.
 Live evidence: app responds 200 OK.
 Missing production proof: auth callback dashboard and Supabase RLS provider state are not proven by repo code.
+
+$ viberaven architecture map
+Auth boundary: callback route now depends on preview env.
+Data boundary: Supabase RLS migration changed the same release.
+Deploy boundary: app can still return 200 OK while provider config is wrong.
+Fix boundary: repo redirect fallback is code; callback URL and RLS proof are provider actions.
+
+$ viberaven next action
 Next action: fix redirect fallback in code, then verify provider callback URL + RLS policy before claiming safe release.
 ```
 
@@ -80,14 +120,16 @@ npx -y skills add ohad6k/VibeRaven --skill go-live
 
 | Skill | What It Makes The Agent Do |
 | --- | --- |
-| `production-context` | Maintain `.viberaven/production-context.md`: what changed, why dangerous, what was verified, and what provider/human proof remains. |
-| `what-broke` | Ask what changed before editing, then fix the smallest repo-code surface the evidence supports. |
-| `viberaven` | Use Studio, provider cards, release/version context, MCP status, and access modes during real work. |
+| `production-context` | Maintain `.viberaven/production-context.md`: architecture boundaries, what changed, why dangerous, what was verified, and what provider/human proof remains. |
+| `what-broke` | Ask what changed before editing, map the affected architecture boundary, then fix the smallest repo-code surface the evidence supports. |
+| `viberaven` | Use Studio, provider cards, release/version context, architecture context, MCP status, and access modes during real work. |
 | `go-live` | Push and deploy with build, live URL proof, and clear provider/human boundaries. |
 
-## Instant Hook
+## Architecture Context
 
-`what-broke` is the fast entry point: a skill that makes an agent ask what changed before editing, then move toward the fix.
+Most AI-built apps do not fail because the agent cannot write code. They fail because the agent does not know the architecture it is touching: auth handoffs, database policies, provider dashboards, deploy env, webhook delivery, and the release where behavior changed.
+
+`what-broke` is the fast entry point: it makes the agent ask what changed, map the affected architecture boundary, then move toward the smallest fix.
 
 ```text
 User:
@@ -99,9 +141,10 @@ Starts editing middleware.
 With VibeRaven:
 Stop. What changed?
 - last working version: v1.2.3
-- changed since then: auth callback route + preview env
+- changed since then: auth callback route + preview env + Supabase RLS migration
+- architecture boundary: login callback -> session -> database policy
 - repo-code fix: update redirect fallback
-- human/provider action: add callback URL in the auth dashboard
+- provider action: verify callback URL and RLS policy outside the repo
 ```
 
 That is only the first move. VibeRaven should not just explain what broke. It should carry production context into the next safe repo fix, then separate anything that still needs a provider dashboard, MCP tool, or human action.
