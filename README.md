@@ -20,7 +20,7 @@
   </p>
 </div>
 
-VibeRaven is the open-source local cockpit for AI coding agents. Codex, Claude Code, Cursor, and Gemini can write the code, but they patch blind. VibeRaven maps your product in seconds: releases, providers, and launch risks, all ready to drag into your agent.
+VibeRaven is the open-source cockpit for AI coding agents. Agents write code fast, but they patch blind. VibeRaven maps your product in seconds: releases, providers, and launch risks, ready to drag into your agent's next prompt.
 
 ```bash
 npx -y viberaven
@@ -28,7 +28,7 @@ npx -y viberaven
 
 ![VibeRaven Studio: your product mapped in seconds](./assets/viberaven-studio-demo.gif)
 
-One command. Zero config. Fully local. No login, no API key, no telemetry. The Studio opens in your browser, detects your stack, finds your providers, puts your git releases on a timeline, and gives you a "can I ship?" verdict from offline checks.
+The Studio opens in your browser and works entirely on your machine: it detects your stack, finds your providers, puts your git releases on a timeline, and gives you a "can I ship?" verdict from offline checks. No login, no API key, no telemetry.
 
 ## Your first 5 minutes
 
