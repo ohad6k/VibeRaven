@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-07-02T15:16:11.747Z",
+  "exportedAt": "2026-07-02T19:41:37.833Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -46,6 +46,10 @@
     [
       "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
       ".github/workflows/viberaven-agent-discovery.yml"
+    ],
+    [
+      "export/public-discovery-staging/.github/workflows/pages.yml",
+      ".github/workflows/pages.yml"
     ],
     [
       "export/public-discovery-staging/plugin.yaml",

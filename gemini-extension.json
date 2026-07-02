@@ -1,6 +1,6 @@
 {
   "name": "viberaven",
-  "version": "1.3.1",
+  "version": "1.3.5",
   "description": "VibeRaven Studio and architecture/production-context skills for AI-built apps. Use at the start of real app work and before changing release-sensitive code, providers, migrations, auth, billing, webhooks, or deploy flows.",
   "contextFileName": "AGENTS.md"
 }
