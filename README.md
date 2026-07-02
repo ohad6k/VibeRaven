@@ -151,7 +151,7 @@ Local evidence checks for RLS proof, service-role exposure, and pooler ports bef
 - npm: [viberaven](https://www.npmjs.com/package/viberaven)
 - Issues: [ohad6k/VibeRaven/issues](https://github.com/ohad6k/VibeRaven/issues)
 
-Current public release: `viberaven@1.3.0`.
+Current public release: `viberaven@1.3.1`.
 
 If VibeRaven helps, star the repo so other AI app builders can find it. Use **Watch → Custom → Releases** for release notifications.
 
