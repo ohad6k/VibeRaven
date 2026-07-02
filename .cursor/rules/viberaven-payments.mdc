@@ -7,6 +7,6 @@ globs:
 alwaysApply: false
 ---
 
-Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md` for what changed, which architecture boundary is affected, and which provider context matters.
+Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md`.
 
 Do NOT ship webhook handlers without signature verification; INSTEAD run `npx -y viberaven --agent-mode` after webhook edits.

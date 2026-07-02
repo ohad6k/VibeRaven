@@ -1,19 +1,15 @@
 ---
-description: VibeRaven always-on architecture, release, and provider context for agents
+description: VibeRaven production gate — canonical agent commands and gate loop
 alwaysApply: true
 ---
 
-At the start of real app work, map the architecture boundary before editing: UI/API, auth/session, data/schema/RLS, provider dashboard, deploy/env, background job/webhook, billing, storage, or release/version drift.
-
-Ask concise questions only when the answer changes the plan: last working version, production symptom, provider involved, deploy target, or provider/dashboard proof.
-
-Open Studio with `npx -y viberaven` for context. Run `npx -y viberaven --agent-mode` before deploy, provider-sensitive, database-policy, or dependency changes when artifact context is needed.
+Run `npx -y viberaven --agent-mode` before deploy, auth, RLS, webhooks, or dependency changes.
 
 Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json` and `.viberaven/mission-map.md`.
-Fix one scoped gap, then `npx -y viberaven --verify`. Before CI or production promote: `npx -y viberaven --strict`.
+Fix one gap, then `npx -y viberaven --verify`. Before CI or production promote: `npx -y viberaven --strict`.
 
-Context is not clear until the architecture boundary, release/version context, and provider proof boundary are understood. For launch gates, `gate.status === "clear"` is required.
+Gate is not clear until `gate.status === "clear"`.
 
-Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md` for what changed, which architecture boundary is affected, and which provider context matters.
+Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md`.
 
-Full VibeRaven rules: `AGENTS.md` / `CLAUDE.md` (installed by `npx -y viberaven init --agents all`).
+Full production rules: `AGENTS.md` / `CLAUDE.md` (installed by `npx -y viberaven init --agents all`).

@@ -1,8 +1,8 @@
 interface:
-  display_name: "VibeRaven"
-  short_description: "Route agents through production evidence"
+  display_name: "VibeRaven — Control Layer for AI-Built Products"
+  short_description: "Product context + launch verdict for coding agents, fully local"
   brand_color: "#ff4d1f"
-  default_prompt: "Use $viberaven to route this task through the VibeRaven plugin loop: architecture plan, release/provider evidence, MCP context when available, verification, production memory, and next skill."
+  default_prompt: "Use $viberaven to map this product and clear launch blockers before shipping."
 
 policy:
   allow_implicit_invocation: true

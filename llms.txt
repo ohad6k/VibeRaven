@@ -1,18 +1,8 @@
 # VibeRaven
 
-> AI agents can code. They still need to know what changed.
+> VibeRaven Production Protocol for AI-built apps. Agent Context + Production Gate.
 
-VibeRaven is the open-source localhost Studio for release drift, version context, and provider context. Use it when an agent needs to know which version broke the app, what changed since the last working release, and which provider context matters before editing.
-
-`npx -y viberaven` is the primary entry point. It opens the local Studio so the user or agent can compare releases, inspect provider context, and decide the next repo-owned fix before another patch.
-
-Canonical Studio command:
-
-```bash
-npx -y viberaven
-```
-
-Non-interactive artifact loop when the Studio UI is not the right fit:
+Canonical agent command:
 
 ```bash
 npx -y viberaven --agent-mode

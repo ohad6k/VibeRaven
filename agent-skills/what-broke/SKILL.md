@@ -1,65 +1,36 @@
 ---
 name: what-broke
-description: Use when an app worked before and now fails, a release or deploy may have changed behavior, provider state may be involved, or an AI agent is about to patch without version evidence.
+description: Use when an AI agent needs to stop guessing, find which version broke an app, compare releases, read git tags/diffs/changelogs, and connect the code change to provider context such as database, storage, deployment, and external runtime behavior before editing.
 ---
 
-# VibeRaven: What Broke
+# What Broke
 
-Find the version that changed behavior before patching.
+Use this skill when the app worked before and the agent is about to patch blind. Find the version that changed behavior, recover the version/release context, explain what broke, and connect the code diff to provider reality: database, storage, deployment, and external runtime behavior.
 
-## Hard Rule
+## First Pass
 
-Do not guess from symptoms. Compare a known-good state to the current/bad state, then map the changed boundary.
-
-## Loop
-
-```text
-range -> diff -> boundary -> risk -> fix -> verify -> memory
-```
-
-1. Read `.viberaven/production-context.md` if it exists.
-2. Protect dirty work: run `git status --short`; never reset or overwrite user changes.
-3. Choose the range:
-   - Prefer user-provided good/bad versions.
-   - Else inspect tags, changelog, release branches, package versions, and recent commits.
-4. Diff narrowly:
-   - `git diff <good>..<bad> --stat`
-   - `git diff <good>..<bad> --name-only`
-   - focused `git diff <good>..<bad> -- <path>`
-5. Rank changed files by production risk:
-   - migrations/schema/RLS/storage
-   - auth/session/callbacks
-   - deploy/env/runtime config
-   - billing/webhooks/jobs/queues
-   - API contracts
-   - UI consumers
-6. Use VibeRaven/provider MCP evidence when available for release history, provider status, dashboard-adjacent proof, and known incidents.
-7. Make the scoped repo fix when the evidence supports it; otherwise name the missing proof.
-8. Verify and update/propose `.viberaven/production-context.md`.
-
-If the repo fix is proven and the user asked for code work, implement it. Do not stop at diagnosis.
-
-When the output names `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
-
-Use `Next skill: production-context` when the fix touches migrations, providers, auth, env, billing, storage, webhooks, incidents, or fragile customer paths. Use `Next skill: go-live` when the next proof is deploy/live URL. Do not use `Next skill: None` when production memory or live proof is still needed.
+1. Inspect dirty work first: `git status --short`. Do not reset, checkout, or overwrite user changes.
+2. Identify the comparison range:
+   - Prefer explicit known-good and known-bad versions from the user.
+   - Otherwise infer from `git tag --sort=-creatordate`, `git log --oneline --decorate -n 40`, package versions, release branches, and CHANGELOG entries.
+3. Map version names to concrete git refs: tags, branch names, release commits, package versions, or changelog headings.
+4. Build a narrow diff before editing: `git diff <good>..<bad> --stat`, then `git diff <good>..<bad> --name-only`, then focused `git diff <good>..<bad> -- <path>`.
+5. Read provider-adjacent files touched in the range: migrations, schema files, storage policies, deployment config, provider SDK setup, seed data, and runtime boundary files. Add identity, billing, or event-delivery files only when the diff or user pain points there.
 
 ## Evidence Packet
 
-```text
-Range:
-What changed:
-Architecture boundary:
-Production danger:
-Repo fix:
-Provider/MCP action:
-Verification:
-Memory:
-Next skill:
-```
+Before proposing code changes, produce a short packet:
 
-If evidence is missing, ask for the exact missing item: last working version, deploy URL, provider receipt, log line, migration, rollback note, or screenshot.
+- **Range:** good ref, bad/current ref, confidence, and why that range was chosen.
+- **Version name:** semantic version, release name, tag, changelog heading, or "unknown".
+- **Changed surface:** the files or modules that changed, grouped by app code, database, storage, deployment, provider SDK/setup, and external runtime behavior.
+- **Provider context:** what provider-dependent behavior may have changed. Say when dashboard or runtime state is not verifiable from the repo.
+- **What broke path:** the smallest chain from version change to observed breakage.
+- **Missing evidence:** anything needed from logs, provider dashboards, release notes, or the user.
 
-## Useful Commands
+## Smart Diff Workflow
+
+Use the cheapest command that answers the next question:
 
 ```bash
 git status --short
@@ -67,19 +38,46 @@ git tag --sort=-creatordate
 git log --oneline --decorate -n 40
 git diff <good>..<bad> --stat
 git diff <good>..<bad> --name-only
-git log --grep="rollback\\|incident\\|hotfix\\|deploy" --oneline -n 30
+git log --oneline -- <path>
+git show --stat <commit>
+git show <commit> -- <path>
 ```
 
-## Provider Boundary
+When many files changed, rank by production risk first:
 
-Repo edits can fix repo code. They do not prove provider dashboards are correct.
+1. Database migrations, schema, queries, ORM models, RLS/policies.
+2. Identity/session boundaries, only when the diff or user pain points there.
+3. Deployment/runtime config, build output assumptions, redirects, rewrites.
+4. Storage buckets, upload/download rules, signed URL code.
+5. API contracts, background jobs, queues, scheduled tasks, and external event delivery.
+6. UI changes that consume changed contracts.
 
-Name external proof separately: Stripe webhook endpoint, Supabase RLS/policy, Clerk callback URL, Vercel env/domain, email DNS, storage bucket policy, queue/cron config, or incident/rollback note.
+## Risk Map
 
-## Mistakes
+Create a Risk Map before editing:
 
-- Inferring the breaking version from timestamps alone.
-- Reading the whole repo before choosing a range.
-- Treating a package bump as harmless.
-- Saying "config changed" without naming the provider boundary.
-- Stopping at analysis when a proven repo fix is available.
+| Signal | Why It Matters |
+| --- | --- |
+| Migration without matching app query update | Code may expect old schema or policy behavior |
+| Identity/provider behavior changed with no release note | The break may be outside the edited component |
+| Package or SDK version changed | Behavior may differ without app code changes |
+| Deployment config changed | Local success may not match production |
+| Changelog mentions rename, cleanup, or refactor | High chance of hidden contract break |
+
+## Fix Plan
+
+Only after the Evidence Packet and Risk Map:
+
+1. State the most likely version that introduced the issue.
+2. State the smallest code or config change to test first.
+3. Protect provider boundaries: do not claim database, deployment, billing, storage, identity, or other dashboard state was fixed by repo edits alone.
+4. Add or run the narrowest verification that proves the version-control theory, such as a focused test, migration check, route test, or build.
+5. If evidence is weak, ask for the missing release/log/provider detail instead of guessing.
+
+## Common Mistakes
+
+- Do not infer the breaking version from file timestamps alone.
+- Do not compare the whole repo when a narrower good/bad range exists.
+- Do not treat a package version bump as harmless; read its surrounding code changes.
+- Do not collapse provider context into generic "config changed" language. Name the database, storage, deployment, or external runtime behavior that could be affected.
+- Do not rewrite broad areas while investigating a version regression. Patch the smallest surface that matches the diff evidence.

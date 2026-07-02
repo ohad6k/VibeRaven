@@ -1,107 +1,67 @@
-<p align="center">
-  <img src="./assets/raven-mascot.png" width="170" alt="VibeRaven raven mascot">
-</p>
+# VibeRaven
 
-<h1 align="center">VibeRaven</h1>
+**Your AI agent builds it. VibeRaven controls it.**
 
-<p align="center">
-  <strong>Stop your agent from patching blind.</strong>
-</p>
-
-<p align="center">
-  <a href="https://github.com/ohad6k/VibeRaven/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/ohad6k/VibeRaven?style=flat-square&label=stars"></a>
-  <a href="https://www.npmjs.com/package/viberaven"><img alt="npm version" src="https://img.shields.io/npm/v/viberaven?style=flat-square&label=npm"></a>
-  <a href="https://www.npmjs.com/package/viberaven"><img alt="npm downloads" src="https://img.shields.io/npm/dm/viberaven?style=flat-square&label=npm%20downloads"></a>
-  <img alt="skills" src="https://img.shields.io/badge/skills-6-7c3aed?style=flat-square">
-  <img alt="works with Codex Claude Gemini Cursor" src="https://img.shields.io/badge/agents-Codex%20%7C%20Claude%20%7C%20Gemini%20%7C%20Cursor-111827?style=flat-square">
-  <img alt="license" src="https://img.shields.io/badge/license-MIT-111827?style=flat-square">
-</p>
-
-<p align="center">
-  <a href="./assets/viberaven-studio-demo.mp4">
-    <img src="./assets/viberaven-studio-demo.gif" alt="VibeRaven Studio cockpit UI with agent chat, provider board, release versions, access controls, and production actions">
-  </a>
-</p>
-
-<p align="center">
-  <a href="./assets/viberaven-studio-demo.mp4"><strong>Open the full-quality MP4 demo</strong></a>
-</p>
-
-Repo context tells the agent what exists. Production context tells it what is dangerous.
-
-VibeRaven gives AI-built apps a **plugin/skills pack**, MCP context, and local Studio so agents can work like senior engineers before they patch: map the architecture, inspect version/release drift, respect provider boundaries, and use MCP/Studio context when repo code is not enough.
-
-The skill count is not the product. The flow is:
-
-```text
-route -> ask -> evidence -> fix -> verify -> remember -> next action
-```
-
-## AI Agent Quick Read
-
-If you are an AI coding agent, start with `viberaven` when unsure. It routes to `architecture-context`, `architecture-plan`, `what-broke`, `production-context`, or `go-live`. When a skill returns `Next skill:`, continue with that VibeRaven skill unless user input, auth, or provider proof is required.
-
-## Plugin + Skills
-
-Use the skills when you want the agent behavior change immediately. They work as one plugin flow: route the task, ask low-level product questions, gather repo/provider evidence, make the scoped repo action, verify the claim, record production memory, then hand off to the next skill when needed. Use the Studio when you want the full cockpit around releases, providers, diffs, chat, MCP context, and access modes.
-
-## Proof
-
-Before VibeRaven, the agent sees a green check and edits the nearest file. With VibeRaven, it asks low-level product questions, turns the answers into an architecture brief, separates repo work from provider proof, and names the next skill in the loop.
-
-Reproduce the demo proof artifacts:
-
-```bash
-node examples/proof/live-evidence-demo.mjs --out-dir .viberaven-proof --show
-```
-
-The script creates a disposable repo, tags `v1.2.3` and `v1.2.4`, changes auth/env/RLS files, runs real `git diff`, starts a local HTTP check, then shows why `200 OK` is not enough when provider proof is missing.
-
-```bash
-npx -y skills add ohad6k/VibeRaven --skill architecture-context
-npx -y skills add ohad6k/VibeRaven --skill architecture-plan
-npx -y skills add ohad6k/VibeRaven --skill production-context
-npx -y skills add ohad6k/VibeRaven --skill what-broke
-npx -y skills add ohad6k/VibeRaven --skill viberaven
-npx -y skills add ohad6k/VibeRaven --skill go-live
-```
-
-| Skill | What It Makes The Agent Do |
-| --- | --- |
-| `viberaven` | Router: choose the right VibeRaven skill, Studio/MCP evidence, and next action. |
-| `architecture-context` | Ask low-level product questions, then hand answered work to `architecture-plan`. |
-| `architecture-plan` | Write the workstream architecture plan with boundaries, options, risks, sequence, verification, and route before implementation. |
-| `what-broke` | Compare working/broken releases, map the changed boundary, implement the scoped repo fix when proven, and name provider proof. |
-| `production-context` | Maintain `.viberaven/production-context.md`: what changed, why dangerous, verification, provider/MCP proof, and open action. |
-| `go-live` | Push and deploy with local proof, GitHub/Vercel evidence, live URL proof, production memory, and provider gaps. |
-
-## Open the Full Studio
+Codex, Claude Code, Cursor, and Gemini can write the code — but they patch blind. VibeRaven is local mission control for AI-built products: your releases, providers, and launch risks, mapped in seconds and ready to drag into your agent.
 
 ```bash
 npx -y viberaven
 ```
 
-The Studio is the cockpit for deeper work: agentic chat, draggable providers, draggable versions/releases, release diffs, provider MCP context, terminal output, CLI-agent connection checks, and access-mode control.
+![VibeRaven Studio: your product mapped in seconds](./assets/viberaven-studio-demo.gif)
 
-Current npm latest: `viberaven@1.2.4` and `@viberaven/cli@1.2.4`.
+One command, zero config, fully local — no login, no API key, no telemetry. The Studio boots and maps **your** product: stack detected, providers found, git releases on a timeline, and a "can I ship?" verdict from offline checks.
 
-If this repo helps, star it so other AI app builders can find production context for agents. Use **Watch -> Custom -> Releases** if you want release notifications.
+## Your first 5 minutes
 
-> VibeRaven public repo is the agent discovery and installation surface. Product source code and service internals live in a private repository.
+1. **Run it** — `npx -y viberaven` in your project folder. The Studio opens in your browser and scans your repo offline.
+2. **Read your verdict** — the gate chip and Launch Signals show exactly what blocks launch, ranked. Click any signal → **Fix** hands it to your agent.
+3. **Connect your coding agent** — pick Codex, Claude Code, or Gemini CLI in the chat panel, hit **Test connection**, and choose how much access it gets (`ask` / `approve` / `full`).
+4. **Open the Architecture map** — pages, API, data, modules, and providers as a live draggable map. Weak boundaries glow red. Click one and press a plain-English action like *"Protect user data (RLS)"* or *"Fix slow queries"*.
+5. **Open the Worktree** — your branches as a real tree. Uncommitted mess? One tap: *Commit with agent*. Branch ready? *Review* explains it in plain language, *Merge* does it safely.
 
-The local-first boundary matters: the open-source local CLI/UI does not require login or hosted API credentials.
+Everything the agent needs is also written to `.viberaven/` as markdown and JSON — readable by any tool, versioned by git.
 
-## What VibeRaven Adds
+## The terminal twin: `viberaven check`
 
-- **Version context:** tags, release names, changelogs, PR links, git diffs, rollback notes, and recent deploy history.
-- **Production danger context:** provider config drift, migration history, incidents, fragile customer paths, auth/billing/database/deploy boundaries.
-- **Fix boundaries:** repo-code fixes are applied or prompted separately from provider dashboard work that needs proof.
-- **Agent control:** ask/approve/full access modes for connected Codex, Claude Code, Gemini, and other CLI agents.
-- **MCP context:** provider and readiness context can be pulled into the agent without pretending MCP itself is the user-facing feature.
+For agents and CI, the same verdict as one command:
 
-## Install Agent Guidance
+```bash
+npx -y viberaven check
+```
 
-Make AI agents carry architecture, release, and provider context before they patch the repo:
+```text
+viberaven check · ~/my-app
+
+🔴 RLS disabled on public tables  (rls_profiles)
+🟡 Service-role key referenced in client bundle  (service_role_client)
+⚪ No error monitoring wired  (monitoring_missing)
+
+Verdict: ❌ 1 blocker, 1 warning · score 62
+Fix: viberaven fix · Details: .viberaven/agent-tasklist.md
+```
+
+One line per finding, `file:line` evidence in the artifacts, exit code `1` on blockers. Then:
+
+```bash
+npx -y viberaven fix            # list gaps with safe automatic recipes
+npx -y viberaven fix --gap <id> # apply one recipe
+npx -y viberaven --strict       # final gate before deploy or CI
+```
+
+Everything is written to `.viberaven/` as markdown and JSON on disk — `agent-tasklist.md`, `gate-result.json`, `context-map.json` — so any agent (and git) can read it.
+
+## The Studio is an agent control room
+
+- **Agentic chat on your repo** — connect Codex, Claude Code, or Gemini CLI and drive them from the Studio, with connection health and live terminal output.
+- **Access modes** — `ask`, `approve`, or `full`: control how much your agent can do, Codex-style, and it changes the real agent command, not just the UI copy.
+- **Drag context into the prompt** — drag a release, a provider card, or production memory into agent chat, so the agent patches with your product's versions, providers, and danger zones instead of guessing.
+- **Providers via MCP** — connect Supabase, Vercel, and Stripe; provider status flows into agent prompts, and provider proof stays separate from repo-code fixes.
+- **Versions & releases** — release diffs, tags, changelogs, and "what changed since the last working release."
+
+## Install for AI agents
+
+Make agents use release and provider context before they patch the repo:
 
 ```bash
 npx -y viberaven init --agents all
@@ -121,34 +81,72 @@ This installs bounded rules (`<!-- VIBERAVEN:START -->` ... `<!-- VIBERAVEN:END 
 - `.github/copilot-instructions.md`
 - `.viberaven/agent-context.md`, `.viberaven/mission-map.md`
 
-## Agent-ready Starter Template
+The rules teach the loop: `check` → read `.viberaven/` → fix one gap → `check` again, until `gate.status === "clear"`.
 
-[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) - agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
+## Agent skills
 
-## Machine-readable Docs
+Six [skills.sh](https://skills.sh) skills route agents through architecture questions, version evidence, and launch proof:
 
-- [llms-full.txt](https://viberaven.dev/llms-full.txt)
-- [llms.txt](./llms.txt)
-- [skills.json](https://viberaven.dev/skills.json)
-- [skills.sh.json](./skills.sh.json)
-- [Production Protocol guide](https://viberaven.dev/viberaven-production-protocol-ai-built-apps.md)
-- [What is `.viberaven/prp.json`?](https://viberaven.dev/what-is-viberaven-prp-json.md)
-- [How to use `nextActions`](https://viberaven.dev/how-to-use-viberaven-next-actions.md)
-- [PRP MCP resources](https://viberaven.dev/viberaven-prp-mcp-resources.md)
-- [Example proof artifacts](./examples/proof/)
+| Skill | Job |
+| --- | --- |
+| `viberaven` | The router: local check/fix loop, Studio, and MCP context. |
+| `architecture-context` | Ask the missing product questions before any edit. |
+| `architecture-plan` | Turn answers + repo evidence into a workstream plan. |
+| `what-broke` | Find which version broke the app before patching. |
+| `production-context` | Keep compact production memory in `.viberaven/production-context.md`. |
+| `go-live` | Local app → GitHub → Vercel, with live-URL proof. |
+
+```bash
+npx -y skills add ohad6k/VibeRaven --skill viberaven
+```
+
+See [agent-skills/](./agent-skills/) for the full pack.
+
+This repo also works as an agent **plugin**: `plugin.yaml`, `.claude-plugin/`, `.codex-plugin/`, and `gemini-extension.json` expose the six skills plus `/viberaven-work`, `/viberaven-help`, `/viberaven-production-context`, and `/viberaven-launch` commands to Claude Code, Codex, and Gemini CLI.
 
 ## MCP
 
-VibeRaven is listed in the MCP registry for agents that prefer tools over raw terminal commands.
+VibeRaven is listed in the MCP registry for agents that prefer tools over terminal commands:
 
 ```json
 { "viberaven": { "command": "npx", "args": ["-y", "viberaven", "--mcp"] } }
 ```
 
-Prefer `viberaven_prp_current` or `prp://current` when MCP is available; use `viberaven_validate_npm_package` before adding npm dependencies.
+Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_apply`, `viberaven_verify`, `viberaven_audit`, `viberaven_provider_verify`, and `viberaven_validate_npm_package` (run it before adding npm dependencies).
 
-## Get the Product
+## Vercel + Supabase
+
+```bash
+npx -y viberaven audit --vercel-supabase
+```
+
+Local evidence checks for RLS proof, service-role exposure, and pooler ports before you claim "production ready."
+
+## Philosophy
+
+- **Local-first.** The CLI and Studio run on your machine. No login, no API key, no telemetry, no scan quota.
+- **Markdown on disk.** All context lives in `.viberaven/` as plain files your agent and your git history can read.
+- **Evidence over vibes.** Findings point at repo evidence; provider dashboard state is never claimed from repo edits alone.
+- **Non-destructive.** Fix recipes are guarded, cleanup is plan-only, and nothing is pushed or deployed for you.
+
+## Agent-ready starter template
+
+[examples/nextjs-supabase-vercel-production-ready-template](./examples/nextjs-supabase-vercel-production-ready-template/) — agent rules and `viberaven:*` scripts for Next.js + Supabase + Vercel.
+
+## Machine-readable docs
+
+- [llms.txt](./llms.txt) · [llms-full.txt](https://viberaven.dev/llms-full.txt)
+- [skills.json](https://viberaven.dev/skills.json) · [skills.sh.json](./skills.sh.json)
+- [Example proof artifacts](./examples/proof/)
+
+## Get the product
 
 - Website: [viberaven.dev](https://viberaven.dev)
 - npm: [viberaven](https://www.npmjs.com/package/viberaven)
 - Issues: [ohad6k/VibeRaven/issues](https://github.com/ohad6k/VibeRaven/issues)
+
+Current public release: `viberaven@1.3.0`.
+
+If VibeRaven helps, star the repo so other AI app builders can find it. Use **Watch → Custom → Releases** for release notifications.
+
+> This public repo is the agent discovery and installation surface. Product source development happens in a private repository.

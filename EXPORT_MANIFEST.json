@@ -1,47 +1,19 @@
 {
-  "exportedAt": "2026-06-30T16:49:37.947Z",
-  "sourceRepo": "private development repository",
+  "exportedAt": "2026-07-02T15:04:04.688Z",
+  "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
     [
-      ".gitignore",
-      ".gitignore"
-    ],
-    [
-      "CONTRIBUTING.md",
-      "CONTRIBUTING.md"
-    ],
-    [
-      "LICENSE",
-      "LICENSE"
-    ],
-    [
       "docs/public-repo/README.md",
       "README.md"
-    ],
-    [
-      "docs/public-repo/assets/raven-mascot.png",
-      "assets/raven-mascot.png"
     ],
     [
       "docs/public-repo/assets/viberaven-localhost-ui.png",
       "assets/viberaven-localhost-ui.png"
     ],
     [
-      "docs/public-repo/assets/viberaven-live-evidence.png",
-      "assets/viberaven-live-evidence.png"
-    ],
-    [
-      "docs/public-repo/assets/viberaven-real-studio.png",
-      "assets/viberaven-real-studio.png"
-    ],
-    [
       "docs/public-repo/assets/viberaven-studio-demo.gif",
       "assets/viberaven-studio-demo.gif"
-    ],
-    [
-      "docs/public-repo/assets/viberaven-studio-demo.mp4",
-      "assets/viberaven-studio-demo.mp4"
     ],
     [
       "llms.txt",
@@ -72,12 +44,8 @@
       "skills.sh.json"
     ],
     [
-      "export/public-discovery-staging/.codex-plugin/plugin.json",
-      ".codex-plugin/plugin.json"
-    ],
-    [
-      "export/public-discovery-staging/.claude-plugin/plugin.json",
-      ".claude-plugin/plugin.json"
+      "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
+      ".github/workflows/viberaven-agent-discovery.yml"
     ],
     [
       "export/public-discovery-staging/plugin.yaml",
@@ -86,6 +54,14 @@
     [
       "export/public-discovery-staging/gemini-extension.json",
       "gemini-extension.json"
+    ],
+    [
+      "export/public-discovery-staging/.claude-plugin/plugin.json",
+      ".claude-plugin/plugin.json"
+    ],
+    [
+      "export/public-discovery-staging/.codex-plugin/plugin.json",
+      ".codex-plugin/plugin.json"
     ],
     [
       "export/public-discovery-staging/commands/viberaven-help.toml",
@@ -102,10 +78,6 @@
     [
       "export/public-discovery-staging/commands/viberaven-launch.toml",
       "commands/viberaven-launch.toml"
-    ],
-    [
-      "export/public-discovery-staging/.github/workflows/viberaven-agent-discovery.yml",
-      ".github/workflows/viberaven-agent-discovery.yml"
     ],
     [
       "AGENTS.md",

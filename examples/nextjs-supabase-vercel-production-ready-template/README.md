@@ -9,13 +9,13 @@ npx -y viberaven init --agents all
 npx -y viberaven doctor --agents
 ```
 
-## What-Changed Loop
+## Production gate
 
 ```bash
 npx -y viberaven --agent-mode
 ```
 
-Read `.viberaven/agent-tasklist.md` and `.viberaven/gate-result.json`. Fix one what-changed gap, then `npx -y viberaven --verify` once per batch.
+Read `.viberaven/agent-tasklist.md` and `.viberaven/gate-result.json`. Fix one gap, then `npx -y viberaven --verify` once per batch.
 
 ## Files in this template
 
