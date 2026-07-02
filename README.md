@@ -19,6 +19,12 @@ One command, zero config, fully local — no login, no API key, no telemetry. Th
 3. **Connect your coding agent** — pick Codex, Claude Code, or Gemini CLI in the chat panel, hit **Test connection**, and choose how much access it gets (`ask` / `approve` / `full`).
 4. **Open the Architecture map** — pages, API, data, modules, and providers as a live draggable map. Weak boundaries glow red. Click one and press a plain-English action like *"Protect user data (RLS)"* or *"Fix slow queries"*.
 5. **Open the Worktree** — your branches as a real tree. Uncommitted mess? One tap: *Commit with agent*. Branch ready? *Review* explains it in plain language, *Merge* does it safely.
+6. **Give your agent the skills** — install the six-skill pack and the plugin so Codex, Claude Code, and Gemini follow the same senior-engineer loop everywhere:
+
+   ```bash
+   npx -y skills add ohad6k/VibeRaven --skill viberaven   # skills.sh pack
+   npx -y viberaven init --agents all                     # agent rules in-repo
+   ```
 
 Everything the agent needs is also written to `.viberaven/` as markdown and JSON — readable by any tool, versioned by git.
 
