@@ -1,12 +1,8 @@
 {
-  "exportedAt": "2026-07-03T10:19:59.010Z",
+  "exportedAt": "2026-07-03T10:26:25.982Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
-    [
-      "docs/public-repo/index.html",
-      "index.html"
-    ],
     [
       "docs/public-repo/README.md",
       "README.md"
