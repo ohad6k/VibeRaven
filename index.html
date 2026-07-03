@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VibeRaven - Local Studio for AI-built apps</title>
+    <meta
+      name="description"
+      content="VibeRaven is the open-source local Studio for AI-built apps: agentic chat, provider context, release diffs, and production-readiness checks from one command."
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0c0f12;
+        --panel: #141a20;
+        --panel-soft: #10161b;
+        --text: #f5f2ea;
+        --muted: #a7b0b8;
+        --line: rgba(245, 242, 234, 0.14);
+        --accent: #f26b3a;
+        --accent-soft: rgba(242, 107, 58, 0.16);
+        --green: #5fe0a0;
+        --blue: #75b8ff;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at top left, rgba(242, 107, 58, 0.18), transparent 34rem),
+          linear-gradient(135deg, #0c0f12 0%, #111820 52%, #0b0d10 100%);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page {
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .shell {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 24px 0;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+      }
+
+      .brand img {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .nav a {
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 9px 13px;
+      }
+
+      .nav a:hover,
+      .nav a:focus-visible {
+        border-color: var(--line);
+        color: var(--text);
+        outline: none;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr);
+        gap: 38px;
+        align-items: center;
+        padding: 58px 0 44px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        width: fit-content;
+        border: 1px solid rgba(95, 224, 160, 0.24);
+        border-radius: 999px;
+        background: rgba(95, 224, 160, 0.08);
+        color: #b7f4d2;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 8px 11px;
+      }
+
+      h1 {
+        max-width: 760px;
+        margin: 18px 0 18px;
+        font-size: clamp(46px, 7vw, 86px);
+        line-height: 0.94;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 630px;
+        margin: 0;
+        color: #c3cbd2;
+        font-size: 19px;
+        line-height: 1.65;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0 18px;
+        font-weight: 800;
+      }
+
+      .button--primary {
+        border-color: rgba(242, 107, 58, 0.55);
+        background: var(--accent);
+        color: #11100e;
+      }
+
+      .button--secondary {
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .terminal {
+        width: fit-content;
+        max-width: 100%;
+        margin-top: 22px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(10, 13, 16, 0.72);
+        color: #eef2f6;
+        padding: 13px 15px;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 14px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      }
+
+      .demo {
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+        padding: 10px;
+        box-shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+      }
+
+      .demo img {
+        display: block;
+        width: 100%;
+        border-radius: 16px;
+      }
+
+      .demo::after {
+        content: "Studio cockpit";
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        background: rgba(9, 12, 15, 0.76);
+        color: #e9edf1;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 8px 11px;
+        backdrop-filter: blur(10px);
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        padding: 18px 0 54px;
+      }
+
+      .feature {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.045);
+        padding: 18px;
+      }
+
+      .feature b {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .feature span {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .contributors {
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        background: rgba(6, 8, 10, 0.35);
+        padding: 38px 0 42px;
+      }
+
+      .contributors__header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 22px;
+      }
+
+      .contributors h2 {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 46px);
+        letter-spacing: 0;
+      }
+
+      .contributors p {
+        max-width: 560px;
+        margin: 8px 0 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .contributors-marquee {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      }
+
+      .contributors-marquee__track {
+        display: flex;
+        width: max-content;
+        gap: 14px;
+        animation: contributors-scroll 26s linear infinite;
+      }
+
+      .contributors-marquee:hover .contributors-marquee__track,
+      .contributors-marquee:focus-within .contributors-marquee__track {
+        animation-play-state: paused;
+      }
+
+      .contributor {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 238px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035));
+        padding: 9px 15px 9px 9px;
+      }
+
+      .contributor img {
+        width: 48px;
+        height: 48px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+      }
+
+      .contributor b {
+        display: block;
+        font-size: 14px;
+      }
+
+      .contributor span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 28px 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .footer nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      @keyframes contributors-scroll {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(calc(-50% - 7px));
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .contributors-marquee__track {
+          animation: none;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+          padding-top: 28px;
+        }
+
+        .features {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .contributors__header,
+        .footer {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .nav {
+          flex-wrap: wrap;
+        }
+
+        .features {
+          grid-template-columns: 1fr;
+        }
+
+        .contributor {
+          min-width: 220px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="shell topbar">
+        <a class="brand" href="./">
+          <img src="./assets/raven-mascot.png" alt="" />
+          <span>VibeRaven</span>
+        </a>
+        <nav class="nav" aria-label="Primary">
+          <a href="./README">README</a>
+          <a href="./agent-skills/">Skills</a>
+          <a href="./examples/proof/">Proof</a>
+          <a href="https://www.npmjs.com/package/viberaven">npm</a>
+          <a href="https://github.com/ohad6k/VibeRaven">GitHub</a>
+        </nav>
+      </header>
+
+      <section class="shell hero" aria-labelledby="hero-title">
+        <div>
+          <span class="eyebrow">Open-source local Studio for AI-built apps</span>
+          <h1 id="hero-title">Your AI agent builds it. VibeRaven controls it.</h1>
+          <p class="lead">
+            Run the Studio inside your repo to connect Codex, Claude, or Gemini, drag provider and release
+            context into chat, and check whether the app is ready before users see it.
+          </p>
+          <div class="actions">
+            <a class="button button--primary" href="https://www.npmjs.com/package/viberaven">Run with npx</a>
+            <a class="button button--secondary" href="./README">Read the agent guide</a>
+          </div>
+          <div class="terminal" aria-label="Install command">npx -y viberaven</div>
+        </div>
+        <a class="demo" href="./assets/viberaven-studio-demo.gif" aria-label="Open VibeRaven Studio demo">
+          <img src="./assets/viberaven-studio-demo.gif" alt="VibeRaven Studio cockpit demo" />
+        </a>
+      </section>
+
+      <section class="shell features" aria-label="Core VibeRaven workflows">
+        <article class="feature">
+          <b>Agentic chat</b>
+          <span>Connect local CLI agents and control access modes from the Studio.</span>
+        </article>
+        <article class="feature">
+          <b>Provider context</b>
+          <span>Keep Supabase, Vercel, and Stripe proof visible and separate from repo fixes.</span>
+        </article>
+        <article class="feature">
+          <b>Release diffs</b>
+          <span>Compare versions, explain changes, and find what shifted since a working release.</span>
+        </article>
+        <article class="feature">
+          <b>Local evidence</b>
+          <span>No login, no telemetry, no scan quota. Markdown and JSON stay in your repo.</span>
+        </article>
+      </section>
+
+      <section class="contributors" aria-labelledby="contributors-title">
+        <div class="shell contributors__header">
+          <div>
+            <h2 id="contributors-title">Community contributors</h2>
+            <p>
+              VibeRaven is public, inspectable, and built around agent-readable files. Star the repo, open
+              issues, and help improve the production loop for AI-built apps.
+            </p>
+          </div>
+          <a class="button button--secondary" href="https://github.com/ohad6k/VibeRaven/graphs/contributors">
+            View contributors
+          </a>
+        </div>
+        <div class="contributors-marquee shell" aria-label="Moving contributor avatars">
+          <div class="contributors-marquee__track">
+            <a class="contributor" href="https://github.com/ohad6k">
+              <img src="https://avatars.githubusercontent.com/u/190882507?v=4" alt="" />
+              <span><b>ohad6k</b><span>103 contributions</span></span>
+            </a>
+            <a class="contributor" href="https://github.com/Sufiyan-MSA">
+              <img src="https://avatars.githubusercontent.com/u/186238874?v=4" alt="" />
+              <span><b>Sufiyan-MSA</b><span>1 contribution</span></span>
+            </a>
+            <a class="contributor" href="https://github.com/vku2018">
+              <img src="https://avatars.githubusercontent.com/u/299349635?v=4" alt="" />
+              <span><b>vku2018</b><span>1 contribution</span></span>
+            </a>
+            <a class="contributor" href="https://github.com/caioribeiroclw-pixel">
+              <img src="https://avatars.githubusercontent.com/u/266331747?v=4" alt="" />
+              <span><b>caioribeiroclw-pixel</b><span>1 contribution</span></span>
+            </a>
+            <a class="contributor" href="https://github.com/ohad6k" aria-hidden="true" tabindex="-1">
+              <img src="https://avatars.githubusercontent.com/u/190882507?v=4" alt="" />
+              <span><b>ohad6k</b><span>103 contributions</span></span>
+            </a>
+            <a class="contributor" href="https://github.com/Sufiyan-MSA" aria-hidden="true" tabindex="-1">
+              <img src="https://avatars.githubusercontent.com/u/186238874?v=4" alt="" />
+              <span><b>Sufiyan-MSA</b><span>1 contribution</span></span>
+            </a>
+            <a class="contributor" href="https://github.com/vku2018" aria-hidden="true" tabindex="-1">
+              <img src="https://avatars.githubusercontent.com/u/299349635?v=4" alt="" />
+              <span><b>vku2018</b><span>1 contribution</span></span>
+            </a>
+            <a class="contributor" href="https://github.com/caioribeiroclw-pixel" aria-hidden="true" tabindex="-1">
+              <img src="https://avatars.githubusercontent.com/u/266331747?v=4" alt="" />
+              <span><b>caioribeiroclw-pixel</b><span>1 contribution</span></span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="shell footer">
+        <span>Current public release: viberaven@1.3.5</span>
+        <nav aria-label="Footer">
+          <a href="./llms.txt">llms.txt</a>
+          <a href="./skills.sh.json">skills.sh.json</a>
+          <a href="./docs/mcp-registry-submission.md">MCP registry</a>
+          <a href="./LICENSE">MIT License</a>
+        </nav>
+      </footer>
+    </main>
+  </body>
+</html>

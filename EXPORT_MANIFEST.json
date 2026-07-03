@@ -1,11 +1,27 @@
 {
-  "exportedAt": "2026-07-02T19:41:37.833Z",
+  "exportedAt": "2026-07-03T10:19:59.010Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
     [
+      "docs/public-repo/index.html",
+      "index.html"
+    ],
+    [
       "docs/public-repo/README.md",
       "README.md"
+    ],
+    [
+      "docs/public-repo/CONTRIBUTING.md",
+      "CONTRIBUTING.md"
+    ],
+    [
+      "docs/public-repo/LICENSE",
+      "LICENSE"
+    ],
+    [
+      "docs/public-repo/assets/raven-mascot.png",
+      "assets/raven-mascot.png"
     ],
     [
       "docs/public-repo/assets/viberaven-localhost-ui.png",
