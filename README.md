@@ -159,6 +159,7 @@ Local evidence checks for RLS proof, service-role exposure, and pooler ports bef
 
 Contributions are welcome, and most of them need no private source access:
 
+- Read the [contribution guide](./CONTRIBUTING.md) for repo structure, PR expectations, and local checks.
 - Pick up a [good first issue](https://github.com/ohad6k/VibeRaven/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22): docs, provider fixtures, examples, and translations.
 - Share ideas or questions in [Discussions](https://github.com/ohad6k/VibeRaven/discussions).
 - Join the [Discord](https://discord.gg/ZAJvazz63Y) to talk to the maintainer directly.
