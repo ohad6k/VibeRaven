@@ -1,6 +1,6 @@
 ## Current VibeRaven Product Focus
 
-This repo is currently focused on the open-source VibeRaven `1.3.5` product:
+This repo is currently focused on the open-source VibeRaven `1.4.0` product:
 
 - Main command: `npx -y viberaven`
 - Main product surface: the local Studio cockpit UI in `packages/cli/src/local-ui/`
