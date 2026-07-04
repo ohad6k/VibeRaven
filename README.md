@@ -26,7 +26,7 @@ VibeRaven is the open-source cockpit for AI coding agents. Agents write code fas
 npx -y viberaven
 ```
 
-![VibeRaven Studio: your product mapped in seconds](./assets/viberaven-studio-demo.gif)
+![VibeRaven Studio: your providers as graded cards, your agent on your repo](./assets/viberaven-studio.png)
 
 The Studio opens in your browser and works entirely on your machine: it detects your stack, finds your providers, puts your git releases on a timeline, and gives you a "can I ship?" verdict from offline checks. No login, no API key, no telemetry.
 
