@@ -193,7 +193,7 @@ Contributions are welcome, and most of them need no private source access:
 
 ## License
 
-[MIT](./LICENSE). Current public release: `viberaven@1.4.1`.
+[MIT](./LICENSE). Current public release: `viberaven@1.4.2`.
 
 If VibeRaven helps you ship, star the repo so other AI app builders can find it. Use **Watch → Custom → Releases** for release notifications.
 
