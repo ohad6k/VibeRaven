@@ -2,11 +2,11 @@
   <img src="./assets/banner.png" alt="VibeRaven — AI got your app to demo. VibeRaven gets it to production. The production protocol for AI-built apps. Open source, local-first, MIT." width="100%" />
 
   <p>
-    <a href="https://skills.sh"><img src="https://img.shields.io/badge/Install_as_skill-e8c15a?style=for-the-badge&logoColor=black" height="40" alt="Install as skill" /></a>
+    <a href="https://viberaven.dev"><img src="https://img.shields.io/badge/Website-viberaven.dev-e8c15a?style=for-the-badge&logoColor=black" height="40" alt="Website" /></a>
     &nbsp;
-    <a href="https://github.com/ohad6k/VibeRaven"><img src="https://img.shields.io/badge/View_on_GitHub-181717?style=for-the-badge&logo=github&logoColor=white" height="40" alt="View on GitHub" /></a>
+    <a href="https://www.npmjs.com/package/viberaven"><img src="https://img.shields.io/badge/Install-npx%20viberaven-cb3837?style=for-the-badge&logo=npm&logoColor=white" height="40" alt="Install from npm" /></a>
     &nbsp;
-    <a href="https://discord.gg/ZAJvazz63Y"><img src="https://img.shields.io/badge/Join_the_Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="40" alt="Join the Discord" /></a>
+    <a href="https://discord.gg/ZAJvazz63Y"><img src="https://img.shields.io/badge/Join-Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="40" alt="Join the Discord" /></a>
   </p>
 
   <p>
@@ -32,7 +32,9 @@ VibeRaven is the open-source cockpit for AI coding agents. Agents write code fas
 npx -y viberaven
 ```
 
-![VibeRaven Studio: your providers as graded cards, your agent on your repo](./assets/viberaven-studio.png)
+<div align="center">
+  <img src="./assets/viberaven-studio-demo.gif" alt="VibeRaven Studio in action: providers dealt as graded cards, git releases on a timeline, and Codex / Claude Code / Gemini driven from one local cockpit" width="100%" />
+</div>
 
 ## Your stack, as a hand of cards
 

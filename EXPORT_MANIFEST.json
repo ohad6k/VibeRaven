@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-07-06T14:39:48.542Z",
+  "exportedAt": "2026-07-06T14:47:40.100Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -14,6 +14,22 @@
     [
       "docs/public-repo/LICENSE",
       "LICENSE"
+    ],
+    [
+      "docs/public-repo/assets/logo.png",
+      "assets/logo.png"
+    ],
+    [
+      "docs/public-repo/assets/banner.png",
+      "assets/banner.png"
+    ],
+    [
+      "docs/public-repo/assets/cards-binder.png",
+      "assets/cards-binder.png"
+    ],
+    [
+      "docs/public-repo/assets/provider-cards.png",
+      "assets/provider-cards.png"
     ],
     [
       "docs/public-repo/assets/raven-mascot.png",
