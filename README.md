@@ -33,7 +33,7 @@ npx -y viberaven
 ```
 
 <div align="center">
-  <img src="./assets/viberaven-studio-demo.gif" alt="VibeRaven Studio in action: providers dealt as graded cards, git releases on a timeline, and Codex / Claude Code / Gemini driven from one local cockpit" width="100%" />
+  <img src="./assets/viberaven-studio.png" alt="VibeRaven Studio (manga skin): providers dealt as graded cards, git releases on a timeline, and Codex / Claude Code / Gemini driven from one local cockpit" width="100%" />
 </div>
 
 ## Your stack, as a hand of cards
