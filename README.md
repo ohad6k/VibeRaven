@@ -26,7 +26,7 @@
   </p>
 </div>
 
-VibeRaven is the open-source cockpit for AI coding agents. Agents write code fast, but they patch blind. VibeRaven maps your product in seconds: releases, providers, and launch risks, ready to drag into your agent's next prompt.
+VibeRaven is an open-source local cockpit for AI-built apps. Run `npx -y viberaven` in your repo and it connects your coding agent (Claude Code, Cursor, Codex) to the context it patches blind without, your architecture, providers, and releases, then shows what is actually safe to ship to production, auth, RLS, webhooks, deploy, before real users hit it. Local-first, no login.
 
 ```bash
 npx -y viberaven
