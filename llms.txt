@@ -1,8 +1,14 @@
 # VibeRaven
 
-> VibeRaven Production Protocol for AI-built apps. Agent Context + Production Gate.
+> Open-source localhost Studio and production-readiness gate for AI-built apps.
 
-Canonical agent command:
+Start with:
+
+```bash
+npx -y viberaven
+```
+
+Use the deeper artifact loop when the agent needs PRP, gate, and next-action files:
 
 ```bash
 npx -y viberaven --agent-mode
@@ -26,9 +32,12 @@ Prefer `viberaven_prp_current` or `prp://current` when MCP is available.
 ## Links
 
 - https://viberaven.dev
+- https://viberaven.dev/npx-viberaven.md
 - https://viberaven.dev/viberaven-production-protocol-ai-built-apps.md
 - https://viberaven.dev/what-is-viberaven-prp-json.md
 - https://viberaven.dev/how-to-use-viberaven-next-actions.md
+- https://viberaven.dev/what-is-viberaven-gate-result-json.md
+- https://viberaven.dev/connect-codex-claude-gemini-cli-to-repo-chat.md
 - https://viberaven.dev/viberaven-prp-mcp-resources.md
 - https://viberaven.dev/agent-context.md
 - https://viberaven.dev/skills.json

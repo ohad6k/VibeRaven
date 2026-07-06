@@ -1,14 +1,20 @@
 <div align="center">
-  <img src="./assets/raven-hero.png" alt="VibeRaven — the raven fanning its hand of provider cards" width="440" />
-  <h1>VibeRaven</h1>
-  <p><strong>Your AI agent builds it. VibeRaven controls it.</strong></p>
+  <img src="./assets/banner.png" alt="VibeRaven — AI got your app to demo. VibeRaven gets it to production. The production protocol for AI-built apps. Open source, local-first, MIT." width="100%" />
+
+  <p>
+    <a href="https://skills.sh"><img src="https://img.shields.io/badge/Install_as_skill-e8c15a?style=for-the-badge&logoColor=black" height="40" alt="Install as skill" /></a>
+    &nbsp;
+    <a href="https://github.com/ohad6k/VibeRaven"><img src="https://img.shields.io/badge/View_on_GitHub-181717?style=for-the-badge&logo=github&logoColor=white" height="40" alt="View on GitHub" /></a>
+    &nbsp;
+    <a href="https://discord.gg/ZAJvazz63Y"><img src="https://img.shields.io/badge/Join_the_Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="40" alt="Join the Discord" /></a>
+  </p>
+
   <p>
     <a href="https://www.npmjs.com/package/viberaven"><img src="https://img.shields.io/npm/v/viberaven?color=e8c15a&label=npm" alt="npm version" /></a>
     <a href="https://www.npmjs.com/package/viberaven"><img src="https://img.shields.io/npm/dm/viberaven?color=e8c15a&label=downloads" alt="npm downloads" /></a>
     <a href="https://github.com/ohad6k/VibeRaven/stargazers"><img src="https://img.shields.io/github/stars/ohad6k/VibeRaven?style=flat&color=e8c15a&label=stars" alt="GitHub stars" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-e8c15a" alt="MIT license" /></a>
     <a href="https://skills.sh"><img src="https://img.shields.io/badge/skills.sh-6--skill_pack-34d399" alt="skills.sh pack" /></a>
-    <a href="https://discord.gg/ZAJvazz63Y"><img src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white" alt="Join the Discord" /></a>
     <a href="https://x.com/VibeRavenStatio"><img src="https://img.shields.io/badge/X-follow-000000?logo=x&logoColor=white" alt="Follow on X" /></a>
   </p>
   <p>
@@ -27,6 +33,18 @@ npx -y viberaven
 ```
 
 ![VibeRaven Studio: your providers as graded cards, your agent on your repo](./assets/viberaven-studio.png)
+
+## Your stack, as a hand of cards
+
+<div align="center">
+  <img src="./assets/cards-binder.png" alt="VibeRaven Cards Binder — your providers dealt as a manga trading-card hand: Supabase, Vercel, GitHub, Stripe, Sentry, Clerk, Resend and more, black-and-white with gold foil" width="100%" />
+</div>
+
+VibeRaven deals your providers as a hand — each one graded, each one a card you play into your agent's next move. Supabase, Vercel, GitHub, Stripe, Sentry, Resend, Clerk, Upstash, and more.
+
+<div align="center">
+  <img src="./assets/provider-cards.png" alt="All ten VibeRaven provider cards — Supabase, Vercel, GitHub, Stripe, Sentry, Resend, Clerk, Auth.js, PostHog, Upstash — each a black-and-white manga trading card" width="880" />
+</div>
 
 The Studio opens in your browser and works entirely on your machine: it detects your stack, finds your providers, puts your git releases on a timeline, and gives you a "can I ship?" verdict from offline checks. No login, no API key, no telemetry.
 
@@ -173,7 +191,7 @@ Contributions are welcome, and most of them need no private source access:
 
 ## License
 
-[MIT](./LICENSE). Current public release: `viberaven@1.3.5`.
+[MIT](./LICENSE). Current public release: `viberaven@1.4.1`.
 
 If VibeRaven helps you ship, star the repo so other AI app builders can find it. Use **Watch → Custom → Releases** for release notifications.
 
