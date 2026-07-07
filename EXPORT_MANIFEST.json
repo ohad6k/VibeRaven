@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-07-06T15:07:34.292Z",
+  "exportedAt": "2026-07-07T20:30:51.810Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -10,6 +10,10 @@
     [
       "docs/public-repo/CONTRIBUTING.md",
       "CONTRIBUTING.md"
+    ],
+    [
+      "docs/public-repo/CHANGELOG.md",
+      "CHANGELOG.md"
     ],
     [
       "docs/public-repo/LICENSE",
@@ -50,6 +54,10 @@
     [
       "docs/public-repo/assets/viberaven-studio.png",
       "assets/viberaven-studio.png"
+    ],
+    [
+      "docs/public-repo/assets/viberaven-demo.gif",
+      "assets/viberaven-demo.gif"
     ],
     [
       "llms.txt",
