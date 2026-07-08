@@ -47,5 +47,5 @@ The fastest way to see the Studio is to run it locally — no video needed:
 npx -y viberaven
 ```
 
-That opens the Studio in your browser, entirely on your machine: no login, no
-API key, no telemetry.
+That opens the local Studio in your browser so you can inspect the real
+workflow instead of the demo clip.
