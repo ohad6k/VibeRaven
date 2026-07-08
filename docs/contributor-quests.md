@@ -7,7 +7,7 @@ focused PR.
 
 Every path shares the same first-PR shape: comment `/take` on the issue to
 claim it, keep the change scoped to that one issue, and reference it as
-`Closes #123` in your pull request. Small PRs are reviewed within 48h. See
+`Closes #123` in your pull request. Smaller PRs are easier to review. See
 [CONTRIBUTING.md](../CONTRIBUTING.md) for the full checklist.
 
 ## 1. Bug storyteller — no code required
