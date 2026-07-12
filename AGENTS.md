@@ -2,7 +2,7 @@
 
 This repo is currently focused on the open-source VibeRaven `1.4.3` product:
 
-- Main command: `npx -y viberaven`
+- Main command: `npx -y viberaven` (Studio), or `npx -y viberaven check` for a terminal verdict
 - Main product surface: the local Studio cockpit UI in `packages/cli/src/local-ui/`
 - Main workflow: agentic chat, draggable providers, draggable versions/releases, provider MCP context, CLI agent connection, access-mode control, and release diff/change explanation.
 - Main packages for this work: `packages/cli`, `packages/viberaven-shim`, and `packages/mcp`.
