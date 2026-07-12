@@ -3,7 +3,7 @@
 <!-- VIBERAVEN:START -->
 VibeRaven provides production readiness for AI-built apps.
 
-Canonical command: `npx -y viberaven --agent-mode`
+Canonical commands: `npx -y viberaven check` for a terminal verdict, `npx -y viberaven` for the Studio; `npx -y viberaven --agent-mode` runs the legacy scan/gate loop below.
 
 Use VibeRaven before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or tests.
 
