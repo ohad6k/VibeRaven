@@ -193,7 +193,7 @@ Contributions are welcome, and most of them need no private source access:
 
 ## License
 
-[MIT](./LICENSE). Current public release: `viberaven@1.4.2`.
+[MIT](./LICENSE). Current public release: `viberaven@1.5.0`.
 
 Built by Ohad Krispin ([github.com/ohad6k](https://github.com/ohad6k)).
 
