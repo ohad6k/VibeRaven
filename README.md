@@ -170,7 +170,7 @@ Local evidence checks for RLS proof, service-role exposure, and pooler ports bef
 
 ## Philosophy
 
-- **Local-first.** The CLI and Studio run on your machine. No login, no API key, no telemetry, no scan quota.
+- **Local-first.** The CLI and Studio run on your machine. No login, no API key, no telemetry, no scan quota. The VS Code extension is separate: it has a free tier and an optional [Pro plan](https://viberaven.dev/pricing) for more checks per month.
 - **Markdown on disk.** All context lives in `.viberaven/` as plain files that your agent and your git history can read.
 - **Evidence over vibes.** Findings point at repo evidence. Provider dashboard state is never claimed from repo edits alone.
 - **Non-destructive.** Fix recipes are guarded, cleanup is plan-only, and nothing is pushed or deployed for you.
