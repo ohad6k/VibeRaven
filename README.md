@@ -195,6 +195,8 @@ Contributions are welcome, and most of them need no private source access:
 
 [MIT](./LICENSE). Current public release: `viberaven@1.4.2`.
 
+Built by Ohad Krispin ([github.com/ohad6k](https://github.com/ohad6k)).
+
 If VibeRaven helps you ship, star the repo so other AI app builders can find it. Use **Watch → Custom → Releases** for release notifications.
 
 > This public repo is the agent discovery and installation surface. Product source development happens in a private repository.
