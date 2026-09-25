@@ -170,7 +170,7 @@ Local evidence checks for RLS proof, service-role exposure, and pooler ports bef
 
 ## Philosophy
 
-- **Local-first.** The CLI and Studio run on your machine. No login, no API key, no telemetry, no scan quota.
+- **Local-first.** The CLI and Studio run on your machine. No login, no API key, no telemetry. Local checks in the CLI and Studio are free with no quota. Hosted full checks (the Studio's "Run full check" from 1.5.0, and the VS Code extension) use your account's allowance: 2 on Free, 50 a month on [Pro](https://viberaven.dev/pricing).
 - **Markdown on disk.** All context lives in `.viberaven/` as plain files that your agent and your git history can read.
 - **Evidence over vibes.** Findings point at repo evidence. Provider dashboard state is never claimed from repo edits alone.
 - **Non-destructive.** Fix recipes are guarded, cleanup is plan-only, and nothing is pushed or deployed for you.
@@ -193,7 +193,9 @@ Contributions are welcome, and most of them need no private source access:
 
 ## License
 
-[MIT](./LICENSE). Current public release: `viberaven@1.4.2`.
+[MIT](./LICENSE). Current public release: `viberaven@1.5.0`.
+
+Built by Ohad Krispin ([github.com/ohad6k](https://github.com/ohad6k)).
 
 If VibeRaven helps you ship, star the repo so other AI app builders can find it. Use **Watch → Custom → Releases** for release notifications.
 
