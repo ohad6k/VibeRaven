@@ -7,6 +7,13 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-09-26
+
+- `viberaven`, `@viberaven/cli` and `@viberaven/mcp` now ship together as 1.5.1.
+- Experimental `viberaven rls-test` checks a declared permissions matrix locally with optional PGlite. Ambiguous results remain Unknown; local results do not prove production behavior. Worker startup failures and timeouts are reported without leaving the worker running.
+- Stripe webhook checks more conservatively recognize signature verification in imported helpers. Environment-variable and database-pooler checks now require more specific repo evidence. These are static checks, not runtime verification.
+- Studio full checks refresh the account plan. Credential retries and session-only sign-in preserve access when saving fails; sign-out remains effective in the current Studio when a saved token cannot be removed.
+
 ## [1.4.3] - 2026-07-07
 
 ### Added
