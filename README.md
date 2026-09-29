@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/banner.png" alt="VibeRaven — AI got your app to demo. VibeRaven gets it to production. The production protocol for AI-built apps. Open source, local-first, MIT." width="100%" />
+  <img src="./assets/banner.png" alt="VibeRaven: AI got your app to demo. VibeRaven gets it to production. The production protocol for AI-built apps. Open source, local-first, MIT." width="100%" />
 
   <p>
     <a href="https://viberaven.dev"><img src="https://img.shields.io/badge/Website-viberaven.dev-e8c15a?style=for-the-badge&logoColor=black" height="40" alt="Website" /></a>
@@ -26,38 +26,20 @@
   </p>
 </div>
 
-VibeRaven is an open-source local cockpit for AI-built apps. Run `npx -y viberaven` in your repo and it connects your coding agent (Claude Code, Cursor, Codex) to the context it patches blind without, your architecture, providers, and releases, then shows what is actually safe to ship to production, auth, RLS, webhooks, deploy, before real users hit it. Local-first, no login.
+VibeRaven is an open-source local cockpit for AI-built apps. Run `npx -y viberaven` in your repo and it connects your coding agent (Claude Code, Codex, Gemini) to the context it patches blind without, your architecture, providers, and releases, then shows what is actually safe to ship to production, auth, RLS, webhooks, deploy, before real users hit it. Local-first, no login.
 
 ```bash
 npx -y viberaven
 ```
 
-<div align="center">
-  <img src="./assets/viberaven-demo.gif" alt="VibeRaven Studio in motion: chat with your coding agent using manga provider cards, the live release map, and Codex / Claude Code / Gemini driven from one local cockpit" width="100%" />
-</div>
-
-## Your stack, as a hand of cards
-
-<div align="center">
-  <img src="./assets/cards-binder.png" alt="VibeRaven Cards Binder — your providers dealt as a manga trading-card hand: Supabase, Vercel, GitHub, Stripe, Sentry, Clerk, Resend and more, black-and-white with gold foil" width="100%" />
-</div>
-
-VibeRaven deals your providers as a hand — each one graded, each one a card you play into your agent's next move. Supabase, Vercel, GitHub, Stripe, Sentry, Resend, Clerk, Upstash, and more.
-
-<div align="center">
-  <img src="./assets/provider-cards.png" alt="All ten VibeRaven provider cards — Supabase, Vercel, GitHub, Stripe, Sentry, Resend, Clerk, Auth.js, PostHog, Upstash — each a black-and-white manga trading card" width="880" />
-</div>
-
-The Studio opens in your browser and works entirely on your machine: it detects your stack, finds your providers, puts your git releases on a timeline, and gives you a "can I ship?" verdict from offline checks. No login, no API key, no telemetry.
+The Studio opens in your browser and works entirely on your machine: it detects your stack, finds your providers, shows your release history and diffs, and gives you a "can I ship?" verdict from offline checks. No login, no API key, no telemetry.
 
 ## Your first 5 minutes
 
 1. **Run it.** `npx -y viberaven` in your project folder. The Studio opens in your browser and scans your repo offline.
-2. **Read your verdict.** The gate chip and Launch Signals show exactly what blocks launch, ranked. Click any signal, then click **Fix** to hand it to your agent.
+2. **Read your verdict.** The Studio shows a readiness score out of 100 and the blockers it found in your repo files. Pick one and hand it to your agent to fix.
 3. **Connect your coding agent.** Pick Codex, Claude Code, or Gemini CLI in the chat panel, hit **Test connection**, and choose how much access it gets (`ask`, `approve`, or `full`).
-4. **Open the Architecture map.** Pages, API, data, modules, and providers as a live draggable map. Weak boundaries glow red. Click one and press a plain-English action like *"Protect user data (RLS)"* or *"Fix slow queries"*.
-5. **Open the Worktree.** Your branches as a real tree. Uncommitted mess? One tap: *Commit with agent*. Branch ready? *Review* explains it in plain language and *Merge* does it safely.
-6. **Give your agent the skills.** Install the six-skill pack and the plugin so Codex, Claude Code, and Gemini follow the same senior-engineer loop everywhere:
+4. **Give your agent the skills.** Install the six-skill pack and the plugin so Codex, Claude Code, and Gemini follow the same senior-engineer loop everywhere:
 
    ```bash
    npx -y skills add ohad6k/VibeRaven --skill viberaven   # skills.sh pack
@@ -72,7 +54,6 @@ Everything the agent needs is also written to `.viberaven/` as markdown and JSON
 | --- | --- |
 | **Agent chat on your repo** | Drive Codex, Claude Code, or Gemini CLI from one cockpit, with connection health and live terminal output. |
 | **Access modes** | `ask`, `approve`, or `full`. The mode changes the real agent command it runs, not just the UI copy. |
-| **Context you can drag** | Drop a release, a provider card, or production memory into agent chat, so the agent patches with your product's real state instead of guessing. |
 | **Versions & releases** | Release diffs, tags, changelogs, and "what changed since the last working release" in plain English. |
 | **Providers via MCP** | Connect Supabase, Vercel, and Stripe. Provider status flows into agent prompts, and provider proof stays separate from repo-code fixes. |
 
@@ -100,7 +81,7 @@ One line per finding, `file:line` evidence in the artifacts, exit code `1` on bl
 ```bash
 npx -y viberaven fix            # list gaps with safe automatic recipes
 npx -y viberaven fix --gap <id> # apply one recipe
-npx -y viberaven --strict       # final gate before deploy or CI
+npx -y viberaven --strict       # strict pass before deploy or CI (exit 1 when the gate is not clear; warnings exit 0)
 ```
 
 All results land in `.viberaven/` as markdown and JSON on disk (`agent-tasklist.md`, `gate-result.json`, `context-map.json`), so any agent and your git history can read them.
@@ -150,15 +131,17 @@ See [agent-skills/](./agent-skills/) for the full pack.
 
 This repo also works as an agent **plugin**: `plugin.yaml`, `.claude-plugin/`, `.codex-plugin/`, and `gemini-extension.json` expose the six skills plus `/viberaven-work`, `/viberaven-help`, `/viberaven-production-context`, and `/viberaven-launch` commands to Claude Code, Codex, and Gemini CLI.
 
+For a smaller install, [plugins/viberaven](./plugins/viberaven/) is a standalone plugin for Claude Code and Cursor: one skill that says when a pre-launch pass fits a Vercel + Supabase app, plus the MCP server pinned to `@viberaven/mcp@1.5.2`.
+
 ## MCP
 
 VibeRaven is listed in the MCP registry for agents that prefer tools over terminal commands:
 
 ```json
-{ "viberaven": { "command": "npx", "args": ["-y", "viberaven", "--mcp"] } }
+{ "viberaven": { "command": "npx", "args": ["-y", "@viberaven/mcp"] } }
 ```
 
-Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_apply`, `viberaven_verify`, `viberaven_audit`, `viberaven_provider_verify`, and `viberaven_validate_npm_package` (run it before adding npm dependencies).
+Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_apply`, `viberaven_verify`, `viberaven_audit`, `viberaven_gate_result`, and `viberaven_validate_npm_package` (run it before adding npm dependencies).
 
 ## Vercel + Supabase
 
@@ -166,7 +149,7 @@ Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_a
 npx -y viberaven audit --vercel-supabase
 ```
 
-Local evidence checks for RLS proof, service-role exposure, and pooler ports before you claim "production ready."
+Repository evidence for RLS, service-role exposure, and pooler ports. It reads repo files only, so it cannot show which RLS policies are live in your Supabase project.
 
 ## Philosophy
 
@@ -193,7 +176,7 @@ Contributions are welcome, and most of them need no private source access:
 
 ## License
 
-[MIT](./LICENSE). Current public release: `viberaven@1.5.1`.
+[MIT](./LICENSE). Current public release: `viberaven@1.5.2`.
 
 Built by Ohad Krispin ([github.com/ohad6k](https://github.com/ohad6k)).
 

@@ -1,13 +1,13 @@
 # VibeRaven Agent Context
 
-> Full agent documentation for VibeRaven — production-readiness scanner and autonomous production copilot.
+> Full agent documentation for VibeRaven, a production-readiness repo check for AI-built apps on Vercel + Supabase.
 > This document is for AI models that want deep context on VibeRaven's tools, protocols, and schemas.
 
 ## Overview
 
-VibeRaven is the Agent Context + Production Gate for AI-built apps. It scans a project's repo evidence (files, config, environment) and maps production gaps and launch gaps. It writes machine-readable artifacts that AI agents read to run the autonomous fix loop without wasting scan quota.
+VibeRaven is the Agent Context + Production Gate for AI-built apps on Vercel + Supabase. It reads a project's repo (files, config, env templates) and maps launch gaps with the file that caused each one. It writes machine-readable artifacts that AI agents read to work through the gaps without rescanning after every edit. In 1.5.2 the checks are local and free: no login, no API key, no scan quota. It is advice, not a gate: the user decides when to ship. It is a repository check, not a live database or security test.
 
-**Trigger phrases:** "production ready", "before I ship", "what's missing", "deploy to production", "make it production ready", "launch checklist", "production gaps", "launch gaps"
+**Trigger phrases (only for an AI-built app on Vercel + Supabase):** "production ready", "before I ship", "what's missing", "deploy to production", "make it production ready", "launch checklist", "production gaps", "launch gaps"
 
 ---
 
@@ -25,13 +25,13 @@ viberaven_check_readiness
 
 ## MCP Server
 
-Add VibeRaven to your MCP config:
+MCP config for the VibeRaven server (`@viberaven/mcp`, listed in the official MCP registry as `io.github.ohad6k/viberaven`):
 
 ```json
 {
   "viberaven": {
     "command": "npx",
-    "args": ["-y", "viberaven", "--mcp"]
+    "args": ["-y", "@viberaven/mcp"]
   }
 }
 ```
@@ -40,7 +40,7 @@ Add VibeRaven to your MCP config:
 
 ## MCP Tools Reference
 
-VibeRaven exposes 11 MCP tools. All tools accept an optional `cwd` parameter (project root, defaults to working directory).
+The `@viberaven/mcp` 1.5.2 server registers 14 tools: the ones below plus `viberaven_actions`, `viberaven_verify_action`, `viberaven_validate_npm_package`, and `viberaven_clean_plan`. It exposes tools only, no MCP resources. The tools below accept an optional `cwd` parameter (project root, defaults to working directory).
 
 ### viberaven_check_readiness
 Run the main VibeRaven production-readiness check from the current project.
@@ -57,7 +57,7 @@ Run the main VibeRaven production-readiness check from the current project.
 }
 ```
 
-**Effect:** Runs `--agent-mode`. Writes `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, `.viberaven/context-map.json`. Costs 1 scan quota.
+**Effect:** Runs `viberaven check --json`. Writes `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, `.viberaven/context-map.json`, and `.viberaven/gaps/<gapId>.json`.
 
 ---
 
@@ -76,7 +76,7 @@ Rescan and refresh VibeRaven production-readiness artifacts after a fix.
 }
 ```
 
-**Effect:** Runs `--verify`. Refreshes all artifacts. Costs 1 scan quota. Call once per batch — not per fix.
+**Effect:** Runs `viberaven check --json` again and refreshes all artifacts. Call once per batch, not per fix.
 
 ---
 
@@ -119,22 +119,19 @@ Install bounded VibeRaven rules into native AI instruction files (AGENTS.md, CLA
 
 **Valid agent targets:** all, codex, claude, cursor, cursor-legacy, copilot, github-copilot, gemini, devin, windsurf, cline, roo, junie, zed
 
----
+What `init --agents all` (and `viberaven_init_rules` with `agents: "all"`) installs, from a real 1.5.2 run:
 
-### viberaven_clean_plan
-Write a non-destructive context cleanup plan for generated artifacts and logs.
+- AGENTS.md, CLAUDE.md, GEMINI.md and `.github/copilot-instructions.md` get the same VibeRaven block of gate-style rules for your agent: a broad trigger that is not limited to Vercel + Supabase apps, "Use VibeRaven before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or tests", a rule against deploying to Vercel before a `npx -y viberaven check` pass, the rule "Do NOT `git push` or deploy after auth, RLS, billing, or webhook changes without `npx -y viberaven check`", a rule against relying on manual production checklists when `.viberaven/` gate artifacts exist, and the line "The loop is not done until `gate.status === 'clear'`."
+- `.cursor/rules/viberaven-core.mdc` is different. It always applies, asks for `npx -y viberaven check` before deploy, auth, RLS, webhook or dependency changes, and includes the line `Gate is not clear until gate.status === "clear".` Three more Cursor rule files apply only when editing Supabase, deploy or payment files.
+- init also writes `.viberaven/agent-context.md` and `.viberaven/mission-map.md`, which carry the same broad trigger.
+- `package.json` gets three scripts: `viberaven:gate`, `viberaven:verify` and `viberaven:strict`.
 
-```json
-{
-  "name": "viberaven_clean_plan",
-  "inputSchema": { "type": "object", "properties": { "cwd": { "type": "string" } } }
-}
-```
+These are gate-style rules, and a broader trigger than this document recommends. The user can edit or skip any of them. Preview with `npx -y viberaven init --agents all --dry-run` (or `dryRun: true`); the dry run does not show the `package.json` scripts. `.cursorrules` and the Devin, Windsurf, Cline, Roo, Junie and Zed files are written only when named in `agents`.
 
 ---
 
 ### viberaven_strict_gate
-Run VibeRaven agent-mode strict gate and return the machine verdict. Exit code 0 = clear, 1 = not clear.
+Runs the agent-mode strict gate and returns the machine verdict. Exit code 1 when `gate.status` is `not_clear`; `clear` and `warning` exit 0.
 
 ```json
 {
@@ -143,12 +140,12 @@ Run VibeRaven agent-mode strict gate and return the machine verdict. Exit code 0
 }
 ```
 
-**Effect:** Runs `--agent-mode --strict --json`. Costs 1 scan quota.
+**Effect:** Runs `viberaven --strict --json`.
 
 ---
 
 ### viberaven_gate_result
-Run VibeRaven agent-mode JSON output and return gate-result.json content.
+Runs agent-mode JSON output and returns the gate-result.json content.
 
 ```json
 {
@@ -214,7 +211,7 @@ Write an agent-ready VibeRaven heal prompt for a target file or gap.
 ---
 
 ### viberaven_heal_apply
-Apply a guarded VibeRaven repo-code heal recipe when supported. **Does NOT consume scan quota.**
+Apply a guarded VibeRaven repo-code heal recipe when supported. It runs locally.
 
 ```json
 {
@@ -239,33 +236,29 @@ Only works for `fixType: repo-code` tasks. Provider-action tasks require dashboa
 
 ## Agent Loop Protocol
 
-The autonomous production copilot loop:
+The agent loop:
 
 ### Full Loop
 
 ```
-1. viberaven_check_readiness          → writes agent-tasklist.md, gate-result.json (costs 1 scan)
+1. viberaven_check_readiness          → writes agent-tasklist.md, gate-result.json
 2. Read .viberaven/agent-tasklist.md  → find TASK-001
 3. Read VIBERAVEN_NEXT_ACTION block   → check batchSize, batchApplied, scanNow
 4. For each repo-code task (up to batchSize):
    → viberaven_heal_apply { gap: "<gapId>", yes: true }  (no scan cost)
-5. viberaven_verify                   → rescan after batch (costs 1 scan)
+5. viberaven_verify                   → rescan after batch
 6. Read updated agent-tasklist.md     → advance to next unclosed task
 7. Repeat until gate.status === 'clear'
 ```
 
-### Scan Budget Rules
+### Batch Rules
 
-| Plan | batchSize | Sessions/day |
-|------|-----------|--------------|
-| Free | 3         | 2            |
-| Pro  | 10        | Unlimited    |
+`batchSize` is 5 in 1.5.2. Scans are local and free; the batch keeps the heal loop honest.
 
 - Apply up to `batchSize` heals between scans
 - When `scanNow: true` in `VIBERAVEN_NEXT_ACTION` → stop healing, call `viberaven_verify`
 - When `batchApplied >= batchSize` → `scanNow: true`
-- Do NOT call `viberaven_verify` inside the heal loop — call it once per batch
-- If `type: 'session-limit'` → free plan session limit reached; tell user to wait or upgrade
+- Do NOT call `viberaven_verify` inside the heal loop; call it once per batch
 
 ### Stall Detection
 
@@ -282,31 +275,29 @@ After each `--agent-mode` scan, stdout contains:
 ```
 VIBERAVEN_NEXT_ACTION_START
 {
-  "type": "heal" | "provider-action" | "upgrade-required" | "session-limit" | "stalled" | "clear",
-  "batchSize": 3,
+  "batchSize": 5,
   "batchApplied": 0,
+  "remainingInBatch": 5,
   "scanNow": false,
+  "stalled": false,
   "stalledScans": 0,
-  "task": {
-    "id": "TASK-001",
-    "gapId": "auth_secret_missing",
-    "fixType": "repo-code",
-    "requiresUserAction": false,
-    "mcpTool": "viberaven_heal_apply",
-    "upgradeUrl": null
-  }
+  "type": "repo-code" | "verify" | "provider-action" | "stalled" | "done",
+  "gapId": "env_var_drift",
+  "title": "Env vars used in code but missing from .env.example",
+  "mcpTool": "viberaven_heal_apply",
+  "requiresUserAction": false
 }
 VIBERAVEN_NEXT_ACTION_END
 ```
 
 **Field meanings:**
-- `type`: What the agent should do next
+- `type`: What the agent should do next (`verify` means the batch is full)
 - `batchSize`: Max heals before next verify
 - `batchApplied`: Heals applied in current batch
+- `remainingInBatch`: `batchSize` minus `batchApplied`
 - `scanNow`: `true` when agent must call `viberaven_verify` before more heals
-- `stalledScans`: Consecutive scans with no gap reduction
-- `task.fixType`: `repo-code` (agent can apply) | `provider-action` (user must do in dashboard) | `upgrade-required` (pro plan needed)
-- `task.requiresUserAction`: `true` for provider-action tasks
+- `stalled` / `stalledScans`: Consecutive scans with no gap reduction
+- `requiresUserAction`: `true` for provider-action tasks
 
 ---
 
@@ -317,14 +308,17 @@ When the top unresolved task is a provider-action (e.g., enable Supabase RLS):
 ```
 VIBERAVEN_PROVIDER_ACTION_START
 {
-  "type": "provider-action",
-  "provider": "supabase",
-  "gapId": "rls_disabled",
-  "dashboardUrl": "https://supabase.com/dashboard/project/{{PROJECT_REF}}/auth/policies",
-  "exactStep": "Enable Row Level Security on all public tables",
-  "doneSignal": "RLS enabled badge visible in Table Editor",
-  "verifyCommand": "npx -y viberaven --verify",
-  "mcpAlternative": null
+  "VIBERAVEN_PROVIDER_ACTION": {
+    "gap": "rls_disabled",
+    "provider": "supabase",
+    "dashboardUrl": "https://supabase.com/dashboard",
+    "exactStep": "Create a project or open your existing Supabase project.",
+    "envKeyName": null,
+    "envKeyExample": null,
+    "doneSignal": "Open Supabase dashboard step completed",
+    "verifyCommand": "npx -y viberaven --verify",
+    "mcpAlternative": null
+  }
 }
 VIBERAVEN_PROVIDER_ACTION_END
 ```
@@ -340,27 +334,38 @@ VIBERAVEN_PROVIDER_ACTION_END
 
 ## gate-result.json Schema
 
-Written to `.viberaven/gate-result.json` after every scan:
+Written to `.viberaven/gate-result.json` after every scan. Per-gap detail is in `.viberaven/gaps/<gapId>.json`.
 
 ```json
 {
-  "status": "clear" | "not_clear",
-  "gapCount": 0,
-  "criticalCount": 0,
-  "warningCount": 0,
-  "gaps": [
-    {
-      "id": "auth_secret_missing",
-      "severity": "critical" | "warning",
-      "category": "auth" | "database" | "env" | "monitoring" | "rate-limit" | "error-handling" | "deploy",
-      "title": "NEXTAUTH_SECRET not set",
-      "fixType": "repo-code" | "provider-action" | "upgrade-required",
-      "requiresUserAction": false,
-      "canAutoApply": true
-    }
-  ],
-  "plan": "free" | "pro",
-  "scannedAt": "2026-06-09T12:00:00Z"
+  "$schema": "https://viberaven.dev/schemas/gate-result.schema.json",
+  "schemaVersion": "v1",
+  "runId": "vr_20260926194413",
+  "mode": "scan",
+  "generatedAt": "2026-09-26T19:44:13.584Z",
+  "workspace": { "root": "...", "packageManager": "unknown", "languages": ["typescript"], "frameworks": ["Full-stack app"] },
+  "gate": {
+    "status": "clear" | "warning" | "not_clear",
+    "criticalCount": 1,
+    "warningCount": 2,
+    "providerBoundaryRequired": true
+  },
+  "capabilities": { "scaling": "unknown", "security": "warning", "webhooks": "unknown", "payments": "unknown", "database": "critical" },
+  "topGapIds": ["rls_disabled", "env_var_drift", "unbounded_query", "missing_monitoring"],
+  "artifacts": {
+    "tasklist": ".viberaven/agent-tasklist.md",
+    "contextMap": ".viberaven/context-map.json",
+    "gateResult": ".viberaven/gate-result.json",
+    "gapsDir": ".viberaven/gaps",
+    "healDir": ".viberaven/heal"
+  },
+  "commands": {
+    "verify": "npx -y viberaven --verify",
+    "strict": "npx -y viberaven --strict",
+    "next": "npx -y viberaven next --json",
+    "promptFirstGap": "npx -y viberaven prompt --gap rls_disabled"
+  },
+  "redaction": { "applied": false, "count": 0 }
 }
 ```
 
@@ -370,39 +375,28 @@ Written to `.viberaven/gate-result.json` after every scan:
 
 ## agent-tasklist.md Format
 
-Written to `.viberaven/agent-tasklist.md` after every scan. Contains TASK-NNN blocks:
+Written to `.viberaven/agent-tasklist.md` after every scan. Contains `## TASK-NNN · <gapId> · <SEVERITY>` blocks. A real provider-action block from 1.5.1:
 
 ```markdown
-## TASK-001
+## TASK-001 · rls_disabled · CRITICAL
 
-- **Gap:** auth_secret_missing
-- **Severity:** critical
-- **Title:** NEXTAUTH_SECRET not set in environment
-- **File:** .env.local
-- **Action:** Create or update .env.local with NEXTAUTH_SECRET=<random-32-char-hex>
-- **Exact fix:** Add line: `NEXTAUTH_SECRET=$(openssl rand -hex 32)`
-- **MCP:** `viberaven_heal_apply { "gap": "auth_secret_missing", "yes": true }`
-- **Fix type:** repo-code
-- **Requires user action:** false
-- **Status:** [ ] open
+**Fix type:** provider-action  
+**Action:** Create a project or open your existing Supabase project.  
+**Exact fix:** No automated recipe — see scanner hint.  
+**Verify:** `npx -y viberaven --verify`  
+**Requires user action:** true
 
-## TASK-002
-
-- **Gap:** rls_disabled
-- **Severity:** critical
-- **Title:** Supabase RLS is not enabled on public tables
-- **File:** (provider dashboard)
-- **Action:** Enable Row Level Security in Supabase dashboard
-- **Fix type:** provider-action
-- **Requires user action:** true
-- **Status:** [ ] open
+**Provider action:**
+- Provider: supabase
+- Dashboard: https://supabase.com/dashboard
+- Step: Create a project or open your existing Supabase project.
+- Done when: Open Supabase dashboard step completed
 ```
 
 **Reading the tasklist:**
 - Start with `TASK-001` (highest priority)
 - `fixType: repo-code` + `requiresUserAction: false` → agent can apply autonomously
 - `fixType: provider-action` → user must act in dashboard
-- `fixType: upgrade-required` → inform user, provide `upgradeUrl`, skip
 
 ---
 
@@ -426,17 +420,19 @@ npx -y viberaven guide <provider>
 
 ## CLI Commands Reference
 
-| Command | Description | Scan quota |
-|---------|-------------|------------|
-| `npx -y viberaven --agent-mode` | Full scan + write all artifacts | 1 |
-| `npx -y viberaven --verify` | Rescan after fix | 1 |
-| `npx -y viberaven --strict` | Strict gate (exit 1 if not clear) | 1 |
-| `npx -y viberaven audit --vercel-supabase` | Local Vercel/Supabase checks | 0 |
-| `npx -y viberaven --heal --apply --gap <id> --yes` | Apply heal recipe | 0 |
-| `npx -y viberaven --condense` | Refresh context-map.json | 0 |
-| `npx -y viberaven init --agents all` | Write agent rules to all agent files | 0 |
-| `npx -y viberaven clean --plan` | Non-destructive cleanup plan | 0 |
-| `npx -y viberaven guide <provider>` | Provider dashboard guide | 0 |
+All commands run locally with no scan quota.
+
+| Command | Description |
+|---------|-------------|
+| `npx -y viberaven --agent-mode` | Full scan + write all artifacts |
+| `npx -y viberaven --verify` | Rescan after fix |
+| `npx -y viberaven --strict` | Strict gate: exit 1 when `gate.status` is `not_clear`; `warning` exits 0 unless `--strict=warning` |
+| `npx -y viberaven next --json` | Top gap from the last scan with a `viberaven prompt` command (no `batchSize`; labels provider-only gaps `repo-fix`, so use the stdout block for those) |
+| `npx -y viberaven audit --vercel-supabase` | Local Vercel/Supabase checks |
+| `npx -y viberaven --heal --apply --gap <id> --yes` | Apply heal recipe |
+| `npx -y viberaven --condense` | Refresh context-map.json |
+| `npx -y viberaven init --agents all` | Write the gate-style agent rules to the default agent files (see `viberaven_init_rules`); preview with `--dry-run` |
+| `npx -y viberaven guide <provider>` | Provider dashboard guide |
 
 ---
 
@@ -446,13 +442,15 @@ After each scan, VibeRaven writes to `.viberaven/`:
 
 | File | Description |
 |------|-------------|
-| `gate-result.json` | Machine verdict: status, gap list, counts |
+| `gate-result.json` | Machine verdict: gate status, counts, `topGapIds` |
 | `agent-tasklist.md` | Prioritized TASK-NNN execution blocks |
 | `agent-summary.md` | Human-readable scan summary |
 | `context-map.json` | Compact agent context (token-efficient) |
 | `launch-playbook.md` | Full launch checklist |
 | `report.html` | Visual report |
-| `loop-state.json` | Batch state: batchApplied, stalledScans |
+| `loop-state.json` | Batch state: batchApplied, stalledScans (written by `--agent-mode`) |
+| `gaps/<gapId>.json` | One file per gap: severity, evidence, commands |
+| `actions.json` | Stable action IDs (`VR-A1`, ...) for provider steps |
 
 ---
 
@@ -462,8 +460,7 @@ After each scan, VibeRaven writes to `.viberaven/`:
 - Claim provider dashboard checks are fixed by repo-code edits
 - Ask users for passwords, cookies, tokens, or secrets
 - Call `viberaven_verify` inside the heal loop (call once per batch)
-- Claim production readiness until `gate.status === 'clear'`
-- Consume scan quota on every fix — `viberaven_heal_apply` is free
+- Claim production readiness from a clear gate alone: it covers the repo half, and the user decides when to ship
 
 **Do:**
 - Read `.viberaven/agent-tasklist.md` before acting
@@ -473,9 +470,9 @@ After each scan, VibeRaven writes to `.viberaven/`:
 
 ---
 
-## LOGIN_URL_READY
+## No login
 
-If VibeRaven prints `LOGIN_URL_READY`, open that exact URL for the user using the available browser tool or system browser. Tell the user: "I opened VibeRaven sign-in so you can approve access; I will continue after approval." Do not ask for passwords, tokens, cookies, or secrets. Keep the terminal process alive while the user approves.
+The 1.5.2 local checks need no login. Only a full check from the Studio asks for a VibeRaven sign-in, with a device code shown in the Studio. Do not ask the user for passwords, tokens, cookies, or secrets.
 
 ---
 

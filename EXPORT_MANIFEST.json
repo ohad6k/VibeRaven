@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-07-07T20:30:51.810Z",
+  "exportedAt": "2026-09-29T13:00:59.996Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
@@ -126,6 +126,26 @@
     [
       "export/public-discovery-staging/commands/viberaven-launch.toml",
       "commands/viberaven-launch.toml"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven/.claude-plugin/plugin.json",
+      "plugins/viberaven/.claude-plugin/plugin.json"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven/.cursor-plugin/plugin.json",
+      "plugins/viberaven/.cursor-plugin/plugin.json"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven/skills/prelaunch-check/SKILL.md",
+      "plugins/viberaven/skills/prelaunch-check/SKILL.md"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven/README.md",
+      "plugins/viberaven/README.md"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven/LICENSE",
+      "plugins/viberaven/LICENSE"
     ],
     [
       "AGENTS.md",

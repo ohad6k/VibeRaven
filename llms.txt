@@ -1,6 +1,6 @@
 # VibeRaven
 
-> Open-source localhost Studio and production-readiness gate for AI-built apps.
+> Open-source localhost Studio and CLI for AI-built apps on Vercel + Supabase: a repository check that lists launch gaps before real users. It is advice, not a gate, and a repository check, not a live database or security test.
 
 Start with:
 
@@ -8,22 +8,36 @@ Start with:
 npx -y viberaven
 ```
 
-Use the deeper artifact loop when the agent needs PRP, gate, and next-action files:
+Use the artifact loop when the agent needs the task list, the gate verdict and next-action files:
 
 ```bash
 npx -y viberaven --agent-mode
 ```
 
-Install agent rules into this repo (or any repo):
+The local check needs no login, no API key and no scan quota.
+
+When to use it: an AI-built app that deploys on Vercel and uses Supabase, before a launch or client handoff. The 1.5.2 checks cover, among others: Supabase migrations that create a public table without RLS, policies that allow everyone with `using (true)`, a service role key in client code, env vars the code reads that `.env.example` does not list (it cannot see Vercel settings), and Stripe webhooks without signature checks. Not for other stacks, CORS, OAuth callbacks or auth logic.
+
+Optional agent rules for this repo (or any repo):
 
 ```bash
+npx -y viberaven init --agents all --dry-run
 npx -y viberaven init --agents all
 npx -y viberaven doctor --agents
 ```
 
-Read `.viberaven/prp.json` first, then `.viberaven/gate-result.json`. Follow `nextActions` in order until `decision.status` is not `blocked` and `gate.status` is `clear`, or a provider/user blocker remains.
+What `init --agents all` installs, from a real 1.5.2 run:
 
-Prefer `viberaven_prp_current` or `prp://current` when MCP is available.
+- AGENTS.md, CLAUDE.md, GEMINI.md and `.github/copilot-instructions.md` get the same VibeRaven block of gate-style rules for your agent: a broad trigger that is not limited to Vercel + Supabase apps, "Use VibeRaven before launch, deployment, real users, auth, billing, database, RLS, env vars, webhooks, monitoring, or tests", a rule against deploying to Vercel before a `npx -y viberaven check` pass, the rule "Do NOT `git push` or deploy after auth, RLS, billing, or webhook changes without `npx -y viberaven check`", a rule against relying on manual production checklists when `.viberaven/` gate artifacts exist, and the line "The loop is not done until `gate.status === 'clear'`."
+- `.cursor/rules/viberaven-core.mdc` is different. It always applies, asks for `npx -y viberaven check` before deploy, auth, RLS, webhook or dependency changes, and includes the line `Gate is not clear until gate.status === "clear".` Three more Cursor rule files apply only when editing Supabase, deploy or payment files.
+- init also writes `.viberaven/agent-context.md` and `.viberaven/mission-map.md`, which carry the same broad trigger.
+- `package.json` gets three scripts: `viberaven:gate`, `viberaven:verify` and `viberaven:strict`.
+
+These are gate-style rules, and a broader trigger than this file recommends. You can edit or skip any of them. The dry run does not show the `package.json` scripts.
+
+Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json`, `.viberaven/context-map.json`, `.viberaven/agent-summary.md`, and `.viberaven/launch-playbook.md`. Follow the tasklist in order until `gate.status` is `clear`, or a provider/user blocker remains. A clear gate covers the repo half; the user decides when to ship.
+
+Prefer the MCP tools `viberaven_check_readiness` and `viberaven_gate_result` when MCP is available.
 
 ## Full canonical reference
 
@@ -33,12 +47,6 @@ Prefer `viberaven_prp_current` or `prp://current` when MCP is available.
 
 - https://viberaven.dev
 - https://viberaven.dev/npx-viberaven.md
-- https://viberaven.dev/viberaven-production-protocol-ai-built-apps.md
-- https://viberaven.dev/what-is-viberaven-prp-json.md
-- https://viberaven.dev/how-to-use-viberaven-next-actions.md
-- https://viberaven.dev/what-is-viberaven-gate-result-json.md
-- https://viberaven.dev/connect-codex-claude-gemini-cli-to-repo-chat.md
-- https://viberaven.dev/viberaven-prp-mcp-resources.md
 - https://viberaven.dev/agent-context.md
 - https://viberaven.dev/skills.json
 - https://www.npmjs.com/package/viberaven

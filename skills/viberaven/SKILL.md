@@ -1,6 +1,6 @@
 ---
 name: viberaven
-description: Use VibeRaven when working on an AI-built app that must ship to real users; when the user asks to ship, deploy, go to production, connect auth, database, payments, RLS, env vars, webhooks, or monitoring; when production-only errors appear; or when the agent needs product context (versions, providers, launch risks) before patching. Fully local — no login, no API key.
+description: Use VibeRaven when working on an AI-built app that must ship to real users; when the user asks to ship, deploy, go to production, connect auth, database, payments, RLS, env vars, webhooks, or monitoring; when production-only errors appear; or when the agent needs product context (versions, providers, launch risks) before patching. Fully local: no login, no API key.
 ---
 
 # VibeRaven Skill
@@ -9,7 +9,7 @@ VibeRaven is the control layer for AI-built products. It runs fully locally: no 
 
 ## When To Use
 
-Use when the user wants production-ready, launch-ready, "what is missing before ship", a production audit, or a safe deploy for an AI-coded codebase — auth, database, payments, monitoring, error handling, rate limits, env vars. Also use when you need product context before editing: which providers the app uses, what changed between releases, and where the danger zones are.
+Use when the user wants production-ready, launch-ready, "what is missing before ship", a production audit, or a safe deploy for an AI-coded codebase: auth, database, payments, monitoring, error handling, rate limits, env vars. Also use when you need product context before editing: which providers the app uses, what changed between releases, and where the danger zones are.
 
 ## The Loop
 
@@ -20,7 +20,7 @@ Use when the user wants production-ready, launch-ready, "what is missing before 
 5. Re-run `npx -y viberaven check` after a batch of fixes, not after every file patch.
 6. Before deploy or CI: `npx -y viberaven --strict`.
 
-Keep operating until `gate.status === "clear"` in `.viberaven/gate-result.json` or only provider/user blockers remain. Scans are local and free — never wait, never ask for credentials.
+Keep operating until `gate.status === "clear"` in `.viberaven/gate-result.json` or only provider/user blockers remain. Scans are local and free; never wait, never ask for credentials.
 
 ## Studio
 
@@ -40,8 +40,8 @@ Check RLS, service-role exposure, and pooler ports `5432` / `6543` before making
 
 ## Boundaries
 
-- Repo-code edits never prove provider dashboard state. Billing, DNS, webhooks, quotas, and live provider verification need dashboard or MCP proof — say so explicitly.
+- Repo-code edits never prove provider dashboard state. Billing, DNS, webhooks, quotas, and live provider verification need dashboard or MCP proof; say so explicitly.
 - Never ask for passwords, tokens, cookies, or secret values.
-- Cleanup is plan-only: `npx -y viberaven clean --plan`.
+- `check`, `--agent-mode`, `audit` and `clean --plan` write only under `.viberaven/`. `init` and `fix --gap` edit repo files: `init` writes agent rule files such as `AGENTS.md` and adds `viberaven:*` scripts to `package.json` (preview with `init --dry-run`), and `fix --gap` edits code (preview with `npx -y viberaven --heal --plan --gap <id>`; `fix` has no `--dry-run`).
 
 Next skill: `architecture-context` when feature work is vague and product questions are missing; `architecture-plan` once those questions are answered; `what-broke` when a working app regressed; `production-context` to record durable risk in `.viberaven/production-context.md`; `go-live` when the user wants the app pushed to GitHub and live on Vercel.
