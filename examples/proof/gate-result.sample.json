@@ -39,10 +39,10 @@
     "healDir": ".viberaven/heal"
   },
   "commands": {
-    "verify": "npx -y viberaven@1.5.3 --verify",
-    "strict": "npx -y viberaven@1.5.3 --strict",
-    "next": "npx -y viberaven@1.5.3 next --json",
-    "promptFirstGap": "npx -y viberaven@1.5.3 prompt --gap rls_disabled"
+    "verify": "npx -y viberaven@1.6.1 --verify",
+    "strict": "npx -y viberaven@1.6.1 --strict",
+    "next": "npx -y viberaven@1.6.1 next --json",
+    "promptFirstGap": "npx -y viberaven@1.6.1 prompt --gap rls_disabled"
   },
   "redaction": {
     "applied": false,

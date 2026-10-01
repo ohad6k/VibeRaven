@@ -7,6 +7,18 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-10-01
+
+- `viberaven`, `@viberaven/cli` and `@viberaven/mcp` ship together as 1.6.1.
+- `viberaven --stack supabase,vercel,stripe` opens the Studio with those services already picked, on the Services sheet. The Open your app step is now this one command.
+
+## [1.6.0] - 2026-10-01
+
+- `viberaven`, `@viberaven/cli` and `@viberaven/mcp` ship together as 1.6.0.
+- `check --base <ref>` reports what a change did: findings it introduced, findings it fixed, and the ones that were already on the base. It compares against the merge base, as a pull request diff does, and reads the base from git's object store without a checkout, so hooks and filters never run and the working tree is not touched. When the same check fires on both sides, a newly named table counts as new: a second table without RLS shows up even if the base already had one. With `--base`, the exit code counts only blockers the change introduced.
+- `check --markdown` prints a pull request comment: new blockers first, fixes next, earlier findings folded away, and the `fix` command for the first one.
+- `init --github` writes `.github/workflows/viberaven.yml`. Every pull request gets one VibeRaven comment, updated on each push, and a job summary. It runs in the repository's own GitHub Actions, so private repositories work and the code is never uploaded. It is advice by default; blocking merges is one step to uncomment.
+
 ## [1.5.3] - 2026-09-29
 
 - `viberaven`, `@viberaven/cli` and `@viberaven/mcp` ship together as 1.5.3.

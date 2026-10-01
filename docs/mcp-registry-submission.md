@@ -6,8 +6,8 @@ Checked 2026-10-01 against the registry search endpoint:
 
 - **Registry name:** `io.github.ohad6k/viberaven`
 - **Registry status:** `active`
-- **Latest registry version:** `1.5.3`
-- **npm package:** `@viberaven/mcp` version `1.5.3`
+- **Latest registry version:** `1.6.1`
+- **npm package:** `@viberaven/mcp` version `1.6.1`
 
 The direct `/v0/servers/io.github.ohad6k/viberaven` path can return 404 because
 the public lookup path is the search endpoint. Check it with:
@@ -21,7 +21,7 @@ curl -sL "https://registry.modelcontextprotocol.io/v0/servers?search=viberaven"
 - **Name:** `io.github.ohad6k/viberaven`
 - **Description:** Local app readiness checks, provider context, and release verification for AI coding agents.
 - **Package:** `@viberaven/mcp`
-- **Run:** `npx -y @viberaven/mcp@1.5.3`
+- **Run:** `npx -y @viberaven/mcp@1.6.1`
 
 It reads the repository and writes results to `.viberaven/`. It does not query the live database. The results are advice, not a gate: the user decides when to ship.
 
@@ -31,7 +31,7 @@ It reads the repository and writes results to `.viberaven/`. It does not query t
 {
   "viberaven": {
     "command": "npx",
-    "args": ["-y", "@viberaven/mcp@1.5.3"]
+    "args": ["-y", "@viberaven/mcp@1.6.1"]
   }
 }
 ```

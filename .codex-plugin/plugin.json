@@ -1,6 +1,6 @@
 {
   "name": "viberaven",
-  "version": "1.5.3",
+  "version": "1.6.1",
   "description": "VibeRaven Studio and architecture/production-context skills for AI-built apps.",
   "author": {
     "name": "VibeRaven",
@@ -14,7 +14,7 @@
   "interface": {
     "displayName": "VibeRaven",
     "shortDescription": "Give agents architecture, release, and provider context before fixes.",
-    "longDescription": "Open the VibeRaven Studio with npx -y viberaven@1.5.3, or install the skills pack so coding agents follow one senior-engineer flow: architecture, version/release context, provider boundary, MCP/Studio context, then the smallest safe fix.",
+    "longDescription": "Open the VibeRaven Studio with npx -y viberaven@1.6.1, or install the skills pack so coding agents follow one senior-engineer flow: architecture, version/release context, provider boundary, MCP/Studio context, then the smallest safe fix.",
     "developerName": "VibeRaven",
     "category": "Developer Tools",
     "capabilities": ["Instructions", "Skills", "Local Studio", "Architecture context", "Production context"],
