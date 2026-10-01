@@ -1,26 +1,23 @@
 # VibeRaven Agent Tasklist
 
-**PRODUCTION GATE NOT CLEAR** — fix one repo-code gap before deploy.
+## TASK-001 · rls_disabled · CRITICAL
 
-## TASK-001 — auth_secret_missing
+**Fix type:** provider-action  
+**Action:** Create a project or open your existing Supabase project.  
+**Exact fix:** No automated recipe; see scanner hint.  
+**Verify:** `npx -y viberaven@1.5.3 --verify`  
+**Requires user action:** true
 
-- **Gap:** `AUTH_SECRET` (or equivalent) missing from `.env.example`
-- **Fix type:** repo-code heal supported
-- **Command:** `npx -y viberaven prompt --gap auth_secret_missing`
+**Provider action:**
+- Provider: supabase
+- Dashboard: https://supabase.com/dashboard
+- Step: Create a project or open your existing Supabase project.
+- Done when: Open Supabase dashboard step completed
 
-## TASK-002 — rls_disabled
+## TASK-002 · missing_monitoring · INFO
 
-- **Gap:** Supabase migrations lack RLS on user-owned tables
-- **Fix type:** provider-action + repo evidence
-- **Read:** `.viberaven/mission-map.md` before editing `supabase/migrations/`
+**Fix type:** manual-verify  
+**Exact fix:** No automated recipe; see scanner hint.  
+**Verify:** `npx -y viberaven@1.5.3 --verify`  
+**Requires user action:** true
 
-## TASK-003 — missing_health_route
-
-- **Gap:** No `app/api/health/route.ts` for deploy probes
-- **Fix type:** repo-code heal supported
-
----
-
-After one fix: `npx -y viberaven --verify` (once per batch, not per file).
-
-Gate clears when `gate.status === "clear"` in `.viberaven/gate-result.json`.

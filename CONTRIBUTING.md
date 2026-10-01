@@ -63,14 +63,14 @@ node agent-skills/scripts/verify-skill.mjs
 To smoke-test the published skill install path, use:
 
 ```bash
-npx -y skills add ohad6k/VibeRaven --skill viberaven
+npx -y skills@1.7.0 add ohad6k/VibeRaven --skill viberaven
 ```
 
 When changing agent install guidance, preview rule installation in a throwaway
 project before recommending it:
 
 ```bash
-npx -y viberaven init --agents all --dry-run
+npx -y viberaven@1.5.3 init --agents all --dry-run
 ```
 
 If you edit the example app under

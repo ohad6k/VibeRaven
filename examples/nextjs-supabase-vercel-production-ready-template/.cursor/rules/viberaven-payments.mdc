@@ -9,4 +9,4 @@ alwaysApply: false
 
 Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md`.
 
-Do NOT ship webhook handlers without signature verification; INSTEAD run `npx -y viberaven --agent-mode` after webhook edits.
+A payment webhook handler should verify the provider signature over the raw request body before trusting the event. After webhook edits, `npx -y viberaven@1.5.3 check` shows whether a Stripe handler does.

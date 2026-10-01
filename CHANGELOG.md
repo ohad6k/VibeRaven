@@ -7,6 +7,17 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.5.3] - 2026-09-29
+
+- `viberaven`, `@viberaven/cli` and `@viberaven/mcp` ship together as 1.5.3.
+- `init` writes advice instead of gate rules. The VibeRaven block in AGENTS.md, CLAUDE.md, GEMINI.md, the Copilot instructions, the Cursor rules, `.viberaven/agent-context.md` and `.viberaven/mission-map.md` now says when a pass helps (AI-built apps on Vercel + Supabase, before launch or handoff, after a migration or policy change), that it is advice, not a gate, and that it is a repository check, not a live database test. Running `init` again replaces a 1.5.2 block in place and keeps your own notes outside the VibeRaven markers. `doctor --agents` flags a file that still has the 1.5.2 gate rules.
+- The MCP server sends instructions with the same scope when a client connects, and its tool descriptions no longer call it a production gate. `viberaven_validate_npm_package` says exactly what it checks instead of "looks safe", and `viberaven_gate_result` says it runs a fresh scan.
+- `rls_disabled` found in a repo migration is now a repo change that needs the user's yes, not a provider action. Enabling RLS without policies makes browser reads of those tables return no rows until policies exist, so the task says to ask the user first. After a yes, the heal writes one new migration that enables row level security on each table the migrations leave without it and adds no policies. It refuses, with the reason, when the latest migration touching a table turns RLS off on purpose, when the tables come from SQL outside a `migrations` folder, or when the migrations are not named with a 14-digit timestamp.
+- `fix --gap <id> --dry-run` applied the fix. It now writes a plan and changes no project files.
+- `missing_stripe_webhook` now fires only on the stripe package or code that uses Stripe, not on a `STRIPE_SECRET_KEY` line in `.env.example` or a doc.
+- Printed verify commands use the `--verify --action <id>` flags instead of an unknown `verify` command, and the Studio's verify lane for a gap re-runs the check.
+- Heal rollback instructions work as written, and two heals started in the same second no longer share a folder.
+
 ## [1.5.2] - 2026-09-28
 
 - The MCP tool `viberaven_clean_plan` works again: the CLI routes `clean --plan`, and the tool writes and returns its cleanup plan. The plan deletes nothing.
@@ -63,7 +74,7 @@ Everyone on an earlier version should update.
 - Clicking a provider that isn't in your project opens the "help me add it" mission instead of an MCP connect that couldn't do anything.
 
 ### Changed
-- The Studio header now shows the **gate score**, the same 0 to 100 number `viberaven check` prints, next to the provider card grade, and both carry their scale. Before this the header showed an unlabelled "GRADE" on a 0 to 10 scale while the terminal printed a 0 to 100 score, so one repo could read 0.0 in the Studio and 65 in the terminal with nothing explaining the difference.
+- The Studio header now shows the **score**, the same 0 to 100 number `viberaven check` prints, next to the provider card grade, and both carry their scale. Before this the header showed an unlabelled "GRADE" on a 0 to 10 scale while the terminal printed a 0 to 100 score, so one repo could read 0.0 in the Studio and 65 in the terminal with nothing explaining the difference.
 
 ## [1.4.3] - 2026-07-07
 

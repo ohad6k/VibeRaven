@@ -1,23 +1,51 @@
 {
   "$schema": "https://viberaven.dev/schemas/gate-result.schema.json",
   "schemaVersion": "v1",
+  "runId": "vr_20261001000420",
+  "mode": "scan",
+  "generatedAt": "2026-10-01T00:04:20.522Z",
+  "workspace": {
+    "root": ".",
+    "packageManager": "unknown",
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "Full-stack app"
+    ]
+  },
   "gate": {
     "status": "not_clear",
-    "criticalCount": 2,
-    "warningCount": 3,
+    "criticalCount": 1,
+    "warningCount": 0,
     "providerBoundaryRequired": true
   },
-  "topGapIds": ["auth_secret_missing", "rls_disabled", "missing_health_route"],
+  "capabilities": {
+    "scaling": "unknown",
+    "security": "warning",
+    "webhooks": "unknown",
+    "payments": "unknown",
+    "database": "critical"
+  },
+  "topGapIds": [
+    "rls_disabled",
+    "missing_monitoring"
+  ],
   "artifacts": {
     "tasklist": ".viberaven/agent-tasklist.md",
     "contextMap": ".viberaven/context-map.json",
-    "gateResult": ".viberaven/gate-result.json"
+    "gateResult": ".viberaven/gate-result.json",
+    "gapsDir": ".viberaven/gaps",
+    "healDir": ".viberaven/heal"
   },
-  "nextAction": {
-    "batchSize": 3,
-    "batchApplied": 0,
-    "scanNow": false,
-    "stalled": false,
-    "requiresUserAction": false
+  "commands": {
+    "verify": "npx -y viberaven@1.5.3 --verify",
+    "strict": "npx -y viberaven@1.5.3 --strict",
+    "next": "npx -y viberaven@1.5.3 next --json",
+    "promptFirstGap": "npx -y viberaven@1.5.3 prompt --gap rls_disabled"
+  },
+  "redaction": {
+    "applied": false,
+    "count": 0
   }
 }

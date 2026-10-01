@@ -39,10 +39,10 @@ Useful official pages:
 2. Identify whether GitHub and Vercel CLIs or MCP tools are available:
    - `gh --version`
    - `gh auth status`
-   - `vercel --version` or `npx vercel --version`
-   - `vercel whoami` or `npx vercel whoami`
+   - `vercel --version` or `npx vercel@62.0.0 --version`
+   - `vercel whoami` or `npx vercel@62.0.0 whoami`
    Do not require them if browser/dashboard steps are the only available path.
-3. If VibeRaven is available, open the Studio with `npx -y viberaven` and use Vercel/GitHub provider context, release diff, and access-mode control before running irreversible commands.
+3. If VibeRaven is available, open the Studio with `npx -y viberaven@1.5.3` and use Vercel/GitHub provider context, release diff, and access-mode control before running irreversible commands.
 4. Never ask for passwords, cookies, tokens, API keys, or secret values. Ask the user to authenticate through official CLIs or provider dashboards.
 
 ## Launch Path
@@ -59,7 +59,7 @@ Work in this order:
    - Push normally. Do not force push unless the user explicitly asks and the risk is explained.
 4. Vercel connection:
    - Prefer `vercel link` for an existing project or `vercel --prod` / `vercel deploy --prod` when the CLI is authenticated.
-   - If Vercel CLI is not authenticated, run or open the official auth path: `npx vercel login` or https://vercel.com/login.
+   - If Vercel CLI is not authenticated, run or open the official auth path: `npx vercel@62.0.0 login` or https://vercel.com/login.
    - If CLI deploy is blocked but GitHub is pushed, open https://vercel.com/new so the user can import the GitHub repo.
    - If env vars are required, identify names only. Direct the user to Vercel dashboard or CLI secret commands; do not collect values in chat.
    - Verify build command, output directory, framework preset, install command, and Node version when the repo suggests them.

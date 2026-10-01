@@ -10,17 +10,17 @@ what actually happened.
 ## Before you start
 
 You need a release already shipped (see the README's terminal-twin section
-for `viberaven check` / `viberaven fix` if you haven't run the pre-deploy
-gate yet) and the Studio installed:
+for `viberaven check` / `viberaven fix` if you want a repository check
+first) and the Studio installed:
 
 ```bash
-npx -y viberaven
+npx -y viberaven@1.5.3
 ```
 
 ## The walkthrough
 
 1. **Open the Studio.**
-   Run `npx -y viberaven` in your repo and open the URL it prints. The
+   Run `npx -y viberaven@1.5.3` in your repo and open the URL it prints. The
    Studio detects your stack, finds your providers, and puts your git
    releases on a timeline — no login, no API key.
 
@@ -70,7 +70,8 @@ npx -y viberaven
 This loop is meant to run every time you ship, not just after an incident:
 open the Studio, compare the version you just shipped against the last
 known-good one, drag whatever looks riskier into agent chat, ask a narrow
-question, and keep the proof. It pairs with the pre-deploy gate
-(`viberaven check` / `viberaven --strict`) from the other side of the
-release — that gate stops a bad release from shipping; this workflow tells
-you what actually changed once one did.
+question, and keep the proof. It pairs with the repository check
+(`viberaven check`, or `viberaven --strict` if you want the verdict as a CI
+exit code) from the other side of the release. That check is advice, not a
+gate: it lists launch gaps before you ship and you decide when to ship. This
+workflow tells you what actually changed once you did.

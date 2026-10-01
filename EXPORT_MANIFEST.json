@@ -1,8 +1,12 @@
 {
-  "exportedAt": "2026-09-29T13:00:59.996Z",
+  "exportedAt": "2026-10-01T10:04:37.133Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "files": [
+    [
+      "docs/public-repo/AGENTS.md",
+      "AGENTS.md"
+    ],
     [
       "docs/public-repo/README.md",
       "README.md"
@@ -146,10 +150,6 @@
     [
       "export/public-discovery-staging/plugins/viberaven/LICENSE",
       "plugins/viberaven/LICENSE"
-    ],
-    [
-      "AGENTS.md",
-      "AGENTS.md"
     ],
     [
       "CLAUDE.md",

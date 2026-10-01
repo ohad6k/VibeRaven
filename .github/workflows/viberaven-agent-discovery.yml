@@ -18,5 +18,47 @@ jobs:
         with:
           node-version: 20
 
+      # doctor --agents looks for the unpinned check command in each agent file.
+      # This repo pins every package run, so a "Missing canonical command" line
+      # passes when the file has the pinned command. Every other doctor check,
+      # including the 1.5.2 gate rules check, must pass as is.
+      # The grep string below has no version in the source this workflow is
+      # exported from (see EXPORT_MANIFEST.json). The export pins every run of
+      # a VibeRaven package to the current release, this string included, so in
+      # the public repo it is the pinned check command. If the string stops
+      # reading as a run (runner, -y, package, check), the export leaves it
+      # unpinned and this step fails for every agent file.
       - name: Verify agent injection files
-        run: npx -y viberaven doctor --agents
+        shell: bash
+        run: |
+          set +e
+          npx -y viberaven@1.5.3 doctor --agents > doctor.txt 2>&1
+          status=$?
+          set -e
+          cat doctor.txt
+          if [ "$status" -eq 0 ]; then
+            exit 0
+          fi
+          if ! grep -q '^✗ ' doctor.txt; then
+            echo "::error::doctor --agents exited $status without a check result"
+            exit 1
+          fi
+          failed=0
+          while IFS= read -r line; do
+            case "$line" in
+              "✗ Missing canonical command in "*)
+                file="${line#✗ Missing canonical command in }"
+                if grep -qF 'npx -y viberaven@1.5.3 check' "$file"; then
+                  echo "ok: $file has the pinned check command"
+                else
+                  echo "::error::$file has no check command"
+                  failed=1
+                fi
+                ;;
+              "✗ "*)
+                echo "::error::${line#✗ }"
+                failed=1
+                ;;
+            esac
+          done < doctor.txt
+          exit "$failed"

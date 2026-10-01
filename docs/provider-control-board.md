@@ -36,8 +36,8 @@ example of exactly this drift. When a card is repo-evidence only, treat a
 - **Healthy:** RLS is enabled on every user-owned table, migrations in
   `supabase/migrations/*.sql` are applied, and the connected project's
   schema matches what the repo expects.
-- **Drifted:** a table is missing an RLS policy (`rls_disabled` in the gate
-  result), a migration exists locally but was never applied to the
+- **Drifted:** a table is missing an RLS policy (`rls_disabled` in the scan
+  results), a migration exists locally but was never applied to the
   connected project, or a policy references a column that was renamed or
   removed.
 
@@ -85,9 +85,10 @@ example of exactly this drift. When a card is repo-evidence only, treat a
 - **Healthy:** an error-monitoring SDK (e.g. `@sentry/nextjs`) is a
   dependency and its DSN env var is both used in code and documented in
   `.env.example`.
-- **Drifted:** the dependency is present but no DSN is wired up
-  (`monitoring_missing`-style gap), which usually means errors are
-  silently going nowhere in production.
+- **Drifted:** the dependency is present but no DSN is wired up, which
+  usually means errors are silently going nowhere in production. The
+  scan's `missing_monitoring` gap covers a different case: no Sentry or
+  PostHog reference in the repo at all.
 
 ### PostHog — repo-evidence
 

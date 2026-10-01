@@ -1,9 +1,38 @@
-$ npx viberaven scan
+$ npx -y viberaven@1.5.3 scan
+Scanning .… (local, offline)
 
-VibeRaven production-readiness scan
-Wrote .viberaven/agent-tasklist.md
-Wrote .viberaven/gate-result.json
-Gate status: not_clear (2 critical, 3 warning)
+┌──────────────────────────────────────────────┐
+│ VibeRaven · Production core 14% · 2 gap(s)   │
+│ Score 75 · Blocked                           │
+└──────────────────────────────────────────────┘
 
-Next: read .viberaven/agent-tasklist.md and fix TASK-001.
-Run: npx -y viberaven --verify after the heal batch is full.
+  App Flow           Figma          33%  2 fix
+  Frontend           Vue            25%  3 fix
+  Backend / API      Node.js        0%  4 fix
+  Security           Secrets hygiene 50%  2 fix
+  Auth               Auth.js        33%  4 fix
+  Database           Supabase       25%  GAP 1
+  Payments           Polar          43%  4 fix
+  Deployment         Netlify        40%  4 fix
+  Landing / Onboarding Supabase       0%  5 fix
+  Monitoring         Sentry         0%  GAP 1
+  Testing            Vitest         0%  4 fix
+  Error Handling     PostHog        0%  5 fix
+
+Artifacts:
+  .\.viberaven\report.html
+  .\.viberaven\last-scan.json
+  .\.viberaven\agent-summary.md
+  .\.viberaven\launch-playbook.md
+
+Open report: .\.viberaven\report.html
+Next action: No RLS policy proof in migrations
+Missing SQL evidence for both `enable row level security` and `create policy`.
+Run: viberaven prompt --gap rls_disabled
+AGENT_ACTION: Read .viberaven/agent-tasklist.md, run the next command above, then rescan.
+
+Press Enter in `viberaven` menu to rescan · `viberaven next` for top action
+Agents: read .viberaven/agent-summary.md and launch-playbook.md
+READY: Scan complete. Read .\.viberaven\agent-summary.md before changing code.
+MANUAL_ACTION_REQUIRED: 69 provider dashboard or read-only MCP checks require user/provider verification. Do not claim these as repo-code fixes.
+

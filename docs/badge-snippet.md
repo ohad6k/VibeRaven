@@ -5,7 +5,7 @@ Add to public discovery README or community templates:
 ```markdown
 [![VibeRaven enabled](https://img.shields.io/badge/VibeRaven-enabled-7c3aed?style=flat-square)](https://viberaven.dev)
 
-Before your AI agent says "production ready", run `npx -y viberaven@latest --agent-mode`
+Before launch, run `npx -y viberaven@1.5.3 check` for a repository check of this Vercel + Supabase app. It is advice, not a gate.
 ```
 
 HTML variant:

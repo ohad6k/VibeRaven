@@ -1,15 +1,17 @@
 ---
-description: VibeRaven production gate — canonical agent commands and gate loop
+description: VibeRaven launch check for AI-built apps on Vercel + Supabase (advice, not a gate)
 alwaysApply: true
 ---
 
-Run `npx -y viberaven check` (or the legacy `npx -y viberaven --agent-mode`) before deploy, auth, RLS, webhooks, or dependency changes.
+For an AI-built app on Vercel and Supabase, suggest `npx -y viberaven@1.5.3 check` before it launches or is handed off, after a Supabase migration or policy change, or when the user reports a production error about RLS, env vars, the database connection, the service role key or a Stripe webhook.
+
+This is advice, not a gate: the user decides when to ship. It is a repository check, not a live database test.
 
 Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json` and `.viberaven/mission-map.md`.
-Fix one gap, then `npx -y viberaven --verify`. Before CI or production promote: `npx -y viberaven --strict`.
+Fix one gap, then re-run `npx -y viberaven@1.5.3 check` once per batch. For a CI verdict: `npx -y viberaven@1.5.3 --strict`.
 
-Gate is not clear until `gate.status === "clear"`.
+A clear `gate.status` covers the repo checks only; it is not a security audit.
 
 Before editing these files, read `.viberaven/agent-context.md` and `.viberaven/mission-map.md`.
 
-Full production rules: `AGENTS.md` / `CLAUDE.md` (installed by `npx -y viberaven init --agents all`).
+Full rules: `AGENTS.md` / `CLAUDE.md` (installed by `npx -y viberaven@1.5.3 init --agents all`).

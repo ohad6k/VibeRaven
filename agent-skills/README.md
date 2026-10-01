@@ -5,17 +5,17 @@ Skills that teach AI coding agents to use VibeRaven — the control layer for AI
 Install with the Agent Skills CLI:
 
 ```bash
-npx -y skills add ohad6k/VibeRaven --skill viberaven
-npx -y skills add ohad6k/VibeRaven --skill architecture-context
-npx -y skills add ohad6k/VibeRaven --skill architecture-plan
-npx -y skills add ohad6k/VibeRaven --skill what-broke
-npx -y skills add ohad6k/VibeRaven --skill production-context
-npx -y skills add ohad6k/VibeRaven --skill go-live
+npx -y skills@1.7.0 add ohad6k/VibeRaven --skill viberaven
+npx -y skills@1.7.0 add ohad6k/VibeRaven --skill architecture-context
+npx -y skills@1.7.0 add ohad6k/VibeRaven --skill architecture-plan
+npx -y skills@1.7.0 add ohad6k/VibeRaven --skill what-broke
+npx -y skills@1.7.0 add ohad6k/VibeRaven --skill production-context
+npx -y skills@1.7.0 add ohad6k/VibeRaven --skill go-live
 ```
 
 ## The skills
 
-**`viberaven`** — the router. Teaches agents the local loop: run `npx -y viberaven check` for an offline launch verdict, read `.viberaven/` artifacts, apply fixes with `npx -y viberaven fix --gap <id>`, repeat until the gate is clear. Points at the Studio (`npx -y viberaven`) when the user wants to see and control the product.
+**`viberaven`**: the router. Teaches agents the local loop: run `npx -y viberaven@1.5.3 check` for an offline repository check, read `.viberaven/` artifacts, apply fixes with `npx -y viberaven@1.5.3 fix --gap <id>`, and check again once per batch of fixes. It is advice, not a gate: the user decides when to ship. Points at the Studio (`npx -y viberaven@1.5.3`) when the user wants to see and control the product.
 
 **`architecture-context`** — the question gate. For vague feature work, asks the missing low-level product questions before any edit, then hands the answers to `architecture-plan`.
 
@@ -32,10 +32,10 @@ Each skill can end with `Next skill:`; continue with that skill unless user inpu
 ## The loop agents follow
 
 ```bash
-npx -y viberaven check          # offline checks, 🔴/🟡/⚪ verdict, CI exit codes
-npx -y viberaven fix            # list gaps with safe automatic recipes
-npx -y viberaven fix --gap <id> # apply one recipe
-npx -y viberaven --strict       # final gate before deploy or CI
+npx -y viberaven@1.5.3 check          # offline checks, 🔴/🟡/⚪ verdict, CI exit codes
+npx -y viberaven@1.5.3 fix            # list gaps with safe automatic recipes
+npx -y viberaven@1.5.3 fix --gap <id> # apply one recipe
+npx -y viberaven@1.5.3 --strict       # the verdict as an exit code for CI, if you want one
 ```
 
 Agents read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/context-map.json`, fix one repo-code gap, then re-run `check`. Scans are local and free.
@@ -43,5 +43,5 @@ Agents read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `
 For Vercel + Supabase launch checks:
 
 ```bash
-npx -y viberaven audit --vercel-supabase
+npx -y viberaven@1.5.3 audit --vercel-supabase
 ```

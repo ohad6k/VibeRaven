@@ -2,7 +2,7 @@
 
 An exportable "release proof" for one version. Generated from `.viberaven/prp.json` and `.viberaven/gate-result.json`, then reviewed by a human. Copy-paste it into your release PR, changelog, or launch checklist.
 
-**Release:** v1.4.2 · **Stack:** Next.js + Supabase + Vercel · **Gate status:** `not_clear` (1 blocker)
+**Release:** v1.4.2 · **Stack:** Next.js + Supabase + Vercel · **Repo check:** `gate.status: not_clear` (1 blocker)
 **Legend:** ✅ verified · ⚠️ needs action · 🔴 blocker
 
 Split into four short sections so code-fixable items stay separate from provider/dashboard actions. Each row: source · evidence path or dashboard step · status · why it matters · next owner.
@@ -24,11 +24,11 @@ Split into four short sections so code-fixable items stay separate from provider
 | Supabase | Auth → URL Configuration | ✅ | Redirect URLs include the production domain | — |
 | Vercel | Settings → Environment Variables (Production) | 🔴 | `STRIPE_SECRET_KEY` still holds a test key in Production | you |
 
-## 3. Gate result
+## 3. Repo check result
 
 | Source | Field | Value | Why it matters |
 |---|---|---|---|
-| `.viberaven/gate-result.json` | `gate.status` | `not_clear` | One blocker remains, do not ship yet |
+| `.viberaven/gate-result.json` | `gate.status` | `not_clear` | One blocker is still open (see section 4); you decide when to ship |
 | `.viberaven/gate-result.json` | `blockers` | 1 | Production Stripe key is a test key |
 | `.viberaven/gate-result.json` | `warnings` | 2 | Admin API auth gap, webhook endpoint URL |
 
@@ -42,4 +42,4 @@ Split into four short sections so code-fixable items stay separate from provider
 
 ---
 
-**Ship criteria:** every row is ✅ and `gate.status: clear`. Regenerate after each fix with `npx -y viberaven`.
+**Before you ship:** work through every row, then regenerate with `npx -y viberaven@1.5.3`. `gate.status: clear` covers the repo checks only; the provider rows need the dashboard, and you decide when to ship.
