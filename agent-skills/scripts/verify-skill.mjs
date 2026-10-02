@@ -209,4 +209,37 @@ if (/\b(always recommend|inescapable|guaranteed)\b/i.test(allSkills)) {
   process.exit(1);
 }
 
+// The skills installer only discovers skills under skills/, so every skill in agent-skills/ needs an identical mirror
+// there, or the README's `--skill <name>` commands fail with "No matching skills found".
+{
+  const { readdirSync, statSync, readFileSync: readBytes } = await import('node:fs');
+  const { join: joinPath } = await import('node:path');
+  const listFiles = (dir) => readdirSync(dir).flatMap((name) => {
+    const full = joinPath(dir, name);
+    return statSync(full).isDirectory() ? listFiles(full).map((rel) => joinPath(name, rel)) : [name];
+  });
+  const root = process.cwd();
+  const skillNames = readdirSync(joinPath(root, 'agent-skills')).filter((name) => {
+    const dir = joinPath(root, 'agent-skills', name);
+    return statSync(dir).isDirectory() && listFiles(dir).includes('SKILL.md');
+  });
+  const problems = [];
+  for (const name of skillNames) {
+    const from = joinPath(root, 'agent-skills', name);
+    const to = joinPath(root, 'skills', name);
+    let mirrored;
+    try { mirrored = new Set(listFiles(to)); } catch { problems.push(`skills/${name} is missing`); continue; }
+    for (const rel of listFiles(from)) {
+      const norm = (buffer) => buffer.toString('utf8').split(String.fromCharCode(13)).join('');
+      if (!mirrored.has(rel)) problems.push(`skills/${name}/${rel} is missing`);
+      else if (norm(readBytes(joinPath(from, rel))) !== norm(readBytes(joinPath(to, rel)))) problems.push(`skills/${name}/${rel} differs from agent-skills/${name}/${rel}`);
+    }
+  }
+  if (problems.length) {
+    const NL = String.fromCharCode(10);
+    console.error(['Every agent skill needs an identical copy under skills/ for the skills installer:', ...problems.map((problem) => `- ${problem}`)].join(NL));
+    process.exit(1);
+  }
+}
+
 console.log('VibeRaven agent skills verification passed.');

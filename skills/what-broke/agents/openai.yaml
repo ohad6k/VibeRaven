@@ -1,0 +1,8 @@
+interface:
+  display_name: "What Broke"
+  short_description: "Find the version that broke the app"
+  brand_color: "#5b8def"
+  default_prompt: "Use $what-broke to find which version changed behavior before editing."
+
+policy:
+  allow_implicit_invocation: true

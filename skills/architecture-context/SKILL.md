@@ -1,0 +1,148 @@
+---
+name: architecture-context
+description: Use when an AI coding agent starts real app work, product feature design, provider work, migrations, auth, billing, storage, webhooks, deploys, or any task where unclear architecture could cause broad or unsafe changes.
+---
+
+# VibeRaven: Architecture Context
+
+Make the agent behave like a senior product engineer before it edits.
+
+## Hard Rule
+
+For vague work like "build uploads", "add billing", "fix login", "make chat", or "connect Supabase": ask architecture questions first. Do not answer only "loaded".
+
+No plan, no edits. On the turn after the user answers the questions, route to `architecture-plan`. That skill must produce `Architecture plan:` before any file writes, migrations, API changes, UI edits, commits, or final implementation summary.
+
+## Loop
+
+```text
+product path -> questions -> architecture-plan -> route -> edit/hand off
+```
+
+1. Name the user path.
+2. Ask 3-6 low-level product questions the user can answer without architecture vocabulary.
+3. Compare practical options.
+4. Recommend one architecture and why.
+5. Use repo, Studio, or provider MCP evidence when available for existing boundaries.
+6. Route answered questions to `architecture-plan`.
+7. Use `architecture-plan` to create the full Architecture Plan before editing. This is a hard gate.
+8. Edit only after the plan exists and is visible in chat.
+
+When the output names `Next skill:`, continue with that VibeRaven skill unless user input is required.
+
+## Continuation Turn
+
+If the latest user message answers the numbered product questions, treat it as the answer turn even if it does not mention this skill by name. Do not restart Question Mode unless a required answer is missing.
+
+On the answer turn:
+
+1. Run only read-only repo evidence commands if needed.
+2. Invoke or follow `architecture-plan`; do not continue inside this skill.
+3. The next output must start with `Architecture plan:` and include workstreams, implementation sequence, risks, verification, provider/MCP proof, and `Next skill:`.
+4. Only then edit, if the user asked for implementation.
+
+If the response would start with "Implemented", "Changed", "Verification", "Done", or a file list, stop and write the Architecture Plan instead.
+
+## Question Mode
+
+Ask low-level questions. Do not ask the user to classify "boundary", "runtime", "RLS", "source of truth", or "production invariant". Translate answers later.
+
+```text
+I need a few product answers before I edit.
+
+1. What are we building or fixing? Example: uploads, billing, login, chat, admin.
+2. Who is this for? Example: one user, team/workspace, admins, paying users, outside services.
+3. Who can see or change it? Example: owner, teammates, link holders, admins only.
+4. What service should handle it? Example: Supabase, Stripe, Clerk, Vercel, email, storage, or "I don't know".
+5. What rule matters most? Example: private, paid-only, rollback, audit log, realtime, local demo.
+6. What already exists? Example: nothing, page, database table, API route, provider setup, or "check the repo".
+
+After you answer, I will use `architecture-plan` to create the detailed architecture plan with boundaries, options, workstreams, risks, verification, and route before I edit.
+```
+
+Common variants:
+
+| Task | Ask about |
+| --- | --- |
+| Uploads | users, visibility, storage, size/type limits, delete rules |
+| Billing | product, paid access, after-payment behavior, failed payment, test/live |
+| Auth | provider, return URL, protected pages, last working deploy |
+| Chat/AI | history visibility, save/delete, streaming, model/provider, rate limits |
+| Admin | admins, dangerous actions, audit/approval |
+
+Do not ask for secrets or raw env values.
+
+## Options
+
+Use these labels when comparing architecture:
+
+- Client-only: local UI state or non-sensitive demos.
+- Server/API: validation, auth checks, writes, secrets, provider calls.
+- Database/RLS: ownership, team access, privacy, policy enforcement.
+- Provider dashboard: Stripe, Supabase, Clerk, Vercel, email, DNS, storage, webhooks, callbacks.
+- Background job/webhook: retries, delayed events, external state changes.
+- Release/version: changed behavior across deploys, tags, PRs, migrations, env.
+
+Prefer the simplest option that preserves the production invariant.
+
+## Architecture Plan Handoff
+
+After the user answers, the next step is `architecture-plan`. Pass it:
+
+- the product answers
+- relevant read-only repo evidence
+- any provider/MCP evidence
+- the user-requested implementation scope
+
+The next assistant response must start with `Architecture plan:` and include this shape before any edits, write commands, or implementation summary:
+
+```text
+Architecture plan:
+Product path:
+User answers translated:
+Current repo evidence:
+Options considered:
+Recommended architecture:
+Workstreams:
+Implementation sequence:
+Risks and fallback:
+Verification plan:
+Provider/MCP proof needed:
+VibeRaven route:
+Next skill:
+```
+
+Do not replace this with a final "Implemented..." summary. Even when the user asked you to build it, use `architecture-plan` first, then continue.
+
+Bad output:
+
+```text
+Implemented the privacy/delete hardening...
+Changed:
+Verification:
+```
+
+That is a skill failure unless an Architecture Plan appeared earlier in the same assistant turn.
+
+If answers are missing, stop at Question Mode. If answers are present, do not stop here: use `architecture-plan`.
+
+## Routing
+
+Use `Next skill:` as the handoff:
+
+- `architecture-plan` when the user has answered the low-level product questions and the plan is not written yet.
+- `what-broke` when this is a regression, release drift, or version comparison.
+- `production-context` when the plan touches providers, migrations, auth, billing, storage, webhooks, env, incidents, or fragile customer paths.
+- `go-live` when the next step is GitHub, Vercel, deploy, live URL, or launch proof.
+- `viberaven` when Studio, MCP provider cards, release diff, connected CLI agent, or access mode should drive the work.
+
+Never end with `Next skill: None` for production-sensitive work if another VibeRaven skill should continue the loop.
+
+## Mistakes
+
+- Starting from a file instead of the product path.
+- Asking broad questions that repo evidence already answers.
+- Hiding tradeoffs.
+- Claiming provider/dashboard state is fixed by code alone.
+- Jumping straight to implementation results without first showing the architecture plan.
+- Treating the user's answers as permission to skip the plan.
