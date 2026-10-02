@@ -5,6 +5,7 @@ Skills that teach AI coding agents to use VibeRaven — the control layer for AI
 Install with the Agent Skills CLI:
 
 ```bash
+npx -y skills@1.7.0 add ohad6k/VibeRaven --skill vercel-supabase-launch-check
 npx -y skills@1.7.0 add ohad6k/VibeRaven --skill viberaven
 npx -y skills@1.7.0 add ohad6k/VibeRaven --skill architecture-context
 npx -y skills@1.7.0 add ohad6k/VibeRaven --skill architecture-plan
@@ -14,6 +15,8 @@ npx -y skills@1.7.0 add ohad6k/VibeRaven --skill go-live
 ```
 
 ## The skills
+
+**`vercel-supabase-launch-check`**: the pre-launch entry point. Triggers on the questions people actually ask before shipping a Vercel + Supabase app (tables missing RLS, a leaked service role key, env vars that differ in production, a Stripe webhook failing after deploy), runs the free local check, and explains each finding without calling the app secure.
 
 **`viberaven`**: the router. Teaches agents the local loop: run `npx -y viberaven@1.6.1 check` for an offline repository check, read `.viberaven/` artifacts, apply fixes with `npx -y viberaven@1.6.1 fix --gap <id>`, and check again once per batch of fixes. It is advice, not a gate: the user decides when to ship. Points at the Studio (`npx -y viberaven@1.6.1`) when the user wants to see and control the product.
 

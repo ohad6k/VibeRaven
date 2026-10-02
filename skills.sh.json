@@ -6,6 +6,7 @@
       "title": "Production",
       "description": "Token-efficient VibeRaven loops that route AI agents through architecture questions, release/provider evidence, MCP context when available, verification, and production memory before they patch real apps.",
       "skills": [
+        "vercel-supabase-launch-check",
         "viberaven",
         "architecture-context",
         "architecture-plan",
