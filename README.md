@@ -26,24 +26,24 @@
   </p>
 </div>
 
-VibeRaven is an open-source local cockpit for AI-built apps. Run `npx -y viberaven` in your repo and it connects your coding agent (Claude Code, Codex, Gemini) to the context it patches blind without, your architecture, providers, and releases, then lists the launch gaps it finds in your repo (auth, RLS, webhooks, deploy) before real users hit them. It is advice, not a gate: you decide when to ship. Local-first, no login.
+VibeRaven is an open-source local cockpit for AI-built apps. Run `npx -y viberaven@1.6.1` in your repo and it connects your coding agent (Claude Code, Codex, Gemini) to the context it patches blind without, your architecture, providers, and releases, then lists the launch gaps it finds in your repo (auth, RLS, webhooks, deploy) before real users hit them. It is advice, not a gate: you decide when to ship. Local-first, no login.
 
 ```bash
-npx -y viberaven
+npx -y viberaven@1.6.1
 ```
 
 The Studio opens in your browser and runs on your machine: it detects your stack, finds your providers, shows your release history and diffs, and lists the launch gaps its offline checks find in your repo, with a readiness score. You decide when to ship. The local checks need no login and no API key, and there is no telemetry. "Run full check" is optional: it is a hosted check that needs a VibeRaven account and uses its allowance (see [Philosophy](#philosophy)).
 
 ## Your first 5 minutes
 
-1. **Run it.** `npx -y viberaven` in your project folder. The Studio opens in your browser and scans your repo offline.
+1. **Run it.** `npx -y viberaven@1.6.1` in your project folder. The Studio opens in your browser and scans your repo offline.
 2. **Read your verdict.** The Studio shows a readiness score out of 100 and the blockers it found in your repo files. Pick one and hand it to your agent to fix.
 3. **Connect your coding agent.** Pick Codex, Claude Code, or Gemini CLI in the chat panel, hit **Test connection**, and choose how much access it gets (`ask`, `approve`, or `full`).
 4. **Give your agent the skills.** Install the six-skill pack and the plugin so Codex, Claude Code, and Gemini follow the same senior-engineer loop everywhere:
 
    ```bash
    npx -y skills@1.7.0 add ohad6k/VibeRaven --skill viberaven   # skills.sh pack
-   npx -y viberaven init --agents all                     # agent rules in-repo
+   npx -y viberaven@1.6.1 init --agents all                     # agent rules in-repo
    ```
 
 Everything the agent needs is also written to `.viberaven/` as markdown and JSON, readable by any tool and versioned by git.
@@ -62,7 +62,7 @@ Everything the agent needs is also written to `.viberaven/` as markdown and JSON
 For agents and CI, the same verdict as one command:
 
 ```bash
-npx -y viberaven check
+npx -y viberaven@1.6.1 check
 ```
 
 Real VibeRaven 1.6.1 output on a small Next.js + Supabase app (paths shortened):
@@ -84,50 +84,26 @@ Fix: viberaven fix · Details: ~/my-app/.viberaven/agent-tasklist.md
 Each finding names its gap ID, and most name the file that caused it. The command exits `1` when there are blockers. Then:
 
 ```bash
-npx -y viberaven fix            # list gaps with safe automatic recipes
-npx -y viberaven fix --gap <id> # apply one recipe
-npx -y viberaven --strict       # the verdict as an exit code for CI, if you want one (exit 1 on not_clear; warnings exit 0)
+npx -y viberaven@1.6.1 fix            # list gaps with safe automatic recipes
+npx -y viberaven@1.6.1 fix --gap <id> # apply one recipe
+npx -y viberaven@1.6.1 --strict       # the verdict as an exit code for CI, if you want one (exit 1 on not_clear; warnings exit 0)
 ```
 
 All results land in `.viberaven/` as markdown and JSON on disk (`agent-tasklist.md`, `gate-result.json`, `context-map.json`), so any agent and your git history can read them.
-
-## In CI: the GitHub Action
-
-Lovable and Bolt push straight to `main`, so a pull request check alone misses most of their changes. The [VibeRaven GitHub Action](https://github.com/marketplace/actions/viberaven-supabase-launch-check) runs the same check on pull requests and on pushes, in your own runner:
-
-```yaml
-on:
-  push:
-    branches: [main]
-  pull_request:
-permissions:
-  contents: write
-  pull-requests: write
-jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-      - uses: ohad6k/viberaven-action@v1
-```
-
-A pull request gets one comment with what the change added or fixed. A push to `main` gets a commit comment when there is a blocker. It is advice by default; `fail-on-blockers: 'true'` gates merges. `npx -y viberaven init --github` writes a pull-request-only version of this workflow without the Action.
 
 ## Install for AI agents
 
 Make agents use release and provider context before they patch the repo:
 
 ```bash
-npx -y viberaven init --agents all
-npx -y viberaven doctor --agents
+npx -y viberaven@1.6.1 init --agents all
+npx -y viberaven@1.6.1 doctor --agents
 ```
 
 Preview without writing files:
 
 ```bash
-npx -y viberaven init --agents all --dry-run
+npx -y viberaven@1.6.1 init --agents all --dry-run
 ```
 
 This installs bounded rules (`<!-- VIBERAVEN:START -->` ... `<!-- VIBERAVEN:END -->`) into:
@@ -167,7 +143,7 @@ For a smaller install, [plugins/viberaven](./plugins/viberaven/) is a standalone
 VibeRaven is listed in the MCP registry for agents that prefer tools over terminal commands:
 
 ```json
-{ "viberaven": { "command": "npx", "args": ["-y", "@viberaven/mcp"] } }
+{ "viberaven": { "command": "npx", "args": ["-y", "@viberaven/mcp@1.6.1"] } }
 ```
 
 Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_apply`, `viberaven_verify`, `viberaven_audit`, `viberaven_gate_result`, and `viberaven_validate_npm_package` (run it before adding npm dependencies).
@@ -175,7 +151,7 @@ Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_a
 ## Vercel + Supabase
 
 ```bash
-npx -y viberaven audit --vercel-supabase
+npx -y viberaven@1.6.1 audit --vercel-supabase
 ```
 
 Repository evidence for RLS, service-role exposure, and pooler ports. It reads repo files only, so it cannot show which RLS policies are live in your Supabase project.
