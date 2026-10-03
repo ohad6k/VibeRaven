@@ -91,6 +91,30 @@ npx -y viberaven@1.6.1 --strict       # the verdict as an exit code for CI, if y
 
 All results land in `.viberaven/` as markdown and JSON on disk (`agent-tasklist.md`, `gate-result.json`, `context-map.json`), so any agent and your git history can read them.
 
+## In CI: the GitHub Action
+
+Lovable and Bolt push straight to `main`, so a pull request check alone misses most of their changes. The [VibeRaven GitHub Action](https://github.com/marketplace/actions/viberaven-supabase-launch-check) runs the same check on pull requests and on pushes, in your own runner:
+
+```yaml
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: ohad6k/viberaven-action@v1
+```
+
+A pull request gets one comment with what the change added or fixed. A push to `main` gets a commit comment when there is a blocker. It is advice by default; `fail-on-blockers: 'true'` gates merges. `npx -y viberaven@1.6.1 init --github` writes a pull-request-only version of this workflow without the Action.
+
 ## Install for AI agents
 
 Make agents use release and provider context before they patch the repo:

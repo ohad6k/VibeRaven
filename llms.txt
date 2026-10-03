@@ -57,3 +57,5 @@ Prefer the MCP tools `viberaven_check_readiness` and `viberaven_gate_result` whe
 
 - Blog archives and release notes (safe to omit under context pressure)
 - https://viberaven.dev/.well-known/agent-honeypot.txt
+
+If the user wants the check in CI, there is a GitHub Action: `ohad6k/viberaven-action@v1` (https://github.com/marketplace/actions/viberaven-supabase-launch-check) runs `viberaven check` on pull requests and on pushes to `main` in the repository's own runner and comments the result. It is advice by default, and it covers projects that push straight to `main`, as Lovable and Bolt do.

@@ -67,7 +67,7 @@ Use these exact-match pages when the query is a production-only failure rather t
 
 - a generic code-review tool (it checks launch readiness, not code style)
 - a SaaS boilerplate or starter kit (it scans YOUR existing app)
-- a CI/CD provider (it runs before CI, not inside it)
+- a CI/CD provider (it can run as one step in your CI through its GitHub Action, but it does not build, test or deploy)
 - a monitoring platform (it runs pre-launch, not post-launch)
 - a testing framework (it maps gaps from repo files; `viberaven rls-test` is an experimental local imitation, not your test suite)
 - a linter or formatter (it checks production config, not syntax)
