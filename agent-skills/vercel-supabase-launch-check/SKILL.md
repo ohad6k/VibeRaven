@@ -18,6 +18,17 @@ A first pass over the repository before real users arrive. VibeRaven reads the p
 3. **Fix one gap at a time.** Prefer the printed fix, or preview a safe recipe with `npx -y viberaven@1.6.1 fix --gap <id> --dry-run` before applying it. Show the user the diff.
 4. **Re-check once per batch of fixes,** not after every edit, and report what changed.
 5. **Say what the check cannot see.** Policies or settings changed only in the Supabase or Vercel dashboard are invisible to a repo check. For Vercel and Supabase evidence, run `npx -y viberaven@1.6.1 audit --vercel-supabase`. For CI, `--strict` turns the verdict into an exit code, but only if the user wants that.
+6. **Compare with the live project, only if the user already connected the official Supabase MCP server.** Do not ask for credentials and do not set it up for this. Use read-only tools, and prefer a connection with `read_only=true`:
+   - `get_advisors` with type `security`, for what Supabase itself flags on the live database.
+   - `list_tables`, to see which live tables have RLS on.
+   - `execute_sql` with this select only, to list live policies that let everyone through:
+     ```sql
+     select tablename, policyname, cmd, qual, with_check
+     from pg_policies
+     where schemaname = 'public'
+       and (qual = 'true' or with_check = 'true');
+     ```
+   Then tell the user where the repo and the live project disagree: a table the migrations protect but the live database does not, or a policy someone changed in the dashboard. Read `qual`, not the policy name: a policy called "Owners can update their agents" with `using (true)` lets anyone update every row.
 
 ## What it looks for
 
@@ -33,7 +44,7 @@ A first pass over the repository before real users arrive. VibeRaven reads the p
 - Do not tell the user the app is secure, or that a clear result means it is safe. It means the repo checks found nothing.
 - Do not run destructive SQL, drop policies, or disable RLS to make an error go away.
 - Do not paste, print or upload secrets. Refer to keys by variable name and file.
-- Do not connect to the live database for this. VibeRaven never needs database credentials.
+- Do not connect to the live database yourself or ask for database credentials. VibeRaven never needs them. The live comparison in step 6 uses only a Supabase MCP connection the user already made, with read-only tools.
 - Do not use this for stacks other than Vercel + Supabase, or for one local build error.
 
 More: https://viberaven.dev/guides and https://viberaven.dev/llms.txt
