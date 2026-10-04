@@ -18,7 +18,7 @@ npx -y skills@1.7.0 add ohad6k/VibeRaven --skill go-live
 
 **`vercel-supabase-launch-check`**: the pre-launch entry point. Triggers on the questions people actually ask before shipping a Vercel + Supabase app (tables missing RLS, a leaked service role key, env vars that differ in production, a Stripe webhook failing after deploy), runs the free local check, and explains each finding without calling the app secure.
 
-**`viberaven`**: the router. Teaches agents the local loop: run `npx -y viberaven@1.6.2 check` for an offline repository check, read `.viberaven/` artifacts, apply fixes with `npx -y viberaven@1.6.2 fix --gap <id>`, and check again once per batch of fixes. It is advice, not a gate: the user decides when to ship. Points at the Studio (`npx -y viberaven@1.6.2`) when the user wants to see and control the product.
+**`viberaven`**: the router. Teaches agents the local loop: run `npx -y viberaven@1.6.3 check` for an offline repository check, read `.viberaven/` artifacts, apply fixes with `npx -y viberaven@1.6.3 fix --gap <id>`, and check again once per batch of fixes. It is advice, not a gate: the user decides when to ship. Points at the Studio (`npx -y viberaven@1.6.3`) when the user wants to see and control the product.
 
 **`architecture-context`** — the question gate. For vague feature work, asks the missing low-level product questions before any edit, then hands the answers to `architecture-plan`.
 
@@ -35,10 +35,10 @@ Each skill can end with `Next skill:`; continue with that skill unless user inpu
 ## The loop agents follow
 
 ```bash
-npx -y viberaven@1.6.2 check          # offline checks, 🔴/🟡/⚪ verdict, CI exit codes
-npx -y viberaven@1.6.2 fix            # list gaps with safe automatic recipes
-npx -y viberaven@1.6.2 fix --gap <id> # apply one recipe
-npx -y viberaven@1.6.2 --strict       # the verdict as an exit code for CI, if you want one
+npx -y viberaven@1.6.3 check          # offline checks, 🔴/🟡/⚪ verdict, CI exit codes
+npx -y viberaven@1.6.3 fix            # list gaps with safe automatic recipes
+npx -y viberaven@1.6.3 fix --gap <id> # apply one recipe
+npx -y viberaven@1.6.3 --strict       # the verdict as an exit code for CI, if you want one
 ```
 
 Agents read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `.viberaven/context-map.json`, fix one repo-code gap, then re-run `check`. Scans are local and free.
@@ -46,5 +46,5 @@ Agents read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json`, and `
 For Vercel + Supabase launch checks:
 
 ```bash
-npx -y viberaven@1.6.2 audit --vercel-supabase
+npx -y viberaven@1.6.3 audit --vercel-supabase
 ```

@@ -11,7 +11,7 @@ Sync policy: **manual curated export** from private -> public. The export checkl
 
 Set on https://github.com/ohad6k/VibeRaven/settings:
 
-- **Description:** Local repository check for AI-built apps on Vercel + Supabase: RLS gaps in migrations, secrets in client code, env var drift, Stripe webhook checks. Advice, not a gate. npx -y viberaven@1.6.2 check
+- **Description:** Local repository check for AI-built apps on Vercel + Supabase: RLS gaps in migrations, secrets in client code, env var drift, Stripe webhook checks. Advice, not a gate. npx -y viberaven@1.6.3 check
 - **Website:** https://viberaven.dev
 
 ## Public repo - Topics

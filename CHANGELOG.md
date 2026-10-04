@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.6.3] - 2026-10-04
+
+- `viberaven`, `@viberaven/cli` and `@viberaven/mcp` ship together as 1.6.3.
+- The agent task list routes repo findings (open policies, grants, definer functions, service role keys, unsigned Stripe webhooks, env var drift) to repo-code tasks with the file, line and fix, and lists steps outside the repo (rotate a key, apply a migration live, set the webhook secret) as user steps.
+- One verdict rule across `gate-result.json`, `actions.json`, `context-map.json` and the Studio. "No blockers in repo checks" replaces "Launch ready".
+- After a fix, its outside-the-repo steps appear as `userFollowUps` in `check`, `check --json` and `--agent-mode`.
+- Providers count only from repo evidence, not docs mentions; the summary shows "none found" for an area with nothing detected, and the launch playbook covers detected providers only.
+- `.viberaven/gaps/` drops files for resolved findings, and gap JSON evidence includes the file and line.
+- The README notes `npx.cmd` for Windows PowerShell when `npx` is blocked, and the npm descriptions name the Supabase RLS and security check.
+
 ## [1.6.2] - 2026-10-03
 
 - `viberaven`, `@viberaven/cli` and `@viberaven/mcp` ship together as 1.6.2.

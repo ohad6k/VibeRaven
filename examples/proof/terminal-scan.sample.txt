@@ -1,4 +1,4 @@
-$ npx -y viberaven@1.6.2 scan
+$ npx -y viberaven@1.6.3 scan
 Scanning .… (local, offline)
 
 ┌──────────────────────────────────────────────┐

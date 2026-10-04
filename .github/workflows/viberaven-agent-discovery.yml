@@ -32,7 +32,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          npx -y viberaven@1.6.2 doctor --agents > doctor.txt 2>&1
+          npx -y viberaven@1.6.3 doctor --agents > doctor.txt 2>&1
           status=$?
           set -e
           cat doctor.txt
@@ -48,7 +48,7 @@ jobs:
             case "$line" in
               "✗ Missing canonical command in "*)
                 file="${line#✗ Missing canonical command in }"
-                if grep -qF 'npx -y viberaven@1.6.2 check' "$file"; then
+                if grep -qF 'npx -y viberaven@1.6.3 check' "$file"; then
                   echo "ok: $file has the pinned check command"
                 else
                   echo "::error::$file has no check command"
