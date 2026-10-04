@@ -5,37 +5,37 @@
 Start with:
 
 ```bash
-npx -y viberaven@1.6.1
+npx -y viberaven@1.6.2
 ```
 
 Use the artifact loop when the agent needs the task list, the machine verdict and next-action files:
 
 ```bash
-npx -y viberaven@1.6.1 --agent-mode
+npx -y viberaven@1.6.2 --agent-mode
 ```
 
 The local check needs no login, no API key and no scan quota.
 
-When to use it: an AI-built app that deploys on Vercel and uses Supabase, before a launch or client handoff. The 1.6.1 checks cover, among others: Supabase migrations that create a public table without RLS, policies that allow everyone with `using (true)`, a service role key in client code, env vars the code reads that `.env.example` does not list (it cannot see Vercel settings), and Stripe webhooks without signature checks. Not for other stacks, CORS, OAuth callbacks or auth logic.
+When to use it: an AI-built app that deploys on Vercel and uses Supabase, before a launch or client handoff. The 1.6.2 checks cover, among others: Supabase migrations that create a public table without RLS, policies that allow everyone with `using (true)`, a service role key in client code, env vars the code reads that `.env.example` does not list (it cannot see Vercel settings), and Stripe webhooks without signature checks. Not for other stacks, CORS, OAuth callbacks or auth logic.
 
 Optional agent rules for this repo (or any repo):
 
 ```bash
-npx -y viberaven@1.6.1 init --agents all --dry-run
-npx -y viberaven@1.6.1 init --agents all
-npx -y viberaven@1.6.1 doctor --agents
+npx -y viberaven@1.6.2 init --agents all --dry-run
+npx -y viberaven@1.6.2 init --agents all
+npx -y viberaven@1.6.2 doctor --agents
 ```
 
-The CLI prints its commands, and `init` writes them, without a version (`viberaven`, not `viberaven@1.6.1`). The copy of this file in the ohad6k/VibeRaven repo pins the `npx` commands to the current release, including inside the real 1.6.1 output described here.
+The CLI prints its commands, and `init` writes them, without a version (`viberaven`, not `viberaven@1.6.2`). The copy of this file in the ohad6k/VibeRaven repo pins the `npx` commands to the current release, including inside the real 1.6.2 output described here.
 
-What `init --agents all` installs, from a real 1.6.1 run:
+What `init --agents all` installs, from a real 1.6.2 run:
 
-- AGENTS.md, CLAUDE.md, GEMINI.md and `.github/copilot-instructions.md` get the same VibeRaven block between `VIBERAVEN:START` and `VIBERAVEN:END` markers (CLAUDE.md also gets an `@AGENTS.md` line). The block is scoped to AI-built apps on Vercel + Supabase: it suggests one `npx -y viberaven@1.6.1 check` pass before such an app launches or is handed off, after a Supabase migration or policy change, or when the user reports a production error about RLS, env vars, the database connection, the service role key or a Stripe webhook, and says the check is not needed for other stacks. It says "This is advice, not a gate: the user decides when to ship." and that the check is a repository check, not a live database test. Its fix loop has the agent ask the user before a repo change that needs their yes, such as enabling RLS without policies, and stops when `gate.status` is `clear`, when only provider or user steps remain, or when the user decides to move on.
+- AGENTS.md, CLAUDE.md, GEMINI.md and `.github/copilot-instructions.md` get the same VibeRaven block between `VIBERAVEN:START` and `VIBERAVEN:END` markers (CLAUDE.md also gets an `@AGENTS.md` line). The block is scoped to AI-built apps on Vercel + Supabase: it suggests one `npx -y viberaven@1.6.2 check` pass before such an app launches or is handed off, after a Supabase migration or policy change, or when the user reports a production error about RLS, env vars, the database connection, the service role key or a Stripe webhook, and says the check is not needed for other stacks. It says "This is advice, not a gate: the user decides when to ship." and that the check is a repository check, not a live database test. Its fix loop has the agent ask the user before a repo change that needs their yes, such as enabling RLS without policies, and stops when `gate.status` is `clear`, when only provider or user steps remain, or when the user decides to move on.
 - `.cursor/rules/viberaven-core.mdc` always applies and carries a short version of the same advice. Three more Cursor rule files apply only when editing `supabase/**`, `vercel.json` or `.github/workflows/**`, or payment webhook files. They point the agent at the `.viberaven/agent-context.md` and `.viberaven/mission-map.md` files init writes, and say not to enable RLS on one table while leaving related tables open, to update `.env.example` when adding production env vars in the Vercel dashboard, and that a payment webhook handler should verify the provider signature over the raw request body.
 - init also writes `.viberaven/agent-context.md` and `.viberaven/mission-map.md` with the same scoped suggestion and a short read order.
 - `package.json` gets three scripts that run the CLI through npx with the `--agent-mode`, `--verify` and `--strict` flags: `viberaven:gate`, `viberaven:verify` and `viberaven:strict`. init does not pin a version in them; add one (for example `viberaven@<version>`) if you want every run to use the same release.
 
-You can edit or skip any of these rules. The dry run does not show the `package.json` scripts. Your own notes outside the VibeRaven markers stay. If an earlier version wrote gate rules into these files, running `init --agents all` again replaces the VibeRaven block, and `npx -y viberaven@1.6.1 doctor --agents` names any file that still has them.
+You can edit or skip any of these rules. The dry run does not show the `package.json` scripts. Your own notes outside the VibeRaven markers stay. If an earlier version wrote gate rules into these files, running `init --agents all` again replaces the VibeRaven block, and `npx -y viberaven@1.6.2 doctor --agents` names any file that still has them.
 
 Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json`, `.viberaven/context-map.json`, `.viberaven/agent-summary.md`, and `.viberaven/launch-playbook.md`. Follow the tasklist in order until `gate.status` is `clear`, or a provider/user blocker remains. A `clear` status covers the repo half; the user decides when to ship.
 

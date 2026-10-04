@@ -79,7 +79,7 @@ the repo; provider drift needs a human to update the dashboard.
 ## Regenerating it
 
 ```bash
-npx -y viberaven@1.6.1
+npx -y viberaven@1.6.2
 ```
 
 The Studio's Versions & releases panel regenerates the diff for the

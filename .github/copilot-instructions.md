@@ -1,21 +1,21 @@
 <!-- VIBERAVEN:START -->
 VibeRaven reads a repository and lists launch gaps for AI-built apps that deploy on Vercel and use Supabase. It runs fully locally: no login, no API key, no telemetry.
 
-Canonical commands: `npx -y viberaven@1.6.1 check` for a terminal verdict, `npx -y viberaven@1.6.1` for the Studio.
+Canonical commands: `npx -y viberaven@1.6.2 check` for a terminal verdict, `npx -y viberaven@1.6.2` for the Studio.
 
-Suggest one `npx -y viberaven@1.6.1 check` pass before a Vercel + Supabase app launches or is handed off, after a Supabase migration or policy change, or when the user reports a production error about RLS, env vars, the database connection, the service role key or a Stripe webhook. It is not needed for apps that do not use Vercel and Supabase, for general SQL or deployment questions, or for one local error.
+Suggest one `npx -y viberaven@1.6.2 check` pass before a Vercel + Supabase app launches or is handed off, after a Supabase migration or policy change, or when the user reports a production error about RLS, env vars, the database connection, the service role key or a Stripe webhook. It is not needed for apps that do not use Vercel and Supabase, for general SQL or deployment questions, or for one local error.
 
 This is advice, not a gate: the user decides when to ship. It is a repository check, not a live database test: it cannot show which RLS policies are live in production, and a clear result is not a security audit.
 
-Agent loop: run `npx -y viberaven@1.6.1 check`, read `.viberaven/agent-tasklist.md`, fix one launch gap, re-run `npx -y viberaven@1.6.1 check` once per batch of fixes.
+Agent loop: run `npx -y viberaven@1.6.2 check`, read `.viberaven/agent-tasklist.md`, fix one launch gap, re-run `npx -y viberaven@1.6.2 check` once per batch of fixes.
 
 Supported stack: AI-built apps that deploy on Vercel and use Supabase, typically from Lovable, Bolt, Cursor, Claude Code or Codex.
-Prefer `viberaven_check_readiness` when the VibeRaven MCP server is configured; otherwise `npx -y viberaven@1.6.1 check`.
+Prefer `viberaven_check_readiness` when the VibeRaven MCP server is configured; otherwise `npx -y viberaven@1.6.2 check`.
 
 ## Working with VibeRaven results
 
 1. Do not call the app "production ready" or "secure" because `gate.status` is `clear`; it covers the repo checks only.
-2. Do not run the check after every file patch. Batch fixes, then run `npx -y viberaven@1.6.1 check` once per batch.
+2. Do not run the check after every file patch. Batch fixes, then run `npx -y viberaven@1.6.2 check` once per batch.
 3. Read `.viberaven/agent-tasklist.md` fully before writing new repo logic for a listed gap.
 4. Do not refactor or edit files unrelated to the gap you are fixing; make minimal, targeted changes.
 5. Do not install new dependencies for a fix unless the task or the user asks for them. `viberaven_validate_npm_package` (MCP) can look a new package name up on the public npm registry first.
@@ -26,24 +26,24 @@ Prefer `viberaven_check_readiness` when the VibeRaven MCP server is configured; 
 
 - Read `.viberaven/agent-tasklist.md` first, `.viberaven/gate-result.json` for the verdict (`clear`, `warning` or `not_clear`), and `.viberaven/context-map.json` for compact agent context.
 - `.viberaven/agent-summary.md` holds scan context and `.viberaven/launch-playbook.md` the full checklist.
-- Use `npx -y viberaven@1.6.1 next --json` or `npx -y viberaven@1.6.1 prompt --gap <id>` for one focused repo-code fix at a time.
-- `npx -y viberaven@1.6.1 fix` lists gaps with safe automatic recipes; preview one with `npx -y viberaven@1.6.1 fix --gap <id> --dry-run`, apply it with `npx -y viberaven@1.6.1 fix --gap <id>`.
-- `npx -y viberaven@1.6.1 --heal --plan --gap <id>` writes a non-destructive plan; `npx -y viberaven@1.6.1 --heal --apply --gap <id> --yes` applies supported repo-code recipes; the rls_disabled one enables RLS without policies, so it waits for the user's yes.
-- For the Vercel + Supabase repo evidence (RLS in migrations, pooler port, service role key), run `npx -y viberaven@1.6.1 audit --vercel-supabase`.
-- `npx -y viberaven@1.6.1 --strict` returns the verdict as an exit code for CI when the user wants one (exit 1 when `gate.status` is `not_clear`).
-- Preview these rules with `npx -y viberaven@1.6.1 init --agents all --dry-run`.
-- Cleanup is non-destructive: `npx -y viberaven@1.6.1 clean --plan` writes a reviewable cleanup plan.
+- Use `npx -y viberaven@1.6.2 next --json` or `npx -y viberaven@1.6.2 prompt --gap <id>` for one focused repo-code fix at a time.
+- `npx -y viberaven@1.6.2 fix` lists gaps with safe automatic recipes; preview one with `npx -y viberaven@1.6.2 fix --gap <id> --dry-run`, apply it with `npx -y viberaven@1.6.2 fix --gap <id>`.
+- `npx -y viberaven@1.6.2 --heal --plan --gap <id>` writes a non-destructive plan; `npx -y viberaven@1.6.2 --heal --apply --gap <id> --yes` applies supported repo-code recipes; the rls_disabled one enables RLS without policies, so it waits for the user's yes.
+- For the Vercel + Supabase repo evidence (RLS in migrations, pooler port, service role key), run `npx -y viberaven@1.6.2 audit --vercel-supabase`.
+- `npx -y viberaven@1.6.2 --strict` returns the verdict as an exit code for CI when the user wants one (exit 1 when `gate.status` is `not_clear`).
+- Preview these rules with `npx -y viberaven@1.6.2 init --agents all --dry-run`.
+- Cleanup is non-destructive: `npx -y viberaven@1.6.2 clean --plan` writes a reviewable cleanup plan.
 - Provider dashboard checks are not cleared by repo-code edits. Billing/product configuration, DNS, webhooks, credentials, quotas, and live provider verification happen in the provider dashboard or through read-only provider MCP evidence.
 
 ## VibeRaven Fix Loop
 
 After a check, read `.viberaven/agent-tasklist.md` for the prioritized task list.
 
-1. Run `npx -y viberaven@1.6.1 check`. Exit code 1 means blockers exist.
+1. Run `npx -y viberaven@1.6.2 check`. Exit code 1 means blockers exist.
 2. For each repo-code task where `requiresUserAction: false`:
-   - If the task has an MCP line, call `viberaven_heal_apply { gap: "<gapId>", yes: true }` or run `npx -y viberaven@1.6.1 fix --gap <gapId>`
-   - Otherwise, patch the gap directly using `npx -y viberaven@1.6.1 prompt --gap <id>` guidance.
-3. After a full batch of fixes, run `npx -y viberaven@1.6.1 check` once, not after every single fix.
+   - If the task has an MCP line, call `viberaven_heal_apply { gap: "<gapId>", yes: true }` or run `npx -y viberaven@1.6.2 fix --gap <gapId>`
+   - Otherwise, patch the gap directly using `npx -y viberaven@1.6.2 prompt --gap <id>` guidance.
+3. After a full batch of fixes, run `npx -y viberaven@1.6.2 check` once, not after every single fix.
 4. For a task where `requiresUserAction: true`, show the user the task's action from the tasklist (a provider step with its dashboard, or a repo change that needs their yes, such as enabling RLS without policies), and wait for their answer. Apply a repo change only after they agree. The task's MCP line leaves out `yes: true`; add it once they agree.
 5. Stop when `gate.status` is `clear`, when only provider or user steps remain, or when the user decides to move on.
 

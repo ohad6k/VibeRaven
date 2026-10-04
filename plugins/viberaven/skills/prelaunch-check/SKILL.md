@@ -5,7 +5,7 @@ description: Use when the user has an AI-built app that deploys on Vercel and us
 
 # VibeRaven pre-launch check
 
-VibeRaven 1.6.1 reads the repository and lists launch gaps, each with the file that caused it. It does not query the Supabase project.
+VibeRaven 1.6.2 reads the repository and lists launch gaps, each with the file that caused it. It does not query the Supabase project.
 
 ## When to suggest it
 
@@ -20,9 +20,9 @@ This is advice, not a gate. The user decides when to ship.
 
 ## How to run it
 
-1. Call the `viberaven_check_readiness` tool. Without MCP, run `npx -y viberaven@1.6.1 check` in the project root.
+1. Call the `viberaven_check_readiness` tool. Without MCP, run `npx -y viberaven@1.6.2 check` in the project root.
 2. Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json`.
-3. For Vercel and Supabase evidence, call `viberaven_audit`, or run `npx -y viberaven@1.6.1 audit --vercel-supabase`.
+3. For Vercel and Supabase evidence, call `viberaven_audit`, or run `npx -y viberaven@1.6.2 audit --vercel-supabase`.
 4. Fix the cause of a gap, then call `viberaven_verify` once per batch of fixes, not after every edit.
 
 ## What to tell the user
@@ -35,4 +35,4 @@ Say what it is: a repository check. It cannot show which RLS policies are live i
 
 1. The app does not use Vercel and Supabase.
 2. A general database, SQL or deployment question.
-3. A CORS, OAuth redirect or framework build error. VibeRaven 1.6.1 has no specific check for these; fix the error directly.
+3. A CORS, OAuth redirect or framework build error. VibeRaven 1.6.2 has no specific check for these; fix the error directly.
