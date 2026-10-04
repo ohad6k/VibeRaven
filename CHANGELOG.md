@@ -7,10 +7,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-## [1.6.2] - 2026-10-04
+## [1.6.2] - 2026-10-03
 
 - `viberaven`, `@viberaven/cli` and `@viberaven/mcp` ship together as 1.6.2.
-- A write policy whose name says owners or admins, while its SQL checks nobody, now says so in the finding.
+- Open-policy findings (`rls_policy_allows_all_read`, `rls_policy_allows_all_write`) now say when the policy's name promises owners, admins or members but the SQL checks nobody, and when a policy names the service role, which bypasses row level security and never needs one.
 
 ## [1.6.1] - 2026-10-01
 

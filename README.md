@@ -113,7 +113,7 @@ jobs:
       - uses: ohad6k/viberaven-action@v1
 ```
 
-A pull request gets one comment with what the change added or fixed. A push to `main` gets a commit comment when there is a blocker. It is advice by default; `fail-on-blockers: 'true'` gates merges. `npx -y viberaven@1.6.2 init --github` writes a pull-request-only version of this workflow without the Action.
+A pull request gets one comment with what the change added or fixed. A push to `main` gets a commit comment when there is a blocker. It is advice by default; with `fail-on-blockers: 'true'` the job fails when it finds a blocker, and your branch protection decides what that means for merging. `npx -y viberaven@1.6.2 init --github` writes a pull-request-only version of this workflow without the Action.
 
 ## Install for AI agents
 
