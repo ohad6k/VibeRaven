@@ -1,18 +1,20 @@
 # VibeRaven public proof samples
 
-Real output from `npx -y viberaven@1.6.3 scan` (1.5.3) on the example template in `examples/nextjs-supabase-vercel-production-ready-template`, which holds agent rule files and no app code. The local project path is replaced with `.`, the public repo export pins the `npx` commands in these files to 1.5.3 (the CLI itself prints them without a version), and in `agent-tasklist.sample.md` the dash the CLI prints in "No automated recipe; see scanner hint." is written as a semicolon. Nothing else is edited. No secrets or private project IDs.
+These samples preserve output originally captured with CLI 1.5.3 on the example template in `examples/nextjs-supabase-vercel-production-ready-template`, which holds agent rule files and no app code. The counts and findings are historical; they have not been recaptured with the current release.
 
-To regenerate, run this in the example template folder (local, no login), then copy `.viberaven/gate-result.json` and `.viberaven/agent-tasklist.md` here:
+The local project path is replaced with `.`. The public repo export adapts reproduction and follow-up `npx` commands in these samples to the current release; the CLI originally printed them without a version. The command header in `terminal-scan.sample.txt` is a current reproduction instruction, followed by the original CLI 1.5.3 stdout with its local path replaced. In `agent-tasklist.sample.md`, the dash the CLI prints in "No automated recipe; see scanner hint." is written as a semicolon. No secrets or private project IDs.
+
+To collect a fresh result, run this in the example template folder (local, no login), then compare `.viberaven/gate-result.json` and `.viberaven/agent-tasklist.md` with the historical samples. A current release can return different findings and counts:
 
 ```bash
-npx -y viberaven@1.6.3 scan
+npx -y viberaven@1.6.4 scan
 ```
 
 Files:
 
-- `gate-result.sample.json`: machine verdict (`gate.status` is `not_clear`)
-- `agent-tasklist.sample.md`: the prioritized task list the scan writes
-- `terminal-scan.sample.txt`: stdout from `npx -y viberaven@1.6.3 scan`
+- `gate-result.sample.json`: original machine verdict (`gate.status` is `not_clear`)
+- `agent-tasklist.sample.md`: original task list with exported follow-up commands adapted to the current release
+- `terminal-scan.sample.txt`: current reproduction command header and original CLI 1.5.3 stdout
 
 The scan reads repo files only. On a template with no app code, some stack rows name tools the template does not use, such as Vue and Netlify. A `clear` result covers the repo checks only; it is not a security audit or a live check of Supabase or Vercel.
 

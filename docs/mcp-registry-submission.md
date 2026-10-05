@@ -2,18 +2,18 @@
 
 VibeRaven's MCP server is published in the official MCP Registry.
 
-Checked 2026-10-01 against the registry search endpoint:
+The release configuration below targets the current package version. Verify the registry publication with the search endpoint before claiming it is live:
 
 - **Registry name:** `io.github.ohad6k/viberaven`
-- **Registry status:** `active`
-- **Latest registry version:** `1.6.3`
-- **npm package:** `@viberaven/mcp` version `1.6.3`
+- **Target registry version:** `1.6.4`
+- **npm package:** `@viberaven/mcp` version `1.6.4`
 
-The direct `/v0/servers/io.github.ohad6k/viberaven` path can return 404 because
-the public lookup path is the search endpoint. Check it with:
+Use the stable API's latest-version endpoint, with the slash in the server name
+URL-encoded. The search endpoint is another way to inspect the listing:
 
 ```bash
-curl -sL "https://registry.modelcontextprotocol.io/v0/servers?search=viberaven"
+curl -sL "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.ohad6k%2Fviberaven/versions/latest"
+curl -sL "https://registry.modelcontextprotocol.io/v0.1/servers?search=viberaven&version=latest"
 ```
 
 ## Server
@@ -21,7 +21,7 @@ curl -sL "https://registry.modelcontextprotocol.io/v0/servers?search=viberaven"
 - **Name:** `io.github.ohad6k/viberaven`
 - **Description:** Local app readiness checks, provider context, and release verification for AI coding agents.
 - **Package:** `@viberaven/mcp`
-- **Run:** `npx -y @viberaven/mcp@1.6.3`
+- **Run:** `npx -y @viberaven/mcp@1.6.4`
 
 It reads the repository and writes results to `.viberaven/`. It does not query the live database. The results are advice, not a gate: the user decides when to ship.
 
@@ -31,7 +31,7 @@ It reads the repository and writes results to `.viberaven/`. It does not query t
 {
   "viberaven": {
     "command": "npx",
-    "args": ["-y", "@viberaven/mcp@1.6.3"]
+    "args": ["-y", "@viberaven/mcp@1.6.4"]
   }
 }
 ```
