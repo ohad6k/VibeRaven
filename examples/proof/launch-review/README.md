@@ -19,6 +19,16 @@ If the app is not a Git repository, record the revision as unavailable and descr
 
 Read `.viberaven/agent-tasklist.md` for findings and `.viberaven/gate-result.json` for the verdict. A completed check exits `1` when it finds blockers. If the command fails before producing a result, record the failure rather than treating it as a verdict.
 
+A completed `check` can exit `0` while reporting warnings. For example, a policy using `SELECT ... USING (true)` is a warning: review whether every granted caller should read every row. It can be appropriate for a public catalog and inappropriate for private notes. Record the finding and intended access rule even when the default command passes.
+
+If your CI policy requires warnings to fail the job too, use the existing warning mode:
+
+```bash
+npx -y viberaven@1.6.3 --strict=warning
+```
+
+The default `check` and `--strict` fail on blockers; `--strict=warning` also fails when warnings remain. A command failure before a completed scan still needs investigation. Choose this threshold deliberately, and retain the findings in the review record.
+
 Use the [missing-RLS example](../missing-rls/) to inspect a reproducible finding and its migration change. For your own app, establish intended access rules before changing policies. Fix an agreed batch of findings, then rerun:
 
 ```bash
@@ -26,6 +36,8 @@ npx -y viberaven@1.6.3 check
 ```
 
 A `clear` result covers the repository checks. It does not establish production readiness, deployed policies, successful payments, or client ownership.
+
+For a repeatable comparison of RLS findings and default exit thresholds, see the [eight-case RLS comparison](../rls-comparison/). It tests published VibeRaven 1.6.3 and a pinned Python scanner on identical synthetic migrations, with local PostgreSQL checks and stated limits.
 
 ## Build the review record
 

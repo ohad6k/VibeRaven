@@ -7,6 +7,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Missing-RLS findings and audit summaries describe access as depending on table grants, instead of assuming an anonymous visitor can read and change every row. Detection, severity and default exit behavior are unchanged.
+- The launch review guide explains default warning thresholds and `--strict=warning`. A reproducible eight-case RLS comparison includes pinned scanners, identical SQL fixtures and local PostgreSQL checks.
+
 ## [1.6.3] - 2026-10-04
 
 - `viberaven`, `@viberaven/cli` and `@viberaven/mcp` ship together as 1.6.3.

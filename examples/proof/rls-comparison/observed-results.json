@@ -1,0 +1,173 @@
+{
+  "executed_date": "2026-10-05",
+  "authorship": "VibeRaven-maintainer-authored synthetic comparison, not independent endorsement",
+  "viberaven_version": "1.6.3",
+  "rls_guard_version": "0.1.0",
+  "rls_guard_commit": "ba63656f6d1b7cfae7f3be32e9a0a1749659fe5c",
+  "omitted_unrelated_finding": "VibeRaven missing_monitoring info in every case",
+  "cases": [
+    {
+      "case": "missing_rls",
+      "expected": "Authenticated cross-user access: no RLS.",
+      "rls-guard": {
+        "exit_code": 1,
+        "sql_findings": [
+          [
+            "RLS003",
+            "HIGH"
+          ]
+        ]
+      },
+      "viberaven": {
+        "exit_code": 1,
+        "sql_findings": [
+          [
+            "data_api_grant_without_rls",
+            "critical"
+          ],
+          [
+            "rls_disabled",
+            "critical"
+          ]
+        ]
+      }
+    },
+    {
+      "case": "valid_split",
+      "expected": "Owner CRUD isolation intended; policies in later migration.",
+      "rls-guard": {
+        "exit_code": 0,
+        "sql_findings": []
+      },
+      "viberaven": {
+        "exit_code": 0,
+        "sql_findings": []
+      }
+    },
+    {
+      "case": "private_select_true",
+      "expected": "Authenticated cross-user reads of private notes.",
+      "rls-guard": {
+        "exit_code": 1,
+        "sql_findings": [
+          [
+            "RLS001",
+            "CRITICAL"
+          ]
+        ]
+      },
+      "viberaven": {
+        "exit_code": 0,
+        "sql_findings": [
+          [
+            "rls_policy_allows_all_read",
+            "warning"
+          ]
+        ]
+      }
+    },
+    {
+      "case": "update_using_fallback",
+      "expected": "Owner UPDATE is constrained by implicit WITH CHECK equal to USING; insert/delete denied.",
+      "rls-guard": {
+        "exit_code": 1,
+        "sql_findings": [
+          [
+            "RLS004",
+            "HIGH"
+          ]
+        ]
+      },
+      "viberaven": {
+        "exit_code": 0,
+        "sql_findings": []
+      }
+    },
+    {
+      "case": "public_catalog",
+      "expected": "Intentional public catalog reads; no private-data leak intended.",
+      "rls-guard": {
+        "exit_code": 1,
+        "sql_findings": [
+          [
+            "RLS001",
+            "CRITICAL"
+          ]
+        ]
+      },
+      "viberaven": {
+        "exit_code": 0,
+        "sql_findings": [
+          [
+            "rls_policy_allows_all_read",
+            "warning"
+          ]
+        ]
+      }
+    },
+    {
+      "case": "later_disable",
+      "expected": "Authenticated cross-user access after later DISABLE RLS.",
+      "rls-guard": {
+        "exit_code": 1,
+        "sql_findings": [
+          [
+            "RLS002",
+            "HIGH"
+          ]
+        ]
+      },
+      "viberaven": {
+        "exit_code": 1,
+        "sql_findings": [
+          [
+            "data_api_grant_without_rls",
+            "critical"
+          ],
+          [
+            "rls_disabled",
+            "critical"
+          ]
+        ]
+      }
+    },
+    {
+      "case": "quoted_valid",
+      "expected": "Owner CRUD isolation intended with quoted qualified identifiers.",
+      "rls-guard": {
+        "exit_code": 0,
+        "sql_findings": []
+      },
+      "viberaven": {
+        "exit_code": 0,
+        "sql_findings": []
+      }
+    },
+    {
+      "case": "commented_enable",
+      "expected": "Authenticated cross-user access: comment does not enable RLS.",
+      "rls-guard": {
+        "exit_code": 1,
+        "sql_findings": [
+          [
+            "RLS003",
+            "HIGH"
+          ]
+        ]
+      },
+      "viberaven": {
+        "exit_code": 1,
+        "sql_findings": [
+          [
+            "data_api_grant_without_rls",
+            "critical"
+          ],
+          [
+            "rls_disabled",
+            "critical"
+          ]
+        ]
+      }
+    }
+  ]
+}

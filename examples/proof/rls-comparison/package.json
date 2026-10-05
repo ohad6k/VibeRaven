@@ -1,0 +1,12 @@
+{
+  "name": "viberaven-rls-comparison-reproduction",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify:runtime": "node verify-fixtures.mjs"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.8"
+  }
+}

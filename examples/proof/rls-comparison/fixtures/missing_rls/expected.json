@@ -1,0 +1,10 @@
+{
+  "case": "missing_rls",
+  "expected": "Authenticated cross-user access: no RLS.",
+  "assumptions": [
+    "Synthetic empty database migration context; public schema available to roles.",
+    "authenticated and anon roles lack BYPASSRLS and are not table owners.",
+    "auth.uid() returns the current authenticated UUID; only listed grants/policies exist."
+  ],
+  "live_database_tested": false
+}
