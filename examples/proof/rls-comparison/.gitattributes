@@ -1,0 +1,2 @@
+# Preserve exact fixture bytes, including their original line endings.
+fixtures/** -text whitespace=cr-at-eol
