@@ -48,6 +48,10 @@ The Studio opens in your browser and runs on your machine: it detects your stack
 
 Everything the agent needs is also written to `.viberaven/` as markdown and JSON, readable by any tool and versioned by git.
 
+## Before deploying a Vercel + Supabase app
+
+Want to find Supabase tables missing RLS in your migrations before launch? [Run the before-and-after example](./examples/proof/missing-rls/). It shows the exact migration finding and how the repo verdict changes after owner policies are added. The check reads repository files; deployed database policies still need separate verification.
+
 ## What the Studio gives you
 
 | Capability | What it does |

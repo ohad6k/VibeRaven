@@ -15,3 +15,11 @@ Files:
 - `terminal-scan.sample.txt`: stdout from `npx -y viberaven@1.6.3 scan`
 
 The scan reads repo files only. On a template with no app code, some stack rows name tools the template does not use, such as Vue and Netlify. A `clear` result covers the repo checks only; it is not a security audit or a live check of Supabase or Vercel.
+
+## Reproduce a migration finding
+
+[Find missing RLS before deployment](./missing-rls/) compares two small synthetic fixtures using the published CLI. It includes the SQL change, expected findings and exit codes, and the live-database verification boundary.
+
+## Prepare a launch or client handoff review
+
+[Review an AI-built app before launch or client handoff](./launch-review/) connects repository findings to a blank evidence record, with prompts for a readiness check, a Lovable + Supabase launch, and a client handoff.
