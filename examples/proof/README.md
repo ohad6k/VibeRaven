@@ -15,3 +15,7 @@ Files:
 - `terminal-scan.sample.txt`: stdout from `npx -y viberaven@1.6.3 scan`
 
 The scan reads repo files only. On a template with no app code, some stack rows name tools the template does not use, such as Vue and Netlify. A `clear` result covers the repo checks only; it is not a security audit or a live check of Supabase or Vercel.
+
+## Reproduce a migration finding
+
+[Find missing RLS before deployment](./missing-rls/) compares two small synthetic fixtures using the published CLI. It includes the SQL change, expected findings and exit codes, and the live-database verification boundary.
