@@ -1,7 +1,7 @@
 {
   "name": "viberaven",
-  "description": "Repository check before launch for AI-built apps that deploy on Vercel and use Supabase. Starts the VibeRaven MCP server locally with npx (@viberaven/mcp 1.6.3), which reads repo files, including local .env files, and writes results to .viberaven/. Advice for the user, not a security audit or a live database test.",
-  "version": "1.6.3",
+  "description": "Repository check before launch for AI-built apps that deploy on Vercel and use Supabase. Starts the VibeRaven MCP server locally with npx (@viberaven/mcp 1.6.4), which reads repo files, including local .env files, and writes results to .viberaven/. Advice for the user, not a security audit or a live database test.",
+  "version": "1.6.4",
   "author": { "name": "Ohad Krispin" },
   "homepage": "https://viberaven.dev",
   "repository": "https://github.com/ohad6k/VibeRaven",
@@ -11,7 +11,7 @@
   "mcpServers": {
     "viberaven": {
       "command": "npx",
-      "args": ["-y", "@viberaven/mcp@1.6.3"]
+      "args": ["-y", "@viberaven/mcp@1.6.4"]
     }
   }
 }

@@ -42,4 +42,4 @@ Split into four short sections so code-fixable items stay separate from provider
 
 ---
 
-**Before you ship:** work through every row, then regenerate with `npx -y viberaven@1.6.3`. `gate.status: clear` covers the repo checks only; the provider rows need the dashboard, and you decide when to ship.
+**Before you ship:** work through every row, then regenerate with `npx -y viberaven@1.6.4`. `gate.status: clear` covers the repo checks only; the provider rows need the dashboard, and you decide when to ship.

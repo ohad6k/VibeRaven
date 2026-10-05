@@ -1,4 +1,7 @@
-$ npx -y viberaven@1.6.3 scan
+Historical capture: CLI 1.5.3. The findings and counts below are from that capture.
+Reproduction command (adapted to the current release by the public export):
+$ npx -y viberaven@1.6.4 scan
+Original captured stdout (CLI 1.5.3; local project path replaced with .):
 Scanning .… (local, offline)
 
 ┌──────────────────────────────────────────────┐

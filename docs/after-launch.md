@@ -14,13 +14,13 @@ for `viberaven check` / `viberaven fix` if you want a repository check
 first) and the Studio installed:
 
 ```bash
-npx -y viberaven@1.6.3
+npx -y viberaven@1.6.4
 ```
 
 ## The walkthrough
 
 1. **Open the Studio.**
-   Run `npx -y viberaven@1.6.3` in your repo and open the URL it prints. The
+   Run `npx -y viberaven@1.6.4` in your repo and open the URL it prints. The
    Studio detects your stack, finds your providers, and puts your git
    releases on a timeline — no login, no API key.
 

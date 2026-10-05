@@ -42,7 +42,7 @@ Useful official pages:
    - `vercel --version` or `npx vercel@62.0.0 --version`
    - `vercel whoami` or `npx vercel@62.0.0 whoami`
    Do not require them if browser/dashboard steps are the only available path.
-3. If VibeRaven is available, open the Studio with `npx -y viberaven@1.6.3` and use Vercel/GitHub provider context, release diff, and access-mode control before running irreversible commands.
+3. If VibeRaven is available, open the Studio with `npx -y viberaven@1.6.4` and use Vercel/GitHub provider context, release diff, and access-mode control before running irreversible commands.
 4. Never ask for passwords, cookies, tokens, API keys, or secret values. Ask the user to authenticate through official CLIs or provider dashboards.
 
 ## Launch Path

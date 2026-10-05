@@ -12,7 +12,7 @@ You need Node.js 20 or newer, npm with npx, and a local copy of the app you are 
 node --version
 git rev-parse HEAD
 git status --short
-npx -y viberaven@1.6.3 check
+npx -y viberaven@1.6.4 check
 ```
 
 If the app is not a Git repository, record the revision as unavailable and describe the files reviewed. In Windows PowerShell, use `npx.cmd` if execution policy blocks `npx`. The first run downloads the published package; the repository check then reads local files and writes results under `.viberaven/`.
@@ -24,7 +24,7 @@ A completed `check` can exit `0` while reporting warnings. For example, a policy
 If your CI policy requires warnings to fail the job too, use the existing warning mode:
 
 ```bash
-npx -y viberaven@1.6.3 --strict=warning
+npx -y viberaven@1.6.4 --strict=warning
 ```
 
 The default `check` and `--strict` fail on blockers; `--strict=warning` also fails when warnings remain. A command failure before a completed scan still needs investigation. Choose this threshold deliberately, and retain the findings in the review record.
@@ -32,12 +32,12 @@ The default `check` and `--strict` fail on blockers; `--strict=warning` also fai
 Use the [missing-RLS example](../missing-rls/) to inspect a reproducible finding and its migration change. For your own app, establish intended access rules before changing policies. Fix an agreed batch of findings, then rerun:
 
 ```bash
-npx -y viberaven@1.6.3 check
+npx -y viberaven@1.6.4 check
 ```
 
 A `clear` result covers the repository checks. It does not establish production readiness, deployed policies, successful payments, or client ownership.
 
-For a repeatable comparison of RLS findings and default exit thresholds, see the [eight-case RLS comparison](../rls-comparison/). It tests published VibeRaven 1.6.3 and a pinned Python scanner on identical synthetic migrations, with local PostgreSQL checks and stated limits.
+For a repeatable comparison of RLS findings and default exit thresholds, see the [eight-case RLS comparison](../rls-comparison/). It tests a pinned published VibeRaven baseline and a pinned Python scanner on identical synthetic migrations, with local PostgreSQL checks and stated limits.
 
 ## Build the review record
 
@@ -54,7 +54,7 @@ Before sharing the record or generated output, review it for sensitive informati
 ```text
 Review this app before deployment. Identify its framework, hosting, database,
 repository revision, and any uncommitted changes. If it is a Vercel + Supabase
-app, run npx -y viberaven@1.6.3 check from the app root and read its tasklist
+app, run npx -y viberaven@1.6.4 check from the app root and read its tasklist
 and repository verdict. Explain each finding with file evidence and propose one
 scoped fix at a time. Establish intended access rules before editing RLS.
 Rerun after an agreed batch. Record unresolved findings and live checks
@@ -68,7 +68,7 @@ Help review this Lovable app before launch. First establish whether it uses
 Lovable Cloud or my own Supabase project, where it is hosted, and which
 revision the local files represent. Review Lovable's available security
 findings. If this is a local Vercel + Supabase app, use
-npx -y viberaven@1.6.3 check for repository evidence. Plan separate checks
+npx -y viberaven@1.6.4 check for repository evidence. Plan separate checks
 for deployed policies, two-account data isolation, auth redirects, email
 delivery, and recovery. Use test accounts and only authorized environments.
 For every item, record the evidence or NOT CHECKED and the next owner.
@@ -79,7 +79,7 @@ For every item, record the evidence or NOT CHECKED and the next owner.
 ```text
 Prepare a client handoff review record for this app. Record the revision,
 target environment, date, and reviewer. If the app uses Vercel + Supabase,
-include npx -y viberaven@1.6.3 check findings and remaining repo work.
+include npx -y viberaven@1.6.4 check findings and remaining repo work.
 Separately record evidence for client ownership, provider settings,
 deployment access, auth, payments if used, and backups. List environment
 variable names and the client's secure source of values, never values.
