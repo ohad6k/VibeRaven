@@ -26,7 +26,7 @@
   </p>
 </div>
 
-VibeRaven is an open-source local cockpit for AI-built apps. Run `npx -y viberaven@1.6.4` in your repo and it connects your coding agent (Claude Code, Codex, Gemini) to the context it patches blind without, your architecture, providers, and releases, then lists the launch gaps it finds in your repo (auth, RLS, webhooks, deploy) before real users hit them. It is advice, not a gate: you decide when to ship. Local-first, no login.
+VibeRaven is a pre-deploy repository check for AI-built Next.js apps using Vercel and Supabase. Use it before launch or client handoff, and after migration or policy changes. It reports file evidence and agent tasks for missing RLS, permissive policies, browser-exposed service-role keys, environment variables missing from templates, and Stripe handlers without signature verification. Run `npx -y viberaven@1.6.4` in your repo to open Studio, which brings together findings, provider context, release diffs and work through a connected coding CLI. Repository findings do not prove live user isolation or replace a security audit. VibeRaven does not build or deploy your app; verify live policies and provider settings separately.
 
 ```bash
 npx -y viberaven@1.6.4
