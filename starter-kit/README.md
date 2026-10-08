@@ -98,7 +98,7 @@ The moment your agents write real code, they write your auth, your RLS, your web
 
 Building the team is the fun part. The foreman is the part that saves you at 3am.
 
-(This is exactly what I automate with VibeRaven, open source: `npx -y viberaven@1.6.4`)
+(This is exactly what I automate with VibeRaven, open source: `npx -y viberaven@1.6.7`)
 
 ---
 

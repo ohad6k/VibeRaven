@@ -18,7 +18,7 @@ Blank template. No check below has been performed. Keep a working copy private a
 | Exit code and whether the check completed | NOT CHECKED |
 | Repository verdict / evidence location | NOT CHECKED |
 
-Use `viberaven@1.6.4` for the pinned walkthrough. Fill the scanner field from the actual run. A repository result cannot establish the deployed revision or provider state.
+Use `viberaven@1.6.7` for the pinned walkthrough. Fill the scanner field from the actual run. A repository result cannot establish the deployed revision or provider state.
 
 ## Repository findings
 

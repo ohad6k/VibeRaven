@@ -5,6 +5,14 @@ All notable changes to VibeRaven are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.7] - 2026-10-09
+
+- Local Studio keeps manual Stripe handler and signature repairs reachable from Findings and Fix. Human consent remains separate from provider-dashboard work, and RLS confirmation warnings are preserved.
+- Repository results and heuristic scores describe tested source evidence. The optional hosted review retains upload preview and confirmation; it does not verify live deployments or traffic capacity.
+- Environment template filenames no longer cause filename-only credential blockers. Private-looking files and content-based credential checks remain.
+- Next.js not-found file presence uses discovered paths beyond the sampled file contents. Deployed route behavior still requires separate verification.
+- CLI, shim and MCP release pins are aligned to 1.6.7.
+
 ## [Unreleased]
 
 ## [1.6.4] - 2026-10-05
