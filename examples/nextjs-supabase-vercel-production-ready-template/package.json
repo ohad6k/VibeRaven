@@ -3,8 +3,8 @@
   "private": true,
   "description": "Agent-ready Next.js + Supabase + Vercel template with VibeRaven launch check scripts.",
   "scripts": {
-    "viberaven:gate": "npx -y viberaven@1.6.4 --agent-mode",
-    "viberaven:verify": "npx -y viberaven@1.6.4 --verify",
-    "viberaven:strict": "npx -y viberaven@1.6.4 --strict"
+    "viberaven:gate": "npx -y viberaven@1.6.7 --agent-mode",
+    "viberaven:verify": "npx -y viberaven@1.6.7 --verify",
+    "viberaven:strict": "npx -y viberaven@1.6.7 --strict"
   }
 }

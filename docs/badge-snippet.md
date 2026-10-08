@@ -5,7 +5,7 @@ Add to public discovery README or community templates:
 ```markdown
 [![VibeRaven enabled](https://img.shields.io/badge/VibeRaven-enabled-7c3aed?style=flat-square)](https://viberaven.dev)
 
-Before launch, run `npx -y viberaven@1.6.4 check` for a repository check of this Vercel + Supabase app. It is advice, not a gate.
+Before launch, run `npx -y viberaven@1.6.7 check` for a repository check of this Vercel + Supabase app. It is advice, not a gate.
 ```
 
 HTML variant:

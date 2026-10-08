@@ -11,13 +11,13 @@ A first pass over the repository before real users arrive. VibeRaven reads the p
 
 1. **Run the check** in the project root:
    ```bash
-   npx -y viberaven@1.6.4 check
+   npx -y viberaven@1.6.7 check
    ```
    If the VibeRaven MCP server is connected, call `viberaven_check_readiness` instead. The command exits 1 when it finds blockers. That is a result, not a crash.
 2. **Read the findings** from the terminal and from `.viberaven/agent-tasklist.md`. Explain the top one or two in plain words: what is exposed, to whom, and in which file.
-3. **Fix one gap at a time.** Prefer the printed fix, or preview a safe recipe with `npx -y viberaven@1.6.4 fix --gap <id> --dry-run` before applying it. Show the user the diff.
+3. **Fix one gap at a time.** Prefer the printed fix, or preview a safe recipe with `npx -y viberaven@1.6.7 fix --gap <id> --dry-run` before applying it. Show the user the diff.
 4. **Re-check once per batch of fixes,** not after every edit, and report what changed.
-5. **Say what the check cannot see.** Policies or settings changed only in the Supabase or Vercel dashboard are invisible to a repo check. For Vercel and Supabase evidence, run `npx -y viberaven@1.6.4 audit --vercel-supabase`. For CI, `--strict` turns the verdict into an exit code, but only if the user wants that.
+5. **Say what the check cannot see.** Policies or settings changed only in the Supabase or Vercel dashboard are invisible to a repo check. For Vercel and Supabase evidence, run `npx -y viberaven@1.6.7 audit --vercel-supabase`. For CI, `--strict` turns the verdict into an exit code, but only if the user wants that.
 6. **Compare with the live project, only if the user already connected the official Supabase MCP server.** Do not ask for credentials and do not set it up for this. Use read-only tools, and prefer a connection with `read_only=true`:
    - `get_advisors` with type `security`, for what Supabase itself flags on the live database.
    - `list_tables`, to see which live tables have RLS on.

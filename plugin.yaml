@@ -1,5 +1,5 @@
 name: viberaven
-version: 1.6.4
+version: 1.6.7
 description: VibeRaven Studio and coordinated architecture/production-context skill loops for AI-built apps.
 author: VibeRaven
 provides_commands:

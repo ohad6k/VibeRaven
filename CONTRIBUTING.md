@@ -70,7 +70,7 @@ When changing agent install guidance, preview rule installation in a throwaway
 project before recommending it:
 
 ```bash
-npx -y viberaven@1.6.4 init --agents all --dry-run
+npx -y viberaven@1.6.7 init --agents all --dry-run
 ```
 
 If you edit the example app under
