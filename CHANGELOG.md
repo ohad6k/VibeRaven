@@ -5,6 +5,17 @@ All notable changes to VibeRaven are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.8] - 2026-10-14
+
+- Studio can start a supported app preview and run a requested code change through a connected coding CLI, then show project checks, the running result and a diff. Ask mode returns a plan without editing; Edit and Full use the corresponding CLI access mode.
+- Claude Code runs record confirmed edits for attributed Undo. Changes that cannot be attributed or have changed again are left for manual review. Restores save backups. Shell-based edits and Codex/Gemini runs do not get automatic Undo in this release.
+- Action workspace Git calls disable repo-configured helpers, and a failed starting-state check prevents the agent from running. A Stop button rerender issue found in the browser walkthrough was fixed.
+- Dedicated provider setup actions remain labelled as planned demo scenes; they are not available auth, database, payment or deployment operations.
+- The last full check is kept for the folder it ran on and opens again from the Launch step after a reload or a new Studio session, with when it ran and a note that later changes are not in it. It is stored next to the VibeRaven sign-in in the per-user config directory, never inside the repository, and a malformed file is ignored.
+- Studio chrome is simpler: the VibeRaven raven and wordmark as on viberaven.dev, an Agents tab for the coding agents sheet, a plain close button on panels, two-line findings with one Fix action each, and one line for an agent that is already connected.
+- "Database queries with no row limit" is a repository fix in the listed files instead of a Supabase dashboard step.
+- CLI, shim and MCP release pins are aligned to 1.6.8.
+
 ## [1.6.7] - 2026-10-09
 
 - Local Studio keeps manual Stripe handler and signature repairs reachable from Findings and Fix. Human consent remains separate from provider-dashboard work, and RLS confirmation warnings are preserved.

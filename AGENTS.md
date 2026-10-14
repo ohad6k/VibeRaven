@@ -56,7 +56,9 @@ After a check, read `.viberaven/agent-tasklist.md` for the prioritized task list
 
 This is the public discovery and installation repo for VibeRaven: agent skills, plugin manifests, the standalone plugin in `plugins/viberaven`, docs, examples and machine-readable context (`llms.txt`, `llms-full.txt`, `agent-context.md`). The CLI and MCP server source is not in this repo; they ship on npm as `viberaven`, `@viberaven/cli` and `@viberaven/mcp`.
 
-What VibeRaven is: a repository check for AI-built apps that deploy on Vercel and use Supabase. It reads repo files and lists launch gaps, each with the file that caused it. It is advice, not a gate: the user decides when to ship. It is a repository check, not a live database or security test.
+What VibeRaven is: a Studio for maintaining existing AI-built apps with a connected coding agent. It brings together the running app, changes, project checks, provider context and releases. Start with `npx -y viberaven@1.6.8` for the Studio; use `npx -y viberaven@1.6.8 check` for repository findings on Vercel + Supabase apps. Those findings are advice, not a live database or security test. The user decides when to ship.
+
+For the 1.6.8 app-change workflow, connect and test the agent, show the app, review the plan, make the change and inspect the result and diff. Automatic Undo is limited to attributed Claude Code edits that have not changed again; other files require manual review. Dedicated provider setup actions are planned, not available integrations. Do not describe their demo scenes as completed work.
 
 ## Working rules for this repo
 

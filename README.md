@@ -1,5 +1,7 @@
 <div align="center">
-  <img src="./assets/banner.png" alt="VibeRaven: AI got your app to demo. VibeRaven gets it to production. The production protocol for AI-built apps. Open source, local-first, MIT." width="100%" />
+  <img src="./assets/logo.png" alt="VibeRaven" width="96" />
+  <h1>VibeRaven</h1>
+  <p>A workspace for maintaining the full-stack app you built with AI.</p>
 
   <p>
     <a href="https://viberaven.dev"><img src="https://img.shields.io/badge/Website-viberaven.dev-e8c15a?style=for-the-badge&logoColor=black" height="40" alt="Website" /></a>
@@ -19,34 +21,34 @@
   </p>
   <p>
     <a href="https://viberaven.dev">Website</a> ·
-    <a href="#your-first-5-minutes">Quickstart</a> ·
+    <a href="#your-first-app-change">Quickstart</a> ·
     <a href="#agent-skills">Agent skills</a> ·
     <a href="https://github.com/ohad6k/VibeRaven/releases">Releases</a> ·
     <a href="https://github.com/ohad6k/VibeRaven/discussions">Discussions</a>
   </p>
 </div>
 
-VibeRaven is a pre-deploy repository check for AI-built Next.js apps using Vercel and Supabase. Use it before launch or client handoff, and after migration or policy changes. It reports file evidence and agent tasks for missing RLS, permissive policies, browser-exposed service-role keys, environment variables missing from templates, and Stripe handlers without signature verification. Run `npx -y viberaven@1.6.7` in your repo to open Studio, which brings together findings, provider context, release diffs and work through a connected coding CLI. Repository findings do not prove live user isolation or replace a security audit. VibeRaven does not build or deploy your app; verify live policies and provider settings separately.
+Changing an app means more than asking an agent to edit code. You need to see the result, review what changed, run the project's checks and keep track of its services and releases. VibeRaven brings that work into one Studio for an existing app. Your connected coding agent makes the edits; the running app, diff and checks stay alongside its provider and version context.
 
 ```bash
-npx -y viberaven@1.6.7
+npx -y viberaven@1.6.8
 ```
 
-The Studio opens in your browser and runs on your machine: it detects your stack, finds your providers, shows your release history and diffs, and lists the launch gaps its offline checks find in your repo, with a readiness score. You decide when to ship. The local checks need no login and no API key, and there is no telemetry. "Run full check" is optional: it is a hosted check that needs a VibeRaven account and uses its allowance (see [Philosophy](#philosophy)).
+Run the command from your app's Git repository. You need Node.js 20 or later and a supported coding CLI installed and signed in for agent changes. VibeRaven checks the connection before use. Your coding agent's own access and usage limits still apply.
 
-## Your first 5 minutes
+The Studio and repository checks are free. Optional hosted full checks use a VibeRaven account and its allowance; see [Checks and accounts](#checks-and-accounts). Version 1.6.8 includes the app-change workflow below.
 
-1. **Run it.** `npx -y viberaven@1.6.7` in your project folder. The Studio opens in your browser and scans your repo offline.
-2. **Read your verdict.** The Studio shows a readiness score out of 100 and the blockers it found in your repo files. Pick one and hand it to your agent to fix.
-3. **Connect your coding agent.** Pick Codex, Claude Code, or Gemini CLI in the chat panel, hit **Test connection**, and choose how much access it gets (`ask`, `approve`, or `full`).
-4. **Give your agent the skills.** Install the six-skill pack and the plugin so Codex, Claude Code, and Gemini follow the same senior-engineer loop everywhere:
+## Your first app change
 
-   ```bash
-   npx -y skills@1.7.0 add ohad6k/VibeRaven --skill viberaven   # skills.sh pack
-   npx -y viberaven@1.6.7 init --agents all                     # agent rules in-repo
-   ```
+1. **Open your project.** Run `npx -y viberaven@1.6.8` in its folder. The Studio opens in your browser.
+2. **Connect your agent.** Open **Agents**, select your installed CLI, run **Test connection**, then choose **Use this agent**. The walkthrough for this release was tested with Claude Code.
+3. **Show your app.** Choose **Show my app** and start its development server. Preview availability depends on the project's dev script and supported setup.
+4. **Ask for a small change.** For example, change a heading in your app. Review the plan, choose the access mode and select **Make the change**. Ask mode plans without making changes; Edit permits repo edits; Full gives the supported CLI broader access.
+5. **Check the result.** Try the running app, read the project's check results and open **Review** for the diff. Missing tests are reported as unchecked; a page loading does not prove every feature works.
 
-Everything the agent needs is also written to `.viberaven/` as markdown and JSON, readable by any tool and versioned by git.
+With Claude Code, **Undo** can restore files attributed to confirmed agent edits if they have not changed again since the run. Files it cannot attribute stay for manual review. Shell-based edits and Codex/Gemini runs do not get automatic Undo in this release. Restores keep backups; there is no one-click redo yet.
+
+On Windows PowerShell, use `npx.cmd` if execution policy blocks `npx`. The [agent skills](#agent-skills) are optional; installing the whole pack is not required to try this workflow.
 
 ## Before deploying a Vercel + Supabase app
 
@@ -56,17 +58,21 @@ Want to find Supabase tables missing RLS in your migrations before launch? [Run 
 
 | Capability | What it does |
 | --- | --- |
-| **Agent chat on your repo** | Drive Codex, Claude Code, or Gemini CLI from one cockpit, with connection health and live terminal output. |
-| **Access modes** | `ask`, `approve`, or `full`. The mode changes the real agent command it runs, not just the UI copy. |
-| **Versions & releases** | Release diffs, tags, changelogs, and "what changed since the last working release" in plain English. |
-| **Providers via MCP** | Connect Supabase, Vercel, and Stripe. Provider status flows into agent prompts, and provider proof stays separate from repo-code fixes. |
+| **Agent work on your repo** | Use connected Claude Code, Codex or Gemini CLI, with a connection test and explicit access modes. |
+| **Running app and checks** | See the app preview, the requested change, project check results and the diff together. |
+| **Review and Undo** | Inspect changes from a run. Automatic Undo is limited to attributed Claude Code edits; other changes require manual review. |
+| **Services and provider context** | Keep detected services and available provider MCP status in view and pass context into agent work. Repo evidence and live provider evidence remain separate. |
+| **Versions and releases** | Compare release points and review what changed since an earlier version. |
+| **Repository checks** | Find file evidence for Vercel + Supabase gaps, including RLS migrations, client keys, environment templates and Stripe webhook verification. |
+
+Dedicated setup actions for Google/GitHub sign-in, databases, payments and deployment are planned. Their labelled demo scenes are not working provider integrations. Code changes do not establish that live provider settings or policies are correct.
 
 ## The terminal twin: `viberaven check`
 
 The same verdict without the Studio:
 
-- In a terminal or CI: `npx -y viberaven@1.6.7 check`
-- For coding agents: `npx -y viberaven@1.6.7 --agent-mode`
+- In a terminal or CI: `npx -y viberaven@1.6.8 check`
+- For coding agents: `npx -y viberaven@1.6.8 --agent-mode`
 - Windows PowerShell: use `npx.cmd` if `npx` is blocked by the execution policy.
 
 Output captured from the built VibeRaven 1.6.6 release candidate on a synthetic Next.js + Supabase app (project path shortened):
@@ -88,9 +94,9 @@ Fix: viberaven fix · Details: ~/my-app\.viberaven\agent-tasklist.md
 Each finding names its gap ID, and most name the file that caused it. The command exits `1` when there are blockers. Then:
 
 ```bash
-npx -y viberaven@1.6.7 fix            # list gaps with safe automatic recipes
-npx -y viberaven@1.6.7 fix --gap <id> # apply one recipe
-npx -y viberaven@1.6.7 --strict       # the verdict as an exit code for CI, if you want one (exit 1 on not_clear; warnings exit 0)
+npx -y viberaven@1.6.8 fix            # list gaps with safe automatic recipes
+npx -y viberaven@1.6.8 fix --gap <id> # apply one recipe
+npx -y viberaven@1.6.8 --strict       # the verdict as an exit code for CI, if you want one (exit 1 on not_clear; warnings exit 0)
 ```
 
 All results land in `.viberaven/` as markdown and JSON on disk (`agent-tasklist.md`, `gate-result.json`, `context-map.json`), so any agent and your git history can read them.
@@ -117,21 +123,21 @@ jobs:
       - uses: ohad6k/viberaven-action@v1
 ```
 
-A pull request gets one comment with what the change added or fixed. A push to `main` gets a commit comment when there is a blocker. It is advice by default; with `fail-on-blockers: 'true'` the job fails when it finds a blocker, and your branch protection decides what that means for merging. `npx -y viberaven@1.6.7 init --github` writes a pull-request-only version of this workflow without the Action.
+A pull request gets one comment with what the change added or fixed. A push to `main` gets a commit comment when there is a blocker. It is advice by default; with `fail-on-blockers: 'true'` the job fails when it finds a blocker, and your branch protection decides what that means for merging. `npx -y viberaven@1.6.8 init --github` writes a pull-request-only version of this workflow without the Action.
 
 ## Install for AI agents
 
 Make agents use release and provider context before they patch the repo:
 
 ```bash
-npx -y viberaven@1.6.7 init --agents all
-npx -y viberaven@1.6.7 doctor --agents
+npx -y viberaven@1.6.8 init --agents all
+npx -y viberaven@1.6.8 doctor --agents
 ```
 
 Preview without writing files:
 
 ```bash
-npx -y viberaven@1.6.7 init --agents all --dry-run
+npx -y viberaven@1.6.8 init --agents all --dry-run
 ```
 
 This installs bounded rules (`<!-- VIBERAVEN:START -->` ... `<!-- VIBERAVEN:END -->`) into:
@@ -164,14 +170,14 @@ See [agent-skills/](./agent-skills/) for the full pack.
 
 This repo also works as an agent **plugin**: `plugin.yaml`, `.claude-plugin/`, `.codex-plugin/`, and `gemini-extension.json` expose the six skills plus `/viberaven-work`, `/viberaven-help`, `/viberaven-production-context`, and `/viberaven-launch` commands to Claude Code, Codex, and Gemini CLI.
 
-For a smaller install, [plugins/viberaven](./plugins/viberaven/) is a standalone plugin for Claude Code and Cursor: one skill that says when a pre-launch pass fits a Vercel + Supabase app, plus the MCP server pinned to `@viberaven/mcp@1.6.7`.
+For a smaller install, [plugins/viberaven](./plugins/viberaven/) is a standalone plugin for Claude Code and Cursor: one skill that says when a pre-launch pass fits a Vercel + Supabase app, plus a version-pinned MCP server. Its manifests specify the package version; the plugin release is separate from the Studio quickstart above.
 
 ## MCP
 
 VibeRaven is listed in the MCP registry for agents that prefer tools over terminal commands:
 
 ```json
-{ "viberaven": { "command": "npx", "args": ["-y", "@viberaven/mcp@1.6.7"] } }
+{ "viberaven": { "command": "npx", "args": ["-y", "@viberaven/mcp@1.6.8"] } }
 ```
 
 Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_apply`, `viberaven_verify`, `viberaven_audit`, `viberaven_gate_result`, and `viberaven_validate_npm_package` (run it before adding npm dependencies).
@@ -179,17 +185,18 @@ Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_a
 ## Vercel + Supabase
 
 ```bash
-npx -y viberaven@1.6.7 audit --vercel-supabase
+npx -y viberaven@1.6.8 audit --vercel-supabase
 ```
 
 Repository evidence for RLS, service-role exposure, and pooler ports. It reads repo files only, so it cannot show which RLS policies are live in your Supabase project.
 
-## Philosophy
+## Checks and accounts
 
-- **Local-first.** The CLI and Studio run on your machine. No login, no API key, no telemetry. Local checks in the CLI and Studio are free with no quota. Hosted full checks (the Studio's "Run full check" from 1.5.0, and the VS Code extension) use your account's allowance: 2 on Free, 50 a month on [Pro](https://viberaven.dev/pricing).
+- **Studio and repository checks.** These run on your machine without a VibeRaven account. Agent changes use your connected coding CLI and its account; they are separate from the repository checks. The CLI has no telemetry.
+- **Hosted full checks.** These are optional and use your VibeRaven account's allowance: 2 on Free, 50 a month on [Pro](https://viberaven.dev/pricing). They are separate from using your own coding agent in the Studio.
 - **Markdown on disk.** All context lives in `.viberaven/` as plain files that your agent and your git history can read.
 - **Evidence over vibes.** Findings point at repo evidence. Provider dashboard state is never claimed from repo edits alone.
-- **Non-destructive.** Fix recipes are guarded, cleanup is plan-only, and nothing is pushed or deployed for you.
+- **Changes under your control.** Review the plan and access mode before the agent edits your project. Cleanup is plan-only. A clear repository check is not a security audit or proof that the deployed app works.
 
 ## Contributing
 
@@ -209,10 +216,10 @@ Contributions are welcome, and most of them need no private source access:
 
 ## License
 
-[MIT](./LICENSE). Current public release: `viberaven@1.6.7`.
+[MIT](./LICENSE). Current public release: `viberaven@1.6.8`.
 
 Built by Ohad Krispin ([github.com/ohad6k](https://github.com/ohad6k)).
 
 If VibeRaven helps you ship, star the repo so other AI app builders can find it. Use **Watch → Custom → Releases** for release notifications.
 
-> This public repo is the agent discovery and installation surface. Product source development happens in a private repository.
+> VibeRaven public repo is the agent discovery and installation surface. Product source code and service internals live in a private repository.
