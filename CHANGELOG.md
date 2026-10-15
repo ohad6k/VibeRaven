@@ -5,6 +5,34 @@ All notable changes to VibeRaven are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+## [1.6.12] - 2026-10-15
+
+- The preview is restarted, not only reloaded, when the dev script runs several processes (`concurrently`, `&`, `npm-run-all`) or uses `vite-node`, so a changed server is never left on its old code.
+- Undo and putting a file back answer as soon as the files are back; the preview restarts after, instead of holding Undo until the app answers again.
+- CLI, shim and MCP release pins are aligned to 1.6.12.
+
+## [1.6.11] - 2026-10-15
+
+- After a change, the preview runs the changed code. A dev command that does not reload by itself (`node server.js`, for example) is restarted after the agent's edits, after Undo and after putting a file back; before, it kept serving the code from before the change while "Page loads" passed. Next.js, Vite, nodemon, `--watch` and similar dev servers still only reload the page.
+- `viberaven connect` marks a plan from Ask with • and a stopped run with ■, not ✗, which stays for a run that failed.
+- CLI, shim and MCP release pins are aligned to 1.6.11.
+
+## [1.6.10] - 2026-10-15
+
+- Undo puts a file back byte for byte. In a repository checked out with `core.autocrlf` (common on Windows), a file the agent changed used to come back with LF line endings instead of its original CRLF. It now gets its exact earlier bytes, line endings and final newline included, and its diff shows only the lines the agent changed.
+- CLI, shim and MCP release pins are aligned to 1.6.10.
+
+## [1.6.9] - 2026-10-14
+
+- `viberaven connect --session <id> --token <code>` links a project folder to its app on viberaven.dev. Copy the line from the app page; it works once, for 10 minutes. While that terminal stays open, checks requested on the site run on your computer and only the summary and finding titles are sent back. Ctrl+C or closing the window disconnects. The connection is opt-in. Local Studio and repository checks remain available without a VibeRaven account; coding agents and optional hosted checks use their own network services.
+- Changes asked on viberaven.dev run through `connect` with your own coding agent (Claude Code, Codex or Gemini CLI), in Ask or Edit mode only, in the connected folder. The site shows the steps, the changed files, your app's checks and the running app, and Stop ends the run. A change also sends back the diff of the files it changed, so Review works on the site: secrets are redacted, env and key files are left out, and diffs are capped at 40 files of 20,000 characters each. Undo from the site restores only attributed Claude Code edits that have not changed again; other changes require manual review.
+- Studio: All actions lists what runs now as rows and what is coming as a wall of provider logos and icons, with search and a filter by kind.
+- Studio: the browser tab shows the same raven icon as viberaven.dev.
+- Website changes require sign-in: Free includes two changes per account; Pro includes up to 300 changes per billing month, separate from the full-check allowance. Coding-agent access and usage come from your own provider account.
+- CLI, shim and MCP release pins are aligned to 1.6.9.
+
 ## [1.6.8] - 2026-10-14
 
 - Studio can start a supported app preview and run a requested code change through a connected coding CLI, then show project checks, the running result and a diff. Ask mode returns a plan without editing; Edit and Full use the corresponding CLI access mode.
@@ -23,8 +51,6 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Environment template filenames no longer cause filename-only credential blockers. Private-looking files and content-based credential checks remain.
 - Next.js not-found file presence uses discovered paths beyond the sampled file contents. Deployed route behavior still requires separate verification.
 - CLI, shim and MCP release pins are aligned to 1.6.7.
-
-## [Unreleased]
 
 ## [1.6.4] - 2026-10-05
 
