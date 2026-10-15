@@ -5,6 +5,12 @@ All notable changes to VibeRaven are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.11] - 2026-10-15
+
+- After a change, the preview runs the changed code. A dev command that does not reload by itself (`node server.js`, for example) is restarted after the agent's edits, after Undo and after putting a file back; before, it kept serving the code from before the change while "Page loads" passed. Next.js, Vite, nodemon, `--watch` and similar dev servers still only reload the page.
+- `viberaven connect` marks a plan from Ask with • and a stopped run with ■, not ✗, which stays for a run that failed.
+- CLI, shim and MCP release pins are aligned to 1.6.11.
+
 ## [1.6.10] - 2026-10-15
 
 - Undo puts a file back byte for byte. In a repository checked out with `core.autocrlf` (common on Windows), a file the agent changed used to come back with LF line endings instead of its original CRLF. It now gets its exact earlier bytes, line endings and final newline included, and its diff shows only the lines the agent changed.
