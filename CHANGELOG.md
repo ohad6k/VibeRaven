@@ -7,6 +7,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- The GitHub and npm READMEs open with what `viberaven check` finds (tables without RLS, `using (true)` policies, service_role keys in client code, anon-callable security definer functions, the wrong pooler port, unverified Stripe webhooks) and add a gap table with the related Supabase Security Advisor lints, a real output example, when to use it and when not to, and how it compares with Supabase Security Advisor, OWASP ZAP, Semgrep, Snyk, CodeQL and Playwright.
+- The `viberaven` and `@viberaven/cli` npm descriptions and keywords name the same checks (adds `launch-checklist` and `vibe-coding`). The npm pages change on the next publish.
+
 ## [1.6.12] - 2026-10-15
 
 - The preview is restarted, not only reloaded, when the dev script runs several processes (`concurrently`, `&`, `npm-run-all`) or uses `vite-node`, so a changed server is never left on its old code.
