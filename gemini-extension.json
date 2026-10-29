@@ -1,6 +1,11 @@
 {
   "name": "viberaven",
   "version": "1.6.12",
-  "description": "VibeRaven Studio and architecture/production-context skills for AI-built apps. Use at the start of real app work and before changing release-sensitive code, providers, migrations, auth, billing, webhooks, or deploy flows.",
-  "contextFileName": "AGENTS.md"
+  "description": "Repository checks for AI-built apps on Supabase, Vercel and Stripe: RLS and migrations, grants and 42501 errors, a service role key in client code, env vars and webhook signatures. Local checks are free, with no login or API key. Includes the read-only VibeRaven guides MCP server.",
+  "contextFileName": "AGENTS.md",
+  "mcpServers": {
+    "viberaven-guides": {
+      "httpUrl": "https://viberaven.dev/mcp"
+    }
+  }
 }
