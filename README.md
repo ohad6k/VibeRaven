@@ -2,12 +2,12 @@
   <img src="./assets/logo.png" alt="VibeRaven" width="88" />
   <h1>VibeRaven</h1>
   <p>VibeRaven checks AI-built apps on Vercel + Supabase for launch gaps before you ship: tables without RLS, permissive policies such as <code>using (true)</code>, service_role keys in client code, anon-callable security definer functions, the wrong pooler port and unverified Stripe webhooks.</p>
-  <p>Run <code>npx -y viberaven@1.6.12 check</code> in your app's folder. It reads the repository on your machine, needs no account, and names the file and line for each gap.</p>
+  <p>Run <code>npx -y viberaven@1.7.1 check</code> in your app's folder. It reads the repository on your machine, needs no account, and names the file and line for each gap.</p>
 
   <p>
     <a href="https://www.npmjs.com/package/viberaven"><img src="https://img.shields.io/badge/npm-viberaven-cb3837?style=for-the-badge&logo=npm&logoColor=white" height="40" alt="Install from npm" /></a>
     &nbsp;
-    <a href="https://viberaven.dev/try"><img src="https://img.shields.io/badge/Try_it-viberaven.dev-e8c15a?style=for-the-badge&logoColor=black" height="40" alt="Try it on viberaven.dev" /></a>
+    <a href="https://viberaven.dev/try?src=readme&tool=try_it"><img src="https://img.shields.io/badge/Try_it-viberaven.dev-e8c15a?style=for-the-badge&logoColor=black" height="40" alt="Try it on viberaven.dev" /></a>
     &nbsp;
     <a href="https://discord.gg/ZAJvazz63Y"><img src="https://img.shields.io/badge/Join-Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="40" alt="Join the Discord" /></a>
   </p>
@@ -36,11 +36,11 @@
 Requires Node.js 20 or newer. From your app's project root:
 
 ```bash
-npx -y viberaven@1.6.12 check
+npx -y viberaven@1.7.1 check
 ```
 
-- In a terminal or CI: `npx -y viberaven@1.6.12 check`
-- For coding agents: `npx -y viberaven@1.6.12 --agent-mode`
+- In a terminal or CI: `npx -y viberaven@1.7.1 check`
+- For coding agents: `npx -y viberaven@1.7.1 check`
 - Windows PowerShell: use `npx.cmd` if `npx` is blocked by the execution policy.
 
 It reads `supabase/migrations`, your client and server code, `package.json` and `.env.example`. It does not connect to your Supabase project or send requests to your app. It exits `1` when it finds a blocker, so it also works as a CI step.
@@ -66,7 +66,7 @@ For a before-and-after run on one migration, see the [missing-RLS example](./exa
 
 ## Example output
 
-From `viberaven check` 1.6.12 on a synthetic Next.js + Supabase app with one of each gap (project path shortened):
+From `viberaven check` 1.7.1 on a synthetic Next.js + Supabase app with one of each gap (project path shortened):
 
 ```text
 viberaven check · ~/my-app
@@ -76,9 +76,7 @@ viberaven check · ~/my-app
 🔴 A policy lets anyone write every row  (rls_policy_allows_all_write)
    Policy "orders are editable" on public.orders (supabase/migrations/20260301000000_init.sql:13) lets anyone, signed in or not, update every row, to any values: using (true).
 🔴 Service role key used in client code  (service_role_key_in_client_code)
-   app/admin/page.tsx:4: creates a Supabase client with the service role key. This file ships to the browser, and the service role key skips RLS entirely. Move the call behind a server route or edge function and rotate the key.
-🟡 Supabase connection is not using the pooler port  (pooler_port_mismatch)
-   Found direct 5432 DATABASE_URL/POSTGRES_URL evidence. Vercel/serverless deployments should prefer Supabase transaction pooler port 6543.
+   app/admin/page.tsx:4: reads NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY. NEXT_PUBLIC_* variables are exposed to client code by Next.js, and the service role key skips RLS entirely. Move the call behind a server route or edge function and rotate the key.
 🟡 Security definer function callable by the Data API roles  (security_definer_function_executable)
    public.grant_credits(uuid, integer) at supabase/migrations/20260301000000_init.sql:15 is security definer, so it runs with its owner's rights and RLS does not limit what it touches. No migration revokes EXECUTE from public, anon, authenticated, so anyone holding the anon key can call it at /rest/v1/rpc/grant_credits. If only the server calls it, add: revoke execute on function public.grant_credits(uuid, integer) from public, anon, authenticated; Fix: revoke execute on function public.grant_credits(uuid, integer) from public, anon, authenticated;
 🟡 Stripe webhook does not verify the signature  (unverified_stripe_webhook)
@@ -90,7 +88,7 @@ viberaven check · ~/my-app
 ⚪ No error monitoring detected  (missing_monitoring)
    No Sentry/PostHog (or similar) instrumentation was found. Production errors will only surface when users complain.
 
-Verdict: ❌ 3 blockers, 5 warnings · score 5
+Verdict: ❌ 3 blockers, 4 warnings · score 5
 Fix: viberaven fix · Details: ~/my-app\.viberaven\agent-tasklist.md
 ```
 
@@ -134,11 +132,11 @@ The post has the method, the limits and the fix. An [earlier post](https://viber
 ## Fix the gaps
 
 ```bash
-npx -y viberaven@1.6.12 fix                         # list gaps with safe automatic recipes
-npx -y viberaven@1.6.12 fix --gap <id> --dry-run    # preview one recipe
-npx -y viberaven@1.6.12 fix --gap <id>              # apply it
-npx -y viberaven@1.6.12 audit --vercel-supabase     # RLS in migrations, pooler port, service_role key
-npx -y viberaven@1.6.12 --strict                    # the verdict as an exit code for CI (exit 1 on not_clear; warnings exit 0)
+npx -y viberaven@1.7.1 fix                         # list gaps with safe automatic recipes
+npx -y viberaven@1.7.1 fix --gap <id> --dry-run    # preview one recipe
+npx -y viberaven@1.7.1 fix --gap <id>              # apply it
+npx -y viberaven@1.7.1 audit --vercel-supabase     # RLS in migrations, pooler port, service_role key
+npx -y viberaven@1.7.1 --strict                    # the verdict as an exit code for CI (exit 1 on not_clear; warnings exit 0)
 ```
 
 The `rls_disabled` recipe adds a migration that enables RLS without policies, so browser reads return no rows until you add policies. Agree before applying it, then apply and test it through your database workflow.
@@ -165,16 +163,16 @@ jobs:
       - uses: ohad6k/viberaven-action@v1
 ```
 
-A pull request gets one comment with what the change added or fixed. A push to `main` gets a commit comment when there is a blocker. It is advice by default; with `fail-on-blockers: 'true'` the job fails when it finds a blocker, and your branch protection decides what that means for merging. `npx -y viberaven@1.6.12 init --github` writes a pull-request-only version of this workflow without the Action.
+A pull request gets one comment with what the change added or fixed. A push to `main` gets a commit comment when there is a blocker. It is advice by default; with `fail-on-blockers: 'true'` the job fails when it finds a blocker, and your branch protection decides what that means for merging. `npx -y viberaven@1.7.1 init --github` writes a pull-request-only version of this workflow without the Action.
 
 ## Install for AI agents
 
 Give coding agents the same context before they patch the repo:
 
 ```bash
-npx -y viberaven@1.6.12 init --agents all --dry-run   # preview
-npx -y viberaven@1.6.12 init --agents all
-npx -y viberaven@1.6.12 doctor --agents
+npx -y viberaven@1.7.1 init --agents all --dry-run   # preview
+npx -y viberaven@1.7.1 init --agents all
+npx -y viberaven@1.7.1 doctor --agents
 ```
 
 This installs bounded rules (`<!-- VIBERAVEN:START -->` ... `<!-- VIBERAVEN:END -->`) into:
@@ -214,14 +212,14 @@ For a smaller install, [plugins/viberaven](./plugins/viberaven/) is a standalone
 VibeRaven is listed in the MCP registry for agents that prefer tools over terminal commands:
 
 ```json
-{ "viberaven": { "command": "npx", "args": ["-y", "@viberaven/mcp@1.6.12"] } }
+{ "viberaven": { "command": "npx", "args": ["-y", "@viberaven/mcp@1.7.1"] } }
 ```
 
 Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_apply`, `viberaven_verify`, `viberaven_audit`, `viberaven_gate_result`, and `viberaven_validate_npm_package` (run it before adding npm dependencies).
 
 ## The local Studio
 
-`npx -y viberaven@1.6.12` with no command opens the Studio: a local page where your own coding agent (Claude Code, Codex or Gemini CLI) makes a change in your folder, and you see the steps, your checks, the running app and the diff, with Undo one click away.
+`npx -y viberaven@1.7.1` with no command opens the Studio: a local page where your own coding agent (Claude Code, Codex or Gemini CLI) makes a change in your folder, and you see the steps, your checks, the running app and the diff, with Undo one click away.
 
 <p align="center">
   <img src="./assets/studio-3d.png" alt="The VibeRaven Studio: the app's providers on the board, one-click starting actions, and the change box with Claude Code" width="900" />
@@ -231,7 +229,7 @@ Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_a
 
 The same workflow, fully local, with no account:
 
-1. **Open your project.** Run `npx -y viberaven@1.6.12` in its folder. The Studio opens in your browser.
+1. **Open your project.** Run `npx -y viberaven@1.7.1` in its folder. The Studio opens in your browser.
 2. **Connect your agent.** Open **Agents**, select your installed CLI, run **Test connection**, then choose **Use this agent**.
 3. **Show your app.** Choose **Show my app** to start its development server.
 4. **Ask for a small change.** Pick Ask to get a plan without edits, or Edit to let the agent change files, then select **Make the change**.
@@ -239,7 +237,7 @@ The same workflow, fully local, with no account:
 
 On Windows PowerShell, use `npx.cmd` if execution policy blocks `npx`.
 
-The Studio also runs on [viberaven.dev](https://viberaven.dev/try): sign in with Google, bring your repo, and connect your computer once. Your agent still works on your computer. The site includes 2 free changes, then [Pro](https://viberaven.dev/pricing) for 300 changes a month. Both need a coding agent you are signed in to; its own account and limits apply.
+The Studio also runs on [viberaven.dev](https://viberaven.dev/try?src=readme&tool=try_it): sign in with Google, bring your repo, and connect your computer once. Your agent still works on your computer. The site includes 2 free changes, then [Pro](https://viberaven.dev/pricing) for 300 changes a month. Both need a coding agent you are signed in to; its own account and limits apply.
 
 | | What the Studio gives you |
 | --- | --- |
@@ -277,7 +275,7 @@ Contributions are welcome, and most of them need no private source access:
 
 ## License
 
-[MIT](./LICENSE). Current public release: `viberaven@1.6.12`.
+[MIT](./LICENSE). Current public release: `viberaven@1.7.1`.
 
 Built by Ohad Krispin ([github.com/ohad6k](https://github.com/ohad6k)).
 

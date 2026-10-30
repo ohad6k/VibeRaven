@@ -51,6 +51,12 @@ For skill changes, prefer precise instructions over broad promises. Do not claim
 provider dashboard state, production readiness, or deployment proof unless the
 repo evidence and command output actually prove it.
 
+For a proposed deterministic rule, follow the [rule contribution recipe](docs/rules/README.md):
+provide synthetic positive and negative fixtures, official source/version scope,
+false-positive cases and redaction evidence for maintainer review. Public contributors
+can submit the recipe and fixtures here; private CLI implementation references in
+the guide are for maintainers with source access.
+
 ## Local Checks
 
 Docs-only changes can usually be reviewed by reading the rendered Markdown and
@@ -70,7 +76,7 @@ When changing agent install guidance, preview rule installation in a throwaway
 project before recommending it:
 
 ```bash
-npx -y viberaven@1.6.12 init --agents all --dry-run
+npx -y viberaven@1.7.1 init --agents all --dry-run
 ```
 
 If you edit the example app under

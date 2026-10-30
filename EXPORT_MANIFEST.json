@@ -1,7 +1,13 @@
 {
-  "exportedAt": "2026-10-15T12:48:14.444Z",
+  "exportedAt": "2026-10-30T14:02:28.403Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
+  "held": [
+    {
+      "path": "examples/nextjs-supabase-vercel-production-ready-template",
+      "reason": "Candidate publication and reviewed wrapper/workflows/README reconciliation required before re-including."
+    }
+  ],
   "files": [
     [
       "docs/public-repo/AGENTS.md",
@@ -84,7 +90,7 @@
       "assets/studio-transition.gif"
     ],
     [
-      "llms.txt",
+      "landing/public/llms.txt",
       "llms.txt"
     ],
     [
@@ -106,6 +112,34 @@
     [
       "docs/badge-snippet.md",
       "docs/badge-snippet.md"
+    ],
+    [
+      "docs/rules/README.md",
+      "docs/rules/README.md"
+    ],
+    [
+      "docs/public-repo/retained/docs/after-launch.md",
+      "docs/after-launch.md"
+    ],
+    [
+      "docs/public-repo/retained/docs/readme-video-troubleshooting.md",
+      "docs/readme-video-troubleshooting.md"
+    ],
+    [
+      "docs/public-repo/retained/docs/version-comparison.md",
+      "docs/version-comparison.md"
+    ],
+    [
+      "docs/public-repo/retained/examples/release-drift/release-proof-report.md",
+      "examples/release-drift/release-proof-report.md"
+    ],
+    [
+      "docs/public-repo/retained/examples/release-drift/v1.0-to-v1.1.md",
+      "examples/release-drift/v1.0-to-v1.1.md"
+    ],
+    [
+      "docs/public-repo/retained/starter-kit/README.md",
+      "starter-kit/README.md"
     ],
     [
       "skills.sh.json",
@@ -172,6 +206,10 @@
       "plugins/viberaven/LICENSE"
     ],
     [
+      "export/public-discovery-staging/plugins/viberaven/logo.png",
+      "plugins/viberaven/logo.png"
+    ],
+    [
       "CLAUDE.md",
       "CLAUDE.md"
     ],
@@ -208,12 +246,12 @@
       ".viberaven/mission-map.md"
     ],
     [
-      "examples/nextjs-supabase-vercel-production-ready-template",
-      "examples/nextjs-supabase-vercel-production-ready-template"
-    ],
-    [
       "examples/proof",
       "examples/proof"
+    ],
+    [
+      "examples/provider-drift",
+      "examples/provider-drift"
     ],
     [
       "skills",

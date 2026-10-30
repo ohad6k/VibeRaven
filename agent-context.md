@@ -15,7 +15,7 @@ VibeRaven is an agent context layer and repository check for AI-built apps on Ve
 
 ```bash
 # Install and run (no global install needed)
-npx -y viberaven@1.6.12 --agent-mode
+npx -y viberaven@1.7.1 --agent-mode
 
 # Or via MCP tool
 viberaven_check_readiness
@@ -31,7 +31,7 @@ MCP config for the VibeRaven server (`@viberaven/mcp`, listed in the official MC
 {
   "viberaven": {
     "command": "npx",
-    "args": ["-y", "@viberaven/mcp@1.6.12"]
+    "args": ["-y", "@viberaven/mcp@1.7.1"]
   }
 }
 ```
@@ -119,18 +119,18 @@ Install bounded VibeRaven rules into native AI instruction files (AGENTS.md, CLA
 
 **Valid agent targets:** all, codex, claude, cursor, cursor-legacy, copilot, github-copilot, gemini, devin, windsurf, cline, roo, junie, zed
 
-The CLI prints its commands, and `init` writes them, without a version (`viberaven`, not `viberaven@1.6.12`). The copy of this file in the ohad6k/VibeRaven repo pins the `npx` commands to the current release, including inside the real 1.6.2 output quoted here and in the action and tasklist blocks below.
+The CLI prints its commands, and `init` writes them, without a version (`viberaven`, not `viberaven@1.7.1`). The copy of this file in the ohad6k/VibeRaven repo pins the `npx` commands to the current release, including inside the real 1.6.2 output quoted here and in the action and tasklist blocks below.
 
-The init description below is from a real 1.6.6 run on 2026-10-07 in a disposable fixture, installed from the local candidate tarballs. It verifies local rule installation, not npm publication, independent adoption or live provider state. Historical 1.6.2 task and action output below retains its original version.
+The init description below is from a local 1.7.0-rc.5 candidate run on 2026-10-25 in a disposable fixture; this candidate is not published. It verifies local rule installation, not npm publication, independent adoption or live provider state. Historical 1.6.2 task and action output below retains its original version.
 
 What `init --agents all` (and `viberaven_init_rules` with `agents: "all"`) installs:
 
-- AGENTS.md, CLAUDE.md, GEMINI.md and `.github/copilot-instructions.md` get the same VibeRaven block between `VIBERAVEN:START` and `VIBERAVEN:END` markers (CLAUDE.md also gets an `@AGENTS.md` line). The block is scoped to AI-built apps on Vercel + Supabase: it suggests one `npx -y viberaven@1.6.12 check` pass before such an app launches or is handed off, after a Supabase migration or policy change, or when the user reports a production error about RLS, env vars, the database connection, the service role key or a Stripe webhook, and says the check is not needed for other stacks. It says "This is advice, not a gate: the user decides when to ship." and that the check is a repository check, not a live database test. Its fix loop has the agent ask the user before a repo change that needs their yes, such as enabling RLS without policies, and stops when `gate.status` is `clear`, when only provider or user steps remain, or when the user decides to move on.
+- AGENTS.md, CLAUDE.md, GEMINI.md and `.github/copilot-instructions.md` get a short VibeRaven block for Vercel + Supabase apps. It runs `npx -y viberaven@1.7.1 check` for relevant changes, fixes permitted repo-code blockers first, then has the agent ask the user before a repo change that needs their yes, such as enabling RLS without policies. It says "This is advice, not a gate: the user decides when to ship." A clean check is not proof of live database state or security. CLAUDE.md also gets an `@AGENTS.md` line.
 - `.cursor/rules/viberaven-core.mdc` always applies and carries a short version of the same advice. Three more Cursor rule files apply only when editing `supabase/**`, `vercel.json` or `.github/workflows/**`, or payment webhook files. They point the agent at the `.viberaven/agent-context.md` and `.viberaven/mission-map.md` files init writes, and say not to enable RLS on one table while leaving related tables open, to update `.env.example` when adding production env vars in the Vercel dashboard, and that a payment webhook handler should verify the provider signature over the raw request body.
-- init also writes `.viberaven/agent-context.md` and `.viberaven/mission-map.md` with the same scoped suggestion and a short read order.
-- `package.json` gets three scripts that run the CLI through npx with the `--agent-mode`, `--verify` and `--strict` flags: `viberaven:gate`, `viberaven:verify` and `viberaven:strict`. init does not pin a version in them; add one (for example `viberaven@<version>`) if you want every run to use the same release.
+- init also writes `.viberaven/agent-context.md`, `.viberaven/mission-map.md`, the full loop in `.viberaven/agent-rules.md`, and the project Skill in `.claude/skills/viberaven/SKILL.md`. A differing existing Skill is preserved for manual review. Selecting one short-rule target also installs its linked guide.
+- `package.json` gets `viberaven:check` (`npx -y viberaven@1.7.1 check`). Existing scripts and their values are preserved, including legacy scripts from an earlier init.
 
-The user can edit or skip any of these rules. Preview with `npx -y viberaven@1.6.12 init --agents all --dry-run` (or `dryRun: true`); the dry run does not show the `package.json` scripts. `.cursorrules` and the Devin, Windsurf, Cline, Roo, Junie and Zed files are written only when named in `agents`. Your own notes outside the VibeRaven markers stay. If an earlier version wrote gate rules into these files, running `init --agents all` again replaces the VibeRaven block, and `npx -y viberaven@1.6.12 doctor --agents` names any file that still has them.
+The user can edit or skip any of these rules. Preview with `npx -y viberaven@1.7.1 init --agents all --dry-run` (or `dryRun: true`); the dry run does not show the `package.json` scripts. `.cursorrules` and the Devin, Windsurf, Cline, Roo, Junie and Zed files are written only when named in `agents`. Your own notes outside the VibeRaven markers stay. If an earlier version wrote gate rules into these files, running `init --agents all` again replaces the VibeRaven block, and `npx -y viberaven@1.7.1 doctor --agents` names any file that still has them.
 
 ---
 
@@ -324,7 +324,7 @@ VIBERAVEN_PROVIDER_ACTION_START
     "envKeyName": null,
     "envKeyExample": null,
     "doneSignal": "Open Supabase dashboard step completed",
-    "verifyCommand": "npx -y viberaven@1.6.12 --verify",
+    "verifyCommand": "npx -y viberaven@1.7.1 --verify",
     "mcpAlternative": null
   }
 }
@@ -360,14 +360,14 @@ VIBERAVEN_NEXT_ACTION_START
   "mcpArgs": {
     "gap": "rls_disabled"
   },
-  "fallbackCommand": "npx -y viberaven@1.6.12 --heal --apply --gap rls_disabled --yes",
+  "fallbackCommand": "npx -y viberaven@1.7.1 --heal --apply --gap rls_disabled --yes",
   "requiresUserAction": true
 }
 VIBERAVEN_NEXT_ACTION_END
 ```
 
 - Every such task's action starts "Ask the user first: enabling RLS without policies makes browser reads return no rows until policies exist."
-- Timestamp-named migrations folder: if the user agrees, the heal (or `npx -y viberaven@1.6.12 fix --gap rls_disabled`) writes one new file, `<UTC yyyymmddHHMMss>_viberaven_enable_rls.sql`, in the same folder, with one `alter table ... enable row level security;` per table and no policies. It returns a warning saying so, and its rollback text says to delete that file. It does not apply the migration to any database. The next `check` reports the table as `rls_no_policies` (info) instead of a blocker.
+- Timestamp-named migrations folder: if the user agrees, the heal (or `npx -y viberaven@1.7.1 fix --gap rls_disabled`) writes one new file, `<UTC yyyymmddHHMMss>_viberaven_enable_rls.sql`, in the same folder, with one `alter table ... enable row level security;` per table and no policies. It returns a warning saying so, and its rollback text says to delete that file. It does not apply the migration to any database. The next `check` reports the table as `rls_no_policies` (info) instead of a blocker.
 - Any other layout (for example `0001_posts.sql`, `V1__init.sql`, SQL outside a `migrations` folder, or a later migration that turns RLS off on purpose): no MCP call and no fallback. The action names the statements to add by hand in a migration that follows the project's naming, plus the policies the app needs. `fix` does not list it, and `fix --gap rls_disabled` refuses and changes nothing.
 
 ---
@@ -400,10 +400,10 @@ Written to `.viberaven/gate-result.json` after every scan. Per-gap detail is in 
     "healDir": ".viberaven/heal"
   },
   "commands": {
-    "verify": "npx -y viberaven@1.6.12 --verify",
-    "strict": "npx -y viberaven@1.6.12 --strict",
-    "next": "npx -y viberaven@1.6.12 next --json",
-    "promptFirstGap": "npx -y viberaven@1.6.12 prompt --gap rls_disabled"
+    "verify": "npx -y viberaven@1.7.1 --verify",
+    "strict": "npx -y viberaven@1.7.1 --strict",
+    "next": "npx -y viberaven@1.7.1 next --json",
+    "promptFirstGap": "npx -y viberaven@1.7.1 prompt --gap rls_disabled"
   },
   "redaction": { "applied": false, "count": 0 }
 }
@@ -423,7 +423,7 @@ Written to `.viberaven/agent-tasklist.md` after every scan. Contains `## TASK-NN
 **Fix type:** provider-action  
 **Action:** Create a project or open your existing Supabase project.  
 **Exact fix:** No automated recipe — see scanner hint.  
-**Verify:** `npx -y viberaven@1.6.12 --verify`  
+**Verify:** `npx -y viberaven@1.7.1 --verify`  
 **Requires user action:** true
 
 **Provider action:**
@@ -440,9 +440,9 @@ A real repo-code block from 1.6.2 that needs the user's yes, from a repo with a 
 
 **Fix type:** repo-code  
 **File:** `supabase/migrations/20260901000000_posts.sql`  
-**Action:** Ask the user first: enabling RLS without policies makes browser reads return no rows until policies exist. If they agree, `npx -y viberaven@1.6.12 fix --gap rls_disabled` writes it: a new migration next to this one that enables row level security on each table listed in the gap detail. It adds no policies: add the ones the app needs, then apply the migration to the database the way this project applies migrations.  
+**Action:** Ask the user first: enabling RLS without policies makes browser reads return no rows until policies exist. If they agree, `npx -y viberaven@1.7.1 fix --gap rls_disabled` writes it: a new migration next to this one that enables row level security on each table listed in the gap detail. It adds no policies: add the ones the app needs, then apply the migration to the database the way this project applies migrations.  
 **Exact fix:** Add a Supabase migration that enables row level security and creates explicit policies for every user-facing table (ALTER TABLE ... ENABLE ROW LEVEL SECURITY; CREATE POLICY ...). Keep the SQL in supabase/migrations so the repo carries the proof.  
-**Verify:** `npx -y viberaven@1.6.12 --verify`  
+**Verify:** `npx -y viberaven@1.7.1 --verify`  
 **MCP:** `viberaven_heal_apply {"gap":"rls_disabled"}`  
 **Requires user action:** true
 ```
@@ -468,7 +468,7 @@ VibeRaven includes playbooks for guided dashboard work:
 
 Run provider guide:
 ```bash
-npx -y viberaven@1.6.12 guide <provider>
+npx -y viberaven@1.7.1 guide <provider>
 ```
 
 ---
@@ -479,15 +479,15 @@ All commands run locally with no scan quota.
 
 | Command | Description |
 |---------|-------------|
-| `npx -y viberaven@1.6.12 --agent-mode` | Full scan + write all artifacts |
-| `npx -y viberaven@1.6.12 --verify` | Rescan after fix |
-| `npx -y viberaven@1.6.12 --strict` | The verdict as an exit code for CI: exit 1 when `gate.status` is `not_clear`; `warning` exits 0 unless `--strict=warning` |
-| `npx -y viberaven@1.6.12 next --json` | Top gap from the last scan with a `viberaven prompt` command (no `batchSize`; labels provider-only gaps `repo-fix`, so use the stdout block for those) |
-| `npx -y viberaven@1.6.12 audit --vercel-supabase` | Local Vercel/Supabase checks |
-| `npx -y viberaven@1.6.12 --heal --apply --gap <id> --yes` | Apply heal recipe |
-| `npx -y viberaven@1.6.12 --condense` | Refresh context-map.json |
-| `npx -y viberaven@1.6.12 init --agents all` | Write the VibeRaven advice block to the default agent files (see `viberaven_init_rules`); preview with `--dry-run` |
-| `npx -y viberaven@1.6.12 guide <provider>` | Provider dashboard guide |
+| `npx -y viberaven@1.7.1 --agent-mode` | Full scan + write all artifacts |
+| `npx -y viberaven@1.7.1 --verify` | Rescan after fix |
+| `npx -y viberaven@1.7.1 --strict` | The verdict as an exit code for CI: exit 1 when `gate.status` is `not_clear`; `warning` exits 0 unless `--strict=warning` |
+| `npx -y viberaven@1.7.1 next --json` | Top gap from the last scan with a `viberaven prompt` command (no `batchSize`; labels provider-only gaps `repo-fix`, so use the stdout block for those) |
+| `npx -y viberaven@1.7.1 audit --vercel-supabase` | Local Vercel/Supabase checks |
+| `npx -y viberaven@1.7.1 --heal --apply --gap <id> --yes` | Apply heal recipe |
+| `npx -y viberaven@1.7.1 --condense` | Refresh context-map.json |
+| `npx -y viberaven@1.7.1 init --agents all` | Write the VibeRaven advice block to the default agent files (see `viberaven_init_rules`); preview with `--dry-run` |
+| `npx -y viberaven@1.7.1 guide <provider>` | Provider dashboard guide |
 
 ---
 

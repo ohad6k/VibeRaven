@@ -1,6 +1,6 @@
 interface:
-  display_name: "VibeRaven — Control Layer for AI-Built Products"
-  short_description: "Product context + launch verdict for coding agents, fully local"
+  display_name: "VibeRaven"
+  short_description: "Supabase RLS, migrations, Vercel env and Stripe webhook checks"
   brand_color: "#ff4d1f"
   default_prompt: "Use $viberaven to check this repo for launch gaps before shipping."
 

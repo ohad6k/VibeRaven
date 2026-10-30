@@ -44,7 +44,7 @@ list the same assets alongside a short description of what the demo shows.
 The fastest way to see the Studio is to run it locally — no video needed:
 
 ```bash
-npx -y viberaven@1.6.7
+npx -y viberaven@1.7.1
 ```
 
 That opens the local Studio in your browser so you can inspect the real

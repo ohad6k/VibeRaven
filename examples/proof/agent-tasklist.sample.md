@@ -5,7 +5,7 @@
 **Fix type:** provider-action  
 **Action:** Create a project or open your existing Supabase project.  
 **Exact fix:** No automated recipe; see scanner hint.  
-**Verify:** `npx -y viberaven@1.6.12 --verify`  
+**Verify:** `npx -y viberaven@1.7.1 --verify`  
 **Requires user action:** true
 
 **Provider action:**
@@ -18,6 +18,6 @@
 
 **Fix type:** manual-verify  
 **Exact fix:** No automated recipe; see scanner hint.  
-**Verify:** `npx -y viberaven@1.6.12 --verify`  
+**Verify:** `npx -y viberaven@1.7.1 --verify`  
 **Requires user action:** true
 
