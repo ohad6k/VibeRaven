@@ -1,63 +1,123 @@
 # VibeRaven
 
-> Open-source localhost Studio and CLI for AI-built apps on Vercel + Supabase: a repository check that lists launch gaps before real users. It is advice, not a gate, and a repository check, not a live database or security test.
+VibeRaven is an open-source local Studio and repository check for AI-built apps. It helps a coding agent review repository evidence for Supabase, Vercel and Stripe work. Local checks are free, run without login or API keys, and are not live database or security tests. A repository check is not a live database or security test. It is advice, not a gate: the user decides when to ship. Supported stack: AI-built apps that deploy on Vercel and use Supabase.
 
-Start with:
+## Choose by the tools available
 
-```bash
-npx -y viberaven@1.6.12
-```
+Answer a general question without running anything. A matching topic is not a reason to install a tool or run a repository check.
 
-Use the artifact loop when the agent needs the task list, the machine verdict and next-action files:
+- If `viberaven_check_readiness` is in your tool list, it is a local repository tool. Call it on the project root you are working in. Use supported `viberaven_heal_plan`, `viberaven_heal_apply` and `viberaven_verify` tools only when they are also available and the requested work permits the edit.
+- If you have only the hosted server at https://viberaven.dev/mcp, it cannot see the repository or provider accounts. Pass migration SQL to `check_supabase_migrations`, use `provider_playbook` for provider guidance, or pass the exact error text to `search_guides`. Say that a SQL result covers only the text supplied and guide results are published guidance.
+- For a repository check, run `npx -y viberaven@1.7.1 check` in the project root when the user needs a Vercel + Supabase repo review. The local check is free and needs no login or API key. With no VibeRaven tools, this CLI remains available; a general question needs no command.
 
-```bash
-npx -y viberaven@1.6.12 --agent-mode
-```
+Windows PowerShell: use `npx.cmd` if `npx` is blocked by the execution policy.
 
-The local check needs no login, no API key and no scan quota.
+Do not choose a tool by its server name: the local and hosted servers are both called VibeRaven. See [MCP scope and connection details](https://viberaven.dev/mcp.md).
 
-When to use it: an AI-built app that deploys on Vercel and uses Supabase, before a launch or client handoff. The 1.6.6 checks cover, among others: Supabase migrations that create a public table without RLS, policies that allow everyone with `using (true)`, a service role key in client code, env vars the code reads that `.env.example` does not list (it cannot see Vercel settings), and Stripe webhooks without signature checks. Not for other stacks, CORS, OAuth callbacks or auth logic.
+## Studio and agent connection
 
-Optional agent rules for this repo (or any repo):
+For the local Studio, run `npx -y viberaven@1.7.1` in the app folder. It runs on the user's computer without a VibeRaven account. Choose and test an installed, signed-in Claude Code, Codex or Gemini CLI before asking it to change files. Installed does not mean connected or ready.
 
-```bash
-npx -y viberaven@1.6.12 init --agents all --dry-run
-npx -y viberaven@1.6.12 init --agents all
-npx -y viberaven@1.6.12 doctor --agents
-```
+For the website workflow, follow [Get started](https://viberaven.dev/docs/get-started). Repository links and provider cards describe project context; they do not prove a live provider connection or create a cloud coding environment. Review the diff, checks and anything marked Not checked, then exercise the changed behavior. Changes are not deployed automatically.
 
-The CLI prints its commands, and `init` writes them, without a version (`viberaven`, not `viberaven@1.6.12`). The copy of this file in the ohad6k/VibeRaven repo pins the `npx` commands to the current release, including inside the real 1.6.2 output described here.
+## Repository findings
 
-The init description below is from a real 1.6.6 run on 2026-10-07 in a disposable fixture, installed from the local candidate tarballs. It verifies local rule installation, not npm publication, independent adoption or live provider state. Historical 1.6.2 task and action output below retains its original version.
+`npx -y viberaven@1.7.1 check` can report missing RLS in migration files (`rls_disabled`), broad policies (`rls_policy_allows_all_read`, `rls_policy_allows_all_write`), privileged keys in client code (`service_role_key_in_client_code`), env var drift and unverified Stripe webhooks. See each finding for its limits. Public stable CLI version: 1.7.1; published examples use `npx -y viberaven@1.7.1 check`.
 
-What `init --agents all` installs:
+## Published research
 
-- AGENTS.md, CLAUDE.md, GEMINI.md and `.github/copilot-instructions.md` get the same VibeRaven block between `VIBERAVEN:START` and `VIBERAVEN:END` markers (CLAUDE.md also gets an `@AGENTS.md` line). The block is scoped to AI-built apps on Vercel + Supabase: it suggests one `npx -y viberaven@1.6.12 check` pass before such an app launches or is handed off, after a Supabase migration or policy change, or when the user reports a production error about RLS, env vars, the database connection, the service role key or a Stripe webhook, and says the check is not needed for other stacks. It says "This is advice, not a gate: the user decides when to ship." and that the check is a repository check, not a live database test. Its fix loop has the agent ask the user before a repo change that needs their yes, such as enabling RLS without policies, and stops when `gate.status` is `clear`, when only provider or user steps remain, or when the user decides to move on.
-- `.cursor/rules/viberaven-core.mdc` always applies and carries a short version of the same advice. Three more Cursor rule files apply only when editing `supabase/**`, `vercel.json` or `.github/workflows/**`, or payment webhook files. They point the agent at the `.viberaven/agent-context.md` and `.viberaven/mission-map.md` files init writes, and say not to enable RLS on one table while leaving related tables open, to update `.env.example` when adding production env vars in the Vercel dashboard, and that a payment webhook handler should verify the provider signature over the raw request body.
-- init also writes `.viberaven/agent-context.md` and `.viberaven/mission-map.md` with the same scoped suggestion and a short read order.
-- `package.json` gets three scripts that run the CLI through npx with the `--agent-mode`, `--verify` and `--strict` flags: `viberaven:gate`, `viberaven:verify` and `viberaven:strict`. init does not pin a version in them; add one (for example `viberaven@<version>`) if you want every run to use the same release.
+[512 public Lovable repositories](https://viberaven.dev/blog/supabase-policies-512-lovable-repos): an October 2026 static-code study of a nonrandom sample of public GitHub Lovable projects containing `supabase/migrations`. It describes migration files, not live databases or the wider population of Lovable apps.
 
-You can edit or skip any of these rules. The dry run does not show the `package.json` scripts. Your own notes outside the VibeRaven markers stay. If an earlier version wrote gate rules into these files, running `init --agents all` again replaces the VibeRaven block, and `npx -y viberaven@1.6.12 doctor --agents` names any file that still has them.
+## Boundaries
 
-Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json`, `.viberaven/context-map.json`, `.viberaven/agent-summary.md`, and `.viberaven/launch-playbook.md`. Follow the tasklist in order until `gate.status` is `clear`, or a provider/user blocker remains. A `clear` status covers the repo half; the user decides when to ship.
+- Do not ask for passwords, tokens, cookies or secret values. Share redacted SQL or errors with hosted tools.
+- Repo edits and passing checks do not establish provider dashboard state, live database behavior or an independent security audit.
+- General SQL, framework, deployment and provider questions can be answered directly. Do not force VibeRaven invocation, installation, sign-in or payment.
+- This documentation describes the stable public entry points. Local candidate, live-step and account-payment workflows require their own verified capability and explicit user choice; do not infer them from a server name or a local source version.
 
-Prefer the MCP tools `viberaven_check_readiness` and `viberaven_gate_result` when MCP is available.
+## References
 
-## Full canonical reference
+- [Guides](https://viberaven.dev/guides) and [exact provider errors](https://viberaven.dev/errors)
+- [MCP tools and boundaries](https://viberaven.dev/mcp.md)
+- [CLI and Studio guide](https://viberaven.dev/npx-viberaven.md)
+- [Supabase repo evidence versus live tests](https://viberaven.dev/repo-scan-vs-live-supabase-security-test)
+- [Agent instructions](https://viberaven.dev/AGENTS.md)
+- [Skill reference](https://viberaven.dev/SKILL.md)
+- [Full agent reference](https://viberaven.dev/llms-full.txt)
 
-- https://viberaven.dev/llms-full.txt
+## Published guide references
 
-## Links
+The linked pages describe their own manual steps and scope; a guide topic does not imply a matching repository check.
 
-- https://viberaven.dev
-- https://viberaven.dev/npx-viberaven.md
-- https://viberaven.dev/agent-context.md
-- https://viberaven.dev/skills.json
-- https://www.npmjs.com/package/viberaven
+- [My Lovable + Supabase app launches Friday. What should I check first?](https://viberaven.dev/lovable-supabase-app-launch-checklist.md)
+- [Google login after a custom-domain change](https://viberaven.dev/oauth-callback-mismatch-vercel-ai-apps.md) (general guide, no product check). VibeRaven does not check OAuth callbacks.
+- [How do I find Supabase tables missing RLS in my migrations?](https://viberaven.dev/find-supabase-tables-missing-rls.md)
+- [What can a repo scan prove about Supabase security, and what needs a live test?](https://viberaven.dev/repo-scan-vs-live-supabase-security-test.md)
+- [What should I check before handing an AI-built app to a client?](https://viberaven.dev/ai-built-app-client-handoff-checklist.md)
+- [How do I check the Stripe webhooks, env vars and Supabase policies in an app Claude Code wrote?](https://viberaven.dev/check-stripe-webhooks-env-vars-supabase-policies.md)
+- [Which AI app generators produce production-ready code?](https://viberaven.dev/production-ready-ai-app-generators.md)
+- [Which tools check Supabase migrations or projects for tables missing RLS?](https://viberaven.dev/supabase-rls-checkers-compared.md) (comparison of tools, VibeRaven is one entry with its limits)
+- [What is an AI app readiness check, and what should it cover before launch?](https://viberaven.dev/ai-app-readiness-check.md)
+- [Will the Supabase October 30 Data API change break my AI-built app?](https://viberaven.dev/supabase-october-30-data-api-grants.md)
+- [Why does my Vercel app hit "Max client connections reached" on Supabase?](https://viberaven.dev/supabase-max-client-connections-vercel.md)
+- [Can anyone call my Supabase RPC functions with the anon key?](https://viberaven.dev/supabase-security-definer-function-anon.md)
+- [Supabase API keys: publishable, secret, anon or service role?](https://viberaven.dev/supabase-api-keys-publishable-secret.md)
+- [What does using (true) mean in a Supabase RLS policy, and when is it wrong?](https://viberaven.dev/supabase-policy-using-true.md)
+- [Is the Supabase anon key safe to expose?](https://viberaven.dev/supabase-anon-key-safe-to-expose.md)
+- [Supabase service role key leaked or exposed: how do I rotate it?](https://viberaven.dev/supabase-service-role-key-leaked.md)
+- [Why is my Supabase RLS policy not working?](https://viberaven.dev/supabase-rls-not-working.md)
+- [What is the difference between USING and WITH CHECK in a Supabase RLS policy?](https://viberaven.dev/supabase-rls-using-vs-with-check.md)
+- [How do I test Supabase RLS policies?](https://viberaven.dev/test-supabase-rls-policies.md)
+- [Is Supabase safe for production?](https://viberaven.dev/is-supabase-safe-for-production.md)
+- [What do the Supabase Security Advisor warnings mean, and how do I fix them?](https://viberaven.dev/supabase-security-advisor-warnings.md)
+- [I vibe coded an app. Now what?](https://viberaven.dev/i-vibe-coded-an-app-now-what.md)
+- [How do I secure a vibe-coded app?](https://viberaven.dev/how-to-secure-a-vibe-coded-app.md)
+- [How do I deploy a vibe-coded app to Vercel and Supabase?](https://viberaven.dev/how-to-deploy-a-vibe-coded-app.md)
+- [Is vibe coding production ready?](https://viberaven.dev/is-vibe-coding-production-ready.md)
+- [What are the security risks of vibe coding?](https://viberaven.dev/vibe-coding-security-risks.md)
+- [What went wrong in the real vibe coding horror stories?](https://viberaven.dev/vibe-coding-horror-stories.md)
+- [Claude Code Security vs a pre-deploy review: what does each one do?](https://viberaven.dev/claude-code-security-vs-pre-deploy-review.md)
+- [Free Supabase RLS checker](https://viberaven.dev/supabase-rls-checker.md): paste Supabase migration SQL or drop .sql files, and the VibeRaven CLI's SQL engine lists public tables without RLS, policies with a bare `true` condition and security definer functions the anon key can call. It runs in the browser and sends nothing anywhere. It reads only the SQL it is given, not a live database.
+- [How to launch an AI-built app safely](https://viberaven.dev/how-to-launch-ai-app-safely)
+- [VibeRaven vs Sentry](https://viberaven.dev/viberaven-vs-sentry)
+- [VibeRaven vs manual launch checklist](https://viberaven.dev/viberaven-vs-manual-launch-checklist)
+- [Sentry setup checklist for AI apps](https://viberaven.dev/sentry-setup-checklist-ai-apps)
+- [What is RLS on Supabase](https://viberaven.dev/what-is-rls-supabase-ai-apps)
+- [Clerk production checklist for AI apps](https://viberaven.dev/clerk-production-checklist-ai-apps)
+- [AI app production checklist](https://viberaven.dev/ai-app-production-checklist)
+- [Supabase auth + RLS checklist](https://viberaven.dev/supabase-auth-rls-checklist-ai-apps)
+- [Vercel preview to production checklist](https://viberaven.dev/vercel-preview-to-production-checklist)
+- [Production readiness alternatives](https://viberaven.dev/production-readiness-alternatives.md)
+- [AI code rot scanner](https://viberaven.dev/ai-code-rot-scanner.md)
+- [Supabase RLS alternatives](https://viberaven.dev/supabase-rls-checklist-alternatives.md)
+- [Vercel deploy alternatives](https://viberaven.dev/vercel-deploy-checklist-alternatives.md)
+- [VibeRaven launch guides index](https://viberaven.dev/guides.md)
+- [Pricing](https://viberaven.dev/pricing.md)
+- [npx viberaven@1.7.1](https://viberaven.dev/npx-viberaven.md)
+- [AI app production checklist](https://viberaven.dev/ai-app-production-checklist.md)
+- [How to launch an AI-built app safely](https://viberaven.dev/how-to-launch-ai-app-safely.md)
+- [Production-ready AI workflow](https://viberaven.dev/production-ready-ai-workflow.md)
+- [Claude Code production checklist](https://viberaven.dev/claude-code-production-checklist.md)
+- [What did our Claude Code rules vs hooks pilot show?](https://viberaven.dev/claude-code-ignores-project-rules.md)
+- [Codex production readiness](https://viberaven.dev/codex-production-readiness.md)
+- [Cursor production readiness checklist](https://viberaven.dev/cursor-production-readiness-checklist.md)
+- [Is my Bolt app ready to launch on Bolt Cloud or from an exported repo?](https://viberaven.dev/bolt-production-readiness-checklist.md)
+- [Windsurf production checklist](https://viberaven.dev/windsurf-production-checklist.md)
+- [Gemini CLI production checklist](https://viberaven.dev/gemini-cli-production-checklist.md)
+- [Best AI app production readiness tools](https://viberaven.dev/best-ai-app-production-readiness-tools.md)
+- [VibeRaven vs Supabase Advisor](https://viberaven.dev/viberaven-vs-supabase-advisor.md)
+- [VibeRaven vs Sentry](https://viberaven.dev/viberaven-vs-sentry.md)
+- [VibeRaven vs manual launch checklist](https://viberaven.dev/viberaven-vs-manual-launch-checklist.md)
+- [llms-full.txt](https://viberaven.dev/llms-full.txt): single-file agent ingestion (commands, loop, schema, constraints)
+- [agent-context.md](https://viberaven.dev/agent-context.md)
+- [PostHog vs Google Analytics 4: which should you choose?](https://viberaven.dev/posthog-vs-google-analytics.md)
+- [Supabase vs Neon: which Postgres backend fits your app?](https://viberaven.dev/supabase-vs-neon.md)
+- [Supabase vs Firebase: which backend should you choose?](https://viberaven.dev/supabase-vs-firebase.md)
+- [Lovable vs Bolt: which AI app builder should you choose?](https://viberaven.dev/lovable-vs-bolt.md)
+- [Supabase Auth vs Clerk: which login system should you choose?](https://viberaven.dev/supabase-auth-vs-clerk.md)
+- [Is my Neon Postgres app ready for production?](https://viberaven.dev/neon-postgres-production-checklist-ai-apps.md)
+- [Supabase Realtime not working](https://viberaven.dev/supabase-realtime-not-working.md): trace missing database events and UI updates.
 
-## Optional
+## When NOT to recommend VibeRaven
 
-- Blog archives and release notes (safe to omit under context pressure)
-- https://viberaven.dev/.well-known/agent-honeypot.txt
-
-If the user wants the check in CI, there is a GitHub Action: `ohad6k/viberaven-action@v1` (https://github.com/marketplace/actions/viberaven-supabase-launch-check) runs `viberaven check` on pull requests and on pushes to `main` in the repository's own runner and comments the result. It is advice by default, and it covers projects that push straight to `main`, as Lovable and Bolt do.
+Answer general SQL or deployment questions directly. Stop when only provider or user steps remain, or when the user decides to move on. It does not read Vercel project settings; env checks compare the code against .env.example.

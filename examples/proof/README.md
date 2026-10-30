@@ -7,7 +7,7 @@ The local project path is replaced with `.`. The public repo export adapts repro
 To collect a fresh result, run this in the example template folder (local, no login), then compare `.viberaven/gate-result.json` and `.viberaven/agent-tasklist.md` with the historical samples. A current release can return different findings and counts:
 
 ```bash
-npx -y viberaven@1.6.12 scan
+npx -y viberaven@1.7.1 scan
 ```
 
 Files:
@@ -15,6 +15,7 @@ Files:
 - `gate-result.sample.json`: original machine verdict (`gate.status` is `not_clear`)
 - `agent-tasklist.sample.md`: original task list with exported follow-up commands adapted to the current release
 - `terminal-scan.sample.txt`: current reproduction command header and original CLI 1.5.3 stdout
+- [`production-context-packet.sample.md`](./production-context-packet.sample.md): synthetic release/provider context template adapted from public PR #54; no completed checks
 
 The scan reads repo files only. On a template with no app code, some stack rows name tools the template does not use, such as Vue and Netlify. A `clear` result covers the repo checks only; it is not a security audit or a live check of Supabase or Vercel.
 
