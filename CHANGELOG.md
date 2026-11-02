@@ -7,8 +7,100 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+
+## [1.7.7] - 2026-11-02
+
+- `check` prints each finding's `path:line` on its own line under the title, the way ESLint and tsc print it, and `check --format sarif` prints SARIF 2.1.0 (one rule per gap id with its guide and app test) for GitHub code scanning and editors.
+- The homepage title and description say what VibeRaven is (an open-source CLI for Vercel + Supabase apps, and what it lists), and the service role key guide is titled the way people search for it.
+- Each finding gets a test of the app's behavior after the fix, beside the rescan: `**Test the app:**` in `.viberaven/agent-tasklist.md`, `testTheApp` in `check --json`, and the end of `prompt --gap <id>` (15 finding ids).
+- `prompt --gap <id>` prints the prompt in a coding-agent shell or when stdout is not a terminal, instead of copying it to the clipboard where the agent cannot read it.
+- `provider_playbook` takes an optional `topic` and returns only the matching items: `{"provider":"supabase","topic":"pooler"}` is about 1.5k characters instead of 11k.
+- viberaven.dev/auth.md describes how an agent opens a free account for the person (device code, approved in their browser); llms.txt links it.
+- Every markdown answer the site serves to agents ends with a pointer to llms.txt and the repo check, offered as the user's choice.
+- New page with original findings: what the check found in 25 public Supabase repos, and its hand-checked precision (viberaven.dev/supabase-repo-study-2026-11.md).
+
+- Precision: four false positives found by hand in a 25-repo sample are gone. A file named `auth.js` is not Auth.js; React Native's `ios/.xcode.env` is not a credential file; the grants check orders migrations by timestamp only when both files carry one; a `security_invoker` view no longer needs its own grant, and an owner-rights view gets a view-specific fix. Critical findings judged correct went from 14 of 20 to 15 of 16.
+- New checks: a debug or diagnostic API route that returns env or request internals (`public_debug_endpoint`), and a private key pasted into a tracked Markdown or docs file (`secret_in_docs`).
+- In a coding-agent shell (Claude Code, Codex, Cursor, Gemini CLI), the bare `npx -y viberaven@1.7.6` runs `check` instead of starting the Studio server that never returns.
+- init rules teach one phrase, "check this with viberaven", tell the agent to prefer the current CLI output and `.viberaven/` files over what it remembers, and look at the project before running the check.
+- The npm pages for `@viberaven/cli` and `@viberaven/mcp` no longer pin 1.6.12; `check` comes first and `changes` is listed. `--agent-mode` from older releases still runs.
+- The hosted `check_supabase_migrations` uses the same rules as the CLI again.
+
+## [1.7.6] - 2026-11-01
+
+- `check` prints `Guide: <url>` under each finding that has a published fix page, and `--json` adds `guide` (ten finding ids, each page live and naming its id).
+- When provider changes are found and the project has no VibeRaven rules, `check` and `changes` offer init with what was found: "Found N provider changes in this repo. So your agent checks the next ones before each deploy: npx -y viberaven@1.7.6 init". `--json` agentSetup carries `reason: provider_changes_found`.
+- `recent_provider_changes` answers with entries end with how to see which of them affect a repo (`npx -y viberaven@1.7.6 changes`).
+
+## [1.7.5] - 2026-11-01
+
+- `check` lists the provider changes that affect the repo (file:line and why), adds `providerChanges` to `--json`, and adds a table to the PR comment (`--markdown`); fix and official source stay in `viberaven changes`. Score and exit code are unchanged. Found by a rules lab: with init's rules an agent ran `check` in 2 of 3 tasks but got no blockers on a repo with a new table missing its grant and a Node 20 pin.
+- CLI dead ends name the next command: an unknown command prints one line with the closest command instead of the whole help; `check <path>` on a missing folder exits 1 instead of reporting no blockers; `changes --path` says to pass the folder as an argument.
+- `recent_provider_changes` with no match names the providers, the error-code retry and `npx -y viberaven@1.7.6 changes`.
+
+## [1.7.4] - 2026-11-01
+
+### `viberaven changes`
+
+- New command: `viberaven changes [path] [--json] [--strict]` matches each dated provider change in the recent-changes pack against the repo and prints affected, review, not affected or not checked by repo, with file, line, fix and official source. It covers Supabase Data API grants for tables created since 2026-10-30, Supabase legacy anon and service_role key variables, Vercel Node 20 `engines.node` pins, Next.js `cacheComponents` route configs, Railway `railway.json` / `railway.toml`, Lovable projects and Clerk development keys in `.env.production`. File reads only, no network, no key values printed; tests and fixtures are not counted as evidence. Exit code 0 unless `--strict` finds an affected change.
+
+### Public README contribution (PR #80)
+
 - The GitHub and npm READMEs open with what `viberaven check` finds (tables without RLS, `using (true)` policies, service_role keys in client code, anon-callable security definer functions, the wrong pooler port, unverified Stripe webhooks) and add a gap table with the related Supabase Security Advisor lints, a real output example, when to use it and when not to, and how it compares with Supabase Security Advisor, OWASP ZAP, Semgrep, Snyk, CodeQL and Playwright.
-- The `viberaven` and `@viberaven/cli` npm descriptions and keywords name the same checks (adds `launch-checklist` and `vibe-coding`). The npm pages change on the next publish.
+
+## [1.7.3] - prepared locally, not published
+
+- Scope Supabase checks to actual provider evidence. Missing SQL is informational `rls_not_checked`; real table-without-RLS remains a blocker. Session poolers on port 5432 are recognized.
+- Preserve the Windows PowerShell UTF-8 BOM while adding the init script, existing scripts and customized Skills.
+- Local MCP adds account and human-requested sign-in tools sharing the CLI credential store. Pro account output links to billing management; account reads create no checkout.
+- Tasklists and hosted MCP results include a visible optional account continuation. CLI-origin visitors can sign in without a repository URL, and all six hosted tools have valid counted handoff routes. Local checking remains free without login.
+- Account-linked work/live resumes expose an exact login fallback and retain the same task. Owner-led billing and live-step readiness guides distinguish fixtures from unobserved payment/provider acceptance.
+- Integrates M1–M5 for a next-only candidate. No payment, deployment or provider completion is implied, and no comparative coding advantage is established.
+
+## [1.7.2] - 2026-10-31
+
+Published to `next` and moved to `latest` on 2026-10-31, for all three packages.
+
+### Changed
+
+- Device sign-in splits the public approval code from the private polling credential. `viberaven login` shows a short `user_code` (`XXXX-XXXX`) and opens an approval page at `https://viberaven.dev/connect?user_code=...`; only the CLI holds the polling credential. Sign-in from 1.7.1 does not work against the updated API, so update the CLI. Codes issued before the change stay valid for at most ten minutes. Existing sessions and local `check` and `init` need no login.
+- The next step in `check --json` is now the plain link `https://viberaven.dev/go/cli/check`. The check still sends nothing anywhere.
+- `missing_csp_header` reads `proxy.ts` as well as `next.config`, `middleware.ts` and `vercel.json`. A Report-Only header, the header name in a comment, or middleware that only covers `/api` no longer clears it.
+
+### Added
+
+- A catalog of dated provider changes, shared by the CLI and MCP. `viberaven provider <name> --recent` lists them for one provider, and the local and hosted MCP servers add a `recent_provider_changes` tool. The local MCP server now lists 27 tools.
+- `secret_key_in_client_env` flags a server credential name under a browser prefix such as `NEXT_PUBLIC_` or `VITE_`, for example a Clerk secret key, a Polar access token or a Firebase private key. The value is never printed.
+- After a Supabase RLS, grant or security definer finding, `check` prints an optional live catalog command (account required, the person approves in the browser). It prints an `init` hint when the repo has no VibeRaven Skill or rules.
+- No production deployment of live checks or payments is claimed. Vercel live reads remain unsupported.
+
+## [1.7.1] - 2026-10-29
+
+Published to `next` on 2026-10-29 and moved to `latest` on 2026-10-30, for all three packages.
+
+- `npx -y viberaven@1.7.6 init` installs the repository Skill for Codex at `.agents/skills/viberaven/SKILL.md` and for Claude Code at `.claude/skills/viberaven/SKILL.md`; `init --agents codex` installs the Codex one. A Skill someone else wrote at that path is left alone.
+- The experimental RLS test no longer passes blind UPDATE, DELETE or reassignment probes merely because a SELECT policy hides another user's row (private PR #162).
+- Local MCP prefers a matching installed CLI and reports execution failures separately from completed findings.
+- This export preparation restores the synthetic Resend provider-boundary example from public PR #53 and production-context sample from #54 with contributor credit, and adds a dry-run-first sync guard that preserves public files. The runnable candidate starter is held from the export until its published package, wrapper, workflows and README are reconciled.
+- No dependency upgrades, and no API deployment or migration is needed.
+
+## [1.7.0] - 2026-10-28 (`next` only)
+
+All three packages were published to `next`; `latest` remains 1.6.12. Recorded CLI/MCP tarball contents matched the reviewed integrity, while their registry `gitHead` provenance caveat remains unresolved for those immutable versions. This entry records package availability, not completed provider acceptance or stable promotion.
+
+- Explicit `init --agents claude` also installs the project Skill; custom Skills remain preserved and dry-run stays read-only.
+- Generated PR feedback and inert starter workflows use Node 24 and SHA-pinned Node 24 actions, with automatic package caching disabled and explicit ZIP artifacts. The PR check and trusted feedback workflows use an independent recheck; this does not update the published Marketplace Action.
+- Adds bundled provider playbooks through `provider <name>` and `provider_playbook`, using one validated pack format with a Supabase example. Reading local guidance requires no account or provider access.
+- Adds saved task contracts and `work start/resume/status`; optional account-linked execution retains the request through connection, quota and payment readiness. This path requires compatible API migrations and deployment; npm publication alone does not enable it.
+- Adds free local `work prepare/verify/report` and local MCP equivalents: reviewed expectations and baseline tests, bounded Node/module/HTTP observations in Docker, current-source evidence and Markdown/JSON reports. Unsupported behavior remains not checked; no comparative quality advantage is established.
+- Init now supplies a draft task-contract template and shared proof workflow while preserving custom files. Direct agent edits followed by local verification do not require account-linked `work resume`.
+- Includes the experimental Supabase catalog-only live-read adapter and separate live-step ledger foundation. Live steps remain disabled by default, Vercel live reads remain blocked, and existing work allowances are unchanged. No live-provider or real-payment acceptance is claimed.
+- Adds bounded OpenAI browser credential wiring detection; values are omitted and deployed exposure is not claimed. Local MCP retains structured CLI results despite npm diagnostics.
+- Hosted changes prepared alongside the packages include recoverable MCP input errors, client attribution and task-oriented descriptions, plus the approved sign-in, apps and account design. They require their own deployment and are not installed by npm.
+- `viberaven init` writes a short rule block (about 180 words) into AGENTS.md, CLAUDE.md, GEMINI.md and copilot-instructions.md, moves the full loop to `.viberaven/agent-rules.md`, and installs the Claude Code project skill at `.claude/skills/viberaven/SKILL.md`. A skill file someone else wrote at that path is left alone.
+- `viberaven init` adds one package.json script, `viberaven:check` (`npx -y viberaven@1.7.6 check`), instead of `viberaven:gate`, `viberaven:verify` and `viberaven:strict`, which ran the older `--agent-mode`, `--verify` and `--strict` flows. Scripts an earlier init wrote are left as they are.
+- The `viberaven` and `@viberaven/cli` npm descriptions and keywords name the same checks (adds `launch-checklist` and `vibe-coding`), as described by public PR #80.
+- `viberaven check --json` adds `nextStep`: one link to viberaven.dev tagged `?src=cli&tool=check`, so a sign-up that follows can be attributed. The terminal verdict is unchanged, and check still sends nothing anywhere. The README's Try it links carry `?src=readme&tool=try_it`.
 
 ## [1.6.12] - 2026-10-15
 

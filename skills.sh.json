@@ -4,7 +4,7 @@
   "groupings": [
     {
       "title": "Production",
-      "description": "Token-efficient VibeRaven loops that route AI agents through architecture questions, release/provider evidence, MCP context when available, verification, and production memory before they patch real apps.",
+      "description": "Supabase RLS, migrations and 42501 grants, service role keys, Vercel env vars, and Stripe webhook signatures before deploy. VibeRaven routes repository checks and hosted SQL or error guidance by the tools available, with free local checks and explicit provider limits.",
       "skills": [
         "vercel-supabase-launch-check",
         "viberaven",
