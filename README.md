@@ -220,6 +220,10 @@ VibeRaven is listed in the MCP registry for agents that prefer tools over termin
 
 Key tools: `viberaven_check_readiness` (runs the local check), `viberaven_heal_apply`, `viberaven_verify`, `viberaven_audit`, `viberaven_gate_result`, and `viberaven_validate_npm_package` (run it before adding npm dependencies).
 
+### Provider context for AI SDK agents
+
+Building an agent that answers provider errors? The [AI SDK provider-context example](./examples/ai-sdk-provider-context/) adds `search_guides` and `recent_provider_changes` from the hosted MCP endpoint. It returns published guidance and dated sources, without installing the VibeRaven CLI or Studio. Its documented tests run locally with a scripted model; live retrieval is optional. It does not inspect your repository or verify a fix.
+
 ## The local Studio
 
 `npx -y viberaven@1.7.6` with no command opens the Studio: a local page where your own coding agent (Claude Code, Codex or Gemini CLI) makes a change in your folder, and you see the steps, your checks, the running app and the diff, with Undo one click away.
