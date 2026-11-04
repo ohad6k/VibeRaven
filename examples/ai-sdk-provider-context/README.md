@@ -17,6 +17,24 @@ npm run typecheck
 
 These commands use a local HTTP MCP fixture and the AI SDK's scripted model. They do not call a paid model or the public endpoint. The scripted model verifies the tool-result round trip; it does not measure spontaneous tool selection or answer quality.
 
+## Get context for a real question
+
+After `npm ci --ignore-scripts`, a coding agent with shell access can retrieve guidance directly without configuring another model or installing an MCP server in its host:
+
+```sh
+npm run --silent context -- --provider supabase --query "new table permission denied 42501"
+```
+
+This sends the specified public troubleshooting question to the existing hosted endpoint and calls only `search_guides` and `recent_provider_changes`. It prints their public result fields as JSON, including returned sources, review dates, coverage and error flags. Client-only `_meta` is excluded. The command reads no project files, runs no model and makes no changes to your application or provider account. Do not include credentials, personal data or private source code in the question.
+
+Use the returned evidence in your current engineering task. On a new provider error or a changed assumption, rerun the command with that question. Assess the sources and their review dates: `retrievedAt` records when you fetched them, not when the underlying advice was reviewed. No-match results do not rule out a problem. The response is guidance to evaluate; verifying the actual fix remains part of your task.
+
+`--help` works without a connection. Exit 0 means both retrieval tools responded without an MCP error; it does not mean an application was checked or fixed. Exit 1 means retrieval failed or was partial, with available error evidence retained. Exit 2 means invalid arguments, before any connection. HTTP requests time out after 20 seconds each. Normal questions use the example's ordinary client identity.
+
+For owner acceptance or synthetic compatibility tests only, add `--own-test` to the context command so those calls use the recognized selftest identity. Normal use does not require a test ledger or that flag. The existing owner smoke below remains a separate compatibility check.
+
+## Owner compatibility smoke
+
 For the optional public-endpoint compatibility check, first record the UTC interval in your own-test ledger, then run:
 
 ```sh
@@ -54,9 +72,9 @@ The agent receives an optional retrieval capability, not a requirement to call t
 
 On November 4, 2026, an owner smoke run completed both tool calls against server `1.7.8` in 2,230 ms. Its custom test headers were not recognized by backend classification, so those two calls must be excluded explicitly as owner traffic. After switching to the recognized selftest client, one targeted recheck completed in 1,045 ms; both tool-call events were independently observed as `declared_test`. Neither run reported tool errors. These observations prove client interoperability and the corrected test marking at those times. They prove neither a latency guarantee nor external adoption, autonomous selection, a live application check, or comparative engineering benefit.
 
-The local test suite verifies HTTP protocol conversion, tool exclusion, missing-tool failure, direct and model-step error/evidence preservation, client-only metadata exclusion, cleanup and complete scripted AI SDK tool loops. No model-quality evaluation is claimed.
+The local test suite verifies HTTP protocol conversion, tool exclusion, missing-tool failure, direct and model-step error/evidence preservation, client-only metadata exclusion, cleanup and complete scripted AI SDK tool loops. Command tests cover normal versus owner identity, actual question routing, partial failure, offline argument/help handling and timeout cleanup. No model-quality evaluation is claimed.
 
-The public endpoint and curated content may change or become unavailable. This example requires both tools and fails explicitly if either is absent. Applications retain their own timeouts, access policies and evidence validation.
+The public endpoint and curated content may change or become unavailable. This example requires both tools and fails explicitly if either is absent. The command uses a per-request timeout; applications using `withProviderContext` can set `requestTimeoutMs` and retain their own access policies and evidence validation.
 
 ## Sources
 
