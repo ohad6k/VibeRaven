@@ -1,8 +1,19 @@
 {
   "name": "viberaven-plugins",
-  "owner": { "name": "Ohad Krispin" },
-  "metadata": { "description": "VibeRaven plugin for local repository checks." },
+  "owner": {
+    "name": "Ohad Krispin"
+  },
+  "metadata": {
+    "description": "VibeRaven plugin for local repository checks."
+  },
   "plugins": [
-    { "name": "viberaven", "source": "./plugins/viberaven" }
+    {
+      "name": "viberaven",
+      "source": "./plugins/viberaven"
+    },
+    {
+      "name": "viberaven-hosted",
+      "source": "./plugins/viberaven-hosted"
+    }
   ]
 }

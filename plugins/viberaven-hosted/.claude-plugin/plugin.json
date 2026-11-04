@@ -1,0 +1,27 @@
+{
+  "description": "Review supplied Supabase migrations or public GitHub migration files for RLS, policy and grant gaps. Get source-linked troubleshooting and dated provider guidance, or run the free local repository check where a shell is available. Static review with explicit coverage, not live database verification.",
+  "author": {
+    "name": "Ohad Krispin",
+    "email": "ohadkrispin@gmail.com",
+    "url": "https://viberaven.dev"
+  },
+  "homepage": "https://viberaven.dev",
+  "repository": "https://github.com/ohad6k/VibeRaven",
+  "license": "MIT",
+  "keywords": [
+    "launch-readiness",
+    "supabase",
+    "rls",
+    "vercel",
+    "checklist"
+  ],
+  "name": "viberaven-hosted",
+  "version": "1.7.8",
+  "privacyPolicyUrl": "https://viberaven.dev/privacy",
+  "mcpServers": {
+    "viberaven": {
+      "type": "http",
+      "url": "https://viberaven.dev/mcp"
+    }
+  }
+}
