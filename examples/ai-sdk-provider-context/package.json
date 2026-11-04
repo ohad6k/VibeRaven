@@ -1,0 +1,14 @@
+{
+  "name": "viberaven-ai-sdk-provider-context-example",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "smoke": "node smoke.ts"
+  },
+  "dependencies": { "@ai-sdk/mcp": "2.0.90", "ai": "7.0.162" },
+  "devDependencies": { "@types/node": "24.12.2", "typescript": "6.0.2" }
+}
