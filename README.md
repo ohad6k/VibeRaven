@@ -146,6 +146,8 @@ The `rls_disabled` recipe adds a migration that enables RLS without policies, so
 
 ## In CI: the GitHub Action
 
+For migration PRs, the [read-only review pilot](https://github.com/ohad6k/viberaven-action/issues/7) puts the report in the Actions summary.
+
 Lovable and Bolt push straight to `main`, so a pull request check alone misses most of their changes. The [VibeRaven GitHub Action](https://github.com/marketplace/actions/viberaven-supabase-launch-check) runs the same check on pull requests and on pushes, in your own runner:
 
 ```yaml
@@ -163,10 +165,10 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - uses: ohad6k/viberaven-action@v1
+      - uses: ohad6k/viberaven-action@v1.1.2
 ```
 
-A pull request gets one comment with what the change added or fixed. A push to `main` gets a commit comment when there is a blocker. It is advice by default; with `fail-on-blockers: 'true'` the job fails when it finds a blocker, and your branch protection decides what that means for merging. `npx -y viberaven@1.7.6 init --github` writes a pull-request-only version of this workflow without the Action.
+A pull request from the same repository gets a comment with what the change added or fixed. Fork pull requests can use the job summary. A push to `main` gets a commit comment when there is a blocker. It is advice by default; with `fail-on-blockers: 'true'` the job fails on a new blocker for a pull request or a blocker on a push. Configure a required status check to use it as a merge gate. `npx -y viberaven@1.7.6 init --github` writes a pull-request-only version of this workflow without the Action.
 
 ## Install for AI agents
 
