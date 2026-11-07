@@ -1,5 +1,5 @@
 {
-  "description": "Review supplied Supabase migrations or public GitHub migration files for RLS, policy and grant gaps. Get source-linked troubleshooting and dated provider guidance, or run the free local repository check where a shell is available. Static review with explicit coverage, not live database verification.",
+  "description": "Review Supabase migrations for RLS and grant gaps, or check a local Vercel + Supabase repository. Results cover inspected files, not live database state.",
   "author": {
     "name": "Ohad Krispin",
     "email": "ohadkrispin@gmail.com",
@@ -9,13 +9,14 @@
   "repository": "https://github.com/ohad6k/VibeRaven",
   "license": "MIT",
   "keywords": [
-    "launch-readiness",
     "supabase",
     "rls",
+    "migrations",
     "vercel",
-    "checklist"
+    "security-review"
   ],
   "name": "viberaven-hosted",
-  "version": "1.7.8",
-  "logo": "assets/logo.png"
+  "version": "1.7.11",
+  "logo": "assets/logo.png",
+  "displayName": "VibeRaven"
 }

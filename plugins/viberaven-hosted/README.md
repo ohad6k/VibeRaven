@@ -21,10 +21,10 @@ The MCP URL is `https://viberaven.dev/mcp`. This plugin starts no local MCP proc
 
 Hosted migration review is static, bounded by file and byte limits. It cannot see private repositories, dashboard-only configuration or a live database, and does not execute SQL. No findings means only that the available rules found none in the inspected input. Keep the resolved commit and coverage limits with the result. A clear static check does not establish production security.
 
-The supplied skill also describes an optional local check, `npx -y viberaven@1.7.8 check`, when shell access is available and execution is authorized. That separate command downloads an npm package if needed, reads the local project and writes `.viberaven/` reports. Installing this plugin does not run it. Free review and guidance do not require sign-in; optional account or paid workflows remain separate.
+The supplied skill also describes an optional local check, `npx -y viberaven@1.7.11 check`, when shell access is available and execution is authorized. That separate command downloads an npm package if needed, reads the local project and writes `.viberaven/` reports. Installing this plugin does not run it. Free review and guidance do not require sign-in; optional account or paid workflows remain separate.
 
 ## Cursor and verification
 
 The adjacent Cursor manifest and `mcp.json` use the documented plugin layout and hosted URL. Cursor runtime installation has not been verified. The release receipt records the exact Claude validation and installation performed; installation tests do not establish natural tool selection, useful external outcomes or return use.
 
-Version 1.7.8 identifies this native wrapper and its optional local command. It does not publish or upgrade any npm package, and is not an official Claude or Cursor directory endorsement. The older local-MCP plugin remains available at `plugins/viberaven`.
+Version 1.7.11 identifies this native wrapper and its optional local command. It does not publish or upgrade any npm package, and is not an official Claude or Cursor directory endorsement. The older local-MCP plugin remains available at `plugins/viberaven`.
