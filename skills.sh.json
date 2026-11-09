@@ -7,6 +7,7 @@
       "description": "Supabase RLS, migrations and 42501 grants, service role keys, Vercel env vars, and Stripe webhook signatures before deploy. VibeRaven routes repository checks and hosted SQL or error guidance by the tools available, with free local checks and explicit provider limits.",
       "skills": [
         "vercel-supabase-launch-check",
+        "supabase-rls-check",
         "viberaven",
         "architecture-context",
         "architecture-plan",
