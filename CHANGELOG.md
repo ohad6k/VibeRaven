@@ -19,10 +19,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Clearer GitHub and npm introductions, package metadata, host requirements and agent setup instructions.
-- CLI, MCP and shim version alignment at 1.10.0, with maintained docs, skills, agent manifests and staged site pins aligned for this candidate. Sessions has its own 0.1.0 version.
+- CLI, MCP and shim version alignment at 1.10.0, with maintained docs, skills, agent manifests and staged site pins aligned for this release. Sessions has its own 0.1.0 version.
 - Sessions is an optional CLI dependency: the free `check` keeps Node 20+ support and its existing behavior. Missing or unsupported race runtimes report an error.
 
-Preparation candidate only. Publication, site deployment and catalog submission require separate owner authorization.
 
 ## [1.9.0] - 2026-11-10
 
