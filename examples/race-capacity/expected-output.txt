@@ -1,0 +1,7 @@
+Expected semantic results for VibeRaven 1.10.0 / sessions 0.1.0:
+Original: 60 orders completed; 24 broken.
+Replay of order 2: selected failure record byte-identical to the original.
+Fixed: 60 orders completed; 0 broken; 36 orders exercised real waits.
+
+This is an expected-results summary, not a literal terminal transcript.
+Timings and machine paths are intentionally omitted.

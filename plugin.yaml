@@ -1,6 +1,6 @@
 name: viberaven
-version: 1.7.6
-description: VibeRaven Studio and coordinated architecture/production-context skill loops for AI-built apps.
+version: 1.10.0
+description: "Production context and checks for AI-built apps across their providers, with local two-user PostgreSQL race tests and exact replay."
 author: VibeRaven
 provides_commands:
   - viberaven-help

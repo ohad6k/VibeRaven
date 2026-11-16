@@ -1,6 +1,27 @@
 # VibeRaven MCP
 
-VibeRaven helps you maintain an existing AI-built app with your coding agent, service context, repository findings and reviewable changes. To use the website, start at https://viberaven.dev/try and connect the computer that holds your app. Real changes need Node.js 20+ and your own installed, signed-in Claude Code, Codex or Gemini CLI on that computer. Follow <https://viberaven.dev/docs/get-started>. For the local Studio, run `npx -y viberaven@1.7.8` in your app folder; it opens locally and needs no VibeRaven account.
+VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change.
+
+## Two users at once
+
+`race` tests your app’s database on real PostgreSQL 18.6, without Docker, and replays exactly what broke. Start locally with `npx -y viberaven@1.10.0 race --example` (Node 24+ with JSPI).
+
+```text
+At most 2 bookings per event: 60 orders, 24 broken, 0 waiting; 1.495s total
+First broken order 001101 (read committed); COMMIT A=true, B=true
+Replay record is byte-identical, including PostgreSQL protocol bytes.
+```
+
+Recorded synthetic example; elapsed time varies. Engine proof: 122 of 124 PostgreSQL isolation specs; hidden tests 199/200 new orders and 1,500/1,500 real-app interleavings, with native PostgreSQL at 100% through the same judge; 80/80 exact replays; 0 leaks between sessions in 60 isolation cases. [Method and limitations](https://github.com/ohad6k/VibeRaven/blob/main/docs/race.md#frozen-engine-proof).
+
+1. `npx -y viberaven@1.10.0 check`: repository risks before launch.
+2. Write a reviewed `viberaven.race.json`, then run `npx -y viberaven@1.10.0 race`: two users at once, with the exact order.
+3. Fix, run `race` again, and replay the reported order to confirm.
+
+[Engine](https://viberaven.dev/engine) · [Connect your agent](https://viberaven.dev/connect/mcp). Hosted MCP gives SQL/error guidance; race runs locally.
+
+
+VibeRaven helps you maintain an existing AI-built app with your coding agent, service context, repository findings and reviewable changes. To use the website, start at https://viberaven.dev/try and connect the computer that holds your app. Real changes need Node.js 20+ and your own installed, signed-in Claude Code, Codex or Gemini CLI on that computer. Follow <https://viberaven.dev/docs/get-started>. For the local Studio, run `npx -y viberaven@1.10.0` in your app folder; it opens locally and needs no VibeRaven account.
 
 MCP is optional. The hosted server below is read-only: it answers from published guides and dated provider notes, `check_supabase_migrations` checks only the migration text you pass to it, and `check_github_repo` reads only the migration files of a public GitHub repository. The local `@viberaven/mcp` server has repository tools, including supported file changes. Neither should be presented as autonomous proof that a live database is secure. The repository check is advice, not a gate: the user decides when to ship. It is not a live database or security test.
 
@@ -53,7 +74,7 @@ Review the findings against the intended access model, make the permitted source
 - Transport: streamable HTTP. Each request stands alone; there are no sessions.
 - Authentication: none. No sign-in and no API key.
 - Read-only: every tool is marked `readOnlyHint: true`.
-- Server: `viberaven`. Source guide version: 1.7.8. Live `initialize` on 2026-11-03 returned 1.7.6; hosted deployment versions are separate from npm CLI releases.
+- Server: `viberaven`. Source guide version: 1.10.0 (prepared locally). Live `initialize` on 2026-11-03 returned 1.7.6; hosted deployment versions are separate from npm CLI releases.
 - MCP registry name: `io.github.ohad6k/viberaven-guides`
 
 It returns published guidance; `check_supabase_migrations` analyzes the SQL you supply, and `check_github_repo` reads the public migration files of the repository you name. It cannot access your local or private files, database, dashboards or provider accounts. SQL and repository results are static analyses of the specified inputs, not verification of the deployed app.
@@ -126,7 +147,7 @@ The registry lists it as this remote entry:
 The MCP server is the `@viberaven/mcp` package, listed in the official MCP registry as `io.github.ohad6k/viberaven`. Add to your MCP config:
 
 ```json
-{ "viberaven": { "command": "npx", "args": ["-y", "@viberaven/mcp@1.7.8"] } }
+{ "viberaven": { "command": "npx", "args": ["-y", "@viberaven/mcp@1.10.0"] } }
 ```
 
 The `viberaven` CLI package is not an MCP server. In 1.6.3 it has no `--mcp` flag: the unknown flag is ignored and the default Studio launch runs (local server on 127.0.0.1, browser opened, and a first scan only when `.viberaven/last-scan.json` does not exist yet).
@@ -153,14 +174,14 @@ The server exposes tools only, no MCP resources or prompts. Start with `viberave
 ## CLI fallback
 
 ```bash
-npx -y viberaven@1.7.8 check
+npx -y viberaven@1.10.0 check
 ```
 
-Agents should read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json` for the machine verdict and `.viberaven/context-map.json`. Work the gaps in `topGapIds` order, starting with the action printed between `VIBERAVEN_NEXT_ACTION_START` and `VIBERAVEN_NEXT_ACTION_END`. `npx -y viberaven@1.7.8 next --json` is a different, simpler output: it reads the last scan and returns `type` (`repo-fix`, `provider-guide`, or `done`), `title`, `detail`, `command` (for a gap, `viberaven prompt --gap <id>`), `productionCorePercent`, and `score`. It has no `batchSize` or `requiresUserAction`, and it labels any remaining gap `repo-fix`, even one only a provider dashboard can clear. To decide whether a gap needs the user or a dashboard, trust the stdout block (`type: "provider-action"`, `requiresUserAction: true`) and the `VIBERAVEN_PROVIDER_ACTION` block, not `next --json`. Apply safe repo-code fixes directly or with a supported heal action, respect `batchSize` from that block, and verify once per batch. A `clear` status covers the repo half; the user decides when to ship.
+Agents should read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json` for the machine verdict and `.viberaven/context-map.json`. Work the gaps in `topGapIds` order, starting with the action printed between `VIBERAVEN_NEXT_ACTION_START` and `VIBERAVEN_NEXT_ACTION_END`. `npx -y viberaven@1.10.0 next --json` is a different, simpler output: it reads the last scan and returns `type` (`repo-fix`, `provider-guide`, or `done`), `title`, `detail`, `command` (for a gap, `viberaven prompt --gap <id>`), `productionCorePercent`, and `score`. It has no `batchSize` or `requiresUserAction`, and it labels any remaining gap `repo-fix`, even one only a provider dashboard can clear. To decide whether a gap needs the user or a dashboard, trust the stdout block (`type: "provider-action"`, `requiresUserAction: true`) and the `VIBERAVEN_PROVIDER_ACTION` block, not `next --json`. Apply safe repo-code fixes directly or with a supported heal action, respect `batchSize` from that block, and verify once per batch. A `clear` status covers the repo half; the user decides when to ship.
 
 ```bash
-npx -y viberaven@1.7.8 --verify
-npx -y viberaven@1.7.8 --strict
+npx -y viberaven@1.10.0 --verify
+npx -y viberaven@1.10.0 --strict
 ```
 
 `--strict` exits 1 when `gate.status` is `not_clear`; a `warning` status exits 0 unless you use `--strict=warning`. It is for a CI step the user chooses to add.
@@ -170,7 +191,7 @@ npx -y viberaven@1.7.8 --strict
 Call `viberaven_validate_npm_package`. It checks that the name exists on the public npm registry and flags a name published in the last 14 days within 2 edits of a popular package, or one with empty metadata. An older lookalike name passes, so it is not a full typosquat or malware check. After dependency changes on a Vercel + Supabase app, run:
 
 ```bash
-npx -y viberaven@1.7.8 check
+npx -y viberaven@1.10.0 check
 ```
 
 ## Boundaries

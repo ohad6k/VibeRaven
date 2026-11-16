@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-11-02T18:27:11.294Z",
+  "exportedAt": "2026-11-16T21:14:43.870Z",
   "sourceRepo": "ohad6k/viberaven-dev",
   "targetRepo": "ohad6k/VibeRaven",
   "held": [
@@ -9,6 +9,34 @@
     }
   ],
   "files": [
+    [
+      "export/public-discovery-staging/plugins/viberaven-hosted/.claude-plugin/plugin.json",
+      "plugins/viberaven-hosted/.claude-plugin/plugin.json"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven-hosted/.cursor-plugin/plugin.json",
+      "plugins/viberaven-hosted/.cursor-plugin/plugin.json"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven-hosted/assets/logo.png",
+      "plugins/viberaven-hosted/assets/logo.png"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven-hosted/LICENSE",
+      "plugins/viberaven-hosted/LICENSE"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven-hosted/mcp.json",
+      "plugins/viberaven-hosted/mcp.json"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven-hosted/README.md",
+      "plugins/viberaven-hosted/README.md"
+    ],
+    [
+      "export/public-discovery-staging/plugins/viberaven-hosted/skills/prelaunch-check/SKILL.md",
+      "plugins/viberaven-hosted/skills/prelaunch-check/SKILL.md"
+    ],
     [
       "docs/public-repo/AGENTS.md",
       "AGENTS.md"
@@ -30,12 +58,128 @@
       "README.md"
     ],
     [
+      "docs/public-repo/notices/sessions.txt",
+      "notices/sessions.txt"
+    ],
+    [
+      "docs/public-repo/notices/cli.txt",
+      "notices/cli.txt"
+    ],
+    [
+      "docs/public-repo/notices/mcp.txt",
+      "notices/mcp.txt"
+    ],
+    [
+      "docs/public-repo/notices/viberaven-shim.txt",
+      "notices/viberaven-shim.txt"
+    ],
+    [
       "docs/public-repo/CONTRIBUTING.md",
       "CONTRIBUTING.md"
     ],
     [
+      "docs/public-repo/SECURITY.md",
+      "SECURITY.md"
+    ],
+    [
+      "docs/public-repo/CODE_OF_CONDUCT.md",
+      "CODE_OF_CONDUCT.md"
+    ],
+    [
+      "docs/public-repo/.github/ISSUE_TEMPLATE/bug_report.md",
+      ".github/ISSUE_TEMPLATE/bug_report.md"
+    ],
+    [
+      "docs/public-repo/.github/ISSUE_TEMPLATE/feature_request.md",
+      ".github/ISSUE_TEMPLATE/feature_request.md"
+    ],
+    [
+      "docs/public-repo/.github/ISSUE_TEMPLATE/config.yml",
+      ".github/ISSUE_TEMPLATE/config.yml"
+    ],
+    [
+      "docs/public-repo/.github/PULL_REQUEST_TEMPLATE.md",
+      ".github/PULL_REQUEST_TEMPLATE.md"
+    ],
+    [
+      "docs/public-repo/examples/race-capacity/README.md",
+      "examples/race-capacity/README.md"
+    ],
+    [
+      "docs/public-repo/examples/race-capacity/expected-output.txt",
+      "examples/race-capacity/expected-output.txt"
+    ],
+    [
+      "docs/public-repo/examples/race-capacity/fix.sql",
+      "examples/race-capacity/fix.sql"
+    ],
+    [
+      "docs/public-repo/examples/race-capacity/supabase/migrations/001_bookings.sql",
+      "examples/race-capacity/supabase/migrations/001_bookings.sql"
+    ],
+    [
+      "export/public-discovery-staging/.claude-plugin/marketplace.json",
+      ".claude-plugin/marketplace.json"
+    ],
+    [
+      "export/public-discovery-staging/.cursor-plugin/marketplace.json",
+      ".cursor-plugin/marketplace.json"
+    ],
+    [
+      "examples/ai-sdk-provider-context/.gitignore",
+      "examples/ai-sdk-provider-context/.gitignore"
+    ],
+    [
+      "examples/ai-sdk-provider-context/README.md",
+      "examples/ai-sdk-provider-context/README.md"
+    ],
+    [
+      "examples/ai-sdk-provider-context/package.json",
+      "examples/ai-sdk-provider-context/package.json"
+    ],
+    [
+      "examples/ai-sdk-provider-context/package-lock.json",
+      "examples/ai-sdk-provider-context/package-lock.json"
+    ],
+    [
+      "examples/ai-sdk-provider-context/tsconfig.json",
+      "examples/ai-sdk-provider-context/tsconfig.json"
+    ],
+    [
+      "examples/ai-sdk-provider-context/provider-context.ts",
+      "examples/ai-sdk-provider-context/provider-context.ts"
+    ],
+    [
+      "examples/ai-sdk-provider-context/answer-provider-question.ts",
+      "examples/ai-sdk-provider-context/answer-provider-question.ts"
+    ],
+    [
+      "examples/ai-sdk-provider-context/smoke.ts",
+      "examples/ai-sdk-provider-context/smoke.ts"
+    ],
+    [
+      "examples/ai-sdk-provider-context/test/context.test.ts",
+      "examples/ai-sdk-provider-context/test/context.test.ts"
+    ],
+    [
+      "examples/ai-sdk-provider-context/context.ts",
+      "examples/ai-sdk-provider-context/context.ts"
+    ],
+    [
+      "examples/ai-sdk-provider-context/test/context-command.test.ts",
+      "examples/ai-sdk-provider-context/test/context-command.test.ts"
+    ],
+    [
       "docs/public-repo/CHANGELOG.md",
       "CHANGELOG.md"
+    ],
+    [
+      "docs/public-repo/race.md",
+      "docs/race.md"
+    ],
+    [
+      "docs/public-repo/AGENTS-HUB.md",
+      "AGENTS-HUB.md"
     ],
     [
       "docs/public-repo/LICENSE",
@@ -46,8 +190,16 @@
       "assets/logo.png"
     ],
     [
-      "docs/public-repo/assets/banner.png",
-      "assets/banner.png"
+      "docs/public-repo/assets/favicon.svg",
+      "assets/favicon.svg"
+    ],
+    [
+      "docs/public-repo/assets/favicon-512.png",
+      "assets/favicon-512.png"
+    ],
+    [
+      "docs/public-repo/assets/favicon-192.png",
+      "assets/favicon-192.png"
     ],
     [
       "docs/public-repo/assets/cards-binder.png",
@@ -56,14 +208,6 @@
     [
       "docs/public-repo/assets/provider-cards.png",
       "assets/provider-cards.png"
-    ],
-    [
-      "docs/public-repo/assets/raven-mascot.png",
-      "assets/raven-mascot.png"
-    ],
-    [
-      "docs/public-repo/assets/raven-hero.png",
-      "assets/raven-hero.png"
     ],
     [
       "docs/public-repo/assets/viberaven-localhost-ui.png",
@@ -110,6 +254,10 @@
       "llms-full.txt"
     ],
     [
+      "landing/public/mcp.md",
+      "docs/mcp.md"
+    ],
+    [
       "landing/public/agent-context.md",
       "agent-context.md"
     ],
@@ -120,6 +268,10 @@
     [
       "docs/github-repo-metadata.md",
       "docs/github-repo-metadata.md"
+    ],
+    [
+      "docs/GITHUB-SETTINGS.md",
+      "GITHUB-SETTINGS.md"
     ],
     [
       "docs/badge-snippet.md",

@@ -5,13 +5,21 @@ description: Review Supabase migrations for row-access and grant gaps, inspect a
 
 # VibeRaven repository review
 
+VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change.
+
+1. Run `npx -y viberaven@1.10.0 check` for repository risks.
+2. Test two users at once on real PostgreSQL: `npx -y viberaven@1.10.0 race` (Node 24+). Start with `npx -y viberaven@1.10.0 race --example`.
+3. Fix, rerun and replay the reported order. [Engine](https://viberaven.dev/engine).
+
+Hosted MCP cannot run local race tests. Give these commands to the repo-capable agent; keep the hosted migration/error guidance below.
+
 Choose the smallest useful route for the user's task. A solved question does not require an installation, account or extra tool call. An installed plugin is not proof that its tools are connected or ready.
 
 ## Choose an available route
 
 - Supplied Supabase migration text: if `check_supabase_migrations` is available, pass `sql` for one migration or `files` with each file's `path` and `content`. For a migration sequence, include earlier schema/policy/grant changes. Context needed by the grant rule can include `supabase/config.toml`, `package.json` and browser code. Never send secrets or `.env` contents.
 - Public GitHub repository: if `check_github_repo` is available, pass `repo` and an optional `ref`. It reads public migration files at one resolved commit, within file/byte caps. The result names the commit and coverage. It cannot inspect private repositories or dashboard-only schema. Never ask the user to make a repository public.
-- Local repository and shell: when running the check is requested or already authorized, run `npx -y viberaven@1.7.11 check` in the project root. This downloads an npm package if needed and writes reports under `.viberaven/`; local checks need no sign-in or API key. Respect the environment's execution permissions. Read `.viberaven/agent-tasklist.md`, then `.viberaven/gate-result.json`. Exit 1 with findings is a check result, not a connection failure. If a matching local MCP readiness tool is actually listed, it can provide the local path instead.
+- Local repository and shell: when running the check is requested or already authorized, run `npx -y viberaven@1.10.0 check` in the project root. This downloads an npm package if needed and writes reports under `.viberaven/`; local checks need no sign-in or API key. Respect the environment's execution permissions. Read `.viberaven/agent-tasklist.md`, then `.viberaven/gate-result.json`. Exit 1 with findings is a check result, not a connection failure. If a matching local MCP readiness tool is actually listed, it can provide the local path instead.
 - A named finding: use `explain_finding` when available. Error or setup guidance can use `search_guides`; dated provider guidance can use `recent_provider_changes`, and `provider_playbook` offers the provider packs it actually lists. None of these runs or verifies a provider fix.
 - No suitable tool or access: explain that boundary and give a concrete local command or a short request for nonsecret input only if needed. Do not claim a check ran. Help directly when the available information is sufficient.
 

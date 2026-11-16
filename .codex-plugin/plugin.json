@@ -1,7 +1,7 @@
 {
   "name": "viberaven",
-  "version": "1.7.6",
-  "description": "VibeRaven Studio and architecture/production-context skills for AI-built apps.",
+  "version": "1.10.0",
+  "description": "Production context and checks for AI-built apps across their providers. Local race tests two users at once on real PostgreSQL and replays exactly what broke.",
   "author": {
     "name": "VibeRaven",
     "url": "https://github.com/ohad6k/VibeRaven"
@@ -9,15 +9,27 @@
   "homepage": "https://github.com/ohad6k/VibeRaven",
   "repository": "https://github.com/ohad6k/VibeRaven",
   "license": "MIT",
-  "keywords": ["ai-built-apps", "production-context", "release-drift", "provider-context", "skills"],
+  "keywords": [
+    "ai-built-apps",
+    "production-context",
+    "release-drift",
+    "provider-context",
+    "skills"
+  ],
   "skills": "./agent-skills/",
   "interface": {
     "displayName": "VibeRaven",
-    "shortDescription": "Give agents architecture, release, and provider context before fixes.",
-    "longDescription": "Open the VibeRaven Studio with npx -y viberaven@1.7.6, or install the skills pack so coding agents follow one senior-engineer flow: architecture, version/release context, provider boundary, MCP/Studio context, then the smallest safe fix.",
+    "shortDescription": "Production context, checks and two-user PostgreSQL race tests.",
+    "longDescription": "VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change. Run npx -y viberaven@1.10.0 race --example, then check, race, fix and replay in your repo. Open the Studio for provider context, releases and diffs.",
     "developerName": "VibeRaven",
     "category": "Developer Tools",
-    "capabilities": ["Instructions", "Skills", "Local Studio", "Architecture context", "Production context"],
+    "capabilities": [
+      "Instructions",
+      "Skills",
+      "Local Studio",
+      "Architecture context",
+      "Production context"
+    ],
     "websiteURL": "https://github.com/ohad6k/VibeRaven",
     "defaultPrompt": [
       "Use architecture-context at the start of real app work to ask low-level product questions, then route answered work to architecture-plan before a fix.",
@@ -27,6 +39,8 @@
       "Use what-broke to find what changed and which architecture boundary is affected before editing.",
       "Use go-live when the user wants GitHub push, Vercel deploy, and live URL proof."
     ],
-    "brandColor": "#7c3aed"
+    "brandColor": "#7c3aed",
+    "iconSmall": "./assets/favicon.svg",
+    "iconLarge": "./assets/favicon-512.png"
   }
 }

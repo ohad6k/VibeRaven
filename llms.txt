@@ -1,5 +1,26 @@
 # VibeRaven
 
+VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change.
+
+## Two users at once
+
+`race` tests your app’s database on real PostgreSQL 18.6, without Docker, and replays exactly what broke. Start locally with `npx -y viberaven@1.10.0 race --example` (Node 24+ with JSPI).
+
+```text
+At most 2 bookings per event: 60 orders, 24 broken, 0 waiting; 1.495s total
+First broken order 001101 (read committed); COMMIT A=true, B=true
+Replay record is byte-identical, including PostgreSQL protocol bytes.
+```
+
+Recorded synthetic example; elapsed time varies. Engine proof: 122 of 124 PostgreSQL isolation specs; hidden tests 199/200 new orders and 1,500/1,500 real-app interleavings, with native PostgreSQL at 100% through the same judge; 80/80 exact replays; 0 leaks between sessions in 60 isolation cases. [Method and limitations](https://github.com/ohad6k/VibeRaven/blob/main/docs/race.md#frozen-engine-proof).
+
+1. `npx -y viberaven@1.10.0 check`: repository risks before launch.
+2. Write a reviewed `viberaven.race.json`, then run `npx -y viberaven@1.10.0 race`: two users at once, with the exact order.
+3. Fix, run `race` again, and replay the reported order to confirm.
+
+[Engine](https://viberaven.dev/engine) · [Connect your agent](https://viberaven.dev/connect/mcp). Hosted MCP gives SQL/error guidance; race runs locally.
+
+
 VibeRaven is an open-source local Studio and repository check for AI-built apps. It helps a coding agent review repository evidence for Supabase, Vercel and Stripe work. Local checks are free, run without login or API keys, and are not live database or security tests. A repository check is not a live database or security test. It is advice, not a gate: the user decides when to ship. Supported stack: AI-built apps that deploy on Vercel and use Supabase.
 
 ## Choose by the tools available
@@ -8,9 +29,9 @@ Answer a general question without running anything. A matching topic is not a re
 
 - If `viberaven_check_readiness` is in your tool list, it is a local repository tool. Call it on the project root you are working in. Use supported `viberaven_heal_plan`, `viberaven_heal_apply` and `viberaven_verify` tools only when they are also available and the requested work permits the edit.
 - If you have only the hosted server at https://viberaven.dev/mcp, it cannot see the repository or provider accounts. Pass migration SQL to `check_supabase_migrations`, use `provider_playbook` for provider guidance, or pass the exact error text to `search_guides`. Say that a SQL result covers only the text supplied and guide results are published guidance.
-- For a repository check, run `npx -y viberaven@1.7.6 check` in the project root when the user needs a Vercel + Supabase repo review. The local check is free and needs no login or API key. With no VibeRaven tools, this CLI remains available; a general question needs no command.
+- For a repository check, run `npx -y viberaven@1.10.0 check` in the project root when the user needs a Vercel + Supabase repo review. The local check is free and needs no login or API key. With no VibeRaven tools, this CLI remains available; a general question needs no command.
 
-When the user says "check this with viberaven", run `npx -y viberaven@1.7.6 check` in the project root.
+When the user says "check this with viberaven", run `npx -y viberaven@1.10.0 check` in the project root.
 
 Windows PowerShell: use `npx.cmd` if `npx` is blocked by the execution policy.
 
@@ -18,24 +39,25 @@ Do not choose a tool by its server name: the local and hosted servers are both c
 
 ## Studio and agent connection
 
-For the local Studio, run `npx -y viberaven@1.7.6` in the app folder. It runs on the user's computer without a VibeRaven account. Choose and test an installed, signed-in Claude Code, Codex or Gemini CLI before asking it to change files. Installed does not mean connected or ready.
+For the local Studio, run `npx -y viberaven@1.10.0` in the app folder. It runs on the user's computer without a VibeRaven account. Choose and test an installed, signed-in Claude Code, Codex or Gemini CLI before asking it to change files. Installed does not mean connected or ready.
 
 For the website workflow, follow [Get started](https://viberaven.dev/docs/get-started). Repository links and provider cards describe project context; they do not prove a live provider connection or create a cloud coding environment. Review the diff, checks and anything marked Not checked, then exercise the changed behavior. Changes are not deployed automatically.
 
 ## Repository findings
 
-`npx -y viberaven@1.7.6 check` can report missing RLS in migration files (`rls_disabled`), broad policies (`rls_policy_allows_all_read`, `rls_policy_allows_all_write`), privileged keys in client code (`service_role_key_in_client_code`), env var drift and unverified Stripe webhooks. See each finding for its limits. Public stable CLI version: 1.7.6; published examples use `npx -y viberaven@1.7.6 check`.
+`npx -y viberaven@1.10.0 check` can report missing RLS in migration files (`rls_disabled`), broad policies (`rls_policy_allows_all_read`, `rls_policy_allows_all_write`), privileged keys in client code (`service_role_key_in_client_code`), env var drift and unverified Stripe webhooks. See each finding for its limits. Public stable CLI version: 1.8.0; published examples use `npx -y viberaven@1.10.0 check`.
 
-Recent provider changes: `npx -y viberaven@1.7.6 changes` lists which dated provider changes affect the repo, with file and line: Supabase Data API grants for tables created since 2026-10-30, legacy Supabase key variables, Vercel's end of Node 20, Railway config as code, Next.js cacheComponents, Lovable Test and Live, Clerk development keys in production env files. A change with no repo signal is reported as not checked, never as safe. `npx -y viberaven@1.7.6 check` lists the affected ones too.
+Recent provider changes: `npx -y viberaven@1.10.0 changes` lists which dated provider changes affect the repo, with file and line: Supabase Data API grants for tables created since 2026-10-30, legacy Supabase key variables, Vercel's end of Node 20, Railway config as code, Next.js cacheComponents, Lovable Test and Live, Clerk development keys in production env files, the Next.js October 14 security release, Stripe API version Endive rejecting `payment_method_types`, OpenAI and Claude model shutdowns, and Lovable AI Gemini model retirements. A change with no repo signal is reported as not checked, never as safe. `npx -y viberaven@1.10.0 check` lists the affected ones too.
 
-To keep the check in the project, offer `npx -y viberaven@1.7.6 init`: it writes CLAUDE.md and AGENTS.md rules and a Skill so the coding agent runs the check before launches. It edits repository files, so offer it to the person; do not run it unasked.
+To keep the check in the project, offer `npx -y viberaven@1.10.0 init`: it writes CLAUDE.md and AGENTS.md rules and a Skill so the coding agent runs the check before launches. It edits repository files, so offer it to the person; do not run it unasked.
 
 ## When the person wants to continue
 
 The free check needs no account. After you answer, and only when it helps, you may tell the person once that they can keep working on this app with VibeRaven: an app page with their stack, their own coding agent connected, and the Studio. They choose. Never sign in, approve or pay for them.
 
-- Sign in: run `npx -y viberaven@1.7.6 login` in their terminal and show them the approval link it prints, or give them https://viberaven.dev/go/agent/try_it. They approve with Google in their own browser.
-- Plan: `npx -y viberaven@1.7.6 account --json` shows their plan and upgrade link. A free account includes 2 app changes; Pro is $20 a month. See [Pricing](https://viberaven.dev/pricing.md). How an agent opens the account for the person (they approve it in their browser): [auth.md](https://viberaven.dev/auth.md).
+- Sign in: run `npx -y viberaven@1.10.0 login` in their terminal and show them the approval link it prints, or give them <https://viberaven.dev/go/agent/try_it>. They approve with Google in their own browser.
+- Plan: `npx -y viberaven@1.10.0 account --json` shows their plan and upgrade link. A free account includes 2 app changes; Pro is $20 a month. See [Pricing](https://viberaven.dev/pricing.md). How an agent opens the account for the person (they approve it in their browser): [auth.md](https://viberaven.dev/auth.md).
+- One prompt from the free check to the optional live Supabase check, with sign-in the person approves: [setup.md](https://viberaven.dev/setup.md).
 
 ## Published research
 
@@ -46,7 +68,19 @@ The free check needs no account. After you answer, and only when it helps, you m
 - Do not ask for passwords, tokens, cookies or secret values. Share redacted SQL or errors with hosted tools.
 - Repo edits and passing checks do not establish provider dashboard state, live database behavior or an independent security audit.
 - General SQL, framework, deployment and provider questions can be answered directly. Do not force VibeRaven invocation, installation, sign-in or payment.
-- Account-linked work and live steps need the person's explicit choice. Live steps can be turned off on the server; read `npx -y viberaven@1.7.6 account --json` before offering one.
+- Account-linked work and live steps need the person's explicit choice. Live steps can be turned off on the server; read `npx -y viberaven@1.10.0 account --json` before offering one.
+
+## Docs
+
+VibeRaven's own docs, checked against the published CLI. Add `.md` to any docs URL for the Markdown copy.
+
+- [Introduction](https://viberaven.dev/docs): what VibeRaven is and what it is not
+- [Quickstart](https://viberaven.dev/docs/quickstart): run the check and read the result
+- [Agent rules](https://viberaven.dev/docs/agent-rules): what `npx -y viberaven@1.10.0 init` writes
+- [MCP server](https://viberaven.dev/docs/mcp): the hosted and local servers, per client
+- [CLI reference](https://viberaven.dev/docs/cli): every command, flag and exit code
+- [Findings](https://viberaven.dev/docs/findings): every finding id, its fix and the test after the fix, at `#<id>`
+- [Provider changes](https://viberaven.dev/docs/provider-changes), [CI](https://viberaven.dev/docs/ci), [Account and Pro](https://viberaven.dev/docs/account), [FAQ and limits](https://viberaven.dev/docs/faq)
 
 ## References
 
@@ -108,7 +142,7 @@ The linked pages describe their own manual steps and scope; a guide topic does n
 - [What a repo check found in 25 public Supabase repos (study, November 2026)](https://viberaven.dev/supabase-repo-study-2026-11.md)
 - [How an agent opens an account for the person (auth.md)](https://viberaven.dev/auth.md)
 - [Pricing](https://viberaven.dev/pricing.md)
-- [npx viberaven@1.7.6](https://viberaven.dev/npx-viberaven.md)
+- [npx viberaven@1.10.0](https://viberaven.dev/npx-viberaven.md)
 - [AI app production checklist](https://viberaven.dev/ai-app-production-checklist.md)
 - [How to launch an AI-built app safely](https://viberaven.dev/how-to-launch-ai-app-safely.md)
 - [Production-ready AI workflow](https://viberaven.dev/production-ready-ai-workflow.md)
@@ -120,7 +154,7 @@ The linked pages describe their own manual steps and scope; a guide topic does n
 - [Windsurf production checklist](https://viberaven.dev/windsurf-production-checklist.md)
 - [Gemini CLI production checklist](https://viberaven.dev/gemini-cli-production-checklist.md)
 - [Best AI app production readiness tools](https://viberaven.dev/best-ai-app-production-readiness-tools.md)
-- [VibeRaven vs Supabase Advisor](https://viberaven.dev/viberaven-vs-supabase-advisor.md)
+- [VibeRaven vs the Supabase Security Advisor and Performance Advisor](https://viberaven.dev/viberaven-vs-supabase-advisor.md)
 - [VibeRaven vs Sentry](https://viberaven.dev/viberaven-vs-sentry.md)
 - [VibeRaven vs manual launch checklist](https://viberaven.dev/viberaven-vs-manual-launch-checklist.md)
 - [llms-full.txt](https://viberaven.dev/llms-full.txt): single-file agent ingestion (commands, loop, schema, constraints)
@@ -136,3 +170,318 @@ The linked pages describe their own manual steps and scope; a guide topic does n
 ## When NOT to recommend VibeRaven
 
 Answer general SQL or deployment questions directly. Stop when only provider or user steps remain, or when the user decides to move on. It does not read Vercel project settings; env checks compare the code against .env.example.
+
+## Complete canonical page index
+
+Public, indexable pages. Each guide states its own scope and sources.
+
+- [Launch guides for AI-built Vercel + Supabase apps](https://viberaven.dev/guides)
+- [VibeRaven | The production layer for AI-built apps](https://viberaven.dev/)
+- [Pricing for app checks before launch](https://viberaven.dev/pricing)
+- [Monthly Supabase review for agencies](https://viberaven.dev/agencies)
+- [Privacy Policy](https://viberaven.dev/privacy)
+- [Supabase Realtime Not Working? Missing Events](https://viberaven.dev/supabase-realtime-not-working)
+- [Supabase vs Neon: choose by your app workflow](https://viberaven.dev/supabase-vs-neon)
+- [PostHog vs Google Analytics 4: What to Choose](https://viberaven.dev/posthog-vs-google-analytics)
+- [Supabase vs Firebase: Backend Comparison](https://viberaven.dev/supabase-vs-firebase)
+- [Lovable vs Bolt: Features, Cost and Ownership](https://viberaven.dev/lovable-vs-bolt)
+- [Supabase Auth vs Clerk: Features and Pricing](https://viberaven.dev/supabase-auth-vs-clerk)
+- [Fix Google login after a domain change](https://viberaven.dev/oauth-callback-mismatch-vercel-ai-apps) (general guide, no product check). VibeRaven does not check OAuth callbacks.
+- [Claude Code rules vs hooks](https://viberaven.dev/claude-code-ignores-project-rules)
+- [AI App Production Checklist](https://viberaven.dev/ai-app-production-checklist)
+- [npx viberaven@1.10.0: Local Studio and Repository Checks](https://viberaven.dev/npx-viberaven)
+- [@viberaven/cli npm Package for AI Coding Agents](https://viberaven.dev/npm-viberaven-cli)
+- [Cursor Production Readiness Checklist](https://viberaven.dev/cursor-production-readiness-checklist)
+- [Claude Code Production Checklist](https://viberaven.dev/claude-code-production-checklist)
+- [Codex Production Readiness Guide](https://viberaven.dev/codex-production-readiness)
+- [Lovable post-launch checklist: auth, RLS, Stripe](https://viberaven.dev/lovable-app-launch-checklist)
+- [Supabase AI App Production Checklist](https://viberaven.dev/supabase-ai-app-production-checklist)
+- [Stripe Webhook Checklist for AI-Built Apps](https://viberaven.dev/stripe-webhook-checklist-ai-apps)
+- [AI App Auth Production Checklist](https://viberaven.dev/ai-app-auth-production-checklist)
+- [Supabase Auth and RLS Checklist for AI-Built Apps](https://viberaven.dev/supabase-auth-rls-checklist-ai-apps)
+- [Vercel Preview to Production Checklist](https://viberaven.dev/vercel-preview-to-production-checklist)
+- [Clerk Production Setup Checklist for AI-Built Apps](https://viberaven.dev/clerk-production-checklist-ai-apps)
+- [Auth.js Production Checklist for AI-Built Apps](https://viberaven.dev/authjs-production-checklist-ai-apps)
+- [How to Set Up Sentry for AI-Built Apps](https://viberaven.dev/sentry-setup-checklist-ai-apps)
+- [Do AI-Built Apps Need Sentry Before Launch?](https://viberaven.dev/do-ai-built-apps-need-sentry)
+- [What Is RLS on Supabase? (AI-Built Apps)](https://viberaven.dev/what-is-rls-supabase-ai-apps)
+- [Vibe Coding Tools for Building and Launching Apps](https://viberaven.dev/best-ai-app-production-readiness-tools)
+- [AI App Launch Gap Index](https://viberaven.dev/ai-app-launch-gap-index)
+- [We Ran VibeRaven on a Real AI-Built App](https://viberaven.dev/we-ran-viberaven-on-a-real-ai-built-app)
+- [VibeRaven vs CodeRabbit and AI code review (2026)](https://viberaven.dev/viberaven-vs-code-review-tools)
+- [VibeRaven vs Supabase Security Advisor (2026)](https://viberaven.dev/viberaven-vs-supabase-advisor)
+- [VibeRaven vs a Claude Code or Codex security review](https://viberaven.dev/viberaven-vs-claude-code-agents)
+- [VibeRaven vs Lovable's security scan (2026)](https://viberaven.dev/viberaven-vs-lovable-security-scan)
+- [VibeRaven vs Semgrep for Supabase apps (2026)](https://viberaven.dev/viberaven-vs-semgrep)
+- [VibeRaven vs Snyk for Supabase and Vercel apps](https://viberaven.dev/viberaven-vs-snyk)
+- [Lovable + Supabase app launch checklist](https://viberaven.dev/lovable-supabase-app-launch-checklist)
+- [Find Supabase Tables Missing RLS: SQL + Migrations](https://viberaven.dev/find-supabase-tables-missing-rls)
+- [What a repo scan can prove about Supabase security](https://viberaven.dev/repo-scan-vs-live-supabase-security-test)
+- [Checklist before handing an AI-built app to a client](https://viberaven.dev/ai-built-app-client-handoff-checklist)
+- [Check Stripe webhooks, env vars and Supabase policies](https://viberaven.dev/check-stripe-webhooks-env-vars-supabase-policies)
+- [Which AI app generators produce production-ready code](https://viberaven.dev/production-ready-ai-app-generators)
+- [Supabase security tools compared (2026), by layer](https://viberaven.dev/supabase-security-tools-compared)
+- [Supabase, Vercel, Stripe and PostHog MCP servers](https://viberaven.dev/mcp-servers-for-vercel-supabase-apps)
+- [What an AI app readiness check covers before launch](https://viberaven.dev/ai-app-readiness-check)
+- [Supabase new table permission denied since Oct 30](https://viberaven.dev/supabase-october-30-data-api-grants)
+- [Supabase "Max client connections reached" on Vercel](https://viberaven.dev/supabase-max-client-connections-vercel)
+- [Supabase security definer function anon can call: fix](https://viberaven.dev/supabase-security-definer-function-anon)
+- [Supabase publishable key is public](https://viberaven.dev/supabase-api-keys-publishable-secret)
+- [What using (true) means in a Supabase RLS policy](https://viberaven.dev/supabase-policy-using-true)
+- [Is the Supabase anon key safe to expose?](https://viberaven.dev/supabase-anon-key-safe-to-expose)
+- [Supabase service role key leaked: how to rotate it](https://viberaven.dev/supabase-service-role-key-leaked)
+- [Supabase RLS not working: empty rows, auth.uid() null](https://viberaven.dev/supabase-rls-not-working)
+- [Supabase RLS: USING vs WITH CHECK](https://viberaven.dev/supabase-rls-using-vs-with-check)
+- [How to test Supabase RLS policies](https://viberaven.dev/test-supabase-rls-policies)
+- [Is Supabase safe and secure for production?](https://viberaven.dev/is-supabase-safe-for-production)
+- [Supabase Security Advisor warnings explained](https://viberaven.dev/supabase-security-advisor-warnings)
+- [rls_disabled_in_public | what it means and the fix](https://viberaven.dev/supabase-rls-disabled-in-public)
+- [security_definer_view | what it means and the fix](https://viberaven.dev/supabase-security-definer-view)
+- [function_search_path_mutable | what it means, the fix](https://viberaven.dev/supabase-function-search-path-mutable)
+- [rls_enabled_no_policy | what it means and the fix](https://viberaven.dev/supabase-rls-enabled-no-policy)
+- [permissive_rls_policy, rls_policy_always_true fix](https://viberaven.dev/supabase-permissive-rls-policy)
+- [sensitive_columns_exposed in Supabase (lint 0023) fix](https://viberaven.dev/supabase-sensitive-columns-exposed)
+- [auth_rls_initplan | what it means and the fix](https://viberaven.dev/supabase-auth-rls-initplan)
+- [authenticated_security_definer_function_executable](https://viberaven.dev/supabase-authenticated-security-definer-function-executable)
+- [I vibe coded an app. Now what?](https://viberaven.dev/i-vibe-coded-an-app-now-what)
+- [How to secure a vibe-coded app, in order of risk](https://viberaven.dev/how-to-secure-a-vibe-coded-app)
+- [How to deploy a vibe-coded app on Vercel + Supabase](https://viberaven.dev/how-to-deploy-a-vibe-coded-app)
+- [Is vibe coding production ready? A fair answer](https://viberaven.dev/is-vibe-coding-production-ready)
+- [Vibe coding security risks, and how to fix each one](https://viberaven.dev/vibe-coding-security-risks)
+- [Vibe coding horror stories, with sources and fixes](https://viberaven.dev/vibe-coding-horror-stories)
+- [Claude Code Security vs a pre-deploy review](https://viberaven.dev/claude-code-security-vs-pre-deploy-review)
+- [PostHog events not showing in a Vite app on Vercel](https://viberaven.dev/posthog-events-not-showing-vite-vercel)
+- [Supabase service role key: Settings > API Keys](https://viberaven.dev/where-to-find-supabase-service-role-key)
+- [Supabase anon key: where to find it and what it is](https://viberaven.dev/where-to-find-supabase-anon-key)
+- [Lovable app testing: preview, two accounts, live URL](https://viberaven.dev/how-to-test-a-lovable-app)
+- [Stripe webhooks for Next.js + Supabase | every fix](https://viberaven.dev/stripe-webhooks-nextjs-supabase)
+- [No signatures found matching the expected signature](https://viberaven.dev/stripe-webhook-no-signatures-found-matching-expected-signature)
+- [Stripe webhook raw body in Next.js App Router | fix](https://viberaven.dev/stripe-webhook-raw-body-nextjs-app-router)
+- [Stripe webhook secret: test vs live | the right whsec](https://viberaven.dev/stripe-webhook-secret-test-vs-live)
+- [Stripe Checkout without a webhook | why it fails](https://viberaven.dev/stripe-checkout-without-webhook)
+- [Stripe webhook duplicate events | idempotent handler](https://viberaven.dev/stripe-webhook-duplicate-events)
+- [SubtleCryptoProvider synchronous context | Stripe fix](https://viberaven.dev/stripe-subtlecryptoprovider-synchronous-context-supabase-edge-function)
+- [FUNCTION_INVOCATION_FAILED on Vercel: find the crash](https://viberaven.dev/vercel-function-invocation-failed)
+- [Vercel function timeout: check maxDuration](https://viberaven.dev/vercel-function-timeout)
+- [Vercel 404 on refresh | fix React Router deep links](https://viberaven.dev/vercel-404-on-refresh)
+- [NEXT_PUBLIC_ env vars exposed? | which keys are safe](https://viberaven.dev/next-public-env-vars-exposed)
+- [Vercel sensitive env vars: Secret vs Config](https://viberaven.dev/vercel-sensitive-environment-variables)
+- [Supabase Vercel integration env vars | which to use](https://viberaven.dev/supabase-vercel-integration-env-vars)
+- [Vercel for AI-built apps | deploy and env var fixes](https://viberaven.dev/vercel-ai-built-apps)
+- [permission denied for table (42501) in Supabase](https://viberaven.dev/supabase-permission-denied-for-table)
+- [Your project's URL and Key are required | env var fix](https://viberaven.dev/supabase-url-and-key-are-required)
+- [Clerk + Supabase: RLS on sub, grant to authenticated](https://viberaven.dev/clerk-supabase-third-party-auth)
+- [Bolt + Supabase: move database, users, storage (2026)](https://viberaven.dev/bolt-to-supabase-migration)
+- [Stripe payment_method_types: Endive fix](https://viberaven.dev/stripe-payment-method-types-no-longer-supported)
+- [Node.js Version "20.x" is discontinued | Vercel fix](https://viberaven.dev/vercel-node-20-discontinued)
+- [Lovable security scan | what it checks and misses](https://viberaven.dev/lovable-security-scan)
+- [email rate limit exceeded | Supabase SMTP fix](https://viberaven.dev/supabase-email-rate-limit-exceeded)
+- [Uncached data was accessed outside of Suspense | fix](https://viberaven.dev/nextjs-uncached-data-accessed-outside-of-suspense)
+- [Clerk keys are missing from your environment | fix](https://viberaven.dev/clerk-keys-missing-from-environment)
+- [Supabase login redirects to localhost | Site URL fix](https://viberaven.dev/supabase-redirect-to-localhost)
+- [Supabase confirmation email not arriving | fix](https://viberaven.dev/supabase-confirm-email-not-arriving)
+- [Lovable Cloud vs Supabase | moving off Cloud](https://viberaven.dev/lovable-cloud-vs-supabase)
+- [Lovable Test and Live retired: Test DB deleted Dec 1](https://viberaven.dev/lovable-test-and-live-environments-retired)
+- [Lovable AI model retirements: Gemini 3.6 Flash Nov 19](https://viberaven.dev/lovable-ai-deprecated-models)
+- [Stripe MCP key cutoff Nov 30: OAuth or agent rk_ key](https://viberaven.dev/stripe-mcp-agent-api-key)
+- [Railway JSON ends Dec 1, 2026: migrate](https://viberaven.dev/railway-json-config-as-code-deprecated)
+- [claude-sonnet-4-5-20250929 retires Nov 30, 2026](https://viberaven.dev/claude-sonnet-4-5-retirement)
+- [OpenAI model shutdowns 2026-10-23 to 2027-01-14](https://viberaven.dev/openai-model-shutdowns-2026)
+- [Supabase Storage: new row violates RLS policy | fix](https://viberaven.dev/supabase-storage-upload-rls-error)
+- [new row violates row-level security policy: Supabase](https://viberaven.dev/supabase-new-row-violates-row-level-security-policy)
+- [Supabase Edge non-2xx: read error.context](https://viberaven.dev/supabase-edge-function-returned-a-non-2xx-status-code)
+- [Invalid API key from Supabase: wrong key or project](https://viberaven.dev/supabase-invalid-api-key)
+- [Next.js "Failed to collect page data for" on Vercel](https://viberaven.dev/nextjs-failed-to-collect-page-data)
+- [Supabase AuthSessionMissingError: session missing](https://viberaven.dev/supabase-auth-session-missing)
+- [ERR_PNPM_OUTDATED_LOCKFILE on Vercel: frozen-lockfile](https://viberaven.dev/vercel-err-pnpm-outdated-lockfile)
+- [connect ENETUNREACH from Railway to Supabase: the fix](https://viberaven.dev/railway-supabase-connect-enetunreach)
+- [Netlify secrets scan fails on the Supabase anon key](https://viberaven.dev/netlify-secrets-scanning-supabase-anon-key)
+- [Resend webhook in a Supabase Edge Function: the fix](https://viberaven.dev/resend-webhook-supabase-edge-function)
+- [Error sending confirmation email: Supabase + Resend](https://viberaven.dev/supabase-error-sending-confirmation-email)
+- [OpenAI browser-like environment: key in client code](https://viberaven.dev/openai-api-key-browser-like-environment)
+- [NextAuth NO_SECRET and UntrustedHost on Vercel](https://viberaven.dev/nextauth-no-secret-untrustedhost-vercel)
+- [Better Auth Invalid origin on Vercel previews](https://viberaven.dev/better-auth-invalid-origin-vercel-preview)
+- [Stripe "Neither apiKey nor config.authenticator"](https://viberaven.dev/stripe-neither-apikey-nor-config-authenticator-provided)
+- [Stripe webhook to Vercel preview: protection bypass](https://viberaven.dev/stripe-webhook-vercel-preview-deployment-protection)
+- [MIDDLEWARE_INVOCATION_FAILED on Vercel: the fix](https://viberaven.dev/vercel-middleware-invocation-failed)
+- [Supabase infinite recursion detected in policy: fix](https://viberaven.dev/supabase-infinite-recursion-detected-in-policy)
+- [Supabase JWT expired (PGRST303): refresh the session](https://viberaven.dev/supabase-jwt-expired)
+- [Supabase Could not find the table in the schema cache](https://viberaven.dev/supabase-could-not-find-the-table-in-the-schema-cache)
+- [Supabase permission denied for schema public (42501)](https://viberaven.dev/supabase-permission-denied-for-schema-public)
+- [Failed to send a request to the Edge Function: fix](https://viberaven.dev/supabase-failed-to-send-a-request-to-the-edge-function)
+- [Vercel DEPLOYMENT_NOT_FOUND: check the URL](https://viberaven.dev/vercel-deployment-not-found)
+- [useSearchParams() should be wrapped in suspense: fix](https://viberaven.dev/nextjs-usesearchparams-should-be-wrapped-in-a-suspense-boundary)
+- [Next.js Failed to find Server Action after a deploy](https://viberaven.dev/nextjs-failed-to-find-server-action)
+- [Failed to fetch dynamically imported module: Vite fix](https://viberaven.dev/vite-failed-to-fetch-dynamically-imported-module)
+- [Stripe No such price error: test vs live price IDs](https://viberaven.dev/stripe-no-such-price)
+- [Google redirect_uri_mismatch with Supabase: the fix](https://viberaven.dev/google-oauth-redirect-uri-mismatch-supabase)
+- [Firebase auth/unauthorized-domain on Vercel: the fix](https://viberaven.dev/firebase-auth-unauthorized-domain-vercel)
+- [Firebase Admin Invalid PEM message on Vercel: the fix](https://viberaven.dev/firebase-admin-invalid-pem-formatted-message-vercel)
+- [Invalid Sentry Dsn undefined on Vercel and Lovable](https://viberaven.dev/sentry-invalid-dsn-undefined)
+- [Failed to load module script MIME type text/html fix](https://viberaven.dev/failed-to-load-module-script-mime-type-text-html)
+- [Cloudflare Workers Too many subrequests with Supabase](https://viberaven.dev/cloudflare-workers-supabase-too-many-subrequests)
+- [Neon too many connections on Vercel: use the pooler](https://viberaven.dev/neon-too-many-connections-vercel)
+- [AI SDK stream cut off on Vercel: the maxDuration fix](https://viberaven.dev/ai-sdk-stream-cut-off-vercel)
+- [Paddle webhook signature verification failed: the fix](https://viberaven.dev/paddle-webhook-signature-verification-failed)
+- [PostHog project API key in the browser: phc_ vs phx_](https://viberaven.dev/posthog-project-api-key-public)
+- [Railway Oct 21, 2026 incident: roll keys, fix deploys](https://viberaven.dev/railway-october-21-2026-security-incident)
+- [Next.js Nov 3, 2026 security release: what to upgrade](https://viberaven.dev/nextjs-security-release-november-2026)
+- [Clerk secret key not showing? Shown once since Oct 19](https://viberaven.dev/clerk-secret-key-not-showing)
+- [Clerk +clerk_test emails stopped on Oct 26, 2026](https://viberaven.dev/clerk-test-email-not-received)
+- [Is the Supabase service role key in client code?](https://viberaven.dev/check-supabase-service-role-key-in-client-code)
+- [VITE_ env variables exposed? Find a secret in one](https://viberaven.dev/vite-env-variables-exposed)
+- [Env vars your app reads but Vercel production lacks](https://viberaven.dev/find-env-vars-missing-in-vercel-production)
+- [Which Supabase tables can the anon key read?](https://viberaven.dev/find-supabase-tables-anon-can-read)
+- [Find Supabase queries with no limit or range](https://viberaven.dev/find-supabase-queries-without-limit)
+- [Do your Next.js API routes have rate limiting?](https://viberaven.dev/check-api-routes-rate-limiting)
+- [Does your Next.js app send a CSP header? Check it](https://viberaven.dev/check-nextjs-content-security-policy)
+- [Is your .env file committed to git? Check and fix](https://viberaven.dev/check-env-file-committed-to-git)
+- [Do your Supabase migrations match production?](https://viberaven.dev/supabase-migrations-match-production)
+- [Supabase OrioleDB public beta: enable it, limits, RLS](https://viberaven.dev/supabase-orioledb-public-beta)
+- [Supabase Compute private alpha: agents, jobs, limits](https://viberaven.dev/supabase-compute-private-alpha)
+- [Supabase MCP server for your own app: OAuth and RLS](https://viberaven.dev/supabase-mcp-server-for-your-app)
+- [Multiple local Supabase projects without Docker](https://viberaven.dev/supabase-multiple-local-projects-without-docker)
+- [Supabase personal access token scopes for agents](https://viberaven.dev/supabase-personal-access-token-scopes)
+- [Supabase MCP Claude-issued auth (Nov 3, 2026)](https://viberaven.dev/supabase-mcp-claude-issued-auth)
+- [Vercel Security Review beta: setup, cost, limits](https://viberaven.dev/vercel-security-review)
+- [Vercel CI beta: setup, turbo.json tags, limits](https://viberaven.dev/vercel-ci-beta)
+- [Next.js bundle optimizer skill and next analyze](https://viberaven.dev/nextjs-bundle-optimizer-skill)
+- [Public prefix cannot use visibility: secret](https://viberaven.dev/vercel-public-prefix-cannot-use-visibility-secret)
+- [No API key found in request (Supabase 401)](https://viberaven.dev/supabase-no-api-key-found-in-request)
+- ["dynamic" not compatible with cacheComponents](https://viberaven.dev/nextjs-dynamic-not-compatible-with-cache-components)
+- [Monitor a Lovable App After Launch](https://viberaven.dev/lovable-app-monitoring)
+- [Auth.js UntrustedHost: Host must be trusted](https://viberaven.dev/authjs-untrusted-host)
+- [Auth.js MissingSecret: Please define a secret](https://viberaven.dev/authjs-missing-secret)
+- [Verify Polar Webhooks in Next.js App Router](https://viberaven.dev/polar-webhook-verification-nextjs)
+- [Lemon Squeezy X-Signature Fails in Next.js](https://viberaven.dev/lemon-squeezy-webhook-signature-nextjs)
+- [Lock Down Public Firestore Security Rules](https://viberaven.dev/firestore-security-rules-public)
+- [Sentry Source Maps for Next.js on Vercel](https://viberaven.dev/sentry-source-maps-nextjs-vercel)
+- [Turso LibsqlError: Server returned HTTP status 401](https://viberaven.dev/turso-libsql-server-error-401)
+- [Turso URL_INVALID: The URL 'undefined' is not valid](https://viberaven.dev/turso-libsql-url-invalid-undefined)
+- [drizzle-kit: required params for turso dialect](https://viberaven.dev/turso-drizzle-kit-required-params-turso-dialect)
+- [Auth0 Callback URL mismatch on Vercel previews](https://viberaven.dev/auth0-callback-url-mismatch-vercel-nextjs)
+- [Auth0Client: Not all required options were provided](https://viberaven.dev/auth0-not-all-required-options-were-provided)
+- [Auth0 "The state parameter is invalid" on Vercel](https://viberaven.dev/auth0-nextjs-state-parameter-is-invalid)
+- [Upstash Redis: Unable to find environment variable](https://viberaven.dev/upstash-redis-unable-to-find-environment-variable)
+- [Upstash WRONGPASS invalid or missing auth token](https://viberaven.dev/upstash-redis-wrongpass-invalid-or-missing-auth-token)
+- [Add Upstash rate limiting to a Next.js API route](https://viberaven.dev/upstash-ratelimit-nextjs-api-route-vercel)
+- [MongoServerSelectionError on Vercel and Atlas](https://viberaven.dev/mongodb-server-selection-error-vercel-atlas)
+- [MongoParseError: Invalid scheme on Vercel](https://viberaven.dev/mongodb-parse-error-invalid-scheme-vercel)
+- [Mongoose buffering timed out after 10000ms on Vercel](https://viberaven.dev/mongoose-buffering-timed-out-vercel)
+- [PlanetScale "direct DDL is disabled" (Prisma P3022)](https://viberaven.dev/planetscale-direct-ddl-is-disabled)
+- [Prisma P3021 on PlanetScale: foreign keys](https://viberaven.dev/planetscale-foreign-keys-cannot-be-created-prisma)
+- [PlanetScale "fetch failed" ENOTFOUND undefined](https://viberaven.dev/planetscale-fetch-failed-enotfound-undefined)
+- [Render: Port scan timeout reached, no open ports](https://viberaven.dev/render-port-scan-timeout-no-open-ports-detected)
+- [Render to Supabase: connect ENETUNREACH fix](https://viberaven.dev/render-supabase-connect-enetunreach)
+- [VITE_ variables undefined on a Render static site](https://viberaven.dev/render-vite-env-vars-undefined-static-site)
+- [Cloudflare Workers: process is not defined](https://viberaven.dev/cloudflare-workers-referenceerror-process-is-not-defined)
+- [Cloudflare Workers: No such module "node:..."](https://viberaven.dev/cloudflare-workers-no-such-module-node-nodejs-compat)
+- [Workers: Cannot perform I/O on a different request](https://viberaven.dev/cloudflare-workers-cannot-perform-io-on-behalf-of-a-different-request)
+- [Netlify "Page not found" on refresh: SPA redirect](https://viberaven.dev/netlify-page-not-found-single-page-app)
+- [process.env undefined in a Netlify function](https://viberaven.dev/netlify-function-process-env-undefined)
+- [VITE_ variables undefined on Netlify](https://viberaven.dev/netlify-vite-env-vars-undefined)
+- [S3 Presigned Upload Blocked by CORS Policy](https://viberaven.dev/aws-s3-presigned-url-cors-no-access-control-allow-origin)
+- [S3 SignatureDoesNotMatch: match the signed PUT](https://viberaven.dev/aws-s3-presigned-put-signature-does-not-match)
+- [AWS SDK: Could not load credentials on Vercel](https://viberaven.dev/aws-s3-could-not-load-credentials-from-any-providers)
+- [GitHub GH013: Push cannot contain secrets](https://viberaven.dev/github-gh013-push-cannot-contain-secrets)
+- [GitHub secret scanning alert: rotate the key first](https://viberaven.dev/github-secret-scanning-alert-leaked-api-key)
+- [GitHub Actions secret empty: forks, Dependabot](https://viberaven.dev/github-actions-secret-empty-fork-dependabot)
+- [Resend: only send testing emails to your own address](https://viberaven.dev/resend-you-can-only-send-testing-emails-to-your-own-email-address)
+- [Resend "Missing API key. Pass it to the constructor"](https://viberaven.dev/resend-missing-api-key-pass-it-to-the-constructor)
+- [Resend domain not verifying: DNS records to check](https://viberaven.dev/resend-domain-not-verifying-dns-records)
+- [Better Auth: You are using the default secret](https://viberaven.dev/better-auth-you-are-using-the-default-secret)
+- [Better Auth redirect_uri_mismatch on Vercel](https://viberaven.dev/better-auth-redirect-uri-mismatch-vercel)
+- [Better Auth Database schema mismatch error](https://viberaven.dev/better-auth-database-schema-mismatch-missing-tables)
+- [Neon "No database connection string was provided"](https://viberaven.dev/neon-no-database-connection-string-provided-to-neon)
+- [Neon Prisma P1002: advisory lock timeout on migrate](https://viberaven.dev/neon-prisma-p1002-advisory-lock-timeout-migrate)
+- [Neon Prisma P1001: cannot reach database server](https://viberaven.dev/neon-prisma-p1001-cant-reach-database-server)
+- [Firebase auth/invalid-api-key on Vercel: the fix](https://viberaven.dev/firebase-auth-invalid-api-key-vercel)
+- [Firestore: Missing or insufficient permissions, fix](https://viberaven.dev/firestore-missing-or-insufficient-permissions)
+- [firebase-admin: Could not load default credentials](https://viberaven.dev/firebase-admin-could-not-load-the-default-credentials-vercel)
+- [PostHog events lost on Vercel? Await flush()](https://viberaven.dev/posthog-node-events-lost-vercel-flush)
+- [PostHog Reverse Proxy in Next.js on Vercel](https://viberaven.dev/posthog-reverse-proxy-nextjs-vercel)
+- [posthog getFeatureFlag undefined on First Load](https://viberaven.dev/posthog-getfeatureflag-undefined-first-load)
+- [Sentry Misses Next.js Server Errors on Vercel](https://viberaven.dev/sentry-nextjs-server-errors-not-captured-onrequesterror)
+- [Sentry ERR_BLOCKED_BY_CLIENT and tunnelRoute](https://viberaven.dev/sentry-err-blocked-by-client-tunnelroute-nextjs)
+- [Sentry Vite plugin: No auth token provided](https://viberaven.dev/sentry-vite-plugin-no-auth-token-provided)
+- [Clerk auth() called without clerkMiddleware()](https://viberaven.dev/clerk-auth-was-called-but-cant-detect-clerkmiddleware)
+- [Clerk infinite redirect loop after going live](https://viberaven.dev/clerk-refreshing-session-token-infinite-redirect-loop)
+- [Clerk: Production Keys are only allowed for domain](https://viberaven.dev/clerk-production-keys-are-only-allowed-for-domain)
+- [Paddle.js checkout not opening in sandbox: the fix](https://viberaven.dev/paddle-js-checkout-not-opening-sandbox-environment)
+- [Paddle access: use subscription.created](https://viberaven.dev/paddle-grant-access-transaction-completed-vs-subscription-activated)
+- [Polar API returned an error: 401 on Vercel](https://viberaven.dev/polar-api-returned-an-error-401-sandbox-production-token)
+- [Playwright browserType.launch: browsers not installed](https://viberaven.dev/playwright-browsertype-launch-executable-doesnt-exist)
+- [Playwright on a protected Vercel preview](https://viberaven.dev/playwright-vercel-preview-deployment-protection-bypass)
+- [Playwright "Timed out waiting from config.webServer"](https://viberaven.dev/playwright-timed-out-waiting-from-config-webserver)
+- [Turnstile "timeout-or-duplicate" siteverify error](https://viberaven.dev/turnstile-siteverify-timeout-or-duplicate)
+- [Supabase "no captcha_token found" on sign up](https://viberaven.dev/supabase-captcha-protection-request-disallowed-no-captcha-token)
+- [Vercel BotID "Possible misconfiguration" fix](https://viberaven.dev/vercel-botid-possible-misconfiguration-checkbotid)
+- [SvelteKit: cannot import $env/static/private](https://viberaven.dev/sveltekit-cannot-import-env-static-private-into-browser-code)
+- [SvelteKit: not exported by virtual:env/static/private](https://viberaven.dev/sveltekit-is-not-exported-by-virtual-env-static-private)
+- [SvelteKit: Cross-site POST form submissions forbidden](https://viberaven.dev/sveltekit-cross-site-post-form-submissions-are-forbidden)
+- [Nuxt runtimeConfig empty in production: NUXT_ names](https://viberaven.dev/nuxt-runtimeconfig-undefined-in-production)
+- [@nuxtjs/supabase: Missing NUXT_PUBLIC_SUPABASE_URL](https://viberaven.dev/nuxt-supabase-missing-nuxt-public-supabase-url)
+- [Nuxt: Hydration completed but contains mismatches](https://viberaven.dev/nuxt-hydration-completed-but-contains-mismatches)
+- [Angular on Vercel "404: NOT_FOUND": output directory](https://viberaven.dev/angular-vercel-404-not-found)
+- [Angular "process is not defined" on Vercel env vars](https://viberaven.dev/angular-process-is-not-defined-environment-variables-vercel)
+- [Angular NG0507: HTML content altered after SSR](https://viberaven.dev/angular-ng0507-html-content-altered-after-server-side-rendering)
+- [Vitest .env values undefined: VITE_ prefix and CI](https://viberaven.dev/vitest-env-variables-undefined-import-meta-env)
+- [Vitest ReferenceError: document is not defined](https://viberaven.dev/vitest-referenceerror-document-is-not-defined)
+- [Vitest "Failed to resolve import" with an @/ alias](https://viberaven.dev/vitest-failed-to-resolve-import-path-alias)
+- [Vercel "No FastAPI entrypoint found": the fix](https://viberaven.dev/fastapi-no-entrypoint-found-vercel)
+- [FastAPI ModuleNotFoundError on Vercel: the fix](https://viberaven.dev/fastapi-modulenotfounderror-no-module-named-vercel)
+- [FastAPI CORS on Vercel: Access-Control-Allow-Origin](https://viberaven.dev/fastapi-cors-access-control-allow-origin-missing-vercel)
+- [Rails: Missing secret_key_base for production](https://viberaven.dev/rails-missing-secret-key-base-production)
+- [Rails "Blocked hosts" 403 on a custom domain](https://viberaven.dev/rails-blocked-hosts-config-hosts-custom-domain)
+- [Rails + Supabase: prepared statement already exists](https://viberaven.dev/rails-supabase-prepared-statement-already-exists)
+- [Vercel Go: Could not find an exported function](https://viberaven.dev/go-vercel-could-not-find-an-exported-function)
+- [pgx prepared statement already exists on Supabase](https://viberaven.dev/go-pgx-prepared-statement-already-exists-supabase)
+- [golang-jwt: signing method ES256 is invalid](https://viberaven.dev/go-supabase-jwt-signing-method-es256-is-invalid)
+- [React Minified Error #185: Max Update Depth](https://viberaven.dev/react-minified-error-185-maximum-update-depth-exceeded)
+- [React Minified Error #418: Hydration Failed](https://viberaven.dev/react-minified-error-418-hydration-failed)
+- [React Router: useNavigate() only in a <Router>](https://viberaven.dev/react-router-usenavigate-may-be-used-only-in-the-context-of-a-router)
+- [LogRocket Not Recording Sessions in Next.js](https://viberaven.dev/logrocket-not-recording-sessions-nextjs-vercel)
+- [LogRocket "script could not load" warning](https://viberaven.dev/logrocket-script-could-not-load-valid-network-connection)
+- [Keep Passwords and PII Out of LogRocket](https://viberaven.dev/logrocket-sanitize-passwords-tokens-pii-recordings)
+- [Storybook environment variables undefined: the fix](https://viberaven.dev/storybook-environment-variables-undefined)
+- [Storybook invariant expected app router to be mounted](https://viberaven.dev/storybook-invariant-expected-app-router-to-be-mounted)
+- [Storybook on Vercel 404 NOT_FOUND: the fix](https://viberaven.dev/storybook-vercel-404-not-found)
+- [Is your SUPABASE_SERVICE_ROLE_KEY in a public .env?](https://viberaven.dev/supabase-service-role-key-exposed-env-file)
+- [Supabase select returns    with no error: RLS](https://viberaven.dev/supabase-select-returns-empty-array)
+- [Supabase PGRST116: .single() got 0 or 2+ rows](https://viberaven.dev/supabase-pgrst116-cannot-coerce-the-result-to-a-single-json-object)
+- [Vercel env var added but not working? Redeploy](https://viberaven.dev/vercel-environment-variable-new-deployment-needed)
+- [Provider errors: exact messages and their fixes](https://viberaven.dev/errors)
+- [Supabase errors: exact messages and their fixes](https://viberaven.dev/errors/supabase)
+- [Vercel errors: exact messages and their fixes](https://viberaven.dev/errors/vercel)
+- [Next.js errors: exact messages and their fixes](https://viberaven.dev/errors/nextjs)
+- [Stripe errors: exact messages and their fixes](https://viberaven.dev/errors/stripe)
+- [Clerk errors: exact messages and their fixes](https://viberaven.dev/errors/clerk)
+- [Resend errors: exact messages and their fixes](https://viberaven.dev/errors/resend)
+- [Auth.js errors: exact messages and their fixes](https://viberaven.dev/errors/authjs)
+- [Turso errors: exact messages and their fixes](https://viberaven.dev/errors/turso)
+- [Auth0 errors: exact messages and their fixes](https://viberaven.dev/errors/auth0)
+- [MongoDB errors: exact messages and their fixes](https://viberaven.dev/errors/mongodb)
+- [PlanetScale errors: exact messages and their fixes](https://viberaven.dev/errors/planetscale)
+- [Better Auth errors: exact messages and their fixes](https://viberaven.dev/errors/better-auth)
+- [Free Supabase RLS checker: paste your migrations](https://viberaven.dev/supabase-rls-checker)
+- [Guides for launching AI-built apps](https://viberaven.dev/blog)
+- [What Makes an AI-Built App Production-Ready?](https://viberaven.dev/blog/production-readiness-checklist-ai-built-apps)
+- [Vercel env vars: fix scope, then redeploy](https://viberaven.dev/blog/vercel-env-vars-production-checklist)
+- [Supabase RLS in 512 Public Lovable Apps](https://viberaven.dev/blog/supabase-policies-512-lovable-repos)
+- [Open Security Definer RPCs in 47% of 512 Lovable Apps](https://viberaven.dev/blog/supabase-security-definer-functions-512-lovable-repos)
+- [Leaked Service Role Keys in 5.7% of 512 Lovable Apps](https://viberaven.dev/blog/supabase-service-role-keys-512-lovable-repos)
+- [Where Coding Agents Spend Their Time: 228k Tool Calls](https://viberaven.dev/blog/where-coding-agents-spend-their-time)
+- [Docs: the free repo check for Vercel + Supabase apps](https://viberaven.dev/docs)
+- [Quickstart: check a Vercel + Supabase repo](https://viberaven.dev/docs/quickstart)
+- [Agent rules for Claude Code, Codex and Cursor](https://viberaven.dev/docs/agent-rules)
+- [MCP server for Claude Code, Codex, Cursor, ChatGPT](https://viberaven.dev/docs/mcp)
+- [CLI reference: check, changes, fix, init, login](https://viberaven.dev/docs/cli)
+- [Findings: every check id and how to fix it](https://viberaven.dev/docs/findings)
+- [Provider changes that affect your repo](https://viberaven.dev/docs/provider-changes)
+- [CI: exit codes, --base, SARIF, GitHub Actions](https://viberaven.dev/docs/ci)
+- [Account and Pro: login --json, plans, limits](https://viberaven.dev/docs/account)
+- [FAQ: what the check covers and what it does not](https://viberaven.dev/docs/faq)
+- [Docs: connect your app and your computer](https://viberaven.dev/docs/get-started)
+- [Docs: make a change and review it](https://viberaven.dev/docs/make-a-change)
+- [Docs: what the service context shows](https://viberaven.dev/docs/provider-context)
+- [Docs: troubleshooting connect, agents, preview](https://viberaven.dev/docs/troubleshooting)

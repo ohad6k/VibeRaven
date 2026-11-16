@@ -1,10 +1,11 @@
 {
   "name": "viberaven",
-  "version": "1.7.6",
-  "description": "VibeRaven Studio and architecture/production-context skills for AI-built apps.",
+  "version": "1.10.0",
+  "description": "Production context and checks for AI-built apps across their providers. Local race tests two users at once on real PostgreSQL and replays exactly what broke.",
   "author": {
     "name": "VibeRaven",
     "url": "https://github.com/ohad6k/VibeRaven"
   },
-  "skills": "./agent-skills/"
+  "skills": "./agent-skills/",
+  "icon": "./assets/favicon.svg"
 }

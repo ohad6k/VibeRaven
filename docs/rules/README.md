@@ -24,7 +24,7 @@ Use a temporary Vite fixture with `package.json` containing `{"dependencies":{"v
 const key = import.meta.env.VITE_OPENAI_API_KEY;
 ```
 
-Run the locally built candidate from the fixture directory: `node /absolute/path/to/packages/cli/dist/cli.js check --json`. Expect `openai_key_in_browser`, critical severity, and `src/client.ts:1`; unrelated fixture findings may also appear. Keep the candidate version and command output with the test receipt.
+Run the locally built CLI from the fixture directory: `node /absolute/path/to/packages/cli/dist/cli.js check --json`. Expect `openai_key_in_browser`, critical severity, and `src/client.ts:1`; unrelated fixture findings may also appear. Keep the tested version and command output with the test receipt.
 
 For a negative fixture, remove the public read and keep application key access in a server-only file such as `server/chat.ts` using `process.env.OPENAI_API_KEY`. Run the same candidate again: this rule should disappear. An authenticated server endpoint is the intended application repair; the static fixture does not verify endpoint auth or a real provider call. Never put a working key in fixtures.
 

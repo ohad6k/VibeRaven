@@ -13,7 +13,7 @@ Read the Supabase migrations in this repository and list the tables and function
 
 1. **Run the check** in the project root:
    ```bash
-   npx -y viberaven@1.8.0 check
+   npx -y viberaven@1.10.0 check
    ```
    Exit code 1 means it found blockers. That is a result, not a crash. If `viberaven_check_readiness` is in your tool list (the local VibeRaven MCP server), you can call it on the project root instead.
 2. **Read the RLS findings** in the output and in `.viberaven/agent-tasklist.md`:

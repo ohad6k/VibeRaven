@@ -1,97 +1,49 @@
 # Contributing to VibeRaven
 
-Thanks for helping improve VibeRaven. This public repo is the discovery and
-installation surface for the VibeRaven agent pack, docs, examples, and plugin
-metadata. Most contributions are docs, examples, skill text, metadata, or
-fixtures rather than private product source changes.
+This public repository contains curated docs, agent skills, plugin metadata and examples. The CLI and sessions runtime are distributed through npm; this is not their full development checkout. A missing private package path is not a broken public clone.
 
-## Repository Map
+## Start here
 
-- `agent-skills/` contains the six public skills and their agent metadata. Start
-  here for skill wording, routing, and verification changes.
-- `skills/` mirrors the packaged `viberaven` skill used by skill installers.
-  Keep it in sync with `agent-skills/viberaven/SKILL.md` when that skill changes.
-- `docs/` contains public registry, badge, and repo metadata docs.
-- `examples/` contains proof artifacts and the example Next.js/Supabase/Vercel
-  starter template.
-- `commands/` contains plugin command prompts such as `viberaven-work` and
-  `viberaven-launch`.
-- `llms.txt`, `llms-full.txt`, and `agent-context.md` are machine-readable
-  context surfaces for agents.
-- `skills.sh.json`, `plugin.yaml`, `gemini-extension.json`, `.claude-plugin/`,
-  and `.codex-plugin/` describe how the pack is discovered by skill and plugin
-  installers.
-- `EXPORT_MANIFEST.json` records which source files are exported into this
-  public repo.
+- `README.md`: commands, package map and limits.
+- `docs/race.md` and `examples/race-capacity/`: bounded concurrency tests and reproduction.
+- `AGENTS-HUB.md`, `agent-skills/` and `skills/`: client setup and agent guidance.
+- `commands/`, `plugin.yaml` and the client plugin directories: discovery metadata.
+- `EXPORT_MANIFEST.json`: the curated export's source-to-destination map.
 
-## Picking Up an Issue
+Use [issues](https://github.com/ohad6k/VibeRaven/issues) for bugs, documentation corrections and focused proposals. Follow the [code of conduct](./CODE_OF_CONDUCT.md). Report vulnerabilities through [SECURITY.md](./SECURITY.md).
 
-Good first issues are usually docs, examples, translations, provider fixtures,
-or narrow skill-copy improvements. Pick one issue and keep the pull request
-small enough to review in one pass.
+## Make a focused change
 
-Before opening a pull request:
+1. Check existing issues and pull requests before starting.
+2. Work on one docs, skill, metadata or synthetic-fixture change at a time.
+3. Keep package versions, client commands and scope consistent. Do not infer marketplace acceptance from a manifest.
+4. Include the actual commands you ran and their results in your pull request. For a visual change, attach a rendered preview.
+5. Keep credentials, private paths, customer data and private application SQL out of every artifact.
 
-1. Read the issue and any linked docs.
-2. Check whether someone is already assigned or has an active pull request.
-3. Keep the change focused on the issue. Avoid unrelated wording churn.
-4. Preserve the repo's local-first, no-telemetry, no-secret-handling language.
+Maintainers reconcile accepted changes with the curated source before regenerating the export. Do not upload a private monorepo or add dependencies merely to edit documentation.
 
-## What Makes a Good PR
+## Local validation
 
-A good VibeRaven PR should include:
+For skill changes in this public clone:
 
-- a short summary of what changed and why;
-- a link to the issue, for example `Closes #123`;
-- validation commands you ran, or a note when the change is docs-only;
-- screenshots only when the change affects visible docs or assets;
-- no private credentials, tokens, cookies, or customer-specific data.
-
-For skill changes, prefer precise instructions over broad promises. Do not claim
-provider dashboard state, production readiness, or deployment proof unless the
-repo evidence and command output actually prove it.
-
-For a proposed deterministic rule, follow the [rule contribution recipe](docs/rules/README.md):
-provide synthetic positive and negative fixtures, official source/version scope,
-false-positive cases and redaction evidence for maintainer review. Public contributors
-can submit the recipe and fixtures here; private CLI implementation references in
-the guide are for maintainers with source access.
-
-## Local Checks
-
-Docs-only changes can usually be reviewed by reading the rendered Markdown and
-checking links or examples. For skill-pack changes, run:
-
-```bash
+```sh
 node agent-skills/scripts/verify-skill.mjs
 ```
 
-To smoke-test the published skill install path, use:
+For agent setup guidance, use a disposable app folder and preview before writing:
 
-```bash
-npx -y skills@1.7.0 add ohad6k/VibeRaven --skill viberaven
+```sh
+npx -y viberaven@1.10.0 init --agents all --dry-run
 ```
 
-When changing agent install guidance, preview rule installation in a throwaway
-project before recommending it:
+For race examples, follow [the capacity fixture](./examples/race-capacity/). Node 24+ with JSPI is required; `check` and Studio support Node 20+. The 1.10.0 commands require the candidate to be installed or available in your registry.
 
-```bash
-npx -y viberaven@1.7.6 init --agents all --dry-run
-```
+## Report a reproducible engine difference
 
-If you edit the example app under
-`examples/nextjs-supabase-vercel-production-ready-template/`, run the narrowest
-relevant package command from that example and include it in the PR.
+Supply a minimal synthetic schema, seed SQL, session statements and expected invariant. Include isolation level, role/claims, exact package/runtime identity, command, schedule index, observed SQLSTATEs, commits and final rows. Attach redacted report/replay output. A native PostgreSQL comparison should state its exact version and method. Do not submit private corpus dumps or claim universal compatibility from one case.
 
-## Asking Questions
+For new static checks, follow the [rule contribution recipe](./docs/rules/README.md) with positive and negative fixtures, version scope and false-positive cases. Private implementation references in that guide are for maintainers with source access.
 
-- Use GitHub Discussions for design questions, contribution ideas, and unclear
-  issue scope: https://github.com/ohad6k/VibeRaven/discussions
-- Join Discord for maintainer feedback and contributor coordination:
-  https://discord.gg/ZAJvazz63Y
+## Maintainer checks
 
-## Review Notes
-
-Maintainers may ask for wording changes, smaller scope, or stronger local proof.
-That is normal. Keep the conversation tied to repo evidence and update the PR
-description when validation changes.
+In the development checkout, run `npm run export:public-discovery` to generate and verify the allowlisted public bundle. Run focused package checks for affected behavior before reviewing tarballs. These scripts are not part of the public clone. Publication, settings changes and deployment are separate owner actions.

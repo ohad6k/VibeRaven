@@ -7,9 +7,82 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-11-16
+
+### Added
+
+- Preview `viberaven race`: writes specs for supported count-limit triggers or reads an explicit two-user spec, runs every bounded statement issue order on PostgreSQL 18.6, reports broken invariants and replays a pinned prefix with protocol-byte comparison.
+- Independent `@viberaven/sessions@0.1.0` engine package, with Node 24+ and Chrome Worker JSPI support, hashed replaceable runtime assets and retained upstream notices.
+- A small synthetic capacity-race example with expected output, replay and fix instructions, methods and explicit coverage limits.
+- Contributor and security reporting guidance, a code of conduct, and issue and pull request templates.
+
+### Changed
+
+- Clearer GitHub and npm introductions, package metadata, host requirements and agent setup instructions.
+- CLI, MCP and shim version alignment at 1.10.0, with maintained docs, skills, agent manifests and staged site pins aligned for this candidate. Sessions has its own 0.1.0 version.
+- Sessions is an optional CLI dependency: the free `check` keeps Node 20+ support and its existing behavior. Missing or unsupported race runtimes report an error.
+
+Preparation candidate only. Publication, site deployment and catalog submission require separate owner authorization.
+
+## [1.9.0] - 2026-11-10
+
+### Added
+
+- `viberaven handoff`: one link for what a coding agent needs from you.
+  - **What it asks for:** keys in `.env.example` missing from `.env.local` (Supabase, Stripe, site URL), an auth redirect step when a callback route exists, and extra steps from an optional `handoff.json`.
+  - **The page:** "Your agent is waiting for N things", with deep links to the right dashboard screen and format checks. It runs on 127.0.0.1 with a one-time token.
+  - **Secrets:** values are written straight to `.env.local` and never pass through the chat or the logs.
+  - **Waiting:** the command waits until the steps are done. `--status` lets an agent check later, and `--no-wait`, `--json` and `--timeout` are available.
+  - **Lab result:** cold coding agents asked only to get a starter running called it 10/10 and handed the link to the user 8/10, with no secret leaks and about half the tokens of a plain README.
+- `init` adds `"setup": "viberaven handoff"` to `package.json` when no `setup` script exists.
+
+## [1.8.0] - 2026-11-09
+
+### Added
+
+- `live`: the first live check on a computer can run before sign-in.
+  - **When:** the site flag `firstLiveBeforeSignIn` (https://viberaven.dev/flags.json) is on, no account is stored and this computer has not run one before.
+  - **What runs:** the Supabase read on this computer with your own token, as before. It ends in `completed_unclaimed`, and `npx -y viberaven@1.10.0 login` is offered to keep checking.
+  - **What it saves:** a timestamp-only marker (`first-live-used.json`) in the config folder, so the next live check uses the usual account flow.
+  - **What it sends:** one path-only request to `/go/live-first`, which counts these checks.
+  - **When it stays off:** a missing or unreachable flag, a signed-in user or an existing marker keep the previous flow unchanged.
+
+## [1.7.11] - 2026-11-07
+
+### Added
+
+- On a Supabase app, `check` now opens with a `Next step:` line that tells the agent to offer the user the optional live check of their Supabase project (`npx -y viberaven@1.10.0 live start --provider supabase --project <project-ref>`), what it reads (RLS flags, policy presence and grants, not rows) and that the user signs in themselves.
+- The agent section that `init` writes to AGENTS.md and CLAUDE.md now asks the agent to end its answer on a Supabase app with that same offer. It never starts the check or signs in for the user.
+- In local tests with fresh agents, the offer reached the user in 9 of 16 runs (Codex 6/8, Claude Code 3/8), up from 0 of 16.
+
+## [1.7.10] - 2026-11-07
+
+### Fixed
+
+- `live` Supabase checks now complete on a default hosted project. The read-only query endpoint runs under Supabase's 2-minute default statement timeout, and the old 60-second requirement made every check stop as `not_checked`.
+- A table with RLS on and no policies is no longer reported as a problem. It denies every row to `anon` and `authenticated`, so only a granted table with RLS off is flagged.
+
+## [1.7.9] - 2026-11-06
+
+- `init` writes a shorter agent section to AGENTS.md and CLAUDE.md that asks the agent to run `npx -y viberaven@1.10.0 check` itself for Supabase access, migration, policy or webhook work, and to use the real output. In local tests with fresh agents, Codex and Claude Code each ran the check 8/8 times with the section (agents without it: 0/37), and 11/12 times in six real repositories that already had their own instructions, where the task asked the agent to read them. An older VibeRaven section is replaced in place; the user's own text is kept.
+- `check` ends with a short "For agents" note: the report reads local repository evidence only, not live provider settings, and the agent should list expected allowed and denied cases per role. With it, Claude Code used the result correctly 7/8 times (4/8 before).
+- The CLI no longer ships an unused copy of anime.js (115 KB of minified code no page loaded). Socket flagged it as minified code in the `viberaven` dependency tree.
+- `init --proactive` opts the repository into provider-sensitive checks; `--dry-run` previews the generated instructions and optional reminder. `check --changed [--base <ref>] [--json]` checks affected provider areas with full repository context, reports unavailable evidence explicitly, and preserves full-scan artifacts.
+- Both full and changed checks retain one grouped `needs_runtime_check` SQL follow-up, with ranked locations, nested details and replay evidence. Unresolved SQL is not a clean scoped verdict or a duplicate blocker.
+- Provider guidance retains the November 3 Next.js security release (16.4.5 / 15.5.29) and uses installed or locked versions rather than declarations to assess patch status. Supabase CLI v3 guidance distinguishes the release, migration-guide update and default-install announcement; matchers point to removed config, implicit local targets and configuration precedence without assuming the installed CLI or authorizing hosted mutations.
+- Installed agent instructions prefer local `changes` for provider CLI/SDK upgrades before general playbooks. Provider guidance is advisory; repository checks do not establish live provider or deployment state.
+- Includes the provider coverage, SQL precision and runtime grouping improvements from PR #308.
+
+## [1.7.8] - 2026-11-02
+
+- `changes` and `check` cover five more dated provider changes, each with file and line: the Next.js October 14 security release (critical fixes in 16.4.1 and 15.5.28), Stripe API version Endive rejecting `payment_method_types` (stripe 23 pins it, and models still write `payment_method_types: ['card']`), OpenAI model shutdowns (2026-10-23, 2026-12-11, 2027-01-14), Lovable AI Gemini retirements, and Claude model retirements. Exact model IDs only: `gpt-4` never matches `gpt-4o`, and Bedrock or OpenRouter IDs are left alone. `changes` now reads every entry in the pack; the MCP tool still returns at most 8.
+- The account step at the end of `.viberaven/agent-tasklist.md` is a command an agent can offer, not a link: `npx -y viberaven@1.10.0 login --json` opens a free account the person approves in their own browser (steps at viberaven.dev/auth.md), asked first. Agents never opened the old /go/ link. `check --json` adds the same command as `nextStep.signup`.
+- The publishable key guide opens with what a pasted `sb_publishable_` key is: public by design, not a leak by itself (Bing shows agents searching literal keys).
+
 
 ## [1.7.7] - 2026-11-02
 
+- Provenance: built and tested from commit `d4c95504f2a7b091218a92199f45cab695a5b6e0`. npm's `gitHead` for 1.7.7 shows `473932f4` because the tarballs were published from another folder; the published integrity of all three packages matches the clean build of `d4c95504`. Publishing now goes only through `scripts/publish-from-clean-clone.mjs`, which refuses that path.
 - `check` prints each finding's `path:line` on its own line under the title, the way ESLint and tsc print it, and `check --format sarif` prints SARIF 2.1.0 (one rule per gap id with its guide and app test) for GitHub code scanning and editors.
 - The homepage title and description say what VibeRaven is (an open-source CLI for Vercel + Supabase apps, and what it lists), and the service role key guide is titled the way people search for it.
 - Each finding gets a test of the app's behavior after the fix, beside the rescan: `**Test the app:**` in `.viberaven/agent-tasklist.md`, `testTheApp` in `check --json`, and the end of `prompt --gap <id>` (15 finding ids).
@@ -21,7 +94,7 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 - Precision: four false positives found by hand in a 25-repo sample are gone. A file named `auth.js` is not Auth.js; React Native's `ios/.xcode.env` is not a credential file; the grants check orders migrations by timestamp only when both files carry one; a `security_invoker` view no longer needs its own grant, and an owner-rights view gets a view-specific fix. Critical findings judged correct went from 14 of 20 to 15 of 16.
 - New checks: a debug or diagnostic API route that returns env or request internals (`public_debug_endpoint`), and a private key pasted into a tracked Markdown or docs file (`secret_in_docs`).
-- In a coding-agent shell (Claude Code, Codex, Cursor, Gemini CLI), the bare `npx -y viberaven@1.7.6` runs `check` instead of starting the Studio server that never returns.
+- In a coding-agent shell (Claude Code, Codex, Cursor, Gemini CLI), the bare `npx -y viberaven@1.10.0` runs `check` instead of starting the Studio server that never returns.
 - init rules teach one phrase, "check this with viberaven", tell the agent to prefer the current CLI output and `.viberaven/` files over what it remembers, and look at the project before running the check.
 - The npm pages for `@viberaven/cli` and `@viberaven/mcp` no longer pin 1.6.12; `check` comes first and `changes` is listed. `--agent-mode` from older releases still runs.
 - The hosted `check_supabase_migrations` uses the same rules as the CLI again.
@@ -29,14 +102,14 @@ and this project follows [Semantic Versioning](https://semver.org/).
 ## [1.7.6] - 2026-11-01
 
 - `check` prints `Guide: <url>` under each finding that has a published fix page, and `--json` adds `guide` (ten finding ids, each page live and naming its id).
-- When provider changes are found and the project has no VibeRaven rules, `check` and `changes` offer init with what was found: "Found N provider changes in this repo. So your agent checks the next ones before each deploy: npx -y viberaven@1.7.6 init". `--json` agentSetup carries `reason: provider_changes_found`.
-- `recent_provider_changes` answers with entries end with how to see which of them affect a repo (`npx -y viberaven@1.7.6 changes`).
+- When provider changes are found and the project has no VibeRaven rules, `check` and `changes` offer init with what was found: "Found N provider changes in this repo. So your agent checks the next ones before each deploy: npx -y viberaven@1.10.0 init". `--json` agentSetup carries `reason: provider_changes_found`.
+- `recent_provider_changes` answers with entries end with how to see which of them affect a repo (`npx -y viberaven@1.10.0 changes`).
 
 ## [1.7.5] - 2026-11-01
 
 - `check` lists the provider changes that affect the repo (file:line and why), adds `providerChanges` to `--json`, and adds a table to the PR comment (`--markdown`); fix and official source stay in `viberaven changes`. Score and exit code are unchanged. Found by a rules lab: with init's rules an agent ran `check` in 2 of 3 tasks but got no blockers on a repo with a new table missing its grant and a Node 20 pin.
 - CLI dead ends name the next command: an unknown command prints one line with the closest command instead of the whole help; `check <path>` on a missing folder exits 1 instead of reporting no blockers; `changes --path` says to pass the folder as an argument.
-- `recent_provider_changes` with no match names the providers, the error-code retry and `npx -y viberaven@1.7.6 changes`.
+- `recent_provider_changes` with no match names the providers, the error-code retry and `npx -y viberaven@1.10.0 changes`.
 
 ## [1.7.4] - 2026-11-01
 
@@ -78,7 +151,7 @@ Published to `next` and moved to `latest` on 2026-10-31, for all three packages.
 
 Published to `next` on 2026-10-29 and moved to `latest` on 2026-10-30, for all three packages.
 
-- `npx -y viberaven@1.7.6 init` installs the repository Skill for Codex at `.agents/skills/viberaven/SKILL.md` and for Claude Code at `.claude/skills/viberaven/SKILL.md`; `init --agents codex` installs the Codex one. A Skill someone else wrote at that path is left alone.
+- `npx -y viberaven@1.10.0 init` installs the repository Skill for Codex at `.agents/skills/viberaven/SKILL.md` and for Claude Code at `.claude/skills/viberaven/SKILL.md`; `init --agents codex` installs the Codex one. A Skill someone else wrote at that path is left alone.
 - The experimental RLS test no longer passes blind UPDATE, DELETE or reassignment probes merely because a SELECT policy hides another user's row (private PR #162).
 - Local MCP prefers a matching installed CLI and reports execution failures separately from completed findings.
 - This export preparation restores the synthetic Resend provider-boundary example from public PR #53 and production-context sample from #54 with contributor credit, and adds a dry-run-first sync guard that preserves public files. The runnable candidate starter is held from the export until its published package, wrapper, workflows and README are reconciled.
@@ -98,7 +171,7 @@ All three packages were published to `next`; `latest` remains 1.6.12. Recorded C
 - Adds bounded OpenAI browser credential wiring detection; values are omitted and deployed exposure is not claimed. Local MCP retains structured CLI results despite npm diagnostics.
 - Hosted changes prepared alongside the packages include recoverable MCP input errors, client attribution and task-oriented descriptions, plus the approved sign-in, apps and account design. They require their own deployment and are not installed by npm.
 - `viberaven init` writes a short rule block (about 180 words) into AGENTS.md, CLAUDE.md, GEMINI.md and copilot-instructions.md, moves the full loop to `.viberaven/agent-rules.md`, and installs the Claude Code project skill at `.claude/skills/viberaven/SKILL.md`. A skill file someone else wrote at that path is left alone.
-- `viberaven init` adds one package.json script, `viberaven:check` (`npx -y viberaven@1.7.6 check`), instead of `viberaven:gate`, `viberaven:verify` and `viberaven:strict`, which ran the older `--agent-mode`, `--verify` and `--strict` flows. Scripts an earlier init wrote are left as they are.
+- `viberaven init` adds one package.json script, `viberaven:check` (`npx -y viberaven@1.10.0 check`), instead of `viberaven:gate`, `viberaven:verify` and `viberaven:strict`, which ran the older `--agent-mode`, `--verify` and `--strict` flows. Scripts an earlier init wrote are left as they are.
 - The `viberaven` and `@viberaven/cli` npm descriptions and keywords name the same checks (adds `launch-checklist` and `vibe-coding`), as described by public PR #80.
 - `viberaven check --json` adds `nextStep`: one link to viberaven.dev tagged `?src=cli&tool=check`, so a sign-up that follows can be attributed. The terminal verdict is unchanged, and check still sends nothing anywhere. The README's Try it links carry `?src=readme&tool=try_it`.
 

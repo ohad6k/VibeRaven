@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security reporting
+    url: https://github.com/ohad6k/VibeRaven/blob/main/SECURITY.md
+    about: Read the private reporting route before sharing vulnerability details.

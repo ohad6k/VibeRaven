@@ -10,7 +10,7 @@ This repository contains curated public documentation and integration files.
 
 Set on https://github.com/ohad6k/VibeRaven/settings:
 
-- **Description:** A workspace for maintaining full-stack apps built with AI. Work through your coding agent with the running app, diffs, project checks, services and releases together. Includes repository checks for Vercel + Supabase. npx -y viberaven@1.7.6
+- **Description:** Production context and checks for AI-built apps across their providers. Race tests two users at once on real PostgreSQL and replays exactly what broke.
 - **Website:** https://viberaven.dev
 
 ## Public repo - Topics

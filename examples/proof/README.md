@@ -7,7 +7,7 @@ The local project path is replaced with `.`. The public repo export adapts repro
 To collect a fresh result, run this in the example template folder (local, no login), then compare `.viberaven/gate-result.json` and `.viberaven/agent-tasklist.md` with the historical samples. A current release can return different findings and counts:
 
 ```bash
-npx -y viberaven@1.7.6 scan
+npx -y viberaven@1.10.0 scan
 ```
 
 Files:

@@ -1,0 +1,6 @@
+THIRD-PARTY NOTICES — viberaven-shim 1.10.0
+
+VibeRaven-owned code is licensed under MIT; see LICENSE.
+No third-party library implementation is bundled in this command wrapper.
+It delegates to the exact @viberaven/cli dependency; see that package's
+THIRD_PARTY_NOTICES and the optional @viberaven/sessions THIRD_PARTY_NOTICES.

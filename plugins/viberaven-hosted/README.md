@@ -1,5 +1,26 @@
 # VibeRaven hosted plugin
 
+VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change.
+
+## Two users at once
+
+`race` tests your app’s database on real PostgreSQL 18.6, without Docker, and replays exactly what broke. Start locally with `npx -y viberaven@1.10.0 race --example` (Node 24+ with JSPI).
+
+```text
+At most 2 bookings per event: 60 orders, 24 broken, 0 waiting; 1.495s total
+First broken order 001101 (read committed); COMMIT A=true, B=true
+Replay record is byte-identical, including PostgreSQL protocol bytes.
+```
+
+Recorded synthetic example; elapsed time varies. Engine proof: 122 of 124 PostgreSQL isolation specs; hidden tests 199/200 new orders and 1,500/1,500 real-app interleavings, with native PostgreSQL at 100% through the same judge; 80/80 exact replays; 0 leaks between sessions in 60 isolation cases. [Method and limitations](https://github.com/ohad6k/VibeRaven/blob/main/docs/race.md#frozen-engine-proof).
+
+1. `npx -y viberaven@1.10.0 check`: repository risks before launch.
+2. Write a reviewed `viberaven.race.json`, then run `npx -y viberaven@1.10.0 race`: two users at once, with the exact order.
+3. Fix, run `race` again, and replay the reported order to confirm.
+
+[Engine](https://viberaven.dev/engine) · [Connect your agent](https://viberaven.dev/connect/mcp). Hosted MCP gives SQL/error guidance; race runs locally.
+
+
 Use VibeRaven's existing hosted tools from a coding agent to review supplied Supabase migrations, read migration files from a public GitHub repository, or get source-linked provider guidance. The agent can continue the engineering task with the returned findings and coverage limits.
 
 This is an opt-in alternative to the `viberaven` local-MCP plugin in the same catalog. Install the one that fits the task. Adding this option does not replace or update an existing `viberaven` installation. Avoid installing both without a specific need: their review instructions overlap, while their tools and data access differ.
@@ -21,10 +42,10 @@ The MCP URL is `https://viberaven.dev/mcp`. This plugin starts no local MCP proc
 
 Hosted migration review is static, bounded by file and byte limits. It cannot see private repositories, dashboard-only configuration or a live database, and does not execute SQL. No findings means only that the available rules found none in the inspected input. Keep the resolved commit and coverage limits with the result. A clear static check does not establish production security.
 
-The supplied skill also describes an optional local check, `npx -y viberaven@1.7.11 check`, when shell access is available and execution is authorized. That separate command downloads an npm package if needed, reads the local project and writes `.viberaven/` reports. Installing this plugin does not run it. Free review and guidance do not require sign-in; optional account or paid workflows remain separate.
+The supplied skill also describes an optional local check, `npx -y viberaven@1.10.0 check`, when shell access is available and execution is authorized. That separate command downloads an npm package if needed, reads the local project and writes `.viberaven/` reports. Installing this plugin does not run it. Free review and guidance do not require sign-in; optional account or paid workflows remain separate.
 
 ## Cursor and verification
 
 The adjacent Cursor manifest and `mcp.json` use the documented plugin layout and hosted URL. Cursor runtime installation has not been verified. The release receipt records the exact Claude validation and installation performed; installation tests do not establish natural tool selection, useful external outcomes or return use.
 
-Version 1.7.11 identifies this native wrapper and its optional local command. It does not publish or upgrade any npm package, and is not an official Claude or Cursor directory endorsement. The older local-MCP plugin remains available at `plugins/viberaven`.
+Version 1.8.0 identifies this native wrapper and its optional local command. It does not publish or upgrade any npm package, and is not an official Claude or Cursor directory endorsement. The older local-MCP plugin remains available at `plugins/viberaven`.

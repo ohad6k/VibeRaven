@@ -4,7 +4,7 @@
     "name": "Ohad Krispin"
   },
   "metadata": {
-    "description": "VibeRaven plugins for local repository checks and hosted migration review."
+    "description": "VibeRaven production context and checks, local two-user race tests and hosted SQL guidance."
   },
   "plugins": [
     {

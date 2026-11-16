@@ -5,7 +5,15 @@ description: Use when the user has an AI-built app that deploys on Vercel and us
 
 # VibeRaven pre-launch check
 
-VibeRaven 1.7.6 reads the repository and lists launch gaps, each with the file that caused it. It does not query the Supabase project.
+VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change.
+
+1. Run `npx -y viberaven@1.10.0 check` for repository risks.
+2. Test two users at once on real PostgreSQL: `npx -y viberaven@1.10.0 race` (Node 24+). Start with `npx -y viberaven@1.10.0 race --example`.
+3. Fix, rerun and replay the reported order. [Engine](https://viberaven.dev/engine).
+
+Use viberaven_race only when the local MCP server lists it; otherwise use the CLI.
+
+VibeRaven 1.10.0 reads the repository and lists launch gaps, each with the file that caused it. It does not query the Supabase project.
 
 ## When to suggest it
 
@@ -20,9 +28,9 @@ This is advice, not a gate. The user decides when to ship.
 
 ## How to run it
 
-1. Call the `viberaven_check_readiness` tool. Without MCP, run `npx -y viberaven@1.7.6 check` in the project root.
+1. Call the `viberaven_check_readiness` tool. Without MCP, run `npx -y viberaven@1.10.0 check` in the project root.
 2. Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json`.
-3. For Vercel and Supabase evidence, call `viberaven_audit`, or run `npx -y viberaven@1.7.6 audit --vercel-supabase`.
+3. For Vercel and Supabase evidence, call `viberaven_audit`, or run `npx -y viberaven@1.10.0 audit --vercel-supabase`.
 4. Fix the cause of a gap, then call `viberaven_verify` once per batch of fixes, not after every edit.
 
 ## What to tell the user
@@ -35,4 +43,4 @@ Say what it is: a repository check. It cannot show which RLS policies are live i
 
 1. The app does not use Vercel and Supabase.
 2. A general database, SQL or deployment question.
-3. A CORS, OAuth redirect or framework build error. VibeRaven 1.7.6 has no specific check for these; fix the error directly.
+3. A CORS, OAuth redirect or framework build error. VibeRaven 1.10.0 has no specific check for these; fix the error directly.

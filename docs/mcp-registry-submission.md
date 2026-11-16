@@ -1,12 +1,12 @@
 # VibeRaven in the MCP Registry
 
-VibeRaven's MCP server is published in the official MCP Registry.
+This is the local MCP Registry configuration for the 1.10.0 release. No 1.10.0 registry submission is claimed.
 
 The release configuration below targets the current package version. Verify the registry publication with the search endpoint before claiming it is live:
 
 - **Registry name:** `io.github.ohad6k/viberaven`
-- **Target registry version:** `1.7.6`
-- **npm package:** `@viberaven/mcp` version `1.7.6`
+- **Target registry version:** `1.10.0`
+- **npm package:** `@viberaven/mcp` version `1.10.0`
 
 Use the stable API's latest-version endpoint, with the slash in the server name
 URL-encoded. The search endpoint is another way to inspect the listing:
@@ -21,7 +21,7 @@ curl -sL "https://registry.modelcontextprotocol.io/v0.1/servers?search=viberaven
 - **Name:** `io.github.ohad6k/viberaven`
 - **Description:** Local app readiness checks, provider context, and release verification for AI coding agents.
 - **Package:** `@viberaven/mcp`
-- **Run:** `npx -y @viberaven/mcp@1.7.6`
+- **Run:** `npx -y @viberaven/mcp@1.10.0`
 
 It reads the repository and writes results to `.viberaven/`. It does not query the live database. The results are advice, not a gate: the user decides when to ship.
 
@@ -31,7 +31,7 @@ It reads the repository and writes results to `.viberaven/`. It does not query t
 {
   "viberaven": {
     "command": "npx",
-    "args": ["-y", "@viberaven/mcp@1.7.6"]
+    "args": ["-y", "@viberaven/mcp@1.10.0"]
   }
 }
 ```

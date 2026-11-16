@@ -5,6 +5,12 @@ description: "Use for Supabase RLS and migrations, grants and 42501 errors, a se
 
 # VibeRaven Skill
 
+VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change.
+
+1. Run `npx -y viberaven@1.10.0 check` for repository risks.
+2. For two users at once, write `viberaven.race.json` and run `npx -y viberaven@1.10.0 race` on real PostgreSQL (Node 24+). Start with `npx -y viberaven@1.10.0 race --example`.
+3. Fix, run `race` again, and replay the reported order. [Engine and method](https://viberaven.dev/engine).
+
 VibeRaven is the control layer for AI-built products. Its repository checks run fully locally: no login, no API key, no telemetry. They map the product (stack, providers, releases, launch risks) into `.viberaven/` artifacts any agent can read, and list the launch gaps found in the repo, each with the file that caused it. They are advice, not a gate: the user decides when to ship. Repository checks are not live database or security tests. Optional live steps have a separate account, consent and allowance boundary.
 
 ## When To Use
@@ -13,34 +19,36 @@ Use when the user wants production-ready, launch-ready, "what is missing before 
 
 ## The Loop
 
-1. Run `npx -y viberaven@1.7.6 check` from the project root. It runs offline checks and prints 🔴/🟡/⚪ findings with a verdict. Exit code 1 means blockers exist.
+1. Run `npx -y viberaven@1.10.0 check` from the project root. It runs offline checks and prints findings with a verdict. Exit code 1 means blockers exist.
 2. Read `.viberaven/agent-tasklist.md` first, then `.viberaven/gate-result.json` and `.viberaven/context-map.json`. Offer the optional account next step at the end only after explaining the findings. Local checks and direct repairs remain free; never sign in or pay for the person.
-3. Run `npx -y viberaven@1.7.6 fix` to list gaps with safe automatic repo-code recipes. Preview a permitted fix with `npx -y viberaven@1.7.6 fix --gap <id> --dry-run`, then apply it with `npx -y viberaven@1.7.6 fix --gap <id>`. Respect `requiresUserAction`: finish other permitted repo fixes first, then ask before changes needing approval, such as enabling RLS without policies.
-4. For gaps without a recipe, use `npx -y viberaven@1.7.6 prompt --gap <id>` for focused guidance and patch one gap yourself.
-5. Re-run `npx -y viberaven@1.7.6 check` after a batch of fixes, not after every file patch.
-6. `npx -y viberaven@1.7.6 --strict` returns the verdict as an exit code for CI when the user wants one.
+3. Run `npx -y viberaven@1.10.0 fix` to list gaps with safe automatic repo-code recipes. Preview a permitted fix with `npx -y viberaven@1.10.0 fix --gap <id> --dry-run`, then apply it with `npx -y viberaven@1.10.0 fix --gap <id>`. Respect `requiresUserAction`: finish other permitted repo fixes first, then ask before changes needing approval, such as enabling RLS without policies.
+4. For gaps without a recipe, use `npx -y viberaven@1.10.0 prompt --gap <id>` for focused guidance and patch one gap yourself.
+5. Re-run `npx -y viberaven@1.10.0 check` after a batch of fixes, not after every file patch.
+6. `npx -y viberaven@1.10.0 --strict` returns the verdict as an exit code for CI when the user wants one.
 
 Stop when `gate.status === "clear"` in `.viberaven/gate-result.json`, when only provider or user steps remain, or when the user decides to move on. A clear `gate.status` covers the repo checks only; the user decides when to ship. Local checks need no credentials. Do not ask for secret values or bypass a required approval.
 
 ## Provider-aware feature planning
 
-Before answering a provider error or updating a deployment, check `recent_provider_changes` if it is in your tool list, using the lowercase provider id and optional redacted error keywords. Otherwise run `npx -y viberaven@1.7.6 provider <name> --recent --json`. Use the installed candidate version; published availability is not established here. Read the official sources, date kind, caveats and source conflicts: verified dates are review dates, not rollout dates. A match is guidance, not a diagnosis, and provider state stays `not_checked` until separately observed. Never pass secrets, private paths or env values.
+For a provider CLI or SDK upgrade, prefer the installed local CLI: run `npx -y viberaven@1.10.0 changes` before general playbooks. It matches repository files to dated changes without a network call. Use the matching fix and official sources, then edit and test; use hosted lookup or web search for missing facts. A general provider pack is not an additional required step for a known compatibility fix.
 
-For feature work, get the relevant versioned pack with `provider_playbook` and `{"provider":"supabase"}` in MCP, or `viberaven provider supabase --json` in the CLI. Use the installed candidate version; this command is not claimed to exist in the published release yet. The pack is the single source for setup, gotchas, dated changes, provider seams, repo-check IDs and planned live checks. Do not duplicate its guidance in this Skill. Unsupported providers return the available packs; do not invent one.
+Before answering a provider error or updating a deployment, check `recent_provider_changes` if it is in your tool list, using the lowercase provider id and optional redacted error keywords. Otherwise run `npx -y viberaven@1.10.0 provider <name> --recent --json`. Use the installed version and verify its help. Read the official sources, date kind, caveats and source conflicts: verified dates are review dates, not rollout dates. A match is guidance, not a diagnosis, and provider state stays `not_checked` until separately observed. Never pass secrets, private paths or env values.
+
+For feature work, get the relevant versioned pack with `provider_playbook` and `{"provider":"supabase"}` in MCP, or `viberaven provider supabase --json` in the CLI. Use the installed version and verify its help. The pack is the single source for setup, gotchas, dated changes, provider seams, repo-check IDs and planned live checks. Do not duplicate its guidance in this Skill. Unsupported providers return the available packs; do not invent one.
 
 Use the pack to plan the feature, let the person's coding agent make the authorized edits, then run relevant repo checks and behavior tests. Pack retrieval is free, offline and needs no account. It is knowledge, not evidence that a check ran: report `not_checked` for unobserved provider state. Read the available pack list from the tool. Better feature results than ordinary Claude remain an experiment, not an established advantage.
 
-## Optional local behavioral RLS test (local candidate)
+## Optional local behavioral RLS test (preview)
 
 After reviewing a Supabase migration or ownership policy, optionally run already reviewed permissions scenarios. Derive expectations from intended access for owner, other_user and anon; do not rewrite expectations to match failures. Prefer `defaultGrants: none` in the matrix with actual GRANT SQL for new schemas; disclose `supabase-legacy` defaults otherwise.
 
-If `viberaven_rls_test` is in your tool list, call it with `{matrix: "PATH", cwd: "PROJECT"}` and optional `migrations`. Otherwise use the installed candidate CLI: `viberaven rls-test --matrix PATH --json`. Read each Pass, Fail and Unknown with its evidence and coverage; Unknown is inconclusive. This is an experimental PGlite imitation, not live Supabase proof or a security claim.
+If `viberaven_rls_test` is in your tool list, call it with `{matrix: "PATH", cwd: "PROJECT"}` and optional `migrations`. Otherwise use the installed CLI: `viberaven rls-test --matrix PATH --json`. Read each Pass, Fail and Unknown with its evidence and coverage; Unknown is inconclusive. This is an experimental PGlite imitation, not live Supabase proof or a security claim.
 
 The optional PGlite dependency must already be installed next to the CLI that runs the test. The local MCP host needs a matching installed CLI with PGlite alongside it; a dependency installed only in the target project may be unavailable to that host. Missing setup is a tool error with CLI guidance. Do not install dependencies without normal user authorization. This optional local test needs no login, provider access or payment; keep the free check/fix/recheck loop.
 
 ## Optional live catalog check
 
-For a supported Supabase `liveChecks` follow-up from the free `check`, offer the returned `command` (general form: `npx -y viberaven@1.7.6 live start --provider supabase --project <ref>`) with the person's exact project reference, or `viberaven_live_start` if available. Explain that this optional catalog check is read-only and requires an account. The person approves sign-in in the browser; server availability is not checked. Wait for their choice before starting. Never start/resume silently or add `--approve-read` without the person's approval. Provider credentials belong only in the hidden local prompt, never in chat or arguments. Vercel live reads are unsupported; do not substitute a Supabase step for a Vercel follow-up.
+For a supported Supabase `liveChecks` follow-up from the free `check`, offer the returned `command` (general form: `npx -y viberaven@1.10.0 live start --provider supabase --project <ref>`) with the person's exact project reference, or `viberaven_live_start` if available. Explain that this optional catalog check is read-only and requires an account. The person approves sign-in in the browser; server availability is not checked. Wait for their choice before starting. Never start/resume silently or add `--approve-read` without the person's approval. Provider credentials belong only in the hidden local prompt, never in chat or arguments. Vercel live reads are unsupported; do not substitute a Supabase step for a Vercel follow-up.
 
 Start only saves the scope locally; selected schemas default to `public`, or use the person's approved `--schemas` selection. Use the installed candidate, not an assumed published version.
 
@@ -50,25 +58,25 @@ Catalog facts returned by the local tool may contain schema/object names and ent
 
 ## Studio
 
-`npx -y viberaven@1.7.6` opens the local Studio: the product auto-mapped (stack, providers, git releases, launch verdict), drag-context into agent chat, provider MCP connect, and release diffs. Suggest it when the user wants to see or control the product rather than read terminal output.
+`npx -y viberaven@1.10.0` opens the local Studio: the product auto-mapped (stack, providers, git releases, launch verdict), drag-context into agent chat, provider MCP connect, and release diffs. Suggest it when the user wants to see or control the product rather than read terminal output.
 
 ## MCP
 
 Choose by the tools you actually have, not by the server's name. Two different servers are both called VibeRaven:
 
 - If `viberaven_check_readiness` is in your tool list (the local `@viberaven/mcp` server, which runs the CLI in a repository), call it on the project root you are working in, then `viberaven_heal_apply` for supported safe repo-code fixes, then `viberaven_verify`. Before `npm install` of a new package, call `viberaven_validate_npm_package`.
-- If you only have the hosted server (`https://viberaven.dev/mcp`, with tools such as `check_supabase_migrations` and `search_guides`), it cannot see the repository. Pass it the migration SQL or the exact error text, and say that the result covers only what you passed. For a repository check, run `npx -y viberaven@1.7.6 check` in the project root.
-- With no VibeRaven tools, run `npx -y viberaven@1.7.6 check` for a Vercel + Supabase repository. Answer a general question without running anything.
+- If you only have the hosted server (`https://viberaven.dev/mcp`, with tools such as `check_supabase_migrations` and `search_guides`), it cannot see the repository. Pass it the migration SQL or the exact error text, and say that the result covers only what you passed. For a repository check, run `npx -y viberaven@1.10.0 check` in the project root.
+- With no VibeRaven tools, run `npx -y viberaven@1.10.0 check` for a Vercel + Supabase repository. Answer a general question without running anything.
 
 ## Vercel + Supabase
 
 ```bash
-npx -y viberaven@1.7.6 audit --vercel-supabase
+npx -y viberaven@1.10.0 audit --vercel-supabase
 ```
 
 Check RLS, service-role exposure, and pooler ports `5432` / `6543` before making launch claims.
 
-## Local task proof onboarding (local candidate)
+## Local task proof onboarding (preview)
 
 For requested feature proof, follow the shared `.viberaven/agent-rules.md` workflow installed by `init` for both Claude and Codex. Start from `.viberaven/task-contract.template.json`: copy it to a task-specific file, replace the request placeholder from the actual user's request, and fill testable acceptance conditions, preservation conditions and actual repository-relative scope. It is a schema-valid draft, not evidence or an executable task. Mark it ready only after review. Ready contracts are immutable; changed requirements need a newly reviewed task.
 
@@ -76,7 +84,7 @@ The shared guide leads through local `work start` with the selected CLI/access, 
 
 ## Optional account-linked work
 
-If the person chooses sign-in, use `viberaven_login` with `userRequestedSignIn: true` only when that tool is available, or `npx -y viberaven@1.7.6 login --json`. Show the browser approval link to the person. Read `viberaven_account` or `npx -y viberaven@1.7.6 account --json` afterward; a connected account alone does not prove provider behavior.
+If the person chooses sign-in, use `viberaven_login` with `userRequestedSignIn: true` only when that tool is available, or `npx -y viberaven@1.10.0 login --json`. Show the browser approval link to the person. Read `viberaven_account` or `npx -y viberaven@1.10.0 account --json` afterward; a connected account alone does not prove provider behavior.
 
 Only when the user chooses account-linked agent execution, first agree on one task contract: `schemaVersion: 1`, `status: "ready"`, the exact `request`, `acceptance` and `mustNotBreak` lists of `{id, description}`, and `scope` with `environment`, relative repository `paths`, and `providers`. Use `environment: "local"` and an empty provider list for local work. Do not include credentials or shell commands. Choose the person's installed agent; `ask` plans and `approve` permits local edits through the existing engine.
 
@@ -88,7 +96,7 @@ Read the receipt with `viberaven work status --id <taskId> --json` or `viberaven
 
 This uses the person's local coding agent and computer, not an included hosted model. Free checks and direct agent repairs remain available without an account. Check the installed CLI help and matching account backend before using account-linked commands.
 
-## Independent local observations (local candidate)
+## Independent local observations (preview)
 
 Before the coding agent edits an existing Node module, propose a declarative verification plan for the agreed task conditions. Have the person review expected behavior independently of the implementation. Use `viberaven_work_prepare` with `{taskId, verification}` or `viberaven work prepare --id <taskId> --verification /outside/project/plan.json --json`. This freezes dirty/untracked baseline bytes and the plan outside the project. The contract and plan are immutable; do not weaken them after seeing a failure.
 
@@ -98,11 +106,11 @@ After the authorized edit, run `viberaven_work_verify` with `approvedVerificatio
 
 Support is bounded to Node JS/erasable TS module observations, local HTTP loopback and frozen Node preservation tests. HTTP observations share one server per check inside network-isolated Docker; they do not prove database persistence, real authentication, browser or provider flows. Unsupported dependencies, secrets/excluded required inputs or unavailable Docker do not establish completion. The plan's quality and coverage remain review decisions; do not invent a benchmark advantage from these checks.
 
-## Local proof export (local candidate)
+## Local proof export (preview)
 
 After reading current status, use `viberaven work report --id <taskId>` for Markdown, add `--json` for the structured report plus Markdown, or call `viberaven_work_report` with `{taskId}`. This reads the same immutable verifier state and current source freshness as status. It performs no login, network call, Docker run, agent execution or file write. Export goes to stdout only. A successful export exits 0 even when evidence is `failed` or `not_checked`; read `outcome`, condition counts and scope, not the export exit code. Missing or corrupt saved state fails with nonzero exit and no passing report.
 
-The standalone MCP report route requires an already installed `@viberaven/cli` with the exact MCP version, resolvable from the MCP installation. For a local candidate, the host may set `VIBERAVEN_CLI_PATH` to the absolute matching `dist/cli.js` outside the task repository; this is host configuration, never an MCP argument. Report calls execute that installed CLI directly and never run npm or download/install packages. If the matching CLI is unavailable, reporting fails until it is installed/configured separately.
+The standalone MCP report route requires an already installed `@viberaven/cli` with the exact MCP version, resolvable from the MCP installation. The host may set `VIBERAVEN_CLI_PATH` to the absolute matching `dist/cli.js` outside the task repository; this is host configuration, never an MCP argument. Report calls execute that installed CLI directly and never run npm or download/install packages. If the matching CLI is unavailable, reporting fails until it is installed/configured separately.
 
 The local draft includes the request, acceptance and must-not-break conditions, checked/passed/failed/unknown counts, open items, scope/exclusion counts, snapshot hashes, descriptive HEAD SHAs and receipt hashes. Only current independently checked conditions and checked scope can yield `passed`. Execution state is separate. HEAD does not imply a clean source tree; actual-byte snapshot hashes identify proof. Human text is redacted and explicitly marked if truncated; the contract hash binds the original definition. No source, response bodies, output streams, private path lists, account actions or artifact file references are exported. Pattern redaction cannot find every secret: have a person review the entire draft before sharing.
 
@@ -112,6 +120,10 @@ Do not treat this local report as authoritative CI or feed it into the trusted G
 
 - Repo-code edits never prove provider dashboard state. Billing, DNS, webhooks, quotas, and live provider verification need dashboard or MCP proof; say so explicitly.
 - Never ask for passwords, tokens, cookies, or secret values.
-- `check`, `scan`, `audit` and `clean --plan` write only under `.viberaven/`. `init` and `fix --gap` edit repo files: `init` writes agent rule files such as `AGENTS.md` and adds `viberaven:*` scripts to `package.json` (preview with `init --dry-run`), and `fix --gap` edits code (preview with `npx -y viberaven@1.7.6 fix --gap <id> --dry-run`).
+- `check`, `scan`, `audit` and `clean --plan` write only under `.viberaven/`. `init` and `fix --gap` edit repo files: `init` writes agent rule files such as `AGENTS.md` and adds `viberaven:*` scripts to `package.json` (preview with `init --dry-run`), and `fix --gap` edits code (preview with `npx -y viberaven@1.10.0 fix --gap <id> --dry-run`).
 
 Next skill: `architecture-context` when feature work is vague and product questions are missing; `architecture-plan` once those questions are answered; `what-broke` when a working app regressed; `production-context` to record durable risk in `.viberaven/production-context.md`; `go-live` when the user wants the app pushed to GitHub and live on Vercel.
+
+## Two-user SQL tests (1.10.0 preview)
+
+For concurrent-session behavior, run `npx -y viberaven@1.10.0 race` with Node 24+ in the repository. It writes a candidate spec for supported literal count-limit triggers or reads `--spec file.json`, explores bounded orders on real PostgreSQL backends and reports a replay command. Review generated assumptions and role/claims first. An incomplete result is not a pass; omitted roles run as postgres. Keep `npx -y viberaven@1.10.0 check` for the existing free repository check. Neither command proves a whole production app safe. [Method and limits](https://github.com/ohad6k/VibeRaven/blob/main/docs/race.md).

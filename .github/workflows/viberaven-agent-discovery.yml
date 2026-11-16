@@ -19,4 +19,4 @@ jobs:
           node-version: 20
 
       - name: Verify agent injection files
-        run: npx -y viberaven@1.7.6 doctor --agents
+        run: npx -y viberaven@1.10.0 doctor --agents

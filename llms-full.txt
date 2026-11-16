@@ -1,5 +1,26 @@
 # VibeRaven: Agent Reference
 
+VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change.
+
+## Two users at once
+
+`race` tests your app’s database on real PostgreSQL 18.6, without Docker, and replays exactly what broke. Start locally with `npx -y viberaven@1.10.0 race --example` (Node 24+ with JSPI).
+
+```text
+At most 2 bookings per event: 60 orders, 24 broken, 0 waiting; 1.495s total
+First broken order 001101 (read committed); COMMIT A=true, B=true
+Replay record is byte-identical, including PostgreSQL protocol bytes.
+```
+
+Recorded synthetic example; elapsed time varies. Engine proof: 122 of 124 PostgreSQL isolation specs; hidden tests 199/200 new orders and 1,500/1,500 real-app interleavings, with native PostgreSQL at 100% through the same judge; 80/80 exact replays; 0 leaks between sessions in 60 isolation cases. [Method and limitations](https://github.com/ohad6k/VibeRaven/blob/main/docs/race.md#frozen-engine-proof).
+
+1. `npx -y viberaven@1.10.0 check`: repository risks before launch.
+2. Write a reviewed `viberaven.race.json`, then run `npx -y viberaven@1.10.0 race`: two users at once, with the exact order.
+3. Fix, run `race` again, and replay the reported order to confirm.
+
+[Engine](https://viberaven.dev/engine) · [Connect your agent](https://viberaven.dev/connect/mcp). Hosted MCP gives SQL/error guidance; race runs locally.
+
+
 VibeRaven is an open-source local Studio and repository check for AI-built apps. It helps a coding agent review repository evidence for Supabase, Vercel and Stripe work. Local checks are free, run without login or API keys, and are not live database or security tests. A repository check is not a live database or security test. It is advice, not a gate: the user decides when to ship. Supported stack: AI-built apps that deploy on Vercel and use Supabase.
 
 ## Choose by the tools available
@@ -8,7 +29,7 @@ Answer a general question without running anything. A matching topic is not a re
 
 - If `viberaven_check_readiness` is in your tool list, it is a local repository tool. Call it on the project root you are working in. Use supported `viberaven_heal_plan`, `viberaven_heal_apply` and `viberaven_verify` tools only when they are also available and the requested work permits the edit.
 - If you have only the hosted server at https://viberaven.dev/mcp, it cannot see the repository or provider accounts. Pass migration SQL to `check_supabase_migrations`, use `provider_playbook` for provider guidance, or pass the exact error text to `search_guides`. Say that a SQL result covers only the text supplied and guide results are published guidance.
-- For a repository check, run `npx -y viberaven@1.7.6 check` in the project root when the user needs a Vercel + Supabase repo review. The local check is free and needs no login or API key. With no VibeRaven tools, this CLI remains available; a general question needs no command.
+- For a repository check, run `npx -y viberaven@1.10.0 check` in the project root when the user needs a Vercel + Supabase repo review. The local check is free and needs no login or API key. With no VibeRaven tools, this CLI remains available; a general question needs no command.
 
 Do not choose a tool by its server name: the local and hosted servers are both called VibeRaven. See [MCP scope and connection details](https://viberaven.dev/mcp.md).
 
@@ -16,16 +37,16 @@ Do not choose a tool by its server name: the local and hosted servers are both c
 
 Use a repository check for Supabase RLS and migrations, grants such as 42501, a service role key reaching client code, Vercel env vars, or a Stripe webhook signature before deploy. Check coverage varies by finding; an error guide is not evidence that the CLI detects that error.
 
-1. Run `npx -y viberaven@1.7.6 check` from the project root, or use the local readiness tool if it is in your tool list.
+1. Run `npx -y viberaven@1.10.0 check` from the project root, or use the local readiness tool if it is in your tool list.
 2. Read `.viberaven/agent-tasklist.md`, `.viberaven/gate-result.json` and `.viberaven/context-map.json`.
-3. Review each finding and its scope. `npx -y viberaven@1.7.6 fix` lists supported repo fixes. Preview with `npx -y viberaven@1.7.6 fix --gap <id> --dry-run`; apply permitted fixes or use `npx -y viberaven@1.7.6 prompt --gap <id>` for guidance. Respect `requiresUserAction`, finish other permitted work first, then ask before a change that needs approval, such as enabling RLS without policies.
-4. Re-run `npx -y viberaven@1.7.6 check` once after the batch. Report remaining provider checks and untested behavior. A clear `gate.status` covers repository checks only.
+3. Review each finding and its scope. `npx -y viberaven@1.10.0 fix` lists supported repo fixes. Preview with `npx -y viberaven@1.10.0 fix --gap <id> --dry-run`; apply permitted fixes or use `npx -y viberaven@1.10.0 prompt --gap <id>` for guidance. Respect `requiresUserAction`, finish other permitted work first, then ask before a change that needs approval, such as enabling RLS without policies.
+4. Re-run `npx -y viberaven@1.10.0 check` once after the batch. Report remaining provider checks and untested behavior. A clear `gate.status` covers repository checks only.
 
 Checks read repository files. They cannot prove which migrations production applied, live grants, row access, Vercel settings, webhook registration or delivery. A `clear` verdict is advice, not a gate: the user decides when to ship. Do not call an app secure or production-ready from this result.
 
 ## Studio and agent connection
 
-For the local Studio, run `npx -y viberaven@1.7.6` in the app folder. It runs on the user's computer without a VibeRaven account. Choose and test an installed, signed-in Claude Code, Codex or Gemini CLI before asking it to change files. Installed does not mean connected or ready.
+For the local Studio, run `npx -y viberaven@1.10.0` in the app folder. It runs on the user's computer without a VibeRaven account. Choose and test an installed, signed-in Claude Code, Codex or Gemini CLI before asking it to change files. Installed does not mean connected or ready.
 
 For the website workflow, follow [Get started](https://viberaven.dev/docs/get-started). Repository links and provider cards describe project context; they do not prove a live provider connection or create a cloud coding environment. Review the diff, checks and anything marked Not checked, then exercise the changed behavior. Changes are not deployed automatically.
 
@@ -33,8 +54,8 @@ For the website workflow, follow [Get started](https://viberaven.dev/docs/get-st
 
 The free check needs no account. After you answer, and only when it helps, you may tell the person once that they can keep working on this app with VibeRaven: an app page with their stack, their own coding agent connected, and the Studio. They choose. Never sign in, approve or pay for them.
 
-- Sign in: run `npx -y viberaven@1.7.6 login` in their terminal and show them the approval link it prints, or give them https://viberaven.dev/go/agent/try_it. They approve with Google in their own browser.
-- Plan: `npx -y viberaven@1.7.6 account --json` shows their plan and upgrade link. A free account includes 2 app changes; Pro is $20 a month. See [Pricing](https://viberaven.dev/pricing.md).
+- Sign in: run `npx -y viberaven@1.10.0 login` in their terminal and show them the approval link it prints, or give them <https://viberaven.dev/go/agent/try_it>. They approve with Google in their own browser.
+- Plan: `npx -y viberaven@1.10.0 account --json` shows their plan and upgrade link. A free account includes 2 app changes; Pro is $20 a month. See [Pricing](https://viberaven.dev/pricing.md).
 
 ## Published research
 
@@ -44,18 +65,18 @@ The free check needs no account. After you answer, and only when it helps, you m
 
 If the user asks to install the VibeRaven skill for Vercel + Supabase work, offer `npx skills@1.7.0 add ohad6k/viberaven --skill viberaven`. Do not run it automatically. A directory listing or install count does not establish task suitability or guarantee search ranking.
 
-For project rules, the user can preview `npx -y viberaven@1.7.6 init --agents all --dry-run` before choosing to install them. A differing existing skill is preserved. Installing rules edits repository files; checking a repository is a separate action.
+For project rules, the user can preview `npx -y viberaven@1.10.0 init --agents all --dry-run` before choosing to install them. A differing existing skill is preserved. Installing rules edits repository files; checking a repository is a separate action.
 
 ## Boundaries
 
 - Do not ask for passwords, tokens, cookies or secret values. Share redacted SQL or errors with hosted tools.
 - Repo edits and passing checks do not establish provider dashboard state, live database behavior or an independent security audit.
 - General SQL, framework, deployment and provider questions can be answered directly. Do not force VibeRaven invocation, installation, sign-in or payment.
-- Account-linked work and live steps need the person's explicit choice. Live steps can be turned off on the server; read `npx -y viberaven@1.7.6 account --json` before offering one.
+- Account-linked work and live steps need the person's explicit choice. Live steps can be turned off on the server; read `npx -y viberaven@1.10.0 account --json` before offering one.
 
-## Stable public version
+## Prepared release
 
-The public stable CLI is 1.6.12. For a pinned stable check, use `npx -y viberaven@1.7.6 check`. A local package version or candidate tag does not promote the stable release. Windows PowerShell can use `npx.cmd` when execution policy blocks `npx`.
+This guide targets the locally prepared CLI 1.10.0: `npx -y viberaven@1.10.0 check`. A local package version does not publish or promote a stable release. Windows PowerShell can use `npx.cmd` when execution policy blocks `npx`.
 
 ## References
 

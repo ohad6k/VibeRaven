@@ -1,7 +1,7 @@
 {
   "name": "viberaven",
-  "version": "1.7.6",
-  "description": "Repository checks for AI-built apps on Supabase, Vercel and Stripe: RLS and migrations, grants and 42501 errors, a service role key in client code, env vars and webhook signatures. Local checks are free, with no login or API key. Includes the read-only VibeRaven guides MCP server.",
+  "version": "1.10.0",
+  "description": "Production context and checks for AI-built apps across their providers. Local race tests two users at once on real PostgreSQL and replays exactly what broke.",
   "contextFileName": "AGENTS.md",
   "mcpServers": {
     "viberaven-guides": {

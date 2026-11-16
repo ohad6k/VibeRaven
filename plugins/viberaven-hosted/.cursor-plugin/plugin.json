@@ -1,5 +1,5 @@
 {
-  "description": "Review Supabase migrations for RLS and grant gaps, or check a local Vercel + Supabase repository. Results cover inspected files, not live database state.",
+  "description": "Production context and checks for AI-built apps across their providers. Hosted SQL and error guidance; use local race tests for two users at once on real PostgreSQL.",
   "author": {
     "name": "Ohad Krispin",
     "email": "ohadkrispin@gmail.com",
@@ -16,7 +16,7 @@
     "security-review"
   ],
   "name": "viberaven-hosted",
-  "version": "1.7.11",
+  "version": "1.10.0",
   "logo": "assets/logo.png",
   "displayName": "VibeRaven"
 }
