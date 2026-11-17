@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://viberaven.dev"><img src="./assets/readme-banner.png" alt="VibeRaven: the production layer for AI-built apps. A race result: both bookings committed, 24 of 60 orders broke, replay byte-identical." width="100%" /></a>
+  <a href="https://viberaven.dev"><img src="./assets/readme-banner.png" alt="VibeRaven: the production layer for AI-built apps. All 20 orders of two bookings drawn as threads: 12 broke the limit, 8 held." width="100%" /></a>
 </p>
 
 <p align="center">
@@ -40,9 +40,9 @@ Replay record is byte-identical, including PostgreSQL protocol bytes.
 
 That is the engine inside VibeRaven: `race` tests your app's database with two users at once, on real PostgreSQL, without Docker, and replays exactly what broke. In order 001101, A inserts, B inserts, A commits, B commits: the event ends with 3 bookings out of 2. The bundled fix brings it to 0 broken of 60.
 
-## Inside your chat
+<p align="center"><img src="./assets/race-result.png" alt="npx -y viberaven race --example: two users book the last seat at once. 12 orders broke under read committed, 12 under repeatable read, 0 under serializable: 24 of 60. The broken order replays exactly." width="100%" /></p>
 
-<p align="center"><img src="./assets/chat-race.png" alt="VibeRaven's race result inside ChatGPT: both bookings committed, 24 of 60 orders broke, replay byte-identical." width="100%" /></p>
+## Inside your chat
 
 Add `https://viberaven.dev/mcp` as a custom connector in ChatGPT, Claude, Codex, Cursor or Lovable, then ask: "Can two users book the last seat?" [Setup for each agent](https://viberaven.dev/connect/mcp).
 
