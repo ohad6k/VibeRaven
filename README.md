@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://viberaven.dev"><img src="./assets/readme-banner.png" alt="VibeRaven: the production layer for AI-built apps. All 20 orders of two bookings drawn as threads: 12 broke the limit, 8 held." width="100%" /></a>
+  <a href="https://viberaven.dev"><img src="./assets/readme-banner.jpg" alt="VibeRaven: the raven mark and the PostgreSQL elephant. Two users at once, on real PostgreSQL." width="100%" /></a>
 </p>
 
 <p align="center">
