@@ -1,5 +1,5 @@
 {
-  "description": "Production context and checks for AI-built apps across their providers. Hosted SQL and error guidance; use local race tests for two users at once on real PostgreSQL.",
+  "description": "Catches the Supabase database bugs AI agents ship and proves the fix. Checks migrations for missing RLS, Data API grants and unsafe concurrent writes, returns corrected SQL, then runs two users' requests on PostgreSQL and saves a shareable proof when the fix holds.",
   "author": {
     "name": "Ohad Krispin",
     "email": "ohadkrispin@gmail.com",
@@ -12,11 +12,13 @@
     "supabase",
     "rls",
     "migrations",
+    "race-conditions",
+    "postgres",
     "vercel",
-    "security-review"
+    "proof"
   ],
   "name": "viberaven-hosted",
-  "version": "1.10.0",
+  "version": "1.12.0",
   "privacyPolicyUrl": "https://viberaven.dev/privacy",
   "mcpServers": {
     "viberaven": {
