@@ -40,8 +40,8 @@ Add `https://viberaven.dev/mcp` as a custom connector in ChatGPT, Claude, Codex,
 ## In your repo
 
 ```sh
-npx -y viberaven@1.10.0 check   # what is risky before launch
-npx -y viberaven@1.10.0 race    # what breaks when two users act at once
+npx -y viberaven@1.12.1 check   # what is risky before launch
+npx -y viberaven@1.12.1 race    # what breaks when two users act at once
 ```
 
 1. `check` reads migrations, client code and env files, and names the file and line for each gap.
@@ -75,9 +75,9 @@ The engine is [`@viberaven/sessions`](https://www.npmjs.com/package/@viberaven/s
 
 | Agent | Setup |
 | --- | --- |
-| Claude Code | `npx -y viberaven@1.10.0 init --agents claude` |
-| Codex | `npx -y viberaven@1.10.0 init --agents codex` |
-| Cursor | `npx -y viberaven@1.10.0 init --agents cursor` |
+| Claude Code | `npx -y viberaven@1.12.1 init --agents claude` |
+| Codex | `npx -y viberaven@1.12.1 init --agents codex` |
+| Cursor | `npx -y viberaven@1.12.1 init --agents cursor` |
 | ChatGPT, Claude, Lovable | Add `https://viberaven.dev/mcp` as a custom connector |
 
 Local MCP tools: `npx -y @viberaven/mcp@1.10.0`. Details in the [agent hub](https://github.com/ohad6k/VibeRaven/blob/main/AGENTS-HUB.md).
@@ -86,7 +86,7 @@ Building an agent that answers provider errors? The [AI SDK provider-context exa
 
 ## Local Studio
 
-`npx -y viberaven@1.10.0` opens the local Studio: chat with your coding agent, the provider board, versions and diffs, and a **Race test** tab that runs `race` and replays a broken order.
+`npx -y viberaven@1.12.1` opens the local Studio: chat with your coding agent, the provider board, versions and diffs, and a **Race test** tab that runs `race` and replays a broken order.
 
 ![VibeRaven local Studio](https://raw.githubusercontent.com/ohad6k/VibeRaven/main/assets/studio-3d.png)
 
