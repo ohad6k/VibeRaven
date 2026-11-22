@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <b>The production layer for AI-built apps.</b><br />
-  Checks across Supabase, Vercel and Stripe, and an engine that races every rule in your database on real PostgreSQL, before your users do.
+  <b>Catch double bookings before release</b><br />
+  VibeRaven tests overlapping PostgreSQL writes and shows what committed. It also checks Supabase migration files for missing RLS and Data API grants.
 </p>
 
 <p align="center">
@@ -23,24 +23,15 @@
 
 ## Quick start
 
-The engine inside VibeRaven, on the bundled example:
+### Reproduce a PostgreSQL booking race
+
+Start in an empty folder with Node 24:
 
 ```sh
-npx -y viberaven@1.10.0 race --example
+npx -y viberaven@1.12.1 race --example
 ```
 
-```text
-At most 2 bookings per event: 60 orders, 24 broken, 0 waiting; 1.495s total
-  read committed: 12/20 broken
-  repeatable read: 12/20 broken
-  serializable: 0/20 broken
-First broken order 001101 (read committed); COMMIT A=true, B=true
-Replay record is byte-identical, including PostgreSQL protocol bytes.
-```
-
-That is the engine inside VibeRaven: `race` tests your app's database with two users at once, on real PostgreSQL, without Docker, and replays exactly what broke. In order 001101, A inserts, B inserts, A commits, B commits: the event ends with 3 bookings out of 2. The bundled fix brings it to 0 broken of 60.
-
-<p align="center"><img src="./assets/race-result.png" alt="npx -y viberaven race --example: two users book the last seat at once. 12 orders broke under read committed, 12 under repeatable read, 0 under serializable: 24 of 60. The broken order replays exactly." width="100%" /></p>
+The synthetic event has one seat left. The unguarded booking flow exceeded capacity in **24 of 60 tested statement orders**. The [booking fixture](https://github.com/ohad6k/VibeRaven/tree/de6208df5a777358251fa87e7457ad5989c33922/examples/race-capacity) shows the guard-row fix and how to rerun the assertion.
 
 ## Inside your chat
 
