@@ -1,0 +1,20 @@
+{
+  "name": "viberaven-codex",
+  "interface": {
+    "displayName": "VibeRaven"
+  },
+  "plugins": [
+    {
+      "name": "viberaven-hosted",
+      "source": {
+        "source": "local",
+        "path": "./plugins/viberaven-hosted"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

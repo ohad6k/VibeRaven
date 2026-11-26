@@ -1,0 +1,31 @@
+{
+  "name": "viberaven-hosted",
+  "version": "1.12.1",
+  "description": "Review Supabase migrations for missing RLS and Data API grants, and find source-linked provider guidance.",
+  "author": {
+    "name": "Ohad Krispin",
+    "url": "https://viberaven.dev"
+  },
+  "homepage": "https://viberaven.dev/connect/mcp",
+  "repository": "https://github.com/ohad6k/VibeRaven",
+  "license": "MIT",
+  "keywords": ["supabase", "migrations", "postgresql", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "VibeRaven",
+    "shortDescription": "Review Supabase migrations",
+    "longDescription": "Review supplied Supabase migration SQL or supported public GitHub migration files for missing row-level security and Data API grants. Get file and line findings, source-linked provider guidance, and a launch checklist. VibeRaven reviews the supplied inputs. Check deployed settings and live database behavior separately. The hosted service receives the input you send. Use redacted SQL or an authorized public repository.",
+    "developerName": "Ohad Krispin",
+    "category": "Developer Tools",
+    "capabilities": ["Migration review", "Provider guidance", "Launch checklist"],
+    "websiteURL": "https://viberaven.dev/connect/mcp",
+    "supportURL": "https://github.com/ohad6k/VibeRaven/issues",
+    "privacyPolicyURL": "https://viberaven.dev/privacy",
+    "termsOfServiceURL": "https://viberaven.dev/terms",
+    "defaultPrompt": ["What should I check before deploying a Next.js app on Vercel with Supabase?"],
+    "brandColor": "#7C3AED",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png"
+  }
+}

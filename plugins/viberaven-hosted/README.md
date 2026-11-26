@@ -1,51 +1,33 @@
 # VibeRaven hosted plugin
 
-VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change.
+Review supplied Supabase migration SQL or a supported public GitHub migration tree for missing row-level security and Data API grants. Ask for file and line evidence, the source commit when available, and what to verify against the deployed database.
 
-## Two users at once
+## Install
 
-`race` tests your app’s database on real PostgreSQL 18.6, without Docker, and replays exactly what broke. Start locally with `npx -y viberaven@1.10.0 race --example` (Node 24+ with JSPI).
-
-```text
-At most 2 bookings per event: 60 orders, 24 broken, 0 waiting; 1.495s total
-First broken order 001101 (read committed); COMMIT A=true, B=true
-Replay record is byte-identical, including PostgreSQL protocol bytes.
-```
-
-Recorded synthetic example; elapsed time varies. Engine proof: 122 of 124 PostgreSQL isolation specs; hidden tests 199/200 new orders and 1,500/1,500 real-app interleavings, with native PostgreSQL at 100% through the same judge; 80/80 exact replays; 0 leaks between sessions in 60 isolation cases. [Method and limitations](https://github.com/ohad6k/VibeRaven/blob/main/docs/race.md#frozen-engine-proof).
-
-1. `npx -y viberaven@1.10.0 check`: repository risks before launch.
-2. Write a reviewed `viberaven.race.json`, then run `npx -y viberaven@1.10.0 race`: two users at once, with the exact order.
-3. Fix, run `race` again, and replay the reported order to confirm.
-
-[Engine](https://viberaven.dev/engine) · [Connect your agent](https://viberaven.dev/connect/mcp). Hosted MCP gives SQL/error guidance; race runs locally.
-
-
-Use VibeRaven's existing hosted tools from a coding agent to review supplied Supabase migrations, read migration files from a public GitHub repository, or get source-linked provider guidance. The agent can continue the engineering task with the returned findings and coverage limits.
-
-This is an opt-in alternative to the `viberaven` local-MCP plugin in the same catalog. Install the one that fits the task. Adding this option does not replace or update an existing `viberaven` installation. Avoid installing both without a specific need: their review instructions overlap, while their tools and data access differ.
-
-## Claude Code
+Claude Code:
 
 ```text
 /plugin marketplace add ohad6k/VibeRaven
 /plugin install viberaven-hosted@viberaven-plugins
 ```
 
-If the marketplace is already installed, refresh it with `/plugin marketplace update viberaven-plugins` before installing the new entry. Check the installed plugin's MCP connection before relying on its tools. A listed plugin alone does not prove the server is connected.
+Run `/plugin marketplace update viberaven-plugins` if you have already added it.
 
-Example task: "Review the Supabase migrations in this public GitHub repository, explain the findings at the checked commit, and help fix any unintended row access." Supply a public repository URL, or paste nonsecret migration text. Preserve the application's intended public reads and test both allowed and denied operations after changes.
+Codex:
 
-## Connection and data
+```bash
+codex plugin marketplace add ohad6k/VibeRaven
+```
 
-The MCP URL is `https://viberaven.dev/mcp`. This plugin starts no local MCP process and has no hooks. The hosted service discovers its tools at connection time; its inventory can change independently of this package. Queries and supplied input are sent to VibeRaven. Never send credentials or `.env` contents. See the [privacy policy](https://viberaven.dev/privacy).
+Select VibeRaven from that marketplace. Cursor can use the adjacent Cursor manifest or add `https://viberaven.dev/mcp` as a Streamable HTTP server. See [connection instructions](https://viberaven.dev/connect/mcp).
 
-Hosted migration review is static, bounded by file and byte limits. It cannot see private repositories, dashboard-only configuration or a live database, and does not execute SQL. No findings means only that the available rules found none in the inspected input. Keep the resolved commit and coverage limits with the result. A clear static check does not establish production security.
+## Tools and data
 
-The supplied skill also describes an optional local check, `npx -y viberaven@1.10.0 check`, when shell access is available and execution is authorized. That separate command downloads an npm package if needed, reads the local project and writes `.viberaven/` reports. Installing this plugin does not run it. Free review and guidance do not require sign-in; optional account or paid workflows remain separate.
+- Migration review: `check_supabase_migrations`, `check_github_repo`.
+- Provider guidance: `provider_playbook`, `recent_provider_changes`, `explain_finding`, `search_guides`, `launch_checklist`.
+- Bounded PostgreSQL test for a supplied case: `race_two_users`.
+- Optional account or report workflows: `connect_repo`, `connect_status`, `request_report_action`.
 
-## Cursor and verification
+The service receives the queries and SQL you send. Use redacted, authorized input. Reviews apply to the supplied files and rule coverage. For live policies and application behavior, verify against your deployed environment separately. [Privacy policy](https://viberaven.dev/privacy).
 
-The adjacent Cursor manifest and `mcp.json` use the documented plugin layout and hosted URL. Cursor runtime installation has not been verified. The release receipt records the exact Claude validation and installation performed; installation tests do not establish natural tool selection, useful external outcomes or return use.
-
-Version 1.8.0 identifies this native wrapper and its optional local command. It does not publish or upgrade any npm package, and is not an official Claude or Cursor directory endorsement. The older local-MCP plugin remains available at `plugins/viberaven`.
+Run `npx -y viberaven@latest check` separately for a local repository pass. For a local stdio server, use `npx -y @viberaven/mcp@latest` or the [local plugin](../viberaven/README.md).

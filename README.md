@@ -80,6 +80,10 @@ Then ask: “Review my Supabase migration files for missing RLS and Data API gra
 
 For ChatGPT, Claude or another remote MCP client, add `https://viberaven.dev/mcp`. The hosted server can review supplied migration SQL or migrations in a supported public GitHub repo. Local MCP tools are available via `npx -y @viberaven/mcp`. See the [agent hub](./AGENTS-HUB.md) for setup and scope.
 
+[Local MCP listing on Glama](https://glama.ai/mcp/servers/ohad6k/VibeRaven) · [Hosted connector and live tool inventory](https://glama.ai/mcp/connectors/io.github.ohad6k/viberaven-guides)
+
+For other MCP clients, see the [stdio and Streamable HTTP setup](./llms-install.md).
+
 Building an agent that answers provider errors? The [AI SDK provider-context example](./examples/ai-sdk-provider-context/) adds `search_guides` and `recent_provider_changes` from the hosted MCP endpoint.
 
 ## Local Studio

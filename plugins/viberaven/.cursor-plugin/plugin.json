@@ -1,7 +1,7 @@
 {
   "name": "viberaven",
-  "description": "Production context and checks for AI-built apps across their providers. Local race tests two users at once on real PostgreSQL and replays exactly what broke.",
-  "version": "1.10.0",
+  "description": "Check Supabase migrations and Vercel configuration locally for missing RLS, Data API grants, client keys, and environment drift.",
+  "version": "1.14.0",
   "author": {
     "name": "Ohad Krispin"
   },
@@ -21,7 +21,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@viberaven/mcp@1.10.0"
+        "@viberaven/mcp@1.14.0"
       ]
     }
   },
