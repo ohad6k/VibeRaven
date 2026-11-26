@@ -1,6 +1,6 @@
 {
   "name": "viberaven",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "Production context and checks for AI-built apps across their providers. Local race tests two users at once on real PostgreSQL and replays exactly what broke.",
   "author": {
     "name": "VibeRaven",
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "VibeRaven",
     "shortDescription": "Production context, checks and two-user PostgreSQL race tests.",
-    "longDescription": "VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change. Run npx -y viberaven@1.10.0 race --example, then check, race, fix and replay in your repo. Open the Studio for provider context, releases and diffs.",
+    "longDescription": "VibeRaven gives AI-built apps production context and checks across Supabase, Vercel, Stripe and the other providers they use, read from the repo, locally, before launch and after a change. Run npx -y viberaven@latest check in the project root for a repository pass. Open the Studio for provider context, releases and diffs.",
     "developerName": "VibeRaven",
     "category": "Developer Tools",
     "capabilities": [
